@@ -138,7 +138,27 @@ sudo config interface startup Ethernet120,Ethernet124,Portchannel01,Ethernet104,
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw25g-r01-u34   | eth0          | st01-sw1g-r01-u32   | Ethernet47    | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet5     | st01-mgmt-r01-u30   | eth0???       | SFP+/25G     | OOB-MGMT (later UPSTREAM1)        |            | TODO: Add real interface name    |
+| st01-sw25g-r01-u34   | Ethernet0     | st01-mgmt-r01-u29    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet1     | st01-mgmt-r01-u28    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet2     | st01-mgmt-r01-u27    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet4     | st01-mgmt-r01-u31    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet5     | st01-mgmt-r01-u30    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet32    | st01-comp-r01-u26    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet33    | st01-comp-r01-u25    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet34    | st01-comp-r01-u24    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet35    | st01-comp-r01-u23    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet36    | st01-comp-r01-u22    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet37    | st01-comp-r01-u21    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet38    | st01-comp-r01-u19    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet39    | st01-comp-r01-u17    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet40    | st01-comp-r01-u15    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet41    | st01-comp-r01-u13    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet42    | st01-comp-r01-u11    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet43    | st01-comp-r01-u09    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet44    | st01-stor-r01-u07    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet45    | st01-stor-r01-u05    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet46    | st01-stor-r01-u03    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet47    | st01-stor-r01-u01    | enp101s0f0    | SFP+/25G     |                  |            |                                  |
 | st01-sw25g-r01-u34   | Ethernet72    | st01-sw100g-r01-u37 | Ethernet112   | QSFP28/100G  | SPINE-LEAF       |            |                                  |
 | st01-sw25g-r01-u34   | Ethernet76    | st01-sw100g-r01-u36 | Ethernet116   | QSFP28/100G  | SPINE-LEAF       |            |                                  |
 
@@ -153,7 +173,28 @@ sudo config interface startup  Ethernet72
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw25g-r01-u35   | eth0          | st01-sw1g-r01-u32   | Ethernet47    | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet5     | st01-mgmt-r01-u30   | eth1???       | SFP+/25G     | OOB-MGMT (later UPSTREAM1)        |            | TODO: Add real interface name    |
+| st01-sw25g-r01-u35   | Ethernet0     | st01-mgmt-r01-u29    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet1     | st01-mgmt-r01-u28    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet2     | st01-mgmt-r01-u27    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet4     | st01-mgmt-r01-u31    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet5     | st01-mgmt-r01-u30    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet32    | st01-comp-r01-u26    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet33    | st01-comp-r01-u25    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet34    | st01-comp-r01-u24    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet35    | st01-comp-r01-u23    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet36    | st01-comp-r01-u22    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet37    | st01-comp-r01-u21    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet38    | st01-comp-r01-u19    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet39    | st01-comp-r01-u17    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet40    | st01-comp-r01-u15    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet41    | st01-comp-r01-u13    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet42    | st01-comp-r01-u11    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet43    | st01-comp-r01-u09    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet44    | st01-stor-r01-u07    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet45    | st01-stor-r01-u05    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet46    | st01-stor-r01-u03    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet47    | st01-stor-r01-u01    | enp101s0f1    | SFP+/25G     |                  |            |                                  |
+
 | st01-sw25g-r01-u35   | Ethernet72    | st01-sw100g-r01-u36 | Ethernet112   | QSFP28/100G  | SPINE-LEAF       |            |                                  |
 | st01-sw25g-r01-u35   | Ethernet76    | st01-sw100g-r01-u37 | Ethernet116   | QSFP28/100G  | SPINE-LEAF       |            |                                  |
 
