@@ -49,19 +49,19 @@
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw1g-r01-u32    | eth0          | st01-sw1g-r01-u47   | Ethernet1     | RJ45/1GBE    | UPSTREAM2        |            |                                  |
 | st01-sw1g-r01-u32    | Ethernet0     | st01-sw1g-r01-u47   | Ethernet3     | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw1g-r01-u32    | Ethernet1     | st01-comp-r01-u21   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet2     | st01-comp-r01-u23   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet3     | st01-comp-r01-u25   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet35    | st01-mgmt-r01-u31   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet36    | st01-ctl-r01-u29    | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet37    | st01-ctl-r01-u27    | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet41    | st01-comp-r01-u17   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet42    | st01-comp-r01-u13   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet43    | st01-comp-r01-u09   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet44    | st01-stor-r01-u05   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet45    | st01-stor-r01-u01   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet46    | st01-sw100g-r01-u36 | eth0          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u32    | Ethernet47    | st01-sw25g-r01-u34  | eth0          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
+| st01-sw1g-r01-u32    | Ethernet1     | st01-comp-r01-u21   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet2     | st01-comp-r01-u23   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet3     | st01-comp-r01-u25   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet35    | st01-mgmt-r01-u31   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet36    | st01-ctl-r01-u29    | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet37    | st01-ctl-r01-u27    | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet41    | st01-comp-r01-u17   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet42    | st01-comp-r01-u13   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet43    | st01-comp-r01-u09   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet44    | st01-stor-r01-u05   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet45    | st01-stor-r01-u01   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet46    | st01-sw100g-r01-u36 | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u32    | Ethernet47    | st01-sw25g-r01-u34  | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u32    | Ethernet52    | st01-sw100g-r01-u37 | Ethernet108   | QSFP28/100G  | SPINE-UPSTREAM2  |            | DEACTIVATED                      |
 | st01-sw1g-r01-u32    | Ethernet56    | st01-sw100g-r01-u36 | Ethernet108   | QSFP28/100G  | SPINE-UPSTREAM2  |            |                                  |
 
@@ -76,18 +76,18 @@ sudo config interface startup Ethernet52
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw1g-r01-u33    | eth0          | st01-sw1g-r01-u47   | Ethernet4     | RJ45/1GBE    | UPSTREAM2        |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet0     | st01-sw1g-r01-u47   | Ethernet5     | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw1g-r01-u33    | Ethernet1     | st01-comp-r01-u22   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet2     | st01-comp-r01-u24   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet3     | st01-comp-r01-u26   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet36    | st01-ctl-r01-u28    | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet37    | st01-mgmt-r01-u30   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet41    | st01-comp-r01-u19   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet42    | st01-comp-r01-u15   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet43    | st01-comp-r01-u11   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet44    | st01-stor-r01-u07   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet45    | st01-stor-r01-u03   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet46    | st01-sw100g-r01-u37 | eth0          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
-| st01-sw1g-r01-u33    | Ethernet47    | st01-sw25g-r01-u35  | eth0          | RJ45/1GBE    | OOB-MGMT         |            | TODO, OOB PROD SERVER            |
+| st01-sw1g-r01-u33    | Ethernet1     | st01-comp-r01-u22   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet2     | st01-comp-r01-u24   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet3     | st01-comp-r01-u26   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet36    | st01-ctl-r01-u28    | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet37    | st01-mgmt-r01-u30   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet41    | st01-comp-r01-u19   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet42    | st01-comp-r01-u15   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet43    | st01-comp-r01-u11   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet44    | st01-stor-r01-u07   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet45    | st01-stor-r01-u03   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet46    | st01-sw100g-r01-u37 | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet47    | st01-sw25g-r01-u35  | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet52    | st01-sw100g-r01-u36 | Ethernet108   | QSFP28/100G  | SPINE-UPSTREAM2  |            | DEACTIVATED                      |
 | st01-sw1g-r01-u33    | Ethernet56    | st01-sw100g-r01-u37 | Ethernet108   | QSFP28/100G  | SPINE-UPSTREAM2  |            |                                  |
 
