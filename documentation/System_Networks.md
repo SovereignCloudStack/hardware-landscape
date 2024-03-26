@@ -27,7 +27,7 @@ Domain nameing scheme: <net>.landscape.sovereignit.de
   * Ports:
    * SSH: 41115
    * Wireguard: 51820
-* Interface: enp9s0
+* Interface: enp9s0 (Remote Temp-Downlink-S…)
 * Subnet: 255.255.255.248 (/29)
 * Gateway: 192.168.104.41
 * DNS: 192.168.104.41
@@ -38,16 +38,16 @@ Domain nameing scheme: <net>.landscape.sovereignit.de
 * External Connection:
   * IP: 188.244.101.28
   * Ports:
-   * SSH: 41115
+   * SSH: 22
    * Wireguard: 51820
-* Interface: eno2np1 ?
+* Interface: eno2 (Remote OSBA-DL-S7-L)
 * IP: 192.168.104.43
 * Subnet: 255.255.255.248 (/29)
 * Gateway: 192.168.104.41
 * DNS: 192.168.104.41
 
 ```
+ip addr add 192.168.104.43/29 dev eno2
 ip link set eno2np1 up
-ip addr add 192.168.104.43/29 dev eno2np1
-ip route add default via 192.168.104.41 dev eno2np1
+ip route add default via 192.168.104.41 dev eno2
 ```

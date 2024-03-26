@@ -38,7 +38,7 @@
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
-| st01-sw1g-r01-u47    | eth0          | st01-mgmt-r01-u30   | eno1np0       | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u47    | eth0          | st01-mgmt-r01-u30   | eno1          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet0     | st01-gw-r01-u46     | enp1s0        | RJ45/1GBE    | UPSTREAM1        |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet1     | st01-sw1g-r01-u32   | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet3     | st01-sw1g-r01-u32   | Ethernet0     | RJ45/1GBE    | SPINE-UPSTREAM2  |            |                                  |
@@ -303,6 +303,7 @@ config vlan member add 23 Interface0
 | st01-ctl-r01-u27     |               |                     |               |              |                  |            |                                  |
 | st01-ctl-r01-u28     |               |                     |               |              |                  |            |                                  |
 | st01-ctl-r01-u29     |               |                     |               |              |                  |            |                                  |
+| st01-mgmt-r01-u30    | eno2          | st01-mgmt-r01-u30-e | JH-Uplink     | RJ45/1GBE    | OSBA-DL-S7-L     |            | Uplink, Portforwarding/IPv4 NAT  |
 | st01-mgmt-r01-u31    |               |                     |               |              |                  |            |                                  |
 | st01-stor-r01-u01    |               |                     |               |              |                  |            |                                  |
 | st01-stor-r01-u03    |               |                     |               |              |                  |            |                                  |
