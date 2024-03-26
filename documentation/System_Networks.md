@@ -22,6 +22,12 @@ Domain nameing scheme: <net>.landscape.sovereignit.de
 * DHCP: yes
 * Interface: enp9s0
 * IP: 192.168.104.42
+* External Connection:
+  * IP: 153.92.93.119
+  * Ports:
+   * SSH: 41115
+   * Wireguard: 51820
+* Interface: enp9s0
 * Subnet: 255.255.255.248 (/29)
 * Gateway: 192.168.104.41
 * DNS: 192.168.104.41
@@ -29,7 +35,12 @@ Domain nameing scheme: <net>.landscape.sovereignit.de
 ### st01-mgmt-r01-u30
 
 * DHCP: No
-* Interface: eno2np1
+* External Connection:
+  * IP: 188.244.101.28
+  * Ports:
+   * SSH: 41115
+   * Wireguard: 51820
+* Interface: eno2np1 ?
 * IP: 192.168.104.43
 * Subnet: 255.255.255.248 (/29)
 * Gateway: 192.168.104.41
