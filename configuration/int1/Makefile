@@ -1,18 +1,18 @@
-venv = . .venv/bin/activate
+venv = . venv/bin/activate
 export PATH := ${PATH}:${PWD}/venv/bin
 
 BRANCH ?= main
 
-deps: .venv/bin/activate ## Install software preconditions to `.venv`.
+deps: venv/bin/activate ## Install software preconditions to `.venv`.
 
 prune:
-	rm -rf .venv
+	rm -rf venv
 
-.venv/bin/activate: Makefile requirements.txt
+venv/bin/activate: Makefile requirements.txt
 	@which python3 > /dev/null || { echo "Missing requirement: python3" >&2; exit 1; }
-	[ -e venv/bin/python ] || python3 -m venv .venv --prompt  osism-$(shell basename ${PWD})
+	[ -e venv/bin/python ] || python3 -m venv venv --prompt  osism-$(shell basename ${PWD})
 	@${venv} && pip3 install -r requirements.txt
-	touch .venv/bin/activate
+	touch venv/bin/activate
 
 sync: deps
 	@echo "Using branch ${BRANCH}"
