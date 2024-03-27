@@ -44,6 +44,7 @@
 | st01-sw1g-r01-u47    | Ethernet3     | st01-sw1g-r01-u32   | Ethernet0     | RJ45/1GBE    | SPINE-UPSTREAM2  |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet4     | st01-sw1g-r01-u33   | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet5     | st01-sw1g-r01-u33   | Ethernet0     | RJ45/1GBE    | SPINE-UPSTREAM2  |            |                                  |
+| st01-sw1g-r01-u47    | Ethernet9     | st01-mgmt-r01-u30   | eno3          | RJ45/1GBE    |                  |            |                                  |
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
@@ -80,7 +81,7 @@ sudo config interface startup Ethernet52
 | st01-sw1g-r01-u33    | Ethernet2     | st01-comp-r01-u24   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet3     | st01-comp-r01-u26   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet36    | st01-ctl-r01-u28    | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw1g-r01-u33    | Ethernet37    | st01-mgmt-r01-u30   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet37    | st01-mgmt-r01-u30   | eno2          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet41    | st01-comp-r01-u19   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet42    | st01-comp-r01-u15   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet43    | st01-comp-r01-u11   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
@@ -215,6 +216,12 @@ sudo config interface shutdown Ethernet52,Ethernet56,PortChannel02
 sudo config interface startup Ethernet52,Ethernet56,PortChannel02
 ```
 
+
+| Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
+|----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
+| st01-mgmt-r01-u30    | eno2          | S1-S48-MR           | Port37        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT     |
+| st01-gw-r01-u46      | eno2          | S1-S48-MR           | Port48        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT     |
+
 # TODO: Not yet completly configured
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
@@ -260,16 +267,7 @@ show interfaces status PortChannel04
 | st01-sw10g-r01-u38   |               |                     |               |              |                  |            |                                  |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 
-
-## TODO
-
-```
-show interfaces status|awk '/"Oper Speed/{print $0} $9 ~ "up" && $8 == "up" {print $0;count++}END{print "\n" count " links"}'
-lldpshow
-show vlan brief
-config vlan member add 23 Interface0
-
-```
+# Misc
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
@@ -287,8 +285,6 @@ config vlan member add 23 Interface0
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw10g-r01-u38   |               |                     |               |              |                  |            |                                  |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
-
-| st01-comp-r01-u09    |               |                     |               |              |                  |            |                                  |
 | st01-comp-r01-u11    |               |                     |               |              |                  |            |                                  |
 | st01-comp-r01-u13    |               |                     |               |              |                  |            |                                  |
 | st01-comp-r01-u15    |               |                     |               |              |                  |            |                                  |
@@ -303,7 +299,6 @@ config vlan member add 23 Interface0
 | st01-ctl-r01-u27     |               |                     |               |              |                  |            |                                  |
 | st01-ctl-r01-u28     |               |                     |               |              |                  |            |                                  |
 | st01-ctl-r01-u29     |               |                     |               |              |                  |            |                                  |
-| st01-mgmt-r01-u30    | eno2          | st01-mgmt-r01-u30-e | JH-Uplink     | RJ45/1GBE    | OSBA-DL-S7-L     |            | Uplink, Portforwarding/IPv4 NAT  |
 | st01-mgmt-r01-u31    |               |                     |               |              |                  |            |                                  |
 | st01-stor-r01-u01    |               |                     |               |              |                  |            |                                  |
 | st01-stor-r01-u03    |               |                     |               |              |                  |            |                                  |
