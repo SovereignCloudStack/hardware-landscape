@@ -36,7 +36,7 @@ Domain nameing scheme: <net>.landscape.sovereignit.de
 
 * DHCP: No
 * External Connection:
-  * IP: 188.244.101.28
+  * IP: 188.244.104.28
   * Ports:
    * SSH: 22
    * Wireguard: 51820
