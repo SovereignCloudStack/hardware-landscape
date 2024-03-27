@@ -1,0 +1,17 @@
+---
+# keycloak-oidc-client-config
+keycloak_admin_id: "admin"
+keycloak_key_provider_component_name: "rsa-for-keystone"
+
+keystone_client_id: "keystone"
+keystone_redirect_uris:
+  - "https://api.testbed.osism.xyz:5000/redirect_uri"
+  - "https://api.testbed.osism.xyz"
+  - "https://192.168.16.254:5000/redirect_uri"
+  - "https://192.168.16.254"
+
+keycloak_private_key_file_path: "{{ configuration_directory }}/environments/custom/files/keycloak/private_key.pem"
+keycloak_private_key_data: "{{ lookup('file', keycloak_private_key_file_path)| regex_replace('\n', '\\\\n') }}"
+
+keycloak_certificate_file_path: "{{ configuration_directory }}/environments/custom/files/keycloak/cert.crt"
+keycloak_certificate_data: "{{ lookup('file', keycloak_certificate_file_path)| regex_replace('\n', '\\\\n') }}"

@@ -1,0 +1,5 @@
+---
+##########################
+# netbox
+
+netbox_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}"

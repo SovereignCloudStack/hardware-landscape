@@ -1,0 +1,71 @@
+##########################################################
+# roles
+
+# NOTE: If netbox is not used, nothing needs to be changed here. In
+#       this case this inventory is used as before. The hosts are
+#       then managed here as normal.
+#
+#       If netbox is used this file is only used to store the hosts
+#       for the initial import into the netbox.
+#
+#       After the initial import of the inventory in the netbox,
+#       the groups in this file can be emptied. The systems are
+#       then assigned to their roles via tags in the netbox.
+
+# The "all" group is not used in OSISM. Therefore it is important
+# that all nodes are explicitly listed here.
+[generic]
+node01
+
+# Nodes that act as manager (sometimes called deployment node)
+# are included in this group.
+[manager]
+node01
+
+# Nodes which are intended for monitoring services belong to
+# this group
+[monitoring]
+
+# Nodes that serve as controllers, so things like scheduler,
+# API or database run there, of the environment.
+[control]
+
+# Virtual systems managed by OpenStack Nova are placed on
+# nodes in this group.
+[compute]
+
+# Network resources managed by OpenStack Neutron, such as
+# L3 routers, are placed on these nodes. This group has nothing
+# to do with the general network configuration.
+[network]
+
+# Nodes that serve as controllers for Ceph, so things like the
+# Ceph Monitor service run here.
+[ceph-control]
+
+# The storage available in these systems is provided in the
+# form of OSDs for Ceph.
+[ceph-resource]
+
+[ceph-rgw:children]
+ceph-control
+
+# NOTE: These empty groups are only necessary if netbox is used. After
+#       the initial import of the hosts these groups can be commented
+#       out. The groups above with the initial hosts can be commented.
+#
+# [generic]
+#
+# [manager]
+#
+# [monitoring]
+#
+# [control]
+#
+# [compute]
+#
+# [network]
+#
+# [ceph-control]
+#
+# [ceph-resource]

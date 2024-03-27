@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The `osism_serial_*` parameters have been removed. The defaults from
+    osism/defaults are fine.
