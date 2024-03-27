@@ -1,0 +1,69 @@
+---
+##########################################################
+# ansible
+
+# NOTE: Address where the node can be reached via SSH.
+ansible_host: 192.168.16.10
+
+##########################################################
+# generic
+
+internal_interface: eno1
+
+# NOTE: The address of the internal interface.
+internal_address: 192.168.16.10
+
+##########################################################
+# netdata
+
+netdata_host_type: client
+
+# NOTE: Uncomment this when this node should be a Netdata server.
+
+# netdata_host_type: server
+
+##########################################################
+# network
+
+# NOTE: This is the initial management interface. Further interfaces can be added.
+# DOCS: https://osism.tech/docs/guides/configuration-guide/commons/network#netplan
+
+network_type: netplan
+network_ethernets:
+  eno1:
+    addresses:
+      - "192.168.16.10/20"
+    gateway4: "192.168.16.1"
+    mtu: 1500
+
+##########################################################
+# kolla
+
+network_interface: eno1
+
+# api_interface:
+# bifrost_network_interface:
+# dns_interface:
+# kolla_external_vip_interface:
+# migration_interface:
+# neutron_external_interface:
+# octavia_network_interface:
+# storage_interface:
+# tunnel_interface:
+
+##########################################################
+# ceph
+
+# NOTE: Uncomment this when this node is a part of the Ceph cluster.
+
+# monitor_address:
+# radosgw_address:
+
+# NOTE: Uncomment this when this node should be a OSD node.
+# DOCS: https://osism.tech/docs/guides/configuration-guide/ceph#lvm-devices
+
+# ceph_osd_devices:
+#   sdb:
+#   sdc:
+#   sdd:
+#   sde:
