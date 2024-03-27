@@ -48,6 +48,6 @@ Domain nameing scheme: <net>.landscape.sovereignit.de
 
 ```
 ip addr add 192.168.104.43/29 dev eno2
-ip link set eno2np1 up
+ip link set eno2 up
 ip route add default via 192.168.104.41 dev eno2
 ```
