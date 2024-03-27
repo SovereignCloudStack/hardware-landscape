@@ -38,13 +38,13 @@
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
-| st01-sw1g-r01-u47    | eth0          | st01-mgmt-r01-u30   | TODO          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u47    | eth0          | st01-mgmt-r01-u30   | eno1          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet0     | st01-gw-r01-u46     | enp1s0        | RJ45/1GBE    | UPSTREAM1        |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet1     | st01-sw1g-r01-u32   | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet3     | st01-sw1g-r01-u32   | Ethernet0     | RJ45/1GBE    | SPINE-UPSTREAM2  |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet4     | st01-sw1g-r01-u33   | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet5     | st01-sw1g-r01-u33   | Ethernet0     | RJ45/1GBE    | SPINE-UPSTREAM2  |            |                                  |
-| st01-sw1g-r01-u47    | Ethernet9     | st01-mgmt-r01-u30   | eth3          | RJ45/1GBE    |                  |            |                                  |
+| st01-sw1g-r01-u47    | Ethernet9     | st01-mgmt-r01-u30   | eno3          | RJ45/1GBE    |                  |            |                                  |
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
@@ -81,7 +81,7 @@ sudo config interface startup Ethernet52
 | st01-sw1g-r01-u33    | Ethernet2     | st01-comp-r01-u24   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet3     | st01-comp-r01-u26   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet36    | st01-ctl-r01-u28    | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw1g-r01-u33    | Ethernet37    | st01-mgmt-r01-u30   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u33    | Ethernet37    | st01-mgmt-r01-u30   | eno2          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet41    | st01-comp-r01-u19   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet42    | st01-comp-r01-u15   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u33    | Ethernet43    | st01-comp-r01-u11   | MGMT          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
@@ -139,27 +139,27 @@ sudo config interface startup Ethernet120,Ethernet124,Portchannel01,Ethernet104,
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw25g-r01-u34   | eth0          | st01-sw1g-r01-u32   | Ethernet47    | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet0     | st01-mgmt-r01-u29    | enp2s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet1     | st01-mgmt-r01-u28    | enp2s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet2     | st01-mgmt-r01-u27    | enp2s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet4     | st01-mgmt-r01-u31    | enp2s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet5     | st01-mgmt-r01-u30    | enp2s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet32    | st01-comp-r01-u26    | enP1p1s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet33    | st01-comp-r01-u25    | enP1p1s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet34    | st01-comp-r01-u24    | enP1p1s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet35    | st01-comp-r01-u23    | enP1p1s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet36    | st01-comp-r01-u22    | enP1p1s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet37    | st01-comp-r01-u21    | enP1p1s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet38    | st01-comp-r01-u19    | enp65s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet39    | st01-comp-r01-u17    | enp65s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet40    | st01-comp-r01-u15    | enp65s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet41    | st01-comp-r01-u13    | enp65s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet42    | st01-comp-r01-u11    | enp65s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet43    | st01-comp-r01-u09    | enp65s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet44    | st01-stor-r01-u07    | enp66s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet45    | st01-stor-r01-u05    | enp66s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet46    | st01-stor-r01-u03    | enp66s0f1np1    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet47    | st01-stor-r01-u01    | enp66s0f1np1    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet0     | st01-mgmt-r01-u29   | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet1     | st01-mgmt-r01-u28   | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet2     | st01-mgmt-r01-u27   | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet4     | st01-mgmt-r01-u31   | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet5     | st01-mgmt-r01-u30   | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet32    | st01-comp-r01-u26   | enP1p1s0f1np1 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet33    | st01-comp-r01-u25   | enP1p1s0f1np1 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet34    | st01-comp-r01-u24   | enP1p1s0f1np1 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet35    | st01-comp-r01-u23   | enP1p1s0f1np1 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet36    | st01-comp-r01-u22   | enP1p1s0f1np1 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet37    | st01-comp-r01-u21   | enP1p1s0f1np1 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet38    | st01-comp-r01-u19   | enp65s0f1np1  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet39    | st01-comp-r01-u17   | enp65s0f1np1  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet40    | st01-comp-r01-u15   | enp65s0f1np1  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet41    | st01-comp-r01-u13   | enp65s0f1np1  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet42    | st01-comp-r01-u11   | enp65s0f1np1  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet43    | st01-comp-r01-u09   | enp65s0f1np1  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet44    | st01-stor-r01-u07   | enp66s0f1np1  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet45    | st01-stor-r01-u05   | enp66s0f1np1  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet46    | st01-stor-r01-u03   | enp66s0f1np1  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet47    | st01-stor-r01-u01   | enp66s0f1np1  | SFP+/25G     |                  |            |                                  |
 | st01-sw25g-r01-u34   | Ethernet72    | st01-sw100g-r01-u37 | Ethernet112   | QSFP28/100G  | SPINE-LEAF       |            |                                  |
 | st01-sw25g-r01-u34   | Ethernet76    | st01-sw100g-r01-u36 | Ethernet116   | QSFP28/100G  | SPINE-LEAF       |            |                                  |
 
@@ -174,27 +174,27 @@ sudo config interface startup  Ethernet72
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw25g-r01-u35   | eth0          | st01-sw1g-r01-u32   | Ethernet47    | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet0     | st01-mgmt-r01-u29    | enp2s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet1     | st01-mgmt-r01-u28    | enp2s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet2     | st01-mgmt-r01-u27    | enp2s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet4     | st01-mgmt-r01-u31    | enp2s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet5     | st01-mgmt-r01-u30    | enp2s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet32    | st01-comp-r01-u26    | enP1p1s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet33    | st01-comp-r01-u25    | enP1p1s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet34    | st01-comp-r01-u24    | enP1p1s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet35    | st01-comp-r01-u23    | enP1p1s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet36    | st01-comp-r01-u22    | enP1p1s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet37    | st01-comp-r01-u21    | enP1p1s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet38    | st01-comp-r01-u19    | enp65s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet39    | st01-comp-r01-u17    | enp65s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet40    | st01-comp-r01-u15    | enp65s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet41    | st01-comp-r01-u13    | enp65s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet42    | st01-comp-r01-u11    | enp65s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet43    | st01-comp-r01-u09    | enp65s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet44    | st01-stor-r01-u07    | enp66s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet45    | st01-stor-r01-u05    | enp66s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet46    | st01-stor-r01-u03    | enp66s0f0np0    | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet47    | st01-stor-r01-u01    | enp66s0f0np0    | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet0     | st01-mgmt-r01-u29   | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet1     | st01-mgmt-r01-u28   | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet2     | st01-mgmt-r01-u27   | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet4     | st01-mgmt-r01-u31   | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet5     | st01-mgmt-r01-u30   | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet32    | st01-comp-r01-u26   | enP1p1s0f0np0 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet33    | st01-comp-r01-u25   | enP1p1s0f0np0 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet34    | st01-comp-r01-u24   | enP1p1s0f0np0 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet35    | st01-comp-r01-u23   | enP1p1s0f0np0 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet36    | st01-comp-r01-u22   | enP1p1s0f0np0 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet37    | st01-comp-r01-u21   | enP1p1s0f0np0 | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet38    | st01-comp-r01-u19   | enp65s0f0np0  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet39    | st01-comp-r01-u17   | enp65s0f0np0  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet40    | st01-comp-r01-u15   | enp65s0f0np0  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet41    | st01-comp-r01-u13   | enp65s0f0np0  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet42    | st01-comp-r01-u11   | enp65s0f0np0  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet43    | st01-comp-r01-u09   | enp65s0f0np0  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet44    | st01-stor-r01-u07   | enp66s0f0np0  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet45    | st01-stor-r01-u05   | enp66s0f0np0  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet46    | st01-stor-r01-u03   | enp66s0f0np0  | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet47    | st01-stor-r01-u01   | enp66s0f0np0  | SFP+/25G     |                  |            |                                  |
 | st01-sw25g-r01-u35   | Ethernet72    | st01-sw100g-r01-u36 | Ethernet112   | QSFP28/100G  | SPINE-LEAF       |            |                                  |
 | st01-sw25g-r01-u35   | Ethernet76    | st01-sw100g-r01-u37 | Ethernet116   | QSFP28/100G  | SPINE-LEAF       |            |                                  |
 
@@ -215,6 +215,12 @@ sudo config interface startup  Ethernet72
 sudo config interface shutdown Ethernet52,Ethernet56,PortChannel02
 sudo config interface startup Ethernet52,Ethernet56,PortChannel02
 ```
+
+
+| Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
+|----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
+| st01-mgmt-r01-u30    | eno2          | S1-S48-MR           | Port37        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT     |
+| st01-gw-r01-u46      | eno2          | S1-S48-MR           | Port48        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT     |
 
 # TODO: Not yet completly configured
 
@@ -261,16 +267,7 @@ show interfaces status PortChannel04
 | st01-sw10g-r01-u38   |               |                     |               |              |                  |            |                                  |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 
-
-## TODO
-
-```
-show interfaces status|awk '/"Oper Speed/{print $0} $9 ~ "up" && $8 == "up" {print $0;count++}END{print "\n" count " links"}'
-lldpshow
-show vlan brief
-config vlan member add 23 Interface0
-
-```
+# Misc
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
@@ -288,8 +285,6 @@ config vlan member add 23 Interface0
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw10g-r01-u38   |               |                     |               |              |                  |            |                                  |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
-
-| st01-comp-r01-u09    |               |                     |               |              |                  |            |                                  |
 | st01-comp-r01-u11    |               |                     |               |              |                  |            |                                  |
 | st01-comp-r01-u13    |               |                     |               |              |                  |            |                                  |
 | st01-comp-r01-u15    |               |                     |               |              |                  |            |                                  |
@@ -304,7 +299,6 @@ config vlan member add 23 Interface0
 | st01-ctl-r01-u27     |               |                     |               |              |                  |            |                                  |
 | st01-ctl-r01-u28     |               |                     |               |              |                  |            |                                  |
 | st01-ctl-r01-u29     |               |                     |               |              |                  |            |                                  |
-| st01-mgmt-r01-u30    |               |                     |               |              |                  |            |                                  |
 | st01-mgmt-r01-u31    |               |                     |               |              |                  |            |                                  |
 | st01-stor-r01-u01    |               |                     |               |              |                  |            |                                  |
 | st01-stor-r01-u03    |               |                     |               |              |                  |            |                                  |
