@@ -15,6 +15,10 @@ INSTALL_ANSIBLE_ROLES=${INSTALL_ANSIBLE_ROLES:-true}
 VENV_PATH=${VENV_PATH:-venv}
 VENV_PYTHON_BIN=${VENV_PYTHON_BIN:-python3}
 
+RUNDIR="$(dirname $(readlink -f $0))"
+cd $RUNDIR || exit 1
+
+
 if [[ $# -lt 1 ]]; then
     echo "usage: $0 PLAYBOOK [ANSIBLEARGS...]"
     exit 1
@@ -43,6 +47,16 @@ fi
 
 command -v ansible-playbook >/dev/null 2>&1 || { echo >&2 "ansible-playbook not installed"; exit 1; }
 command -v ansible-galaxy >/dev/null 2>&1 || { echo >&2 "ansible-galaxy not installed"; exit 1; }
+
+configured_branch="$(grep -E "^configuration_git_version:"  $RUNDIR/configuration.yml|sed '~s,^..*:[ ]*,,')"
+current_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$configured_branch" != "$current_branch" ];then
+   echo "ERROR:"
+   echo "Configured branch '$configured_branch' (see configuration.yml, configuration_git_version)"
+   echo "and current branch '$current_branch' are not the same! Exiting!"
+   exit 1
+fi
 
 ANSIBLE_USER=${ANSIBLE_USER:-dragon}
 CLEANUP=${CLEANUP:-false}
