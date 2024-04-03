@@ -3,6 +3,7 @@
 *.swo
 *.new
 *-new.json
+note
 note-*
 hardware/servers/setup/sum*
 *.passwords
