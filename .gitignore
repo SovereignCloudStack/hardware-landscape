@@ -12,3 +12,14 @@ Supermicro_*_*.*.log.*_*
 users/userdata/vpn/
 venv
 __pycache__
+
+# cookiecutter settings
+.venv
+venv
+Pipfile.lock
+id_rsa.operator
+ironic-agent.initramfs
+ironic-agent.kernel
+roles
+secrets
+secure.yml
