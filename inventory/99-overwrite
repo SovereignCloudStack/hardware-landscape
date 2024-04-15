@@ -1,0 +1,12 @@
+# Groups listed in this file are removed from all other
+# files in the inventory at runtime.
+#
+# This applies to both the form with :children and without.
+#
+# All predefined and usable inventory groups can be found
+# in the cfg-generics repository.
+#
+# https://github.com/osism/cfg-generics/tree/main/inventory
+
+# [ceph-mds:children]
+# ceph-control

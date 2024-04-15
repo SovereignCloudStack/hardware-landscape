@@ -1,0 +1,5 @@
+---
+##########################
+# netdata
+
+netdata_api_host: "{{ hostvars['st01-mgmt-r01-u30']['ansible_' + hostvars['st01-mgmt-r01-u30']['internal_interface']]['ipv4']['address'] }}"

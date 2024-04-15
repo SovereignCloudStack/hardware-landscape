@@ -1,0 +1,45 @@
+---
+##########################
+# generic
+
+fsid: 44bc2d19-fd83-4b92-a6c4-eed358e35672
+
+##########################
+# network
+
+public_network: 10.26.0.0/22
+cluster_network: 10.26.0.0/22
+
+##########################
+# openstack
+
+# NOTE: After the initial deployment of the Ceph Clusters, the following parameter can be
+#       set to false. It must only be set to true again when new pools or keys are added.
+openstack_config: true
+
+##########################
+# custom
+
+ceph_conf_overrides:
+  global:
+    osd pool default size: 3
+  mon:
+    mon allow pool delete: true
+  "client.rgw.{{ hostvars[inventory_hostname]['ansible_hostname'] }}.rgw0":
+    "rgw content length compat": "true"
+    "rgw enable apis": "swift, s3, admin"
+    "rgw keystone accepted admin roles": "admin"
+    "rgw keystone accepted roles": "member, admin"
+    "rgw keystone admin domain": "default"
+    "rgw keystone admin password": "{{ ceph_rgw_keystone_password }}"
+    "rgw keystone admin project": "service"
+    "rgw keystone admin tenant": "service"
+    "rgw keystone admin user": "ceph_rgw"
+    "rgw keystone api version": "3"
+    "rgw keystone implicit tenants": "true"
+    "rgw keystone url": "http://api-int.int1.landscape.sovereignit.de:5000"
+    "rgw keystone verify ssl": "false"
+    "rgw s3 auth use keystone": "true"
+    "rgw swift account in url": "true"
+    "rgw swift versioning enabled": "true"
+    "rgw verify ssl": "false"

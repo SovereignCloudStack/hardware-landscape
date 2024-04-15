@@ -1,0 +1,65 @@
+---
+##########################
+# docker registries
+
+docker_registry: index.docker.io
+docker_registry_ansible: quay.io
+docker_registry_service: index.docker.io
+
+##########################
+# versions
+
+manager_version: 6.0.2
+
+
+##########################
+# ara
+
+ara_enable: true
+ara_server_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}"
+
+##########################
+# listener
+
+# FIXME: It does not work here to work with inventory groups because
+#        the manager's inventory is independent from the rest of the
+#        inventory.
+#
+#        For manager_listener_broker_hosts, a list of IP addresses or
+#        hostnames must be set up on which the RabbitMQ Broker can be
+#        reached on the control nodes.
+
+enable_listener: true
+manager_listener_broker_hosts: []
+manager_listener_broker_username: openstack
+manager_listener_broker_uri: "{% for host in manager_listener_broker_hosts %}amqp://{{ manager_listener_broker_username }}:{{ manager_listener_broker_password }}@{{ host }}:5672/{% if not loop.last %};{% endif %}{% endfor %}"
+
+##########################
+# netbox
+
+netbox_enable: true
+netbox_api_url: "http://{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}:8121"
+
+##########################
+# celery
+
+celery_enable: true
+flower_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}"
+osism_api_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}"
+
+##########################
+# configuration
+
+configuration_directory: /opt/configuration
+configuration_git_private_key_file: ~/.ssh/id_rsa.configuration
+configuration_type: git
+
+configuration_git_host: github.com
+configuration_git_port: 22
+# yamllint disable rule:line-length
+configuration_git_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCTPUZj83eTSYa456ce3uTXEQh07K1dojAmdKP8XfoPmvb5bD9VLZyTFMqqxGL8P7kmSdWZMGITARkfgFYScm973Djsme2BmK5UdHsKydBxsTfxAvRI8OoyXTAENAMJJs+vOBtqwF4nCPhWxdwf6AdE0+ra64ufPprgi+gqoIcDgfuLwastvX/z010sZVtIaKN7kdEgRhW5eMKKV+bs5BPJ4/MXMealxsJKosJyI4IIthiWQ6XujkkYA/hNcsgwQ3RtAN/+SEj3TbJ/Qu3F+rXkPuYDsJ866vYVbz48L87dCCXhIzijWnM/aRyxQGpswsWaWBG5OE3w/FiCoDwdltxouEV5Y5357rvQ5yWv4vngqUGjxN3BmRLYGGja5D5CdPZ1dF2jVawSLaib+6TivUNCKRdMKab8x5TvchiyqIw5sKZQArvDtX1+DKR3xU+RPbD+BFoVVF1Tg39kYQ8QA0+sEzmAUIt3cNXjtOvG0t5djFsPxdtralkiSK92I86jEztR3VeTWbh2pE3nhy8pF/bKCyv+fA2ppT0qMsqwIcyhEy8/Uoi6jBJfpXN0HGqgIwXmbnWzb9xzDSCu1b1QF0Qnw+oWt0G8YaDBdvlXtYbfr9RiD9G5cdY9KG773PJ61bpfb9S/hZ9SSchizwqd+hJUZse+Ei+ofa7QHGQcjjfuDw==
+# yamllint enable rule:line-length
+configuration_git_protocol: ssh
+configuration_git_repository: SovereignCloudStack/hardware-landscape
+configuration_git_username: git
+configuration_git_version: jumphost
