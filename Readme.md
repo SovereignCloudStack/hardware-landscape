@@ -24,9 +24,12 @@
       * [Supermicro A2SDV-4C-LN8F](documentation/devices/servers/Supermicro_A2SDV-4C-LN8F.md)
       * [Supermicro A2SDV-8C-LN8F](documentation/devices/servers/Supermicro_A2SDV-8C-LN8F.md)
 
+## A visual impression
 
-* Overview over the deployed Hardware
-  * TBD
+<div style="display: flex">
+    <img src="documentation/assets/rack/rack_frontside.JPG" style="width: 50%;" />
+    <img src="documentation/assets/rack/rack_backside.JPG" style="width: 50%;" />
+</div>
 
 ## What describes this repository?
 
