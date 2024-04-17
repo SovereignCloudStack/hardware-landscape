@@ -47,11 +47,14 @@
 ## Photos
 
 Detailed Photos:
+    <img src="documentation/assets/rack/rack_frontside.JPG" style="width: 45%;" /><img src="documentation/assets/rack/rack_backside.JPG" style="width: 45%;" />
 
 * Frontendside
+  * [Complete Frontside](documentation/assets/rack/rack_frontside.JPG)
   * [00-Top](documentation/assets/rack/frontside_00.JPG)
   * [01-Bottom](documentation/assets/rack/frontside_01.JPG)
 * Backside
+  * [Complete Backside](documentation/assets/rack/rack_backside.JPG)
   * [00-Top](documentation/assets/rack/backside_00.JPG)
   * [01](documentation/assets/rack/backside_01.JPG)
   * [02](documentation/assets/rack/backside_02.JPG)

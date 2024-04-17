@@ -27,8 +27,7 @@
 ## A visual impression
 
 <div style="display: flex">
-    <img src="documentation/assets/rack/rack_frontside.JPG" style="width: 50%;" />
-    <img src="documentation/assets/rack/rack_backside.JPG" style="width: 50%;" />
+    <img src="documentation/assets/rack/rack_frontside.JPG" style="width: 45%;" /> <img src="documentation/assets/rack/rack_backside.JPG" style="width: 45%;" />
 </div>
 
 ## What describes this repository?
