@@ -17,7 +17,7 @@
       * [Edgecore 5835-54X-O-AC-B](documentation/devices/network/Edgecore_5835-54X-O-AC-B.md)
       * [Edgecore 4630-54TE-O-AC-B](documentation/devices/network/Edgecore_4630-54TE-O-AC-B.md)
       * [Edgecore 7726-32X-O-AC-B](documentation/devices/network/Edgecore_7726-32X-O-AC-B.md)
-    *  Server Equipment
+    * Server Equipment
       * [Supermicro H12SSL-NT](documentation/devices/servers/Supermicro_H12SSL-NT.md)
       * [Supermicro H12SSL-CT](documentation/devices/servers/Supermicro_H12SSL-CT.md)
       * [Supermicro ARS-110M-NR](documentation/devices/servers/Supermicro_ARS-110M-NR.md)
