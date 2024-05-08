@@ -9,7 +9,7 @@
   * OS: [Sonic Community](https://sonicfoundation.dev/)
 * References
   * [Vendor Information](https://www.edge-core.com/productsInfo.php?cls=&cls2=1&cls3=59&id=544)
-  * [Specification] [DCS203_AS7326-56X_DS_R09_20230717.pdf](spec\_sheets/DCS203_AS7326-56X_DS_R09_20230717.pdf)
+  * [Specification] [DCS203_AS7326-56X_DS_R09_20230717.pdf](https://github.com/SCS-Private/orga-infra/blob/main/scs-system-landscape/spec_sheets/network//DCS203_AS7326-56X_DS_R09_20230717.pdf)
 * Application purpose / description:
   * Leaf
 
