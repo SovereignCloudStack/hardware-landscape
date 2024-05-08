@@ -9,7 +9,7 @@
   * OS: [Sonic Community](https://sonicfoundation.dev/)
 * References
   * [Vendor Information](https://www.edge-core.com/productsInfo.php?cls=1&cls2=9&cls3=587&id=927)
-  * [Specification](https://www.edge-core.com/productsInfo.php?cls=1&cls2=9&cls3=587&id=927) : [2023-026-EPS201_AS4630-54TE_DS_R04_20230308.pdf](spec_sheets/2023-026-EPS201_AS4630-54TE_DS_R04_20230308.pdf)
+  * [Specification](https://www.edge-core.com/productsInfo.php?cls=1&cls2=9&cls3=587&id=927) : [2023-026-EPS201_AS4630-54TE_DS_R04_20230308.pdf](https://github.com/SCS-Private/orga-infra/blob/main/scs-system-landscape/spec_sheets/network//2023-026-EPS201_AS4630-54TE_DS_R04_20230308.pdf)
 * Application purpose / description:
   * Mgmt
 
