@@ -21,12 +21,12 @@
 * References
   * System
     * [System Information](https://www.supermicro.com/de/products/system/megadc/1u/ars-110m-nr)
-    * Specification: [ars-110m-nr.pdf](spec\_sheets/ars-110m-nr.pdf)
+    * Specification: [ars-110m-nr.pdf](https://github.com/SCS-Private/orga-infra/blob/main/scs-system-landscape/spec_sheets/servers//ars-110m-nr.pdf)
   * Motherboard:
     * [Motherboard](https://www.supermicro.com/de/products/motherboard/R12SPD-A)
   * Chassis:
     * [Vendor Information](https://www.supermicro.com/de/products/chassis/2u/la26/scla26e1c4-r609lp)
-    * Specification [SCLA26.pdf](spec\_sheets/SCLA26.pdf)
+    * Specification [SCLA26.pdf](https://github.com/SCS-Private/orga-infra/blob/main/scs-system-landscape/spec_sheets/servers//SCLA26.pdf)
   * Licence Data: [orga-infra/ .. /supermicro-bmc-licences/<mac-adress>.txt](https://github.com/SCS-Private/orga-infra/tree/main/scs-system-landscape/supermicro-bmc-licences/)
 * Application purpose / description:
   * Openstack compute servers

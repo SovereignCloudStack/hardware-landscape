@@ -8,7 +8,7 @@
   * OS: [Sonic Community](https://sonicfoundation.dev/)
 * References (TODO: recheck, if there is a more suitable ref)
   * [Vendor Information](https://www.edge-core.com/productsInfo.php?cls=&cls2=1&cls3=59&id=774)
-  * [Specification] [DCS201_AS5835-54X_DS_R06_20230717.pdf](spec\_sheets/DCS201_AS5835-54X_DS_R06_20230717.pdf)
+  * [Specification] [DCS201_AS5835-54X_DS_R06_20230717.pdf](https://github.com/SCS-Private/orga-infra/blob/main/scs-system-landscape/spec_sheets/network//DCS201_AS5835-54X_DS_R06_20230717.pdf)
 * Application purpose / description:
   * Leaf
 
