@@ -19,7 +19,7 @@
   * BIOS Firmware Version: 2.7
 * References
   * [Vendor Information](https://www.supermicro.com/en/products/motherboard/H12SSL-NT)
-  * Specification: [H12SSL-NT Motherboards Super Micro Computer, Inc.pdf](spec\_sheets/H12SSL-NT_Motherboards_Super_Micro_Computer_Inc.pdf)
+  * Specification: [H12SSL-NT Motherboards Super Micro Computer, Inc.pdf](https://github.com/SCS-Private/orga-infra/blob/main/scs-system-landscape/spec_sheets/servers//H12SSL-NT_Motherboards_Super_Micro_Computer_Inc.pdf)
   * Licence Data: [orga-infra/ .. /supermicro-bmc-licences/<mac-adress>.txt](https://github.com/SCS-Private/orga-infra/tree/main/scs-system-landscape/supermicro-bmc-licences/)
 * Application purpose / description:
   * Openstack Compute Servers
