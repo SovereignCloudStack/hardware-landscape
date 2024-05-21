@@ -11,7 +11,10 @@ ansible_host: 188.244.101.28
 ##########################################################
 # generic
 
-internal_interface: eno2
+internal_interface: dummy0
+external_interface: eno2
+mgmt_interface: eno3
+
 
 ##########################################################
 # network
