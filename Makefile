@@ -1,24 +1,25 @@
 venv = . venv/bin/activate
 export PATH := ${PATH}:${PWD}/venv/bin
 
-BRANCH ?= main
+.PHONY: deps
+deps: venv/bin/activate ## Install software preconditions to `venv`.
 
-deps: venv/bin/activate ## Install software preconditions to `.venv`.
-
+.PHONY: prune
 prune:
 	rm -rf venv
 
 venv/bin/activate: Makefile requirements.txt
 	@which python3 > /dev/null || { echo "Missing requirement: python3" >&2; exit 1; }
-	[ -e venv/bin/python ] || python3 -m venv venv --prompt  osism-$(shell basename ${PWD})
+	@[ -e venv/bin/python ] || python3 -m venv venv --prompt osism-$(shell basename ${PWD})
 	@${venv} && pip3 install -r requirements.txt
 	touch venv/bin/activate
 
+.PHONY: deps
 sync: deps
-	@echo "Using branch ${BRANCH}"
-	sed -i "~s,version: .*,version: ${BRANCH}," gilt.yml
+	@[ "${BRANCH}" ] && sed -i -e "s/version: .*/version: ${BRANCH}/" gilt.yml || exit 0
 	@${venv} && gilt overlay && gilt overlay
 
+.PHONY: ansible_vault_rekey
 ansible_vault_rekey: deps
 	pwgen -1 32 > secrets/vaultpass.new
 	${venv} && find environments/ inventory/ -name "*.yml" -exec grep -l ANSIBLE_VAULT {} \+|\
@@ -28,9 +29,8 @@ ansible_vault_rekey: deps
 		--new-vault-password-file secrets/vaultpass.new
 	mv secrets/vaultpass.new secrets/vaultpass
 
+.PHONY: ansible_vault_show
 ansible_vault_show: deps
 	${venv} && find environments/ inventory/ -name "*.yml" -exec grep -l ANSIBLE_VAULT {} \+|\
 		sort -u|\
 		xargs -n 1 --verbose ansible-vault view --vault-password-file secrets/vaultpass | cat
-
-phony: deps prune sync ansible_vault_rekey ansible_vault_show

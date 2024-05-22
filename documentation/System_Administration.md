@@ -1,5 +1,6 @@
 # Administration of the Hardware Landscape
 
+## Initial installation
 
 1. [Installation of the manager node](setup/Managager_Node.md)
 2. Configure manager node
@@ -15,3 +16,9 @@
      osism apply configuration
      ```
 1. [Install a proxy](https://osism.tech/docs/guides/configuration-guide/proxy)
+
+## Manager Access
+
+```
+
+```
