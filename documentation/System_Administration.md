@@ -7,4 +7,10 @@
      ```
      vim -d environments/manager/host_vars/st01-mgmt-r01-u30.yml ./inventory/host_vars/st01-mgmt-r01-u30.yml
      ```
+   * Run Ansible on manager
+     ```
+     ssh st01-mgmt-r01-u30
+     sudo -u dragon -i
+     osism apply configuration
+     ```
 1. [Install a proxy](https://osism.tech/docs/guides/configuration-guide/proxy)

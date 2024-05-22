@@ -15,12 +15,12 @@
 # The "all" group is not used in OSISM. Therefore it is important
 # that all nodes are explicitly listed here.
 [generic]
-node01
+st01-mgmt-r01-u30
 
 # Nodes that act as manager (sometimes called deployment node)
 # are included in this group.
 [manager]
-node01
+st01-mgmt-r01-u30
 
 # Nodes which are intended for monitoring services belong to
 # this group
