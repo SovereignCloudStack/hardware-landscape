@@ -3,7 +3,7 @@
 # ansible
 
 # NOTE: Address where the node can be reached via SSH.
-ansible_host: 192.168.16.10
+ansible_host: 192.168.16.11
 
 ##########################################################
 # generic
