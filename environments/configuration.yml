@@ -1,7 +1,7 @@
 ---
 
 ##########################################################
-# proxy  
+# proxy
 
 # docker
 docker_configure_proxy: true
