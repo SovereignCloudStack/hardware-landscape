@@ -88,6 +88,6 @@ motd_content: |
     see /var/log/screen
 
   You can distribute OS Images using the folder ~/public_html (make file world readable).
-  Download it using the following URI: http://10.10.21.10/~<userid>/<filename>
+  Download it using the following URI: http://{{ internal_ip }}/~<userid>/<filename>
 
 
