@@ -67,7 +67,7 @@ user_list:
     uid: 45007
     groups:
       - docker
-  - name: "osfrickler,"
+  - name: "osfrickler"
     key: "github"
     primary_group: dragon
     uid: 45008
