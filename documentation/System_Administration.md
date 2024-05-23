@@ -17,8 +17,11 @@
      ```
 1. [Install a proxy](https://osism.tech/docs/guides/configuration-guide/proxy)
 
-## Manager Access
+## Manage Access to Landscape
 
-```
-osism apply user
-```
+* Edit [environments/configuration.yml](environments/configuration.yml)
+* Rollout changes
+  ```
+  osism apply user
+  osism apply operator
+  ```

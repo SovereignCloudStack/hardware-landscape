@@ -12,6 +12,7 @@ ansible_host: 192.168.104.43
 # generic
 
 internal_interface: dummy0
+internal_ip: 10.10.21.10
 external_interface: eno2
 mgmt_interface: eno3
 
