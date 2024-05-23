@@ -3,5 +3,5 @@
   hosts: manager
   roles:
     - osism.services.squid
-    - motd
+    - osism.commons.motd
 
