@@ -2,5 +2,5 @@
 - name: Assign roles to manager hosts
   hosts: manager
   roles:
-    - squid
+    - osism.servcies.squid
 
