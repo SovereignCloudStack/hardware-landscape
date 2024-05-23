@@ -20,5 +20,5 @@
 ## Manager Access
 
 ```
-
+osism apply user
 ```
