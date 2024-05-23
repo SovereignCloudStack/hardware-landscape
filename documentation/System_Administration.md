@@ -15,7 +15,10 @@
      sudo -u dragon -i
      osism apply configuration
      ```
-1. [Install a proxy](https://osism.tech/docs/guides/configuration-guide/proxy)
+3. Install Manager Infrastructure
+   ```
+   osism apply manager_infra
+   ```
 
 ## Manage Access to Landscape
 
