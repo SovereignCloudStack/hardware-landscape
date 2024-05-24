@@ -4,5 +4,5 @@
   roles:
     - osism.services.squid
     - osism.commons.motd
-    - scs-landscape
+    - scs-landscape-nodes
 
