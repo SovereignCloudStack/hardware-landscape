@@ -1,6 +1,8 @@
 # Administration of the Hardware Landscape
 
-## Initial installation
+## Installing the entire system
+
+### Step 0: Initial installation
 
 1. [Installation of the manager node](setup/Managager_Node.md)
 2. Configure manager node
@@ -20,9 +22,11 @@
    osism apply manager_infra
    ```
 
-## Manage Access to Landscape
+## Runbooks
 
-* Edit [environments/configuration.yml](environments/configuration.yml)
+### Manage Access to Landscape
+
+* Edit [environments/configuration.yml](../environments/configuration.yml)
 * Rollout changes
   ```
   osism apply user
