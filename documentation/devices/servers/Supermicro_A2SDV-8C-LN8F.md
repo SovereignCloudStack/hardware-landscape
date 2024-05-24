@@ -17,7 +17,7 @@
   * CPLD Version: 04.21.1
 * References
   * [Vendor Information](https://www.supermicro.com/de/products/motherboard/a2sdv-8c-ln8f)
-  * Specification: [A2SDV-8C-LN8F Motherboards Products Supermicro.pdf](spec\_sheets/A2SDV-8C-LN8F_Motherboards_Products_Supermicro.pdf)
+  * Specification: [A2SDV-8C-LN8F Motherboards Products Supermicro.pdf](https://github.com/SCS-Private/orga-infra/blob/main/scs-system-landscape/spec_sheets/servers//A2SDV-8C-LN8F_Motherboards_Products_Supermicro.pdf)
   * Licence Data: [orga-infra/ .. /supermicro-bmc-licences/<mac-adress>.txt](https://github.com/SCS-Private/orga-infra/tree/main/scs-system-landscape/supermicro-bmc-licences/)
 * Application purpose / description:
   * Openstack Control

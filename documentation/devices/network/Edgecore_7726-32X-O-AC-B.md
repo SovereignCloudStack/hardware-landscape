@@ -8,7 +8,7 @@
   * OS: [Sonic Community](https://sonicfoundation.dev/)
 * References
   * [Vendor Information](https://www.edge-core.com/productsInfo.php?cls=&cls2=&cls3=15&id=545)
-  * [Specification] [DCS204_AS7726-32X_DS_R07_20230717.pdf](spec\_sheets/DCS204_AS7726-32X_DS_R07_20230717.pdf)
+  * [Specification] [DCS204_AS7726-32X_DS_R07_20230717.pdf](https://github.com/SCS-Private/orga-infra/blob/main/scs-system-landscape/spec_sheets/network//DCS204_AS7726-32X_DS_R07_20230717.pdf)
 * Application purpose / description:
   * Spine
 
