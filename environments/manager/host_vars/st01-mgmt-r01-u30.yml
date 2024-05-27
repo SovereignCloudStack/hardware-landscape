@@ -11,15 +11,45 @@ ansible_host: 188.244.101.28
 ##########################################################
 # generic
 
-internal_interface: eno2
+internal_interface: dummy0
+external_interface: eno2
+mgmt_interface: eno3
+
 
 ##########################################################
 # network
 
 network_type: netplan
 network_ethernets:
+  dummy0:
+      addresses:
+      - 10.10.21.10/32
+      - fd0c:cc24:75a0:1:10:10:21:10/128
+  enp2s0f0np0:
+      mtu: 9100
+      dhcp4: "no"
+      dhcp6: "no"
+  enp2s0f1np1:
+      mtu: 9100
+      dhcp4: "no"
+      dhcp6: "no"
+  # P2P Link to Switch st01-sw1g-r01-u47
+  eno1:
+    addresses:
+      - "10.10.22.1/24"
+  # Internet Uplink
   eno2:
     addresses:
       - "192.168.104.43/29"
-    gateway4: "192.168.104.41"
+    nameservers:
+      addresses:
+      - 8.8.8.8
+      - 9.9.9.9
+    routes:
+    - to: default
+      via: 192.168.104.41
     mtu: 1500
+  # Access to mangement network
+  eno3:
+    addresses:
+      - "10.10.23.10/24"

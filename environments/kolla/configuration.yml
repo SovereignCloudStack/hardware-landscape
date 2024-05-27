@@ -4,6 +4,11 @@
 
 docker_registry: quay.io
 
+# proxy
+container_http_proxy: "http://{{ groups['manager'][0] }}:3128"
+container_https_proxy: "http://{{ groups['manager'][0] }}:3128"
+container_no_proxy: "localhost,127.0.0.1"
+
 ##########################################################
 # loadbalancer
 

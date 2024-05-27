@@ -1,0 +1,26 @@
+---
+# https://www.brendangregg.com/blog/2024-03-24/linux-crisis-tools.html
+- name: Update the apt package index
+  apt:
+    update_cache: yes
+
+- name: Install required packages
+  apt:
+    name:
+      - procps
+      - util-linux
+      - sysstat
+      - iproute2
+      - numactl
+      - tcpdump
+      - linux-tools-common
+      - linux-tools-{{ ansible_kernel }}
+      - bpfcc-tools
+      - bpftrace
+      - trace-cmd
+      - nicstat
+      - ethtool
+      - tiptop
+      - cpuid
+      - msr-tools
+    state: present

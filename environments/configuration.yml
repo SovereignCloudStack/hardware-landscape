@@ -1,4 +1,35 @@
 ---
+
+
+##########################################################
+# proxy/client
+
+# docker
+docker_configure_proxy: false
+docker_proxy_http: "http://{{ groups['manager'][0]['internal_ip'] }}:3128"
+docker_proxy_https: "{{ docker_proxy_http }}"
+
+# apt
+proxy_proxies: {}
+#  http: "http://{{ groups['manager'][0]['internal_ip'] }}:3128"
+#  https: "http://{{ groups['manager'][0]['internal_ip'] }}:3128"
+#  http: ""
+#  https: ""
+
+##########################################################
+# proxy/server
+
+squid_configuration_directory: /opt/squid/configuration
+squid_docker_compose_directory: /opt/squid
+
+squid_network: 10.10.21.0/24
+squid_service_name: "docker-compose@squid"
+
+squid_host: 0.0.0.0
+squid_port: 3128
+
+squid_tag: 5.7-23.04_beta  # don't get fooled by "beta". this is actually production ready
+
 ##########################
 # docker
 
@@ -9,12 +40,74 @@ docker_user: "{{ operator_user }}"
 
 operator_user: dragon
 
+user_list:
+  - name: "scoopex"
+    key: "github"
+    primary_group: dragon
+    uid: 45001
+    groups:
+      - docker
+  - name: "garloff"
+    key: "github"
+    primary_group: dragon
+    uid: 45002
+    groups:
+      - docker
+  - name: "berendt"
+    key: "github"
+    primary_group: dragon
+    uid: 45003
+    groups:
+      - docker
+  - name: "ignatov17"
+    key: "github"
+    primary_group: dragon
+    uid: 45004
+    groups:
+      - docker
+  - name: "akafazov"
+    key: "github"
+    primary_group: dragon
+    uid: 45005
+    groups:
+      - docker
+  - name: "fkr"
+    key: "github"
+    primary_group: dragon
+    uid: 45006
+    groups:
+      - docker
+  - name: "fdobrovolny"
+    key: "github"
+    primary_group: dragon
+    uid: 45007
+    groups:
+      - docker
+  - name: "osfrickler"
+    key: "github"
+    primary_group: dragon
+    uid: 45008
+    groups:
+      - docker
+  - name: "zuse-z3"
+    key: "github"
+    primary_group: dragon
+    uid: 45009
+    groups:
+      - docker
+
+
 # yamllint disable rule:line-length
 operator_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC2wE2xiuO+i3qmDvu8kCCKX7U7H1diOICbWmR2UrKIxqWgcfWMQsT3WclotJKuVJuKIWyFD6ZNwwLuvC3RxVSqhCiWjqxg3jzJBj7/C1O3IYyLGTUl/x7Cky530lf/aj4wrwt3Ketk/4QNwgget2nCvOy0S2NDCJ3rL6oIUjdJekvRrFf9IbWeX8fqYYCoh1cYJWto1XYPnhMDAB/lqtjN1ssurLSKoJg/bUT7q/KkIvvA/BOR2NMqS0aGx+bKhdkeB22V/t75Ct8ymoCYk9+MTC9i/QX20Fi7835/W7Gl18J8NiO9ebaWyYbsxZ5klWXQa5EiLLBDZ82OR88G+0FjXp1Z3VG6FcpdYpW7sxrT21HEvWOnQACZCdlzwyBJ31id/LjDRhJU6BmZm0Sa9EOJNL8XVOUUzuoa0XL1mIVTsmLpUwqLSfw6Ditb+q4afFi0iYMe3JKOt+JmftvBgeQCjNUsCzk+Ny2j6dZKv2aeF5LOQZGRM3HzG39Gkir3q1zdWmCl4lc3QQBfr5ZcdAp+wQMFSgJAudKffO9kdDVNoyjgih7rD3E+JjJdhY9//WQEEBm2vfEqm7qqEQUAELd0JBCivJmOhUVH0rGbTrnkTBtLR4Au40W5aYaNQJ7+U3hTRrvpycSC1pUU3Wq3OXJd2FRDgKQJljQcpBw4V9j8GQ==
 # yamllint enable rule:line-length
 
+# Todo: add lookup to created users instead of repeating
+operator_authorized_keys_minimal: 2
 operator_authorized_keys:
   - "{{ operator_public_key }}"
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCg4wI3FupkrmzAkQfRkqkS5CQUp3NiIf3jkFk+E7ax/hdgbaW/UjBl9j15BMv/Mmguk11OtHTDgg57VrsL+mPtortKe2DvoVQZxvtnuDhZPFXlNZWJxYkcUUoPy7OwlDjTvfX9QS27rX8Kmz+wKRWz2VSZU3IqTDho+0NX8r3Zrbtkq75nB4Fq99WOzbhdve78GmTABgQvbT5Ypm7bc77cftARWJiyprHocUizui6CdITTPpxUf98HaFo5ZP3YhnZsMlSDu2T2ofiHKXhW+Q7FHP9GiiaH173zLxXFV6LpJ/wDyI8wT3jqPE+FKXyPXKVCDohmbQHOzY5eiePSqhsRbd19wGmkqqqTtKjL9/yUPQ8Lkft0iQPvmepzrB3qL9dLBthKrLNqDAeEv3Eg9MsTTaRyVuQRDizCeySXNMgv+CoeT6PyQstKV68SwUhsCAyIok8y6hFdHSVve66De31fYvkHtMu9C/R5NuhxMuZazazKlpDN9eeBmvT4Pqc5lrc="
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDTMjccqOa268YWdqAhP9awmMtjey/MK92gl+IwpQbxxsEW/HM/EKPGQnF0+7lD6G1W2IqJnFTM5fgWjAmIfzGeR3ySjJDlaQtZdiMHk5YR7VrgRot0odlGZpkkkJnK88xDVYqkq3xmJx39DTF8sKxfWThc1eu5c7Ws7hIvDCvFu4I5w+iPB4R2eycw//A1q3hutagyghJAXad46PgBmu1kODwQG3+sPqNyb4ruh0ODDbSlBZ1XIW4TgaYce5tR8ABlVvASafhZOw3CNK9rThhU4IG3IHvqCsGax269WrIGvSWIkI4EKjvFAEyshOcBsGwjaxm9GxrJLBLpyMVds/Rn3vu4JmupJJFHnWtEyQY6pd77TKyatRcZFjDXrGTPtiHCaMLG49RXvoeHIebjPB3bHqVWJSK5c81oSQwPZTxze5jY2LQOHmpBQ6D2l+5lkzgTQiF3EL7gD6m5Wweht++gQHJ+PnsCkaMZzoT1VdIGrzMO6Tf4O1WTQGkuD/9YtaM="
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIACLmNpHitBkZGVbWAFxZjUATNvLjSktAKwokFIQ9Z1k"
 
 ##########################
 # resolvconf
