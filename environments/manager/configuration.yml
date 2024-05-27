@@ -62,4 +62,4 @@ configuration_git_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCTPUZj83eTSY
 configuration_git_protocol: ssh
 configuration_git_repository: SovereignCloudStack/hardware-landscape
 configuration_git_username: git
-configuration_git_version: install_manager
+configuration_git_version: install_nodes
