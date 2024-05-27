@@ -1,6 +1,7 @@
 ---
 - name: Assign roles to manager hosts
   hosts: manager
+  become: true
   roles:
     - osism.services.squid
     - osism.commons.motd
