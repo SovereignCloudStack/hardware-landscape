@@ -139,9 +139,9 @@ sudo config interface startup Ethernet120,Ethernet124,Portchannel01,Ethernet104,
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw25g-r01-u34   | eth0          | st01-sw1g-r01-u32   | Ethernet47    | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet0     | st01-mgmt-r01-u29   | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet1     | st01-mgmt-r01-u28   | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u34   | Ethernet2     | st01-mgmt-r01-u27   | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet0     | st01-ctl-r01-u29    | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet1     | st01-ctl-r01-u28    | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u34   | Ethernet2     | st01-ctl-r01-u27    | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
 | st01-sw25g-r01-u34   | Ethernet4     | st01-mgmt-r01-u31   | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
 | st01-sw25g-r01-u34   | Ethernet5     | st01-mgmt-r01-u30   | enp2s0f1np1   | SFP+/25G     |                  |            |                                  |
 | st01-sw25g-r01-u34   | Ethernet32    | st01-comp-r01-u26   | enP1p1s0f1np1 | SFP+/25G     |                  |            |                                  |
@@ -174,9 +174,9 @@ sudo config interface startup  Ethernet72
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw25g-r01-u35   | eth0          | st01-sw1g-r01-u32   | Ethernet47    | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet0     | st01-mgmt-r01-u29   | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet1     | st01-mgmt-r01-u28   | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
-| st01-sw25g-r01-u35   | Ethernet2     | st01-mgmt-r01-u27   | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet0     | st01-ctl-r01-u29    | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet1     | st01-ctl-r01-u28    | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
+| st01-sw25g-r01-u35   | Ethernet2     | st01-ctl-r01-u27    | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
 | st01-sw25g-r01-u35   | Ethernet4     | st01-mgmt-r01-u31   | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
 | st01-sw25g-r01-u35   | Ethernet5     | st01-mgmt-r01-u30   | enp2s0f0np0   | SFP+/25G     |                  |            |                                  |
 | st01-sw25g-r01-u35   | Ethernet32    | st01-comp-r01-u26   | enP1p1s0f0np0 | SFP+/25G     |                  |            |                                  |
