@@ -1,0 +1,8 @@
+---
+- name: Set VIM as default editor
+  community.general.alternatives:
+    name: editor
+    path: /usr/bin/vim
+    link: /usr/bin/editor
+    state: auto
+
