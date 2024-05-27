@@ -1,5 +1,5 @@
 
-all: A2SDV-4C-LN8F.iso ARS-110M-NR.iso H12SSL-CT.iso H12SSL-NT.iso
+all: A2SDV-4C-LN8F.iso A2SDV-8C-LN8F.iso ARS-110M-NR.iso H12SSL-CT.iso H12SSL-NT.iso
 .PHONY: all
 
 A2SDV-4C-LN8F.iso: node-image
