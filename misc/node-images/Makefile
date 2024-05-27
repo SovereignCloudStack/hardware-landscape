@@ -46,3 +46,8 @@ H12SSL-NT.iso: node-image
 
 node-image:
 	git clone https://github.com/osism/node-image.git
+
+clean:
+	rm -rf node-image
+	rm -f *.iso
+.PHONY: clean
