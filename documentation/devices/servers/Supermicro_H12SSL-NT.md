@@ -7,6 +7,8 @@
   * Single-CPU 32-Core Server
   * two 1+ Gbp
   * four 25 Gbps SFP+
+    * NIC: 
+    * NIC: 
   * 512 GB ECC RAM
   * 3,2 TB NVMe
   * 480 GB SSD/NVMe (disks with enterprise-Version, DPWD >= 3.0)

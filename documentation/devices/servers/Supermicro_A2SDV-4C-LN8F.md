@@ -7,6 +7,8 @@
   * Single-CPU 4-Core Server
   * six 1+ Gbps
   * two 25 Gbps SFP+
+    * NIC: enp2s0f0np0
+    * NIC: enp2s0f1np1
   * 64 GB ECC RAM
   * two 480 GB SSD/NVMe
   * 1 HE

@@ -2,7 +2,15 @@
 
 ## Installing the entire system
 
-### Step 0: Initial installation
+### Step 0: Create iand publish node images
+
+* Create node cd misc/node-images
+  ```
+  cd misc/node-images
+  make all
+  ```
+
+### Step 1: Initial installation of the manager
 
 1. [Installation of the manager node](setup/Managager_Node.md)
 2. Configure manager node

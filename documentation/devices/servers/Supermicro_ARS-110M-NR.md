@@ -7,6 +7,8 @@
   * Single-CPU mind. 64-Core (Physical Cores)
   * two 1+ Gbps
   * four 25 Gbps SFP+ Netzwerkschnittstellen,
+    * NIC: enp1p1s0f1np1
+    * NIC: enp1p1s0f0np0
   * 512 GB ECC RAM
   * three 3,2 TB NVMe
   * two 480 GB SSD/NVMe
