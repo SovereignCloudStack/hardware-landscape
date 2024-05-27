@@ -13,8 +13,8 @@ A2SDV-4C-LN8F.iso: node-image
 A2SDV-8C-LN8F.iso: node-image
 	node-image/create-image-flavor.sh --layer3_underlay \
 		--config $(PWD)/template.yaml \
-		--arg interface1_name= \
-		--arg interface2_name= \
+		--arg interface1_name=enp2s0f0np0 \
+		--arg interface2_name=enp2s0f1np1 \
 		--build node-image-build-osism-1
 	mv node-image/ubuntu-autoinstall-osism-1.iso A2SDV-8C-LN8F.iso
 
