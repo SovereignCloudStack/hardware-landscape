@@ -18,13 +18,13 @@
   * Tagged VLAN 24, "lab"
   * Tagged VLAN 23, "mgmt"
 * SPINE-UPSTREAM2
-  * Tagged VLAN 25, "prod1"
-  * Tagged VLAN 26, "prod1-stor"
+  * Layer3 Underlay, "prod1"
 * OOB-MGMT
   * Un-Tagged VLAN 23, "mgmt"
+* OOB-MGMT-P2P
+  * Point2Point connection
 * SPINE-LEAF
-  * Tagged VLAN 25, "prod1"
-  * Tagged VLAN 26, "prod1-stor"
+  * Layer3 Underlay, "prod1"
 
 ## IdentGroup:
 
@@ -38,13 +38,13 @@
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
-| st01-sw1g-r01-u47    | eth0          | st01-mgmt-r01-u30   | eno1          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u47    | eth0          | st01-mgmt-r01-u30   | eno1          | RJ45/1GBE    | OOB-MGMT-P2P     |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet0     | st01-gw-r01-u46     | enp1s0        | RJ45/1GBE    | UPSTREAM1        |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet1     | st01-sw1g-r01-u32   | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet3     | st01-sw1g-r01-u32   | Ethernet0     | RJ45/1GBE    | SPINE-UPSTREAM2  |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet4     | st01-sw1g-r01-u33   | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet5     | st01-sw1g-r01-u33   | Ethernet0     | RJ45/1GBE    | SPINE-UPSTREAM2  |            |                                  |
-| st01-sw1g-r01-u47    | Ethernet9     | st01-mgmt-r01-u30   | eno3          | RJ45/1GBE    |                  |            |                                  |
+| st01-sw1g-r01-u47    | Ethernet9     | st01-mgmt-r01-u30   | eno3          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|

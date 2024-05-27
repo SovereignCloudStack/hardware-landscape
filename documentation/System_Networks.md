@@ -9,10 +9,10 @@ Domain nameing scheme: <net>.landscape.sovereignit.de
 | Networkname   | Network             | Router           | VLan    | Description                                     |
 |---------------|---------------------|------------------|---------|-------------------------------------------------|
 | vpn1          | 10.10.1.0/24        | 10.10.2.1        | -       | VPN transfer/client network                     |
+| prod1         | 10.10.21.0/24       | 10.10.21.1       | -       | Production Node Network                         |
+| mgmt-p2p      | 10.10.22.0/24       | 10.10.22.1       | -       | Out of band p2p access for switches and servers |
 | mgmt          | 10.10.23.0/24       | 10.10.23.1       | 23      | Out of band access for switches and servers     |
 | lab           | 10.10.24.0/24       | 10.10.24.1       | 24      | Lab Node Network                                |
-| prod1         | 10.25.0.0/22        | 10.25.0.1        | 25      | Production Node Network                         |
-| prod1-stor    | 10.26.0.0/22        | 10.26.0.1        | 26      | Production Storage Network                      |
 
 
 ## Port Forwarding Access
@@ -50,4 +50,5 @@ Domain nameing scheme: <net>.landscape.sovereignit.de
 ip addr add 192.168.104.43/29 dev eno2
 ip link set eno2 up
 ip route add default via 192.168.104.41 dev eno2
+sed -i "~s,nameserver.*$,nameserver 8.8.8.8," /etc/resolv.conf
 ```
