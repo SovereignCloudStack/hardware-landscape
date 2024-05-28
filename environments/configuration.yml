@@ -39,6 +39,7 @@ docker_user: "{{ operator_user }}"
 # operator
 
 operator_user: dragon
+user_sudoers_type: "user"
 
 user_list:
   - name: "scoopex"
