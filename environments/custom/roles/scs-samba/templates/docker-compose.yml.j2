@@ -5,12 +5,14 @@ services:
     restart: unless-stopped
     image: "{{ samba_image }}"
     ports:
-      - "{{ samba_host }}:{{ samba_port }}:3128"
+      - "137:137"
+      - "139:139"
+      - "445:445"
     volumes:
-      - "{{ samba_configuration_directory }}/conf.d:/etc/samba/conf.d:ro"
-      - samba:/var/spool/samba
-    healthcheck:
-      test: pgrep -f '/usr/sbin/samba -f /etc/samba/smb.conf -NYC'
+      - "{{ samba_configuration_directory }}/:/etc/samba/:ro"
+      - "{{ samba_media_directory }}/:/srv/:ro" 
+    # Automatic user creation not seems to work
+    #command: ["/sbin/tini", "--", "/usr/bin/samba.sh", "-u", "osism;osism"]
 
 networks:
   default:
@@ -22,5 +24,5 @@ networks:
       config:
         - subnet: {{ samba_network }}
 
-volumes:
-  samba:
+#volumes:
+#  samba:

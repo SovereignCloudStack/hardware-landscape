@@ -1,6 +1,11 @@
 ---
 # tasks file for samba
 
+- name: Install smbclient
+  apt:
+    name:
+    - smbclient
+
 - name: Create required directories
   become: true
   ansible.builtin.file:
@@ -11,24 +16,18 @@
     mode: 0750
   loop:
     - "{{ samba_configuration_directory }}"
-    - "{{ samba_configuration_directory }}/conf.d"
     - "{{ samba_docker_compose_directory }}"
 
 - name: Copy samba configuration files
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: "{{ samba_configuration_directory }}/conf.d/{{ item }}"
+    dest: "{{ samba_configuration_directory }}/{{ item }}"
     mode: 0644
     owner: "{{ operator_user }}"
     group: "{{ operator_group }}"
   loop:
-    - osism.conf
+    - smb.conf
   notify: Restart samba service
-
-- name: Remove osism_allow_list.conf configuration file
-  ansible.builtin.file:
-    path: "{{ samba_configuration_directory }}/conf.d/osism_allow_list.conf"
-    state: absent
 
 - name: Copy docker-compose.yml file
   ansible.builtin.template:
