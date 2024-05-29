@@ -9,6 +9,10 @@
   cd misc/node-images
   make all
   ```
+* Create share
+  ```
+  make samba
+  ```
 
 ### Step 1: Initial installation of the manager
 
