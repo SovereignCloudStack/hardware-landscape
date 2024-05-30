@@ -31,6 +31,11 @@ squid_port: 3128
 squid_tag: 5.7-23.04_beta  # don't get fooled by "beta". this is actually production ready
 
 ##########################
+# system settings
+
+motd_show_ssh: true
+
+##########################
 # docker
 
 docker_user: "{{ operator_user }}"
