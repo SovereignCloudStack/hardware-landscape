@@ -2,17 +2,19 @@
 
 ## Installing the entire system
 
-### Step 0: Create iand publish node images
+### Step 0: Create and publish node images
 
 * Create node cd misc/node-images
   ```
   cd misc/node-images
   make all
   ```
-* Create share
+* Publish shares for installation media
   ```
   make samba
   ```
+* Add the passwords file for BMC password (TODO, add this later to ansible secrets) : ``secrets/server.passwords``
+  
 
 ### Step 1: Initial installation of the manager
 
