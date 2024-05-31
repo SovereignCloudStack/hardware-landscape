@@ -165,11 +165,11 @@ def open_servers(host_list: list[str]):
     host_data = parse_configuration_data()
 
     for host_name in host_list:
-        LOGGER.info(f"** {host_name} / {host_data[host_name]['ip']}")
+        LOGGER.info(f"** {host_name} / {host_data[host_name]['bmc_ip_v4']}")
         LOGGER.info(f"Login: {host_data[host_name]['bmc_username']}")
         LOGGER.info(f"Password: {host_data[host_name]['bmc_password']}")
         # Supermciro BMC does not work with other browsers like "firefox"
-        webbrowser.get("google-chrome").open(f"https://{host_data[host_name]['ip']}", new=2)
+        webbrowser.get("google-chrome").open(f"https://{host_data[host_name]['bmc_ip_v4']}", new=2)
 
 
 def template_ansible_config(host_list: list[str]):
@@ -181,10 +181,8 @@ def template_ansible_config(host_list: list[str]):
 
     for host_name in host_list:
         from pprint import pprint
-        pprint(host_data[host_name])
-        results_filename = f"{get_ansible_host_inventory_dir()}/{host_name}.yml"
+        results_filename = f"{get_ansible_host_inventory_dir()}{host_name}.yml"
         with open(results_filename, mode="w", encoding="utf-8") as results:
             LOGGER.info(f"rendering file : {results_filename}")
             templated_string = results_template.render(host_data[host_name])
-            print(templated_string)
             results.write(templated_string)

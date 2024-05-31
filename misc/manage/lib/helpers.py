@@ -18,6 +18,7 @@ def get_basedir() -> str:
 def get_server_documentation_dir() -> str:
     return f"{get_basedir()}/documentation/devices/servers/"
 
+
 def get_ansible_host_inventory_dir() -> str:
     return f"{get_basedir()}/inventory/host_vars/"
 
@@ -34,6 +35,10 @@ def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
     coloredlogs.install(fmt=log_format_string, level=log_level)
 
     return logger, log_file
+
+
+CONFIG_FIELDS = ['name', 'serial', 'bmc_ip_v4', 'mac', 'node_ip_v4', 'node_ip_v6', 'bmc_password', 'bmc_username',
+                 'interfaces']
 
 
 @functools.lru_cache
@@ -65,7 +70,9 @@ def parse_configuration_data() -> dict[str, dict[str, str]]:
 
                 m = re.fullmatch(
                     r"\|\s*(?P<name>[a-z0-9-]+?)\s*\|"
-                    r"\s*(?P<serial>[\da-zA-Z-]+?)\s*\|.+\|\s*(?P<ip>\d+\.\d+\.\d+\.\d+?)\s*"
+                    r"\s*(?P<serial>[\da-zA-Z-]+?)\s*"
+                    r"\|.+"
+                    r"\|\s*(?P<bmc_ip_v4>\d+\.\d+\.\d+\.\d+?)\s*"
                     r"\|.+"
                     r"\|\s*(?P<mac>[a-f0-9:]+)\s*"
                     r"\|\s*(?P<node_ip_v4>\d+\.\d+\.\d+\.\d+?)\s*"
@@ -73,11 +80,13 @@ def parse_configuration_data() -> dict[str, dict[str, str]]:
                     r"\|.*",
                     line.strip())
                 if m:
-                    print(line)
                     data[m.group("name")] = m.groupdict()
                     data[m.group("name")]["bmc_password"] = password_dict[m.group("mac")]["password"]
                     data[m.group("name")]["bmc_username"] = password_dict[m.group("mac")]["username"]
                     data[m.group("name")]["interfaces"] = sorted(interfaces)
+                    for field in CONFIG_FIELDS:
+                        if field not in data[m.group("name")]:
+                            LOGGER.error(f"field not in line : >>{line.strip()}<<")
 
     return data
 
