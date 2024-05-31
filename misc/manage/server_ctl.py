@@ -3,8 +3,9 @@
 import argparse
 import sys
 
-from lib.operating_system import install_server, control_servers, open_servers, check_power_servers
-from lib.hardware import template_bmc_config
+from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
+    template_ansible_config
+from lib.server_hardware import template_bmc_config
 from lib.helpers import get_unique_hosts, get_unique_hosts_full, setup_logging, get_basedir
 
 parser = argparse.ArgumentParser(
@@ -29,6 +30,9 @@ exclusive_group.add_argument('--power_check', action="store_true",
 
 exclusive_group.add_argument('--show', '-s', action="store_true",
                              help="Show hosts")
+
+exclusive_group.add_argument('--ansible', '-a', action="store_true",
+                             help="Create ansible inventory files")
 
 exclusive_group.add_argument('--open','-o', action="store_true",
                              help="Open hosts in your preferred browser and output the login credentials")
@@ -64,6 +68,9 @@ if args.open:
 
 if args.bmc_template:
     template_bmc_config(get_unique_hosts(args.node))
+
+if args.ansible:
+    template_ansible_config(get_unique_hosts(args.node))
 
 if args.install_os:
     install_server(get_unique_hosts(args.install_os), args.media_url)

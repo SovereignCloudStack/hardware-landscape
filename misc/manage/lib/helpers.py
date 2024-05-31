@@ -18,6 +18,9 @@ def get_basedir() -> str:
 def get_server_documentation_dir() -> str:
     return f"{get_basedir()}/documentation/devices/servers/"
 
+def get_ansible_host_inventory_dir() -> str:
+    return f"{get_basedir()}/inventory/host_vars/"
+
 
 def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
     log_format_string = \
@@ -53,17 +56,28 @@ def parse_configuration_data() -> dict[str, dict[str, str]]:
 
     for docu_file_name in glob.glob(f"{get_server_documentation_dir()}/Supermicro_*.md"):
         LOGGER.debug(f"loading data from: {docu_file_name}")
+        interfaces: list[str] = []
         with open(docu_file_name, 'r') as file:
             for line in file.readlines():
+                m = re.fullmatch(r".*\s+NIC:\s+([a-z0-9]+?)([\s].*|)", line.strip())
+                if m:
+                    interfaces.append(m.group(1))
+
                 m = re.fullmatch(
                     r"\|\s*(?P<name>[a-z0-9-]+?)\s*\|"
                     r"\s*(?P<serial>[\da-zA-Z-]+?)\s*\|.+\|\s*(?P<ip>\d+\.\d+\.\d+\.\d+?)\s*"
-                    r"\|.+\|\s*(?P<mac>[a-f0-9:]+)\s*\|.*",
+                    r"\|.+"
+                    r"\|\s*(?P<mac>[a-f0-9:]+)\s*"
+                    r"\|\s*(?P<node_ip_v4>\d+\.\d+\.\d+\.\d+?)\s*"
+                    r"\|\s*(?P<node_ip_v6>(?:[a-f0-9]{1,4}:){7}[a-f0-9]{1,4})\s*"
+                    r"\|.*",
                     line.strip())
                 if m:
+                    print(line)
                     data[m.group("name")] = m.groupdict()
                     data[m.group("name")]["bmc_password"] = password_dict[m.group("mac")]["password"]
                     data[m.group("name")]["bmc_username"] = password_dict[m.group("mac")]["username"]
+                    data[m.group("name")]["interfaces"] = sorted(interfaces)
 
     return data
 

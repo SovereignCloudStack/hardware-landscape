@@ -9,8 +9,10 @@ import sushy
 from sushy import auth
 import urllib3
 
-from .helpers import parse_configuration_data
+from .helpers import parse_configuration_data, get_ansible_host_inventory_dir
 from sushy.resources.manager.manager import Manager
+from jinja2 import Environment, FileSystemLoader
+
 
 MAX_WAIT = 300
 STEP_WAIT = 15
@@ -168,3 +170,21 @@ def open_servers(host_list: list[str]):
         LOGGER.info(f"Password: {host_data[host_name]['bmc_password']}")
         # Supermciro BMC does not work with other browsers like "firefox"
         webbrowser.get("google-chrome").open(f"https://{host_data[host_name]['ip']}", new=2)
+
+
+def template_ansible_config(host_list: list[str]):
+    host_data = parse_configuration_data()
+
+    template_loader = FileSystemLoader(searchpath=get_ansible_host_inventory_dir())
+    template_env = Environment(loader=template_loader)
+    results_template = template_env.get_template("server-template.yml.j2")
+
+    for host_name in host_list:
+        from pprint import pprint
+        pprint(host_data[host_name])
+        results_filename = f"{get_ansible_host_inventory_dir()}/{host_name}.yml"
+        with open(results_filename, mode="w", encoding="utf-8") as results:
+            LOGGER.info(f"rendering file : {results_filename}")
+            templated_string = results_template.render(host_data[host_name])
+            print(templated_string)
+            results.write(templated_string)
