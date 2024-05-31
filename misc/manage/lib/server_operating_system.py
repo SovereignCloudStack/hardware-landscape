@@ -180,7 +180,6 @@ def template_ansible_config(host_list: list[str]):
     results_template = template_env.get_template("server-template.yml.j2")
 
     for host_name in host_list:
-        from pprint import pprint
         results_filename = f"{get_ansible_host_inventory_dir()}{host_name}.yml"
         with open(results_filename, mode="w", encoding="utf-8") as results:
             LOGGER.info(f"rendering file : {results_filename}")
