@@ -35,7 +35,7 @@ network_ethernets:
       dhcp4: "no"
       dhcp6: "no"
   # Access to mangement network
-  eno3:
+  eno6:
     addresses:
       - "10.10.23.254/24"
   # Internet Uplink
