@@ -15,9 +15,7 @@ internal_interface: dummy0
 internal_ip: 10.10.21.10
 external_interface: eno2
 mgmt_interface: eno3
-
-
-
+mgmt_ip: 10.10.23.10
 
 ##########################################################
 # network
