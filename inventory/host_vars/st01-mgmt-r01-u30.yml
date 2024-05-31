@@ -34,10 +34,10 @@ network_ethernets:
       mtu: 9100
       dhcp4: "no"
       dhcp6: "no"
-  # P2P Link to Switch st01-sw1g-r01-u47
+  # Access to mangement network
   eno1:
     addresses:
-      - "10.10.22.1/24"
+      - "10.10.23.254/24"
   # Internet Uplink
   eno2:
     addresses:
@@ -50,11 +50,10 @@ network_ethernets:
     - to: default
       via: 192.168.104.41
     mtu: 1500
-  # Access to mangement network
+  # P2P Link to Switch st01-sw1g-r01-u47
   eno3:
     addresses:
-      - "10.10.23.254/24"
-
+      - "10.10.22.1/24"
 
 motd_content: |
   .
