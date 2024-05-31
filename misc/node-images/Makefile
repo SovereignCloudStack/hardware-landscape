@@ -46,6 +46,7 @@ H12SSL-NT.iso: node-image
 
 node-image:
 	git clone https://github.com/osism/node-image.git
+	node-image/create-image.sh  --help > /dev/null
 
 clean:
 	rm -rf node-image
