@@ -2,6 +2,8 @@
 ##########################################################
 # ansible
 
+inventory_generate_disable: yes
+
 #External Usage
 #ansible_host: 188.244.101.28
 
