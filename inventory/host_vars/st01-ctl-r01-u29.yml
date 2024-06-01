@@ -7,9 +7,11 @@ ansible_host: 10.10.21.14
 ##########################################################
 # generic
 
+device_model: A2SDV-8C-LN8F
 internal_interface: dummy0
 internal_ip: 10.10.21.14
 mgmt_ip: 10.10.23.14
+mgmt_mac: 3c:ec:ef:5b:b5:bb
 
 
 ##########################################################

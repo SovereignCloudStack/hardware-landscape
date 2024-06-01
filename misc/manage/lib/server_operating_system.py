@@ -1,8 +1,10 @@
 import json
 import logging
+import os.path
 from time import sleep
 
 import webbrowser
+
 import requests
 from requests.auth import HTTPBasicAuth
 import sushy
@@ -11,7 +13,8 @@ import urllib3
 
 from .helpers import parse_configuration_data, get_ansible_host_inventory_dir
 from sushy.resources.manager.manager import Manager
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
+import yaml
 
 
 MAX_WAIT = 300
@@ -176,12 +179,27 @@ def template_ansible_config(host_list: list[str]):
     host_data = parse_configuration_data()
 
     template_loader = FileSystemLoader(searchpath=get_ansible_host_inventory_dir())
-    template_env = Environment(loader=template_loader)
+    template_env = Environment(loader=template_loader, undefined=StrictUndefined)
     results_template = template_env.get_template("server-template.yml.j2")
 
     for host_name in host_list:
         results_filename = f"{get_ansible_host_inventory_dir()}{host_name}.yml"
-        with open(results_filename, mode="w", encoding="utf-8") as results:
-            LOGGER.info(f"rendering file : {results_filename}")
-            templated_string = results_template.render(host_data[host_name])
-            results.write(templated_string)
+
+        LOGGER.info(f"rendering file : {results_filename}")
+        templated_string = results_template.render(host_data[host_name])
+        templated_data = yaml.safe_load(templated_string)
+
+        if os.path.exists(results_filename):
+            with open(results_filename, 'r') as file:
+                existing_config = yaml.safe_load(file)
+                if existing_config.get("inventory_generate_strategy", "replace") == "keep":
+                    LOGGER.warning(f"Not templating {host_name} inventory file, inventory_generate_strategy=keep")
+                    continue
+                if existing_config.get("inventory_generate_strategy", "replace") == "update":
+                    LOGGER.warning(f"Updating existing {host_name} inventory file, inventory_generate_strategy=update")
+                    merged_data = {**templated_data, **existing_config}
+                    with open(results_filename, 'w') as f_out:
+                        yaml.dump(merged_data, f_out)
+        else:
+            with open(results_filename, mode="w", encoding="utf-8") as results:
+                results.write(templated_string)

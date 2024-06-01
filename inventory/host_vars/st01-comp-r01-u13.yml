@@ -7,9 +7,11 @@ ansible_host: 10.10.21.27
 ##########################################################
 # generic
 
+device_model: H12SSL-NT
 internal_interface: dummy0
 internal_ip: 10.10.21.27
 mgmt_ip: 10.10.23.27
+mgmt_mac: 3c:ec:ef:9f:e2:2f
 
 
 ##########################################################

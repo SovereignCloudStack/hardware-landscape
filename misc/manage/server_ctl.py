@@ -5,7 +5,7 @@ import sys
 
 from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
     template_ansible_config
-from lib.server_hardware import template_bmc_config
+from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes
 from lib.helpers import get_unique_hosts, get_unique_hosts_full, setup_logging, get_basedir
 
 parser = argparse.ArgumentParser(
@@ -33,6 +33,13 @@ exclusive_group.add_argument('--show', '-s', action="store_true",
 
 exclusive_group.add_argument('--ansible', '-a', action="store_true",
                              help="Create ansible inventory files")
+
+exclusive_group.add_argument('--backup_cfg', type=CfgTypes,
+                             help='backup system configuration (possible values: both, bmc, bios)')
+
+exclusive_group.add_argument('--restore_cfg', type=CfgTypes,
+                             help='restore system configuration (possible values: both, bmc, bios)')
+
 
 exclusive_group.add_argument('--open','-o', action="store_true",
                              help="Open hosts in your preferred browser and output the login credentials")
@@ -83,5 +90,11 @@ if args.power_off:
 
 if args.power_check:
     check_power_servers(get_unique_hosts(args.node))
+
+if args.backup_cfg:
+    backup_config(get_unique_hosts(args.node), args.backup_cfg)
+
+if args.restore_cfg:
+    restore_config(get_unique_hosts(args.node), args.restore_cfg)
 
 sys.exit(0)
