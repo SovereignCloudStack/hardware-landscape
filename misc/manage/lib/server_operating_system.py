@@ -197,6 +197,7 @@ def template_ansible_config(host_list: list[str]):
                     continue
                 if existing_config.get("inventory_generate_strategy", "replace") == "update":
                     LOGGER.warning(f"Updating existing {host_name} inventory file, inventory_generate_strategy=update")
+                    # TODO: do a better merge strategy without messing up the formatting
                     merged_data = {**templated_data, **existing_config}
                     with open(results_filename, 'w') as f_out:
                         yaml.dump(merged_data, f_out)
