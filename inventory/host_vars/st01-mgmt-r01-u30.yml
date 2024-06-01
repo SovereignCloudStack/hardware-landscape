@@ -2,6 +2,7 @@
 ##########################################################
 # ansible
 
+
 inventory_generate_strategy: keep
 
 #External Usage
@@ -18,6 +19,7 @@ internal_ip: 10.10.21.10
 external_interface: eno2
 mgmt_interface: eno3
 mgmt_ip: 10.10.23.10
+
 
 ##########################################################
 # network
@@ -36,6 +38,7 @@ network_ethernets:
       mtu: 9100
       dhcp4: "no"
       dhcp6: "no"
+
   # Access to mangement network
   eno6:
     addresses:
@@ -52,6 +55,7 @@ network_ethernets:
     - to: default
       via: 192.168.104.41
     mtu: 1500
+
   # P2P Link to Switch st01-sw1g-r01-u47
   eno1:
     addresses:

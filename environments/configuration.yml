@@ -30,6 +30,7 @@ squid_port: 3128
 
 squid_tag: 5.7-23.04_beta  # don't get fooled by "beta". this is actually production ready
 
+
 ##########################
 # system settings
 
@@ -45,6 +46,63 @@ docker_user: "{{ operator_user }}"
 
 operator_user: dragon
 user_sudoers_type: "user"
+
+user_list:
+  - name: "scoopex"
+    key: "github"
+    primary_group: dragon
+    uid: 45001
+    groups:
+      - docker
+  - name: "garloff"
+    key: "github"
+    primary_group: dragon
+    uid: 45002
+    groups:
+      - docker
+  - name: "berendt"
+    key: "github"
+    primary_group: dragon
+    uid: 45003
+    groups:
+      - docker
+  - name: "ignatov17"
+    key: "github"
+    primary_group: dragon
+    uid: 45004
+    groups:
+      - docker
+  - name: "akafazov"
+    key: "github"
+    primary_group: dragon
+    uid: 45005
+    groups:
+      - docker
+  - name: "fkr"
+    key: "github"
+    primary_group: dragon
+    uid: 45006
+    groups:
+      - docker
+  - name: "fdobrovolny"
+    key: "github"
+    primary_group: dragon
+    uid: 45007
+    groups:
+      - docker
+  - name: "osfrickler"
+    key: "github"
+    primary_group: dragon
+    uid: 45008
+    groups:
+      - docker
+  - name: "zuse-z3"
+    key: "github"
+    primary_group: dragon
+    uid: 45009
+    groups:
+      - docker
+
 
 user_list:
   - name: "scoopex"
