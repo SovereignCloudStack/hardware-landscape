@@ -3,5 +3,5 @@
   hosts: manager
   become: true
   roles:
-    - scs-samba
+    - scs-mgr-samba
 

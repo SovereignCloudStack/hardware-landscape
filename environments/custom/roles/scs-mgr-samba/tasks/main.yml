@@ -13,9 +13,10 @@
     state: directory
     owner: "{{ operator_user }}"
     group: "{{ operator_group }}"
-    mode: 0750
+    mode: 0775
   loop:
     - "{{ samba_configuration_directory }}"
+    - "{{ samba_media_directory }}"
     - "{{ samba_docker_compose_directory }}"
 
 - name: Copy samba configuration files
