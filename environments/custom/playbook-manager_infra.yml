@@ -7,4 +7,5 @@
     - osism.commons.motd
     - scs-landscape-nodes
     - scs-mgr-samba
+    - scs-mgr-httpd
 

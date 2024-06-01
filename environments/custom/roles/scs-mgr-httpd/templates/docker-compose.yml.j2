@@ -1,0 +1,26 @@
+---
+services:
+  httpd:
+    container_name: "{{ httpd_container_name }}"
+    restart: unless-stopped
+    image: "{{ httpd_image }}"
+    ports:
+      - "8080:80"
+    volumes:
+      - "{{ httpd_configuration_directory }}/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro"
+      - "{{ httpd_media_directory }}/:/srv/:ro" 
+    # Automatic user creation not seems to work
+    #command: ["/sbin/tini", "--", "/usr/bin/httpd.sh", "-u", "osism;osism"]
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: {{ docker_network_mtu }}
+    ipam:
+      driver: default
+      config:
+        - subnet: {{ httpd_network }}
+
+#volumes:
+#  httpd:
