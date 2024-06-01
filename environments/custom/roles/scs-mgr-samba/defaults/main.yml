@@ -2,8 +2,8 @@
 ##########################
 # operator
 
-operator_user: dragon
-operator_group: "{{ operator_user }}"
+operator_user: "dragon"
+operator_group: "dragon"
 
 ##########################
 # docker
