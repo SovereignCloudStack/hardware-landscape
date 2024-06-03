@@ -87,7 +87,7 @@ def _setup_bmc_connection(host_details: dict[str, str]):
     logger.setLevel(logging.INFO)
     logger.addHandler(logging.StreamHandler())
 
-    redfish_url = "https://%s/redfish/v1" % host_details["ip"]
+    redfish_url = "https://%s/redfish/v1" % host_details["bmc_ip_v4"]
 
     basic_auth = auth.BasicAuth(username=host_details["bmc_username"], password=host_details["bmc_password"])
     http_auth = HTTPBasicAuth(host_details["bmc_username"], host_details["bmc_password"])

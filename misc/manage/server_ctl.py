@@ -80,7 +80,7 @@ if args.ansible:
     template_ansible_config(get_unique_hosts(args.node))
 
 if args.install_os:
-    install_server(get_unique_hosts(args.install_os), args.media_url)
+    install_server(get_unique_hosts(args.node), args.media_url)
 
 if args.power_on:
     control_servers(get_unique_hosts(args.node), "ForceOn")
