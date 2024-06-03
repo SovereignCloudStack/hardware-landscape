@@ -28,13 +28,28 @@
 
 ### Step 2: Create and publish node images
 
-* Create node cd misc/node-images
+* Create node node-images on manager
   ```
-  cd misc/node-images
+  st01-mgmt-r01-u30
+  cd /opt/configuration/misc/node-images
   make all
   ```
-* Add the passwords file for BMC password (TODO, add this later to ansible secrets) : ``secrets/server.passwords``
-  
+* Configure  "local shell on your local system
+  * Add the passwords file for BMC password data (TODO, add this later to ansible secrets) : ``secrets/server.passwords``
+* Bootstrap legacy AMI BMC systems:
+  (A2SDV-4C-LN8F and A2SDV-4C-LN8F, `st01-mgmt-*` and `st01-ctl`)
+    1. Configure Virtual Media
+      * Server: 10.10.23.254
+      * Path to Image: `\media\<MODEL>.iso` 
+      * User: osism
+      * Password: osism
+    2. Mount CDROM image
+    3. Open "iKVM/HTML5" Console
+    4. "Set Power Reset", select CD by using the boot menu (F11)
+    5. Unmount CDROM image after first shutdown
+    6. "Power up" until bootstrap installation is complete
+* Bootstrap systems with latest AMI BMC
+* Bootstrap legacy ARM systems
 
 ## Runbooks
 
