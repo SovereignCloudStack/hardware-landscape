@@ -232,7 +232,7 @@ def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
             LOGGER.warning("Device dos not support backup/restore using sum")
             continue
 
-        base_file_name = f"{get_device_configurations_dir("server")}{data["device_model"]}_{hostname}"
+        base_file_name = f"{get_device_configurations_dir('server')}{data['device_model']}_{hostname}"
 
         replacements: list[tuple[str, str]] = [
             tuple((r"File generated at ....-..-.._..:..:..", r"File generated at UNIFIED")),
@@ -256,7 +256,7 @@ def restore_config(bmc_hosts: list[str], filetype: CfgTypes):
             LOGGER.warning("Device dos not support backup/restore using sum")
             continue
 
-        base_file_name = f"{get_device_configurations_dir("server")}{data["device_model"]}_{hostname}"
+        base_file_name = f"{get_device_configurations_dir('server')}{data['device_model']}_{hostname}"
         if filetype in ["bios", "both"]:
             execute_sum(data, f"-c ChangeBiosCfg --file {base_file_name}.cfg")
         if filetype in ["bmc", "both"]:
