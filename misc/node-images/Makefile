@@ -20,7 +20,7 @@ A2SDV-8C-LN8F.iso: node-image
 		--arg interface1_name=enp2s0f0np0 \
 		--arg interface2_name=enp2s0f1np1 \
 		--arg layer3_underlay=true \
-		--build node-image-build-osism-1
+		--build node-image-build-1
 	mv node-image/ubuntu-autoinstall-osism-1.iso A2SDV-8C-LN8F.iso
 	touch A2SDV-8C-LN8F.iso
 

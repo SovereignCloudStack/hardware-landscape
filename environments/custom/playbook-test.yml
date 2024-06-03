@@ -1,7 +1,7 @@
 ---
 - name: Assign roles to manager hosts
   hosts: manager
-  become: true
-  roles:
-    - scs-mgr-httpd
+  tasks:
+    - debug:
+        var=hostvars[inventory_hostname]
 

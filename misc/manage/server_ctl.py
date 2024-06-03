@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+from pprint import pprint
 
 from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
     template_ansible_config
@@ -66,8 +67,7 @@ if args.show:
         hosts = get_unique_hosts(args.node)
 
     for host in hosts:
-        print(host)
-
+        pprint(host, indent=2)
 
 if args.open:
     open_servers(get_unique_hosts(args.node))
