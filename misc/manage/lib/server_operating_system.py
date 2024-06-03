@@ -127,15 +127,23 @@ def virtual_media_insert_new(media_url: str, mgr_inst: Manager):
     virtual_media_inst = virtual_media_col.get_member(virtual_media_col.members_identities[0])
     LOGGER.info(f"Inserting new media {media_url}")
     virtual_media_inst.insert_media(media_url)
+
+    for sys in mgr_inst.systems:
+        LOGGER.info("Set CD as next boot device")
+        sys.set_system_boot_source(
+            target=sushy.BOOT_SOURCE_TARGET_CD,
+            enabled=sushy.BOOT_SOURCE_ENABLED_ONCE
+        )
+
     success = False
     for sec_wait in range(0, MAX_WAIT, STEP_WAIT):
         virtual_media_inst.refresh()
-        from pprint import pprint
         if virtual_media_inst.inserted:
             success = True
             break
-        LOGGER.info(f"Waiting {STEP_WAIT} seconds ({sec_wait}s/{MAX_WAIT}s)")
+        LOGGER.info(f"Waiting {STEP_WAIT} seconds for inserted media ({sec_wait}s/{MAX_WAIT}s) ")
         sleep(STEP_WAIT)
+
     if not success:
         raise RuntimeError(f"Unable to insert virtual media {media_url}")
     return virtual_media_inst
