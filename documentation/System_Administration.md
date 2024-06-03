@@ -49,6 +49,12 @@
     5. Unmount CDROM image after first shutdown
     6. "Power up" until bootstrap installation is complete
 * Bootstrap systems with latest AMI BMC
+  ```
+  ./server_ctl --power_off \
+    st01-stor-r01-u01 st01-stor-r01-u03 st01-stor-r01-u05 st01-stor-r01-u07
+  ./server_ctl --install_os --media_url http://10.10.23.254:8080/H12SSL-CT.iso \
+    st01-stor-r01-u01 st01-stor-r01-u03 st01-stor-r01-u05 st01-stor-r01-u07
+  ```
 * Bootstrap legacy ARM systems
 
 ## Runbooks

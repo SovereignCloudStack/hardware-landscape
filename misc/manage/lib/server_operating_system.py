@@ -17,7 +17,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 import yaml
 
 
-MAX_WAIT = 300
+MAX_WAIT = 120
 STEP_WAIT = 15
 
 LOGGER = logging.getLogger()
@@ -130,6 +130,7 @@ def virtual_media_insert_new(media_url: str, mgr_inst: Manager):
     success = False
     for sec_wait in range(0, MAX_WAIT, STEP_WAIT):
         virtual_media_inst.refresh()
+        from pprint import pprint
         if virtual_media_inst.inserted:
             success = True
             break

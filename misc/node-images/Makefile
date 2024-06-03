@@ -42,7 +42,7 @@ H12SSL-CT.iso: node-image
 		--arg interface2_name=enp66s0f1np1 \
 		--arg layer3_underlay=true \
 		--build node-image-build-osism-1
-	mv node-image/ubuntu-autoinstall-osism-1.iso H12SSL-CT.iso
+	mv node-image/ubuntu-autoinstall-osism-3.iso H12SSL-CT.iso
 	touch H12SSL-CT.iso
 
 H12SSL-NT.iso: node-image
