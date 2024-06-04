@@ -291,7 +291,7 @@ sonic-installer set-default SONiC-OS-Edgecore-SONiC_20230420_055428_ec202111_370
   systemctl restart tinyproxy
   ```
 
-## Disable all ports
+## Manage Port status
 
 
 * Show all connected interfaces
@@ -316,6 +316,12 @@ sonic-installer set-default SONiC-OS-Edgecore-SONiC_20230420_055428_ec202111_370
   ```
   INTERFACES="$(show interfaces status|awk '$9 ~ "up" && $8 == "down" {print $1}'|tr '\n' ',')"
   sudo config interface shutdown $INTERFACES
+  ```
+
+* Enable  use-link-local-only for nodes
+  ```
+  INTERFACES="$(show interfaces status|awk '/25G/{print $1}')"
+  for INTERFACE in $INTERFACES; do sudo config interface ipv6 enable use-link-local-only $INTERFACE; done
   ```
 
 ## VLANs

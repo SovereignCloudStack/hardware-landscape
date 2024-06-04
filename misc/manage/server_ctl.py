@@ -46,7 +46,7 @@ exclusive_group.add_argument('--open','-o', action="store_true",
                              help="Open hosts in your preferred browser and output the login credentials")
 
 parser.add_argument('--media_url', metavar='url', type=str,
-                    default="http://10.10.23.1/ubuntu-autoinstall-osism-4.iso",
+                    default="auto",
                     help='The URL for for the iso image')
 
 parser.add_argument('--log_level', metavar='loglevel', type=str,

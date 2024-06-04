@@ -28,6 +28,8 @@ def get_ansible_host_inventory_dir() -> str:
 def get_device_configurations_dir(device_type: str) -> str:
     return f"{get_basedir()}/device_configurations/{device_type}/"
 
+def get_install_media_url(model: str):
+    return f"http://10.10.23.254/{model}.iso"
 
 def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
     log_format_string = \

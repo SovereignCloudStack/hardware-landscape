@@ -8,7 +8,7 @@ from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
 from .helpers import get_basedir, parse_configuration_data, get_device_configurations_dir, get_rundir, \
-    regex_replace_in_file
+    regex_replace_in_file, get_server_documentation_dir
 
 LOGGER = logging.getLogger()
 
@@ -25,20 +25,37 @@ def change_syslog(root: xml.etree.ElementTree):
 
 
 def change_ntp(root: xml.etree.ElementTree):
-    element = root.find(".//TimeUpdateMode")
-    element.text = "NTP"
 
-    element = root.find(".//NTPPrimaryServer")
-    element.text = "192.53.103.103"
+    if root.find(".//TimeUpdateMode"):
+        element = root.find(".//TimeUpdateMode")
+        element.text = "NTP"
 
-    element = root.find(".//NTPSecondaryServer")
-    element.text = "192.53.103.104"
+        element = root.find(".//NTPPrimaryServer")
+        element.text = "192.53.103.103"
 
-    element = root.find(".//TimeZone")
-    element.text = "+0000"
+        element = root.find(".//NTPSecondaryServer")
+        element.text = "192.53.103.104"
 
-    element = root.find(".//DayLightSaving")
-    element.text = "Disable"
+        element = root.find(".//TimeZone")
+        element.text = "+0000"
+
+        element = root.find(".//DayLightSaving")
+        element.text = "Disable"
+    else:
+        element = root.find(".//NTPEnable")
+        element.text = "Enable"
+
+        element = root.find(".//PrimaryNTPServer")
+        element.text = "192.53.103.103"
+
+        element = root.find(".//SecondaryNTPServer")
+        element.text = "192.53.103.104"
+
+        element = root.find(".//TimeZone")
+        element.text = "(UTC+00:00) Coordinated Universal Time"
+
+        element = root.find(".//AutoDSTEnabled")
+        element.text = "Disable"
 
 
 def change_snmp_community_config(elem: Element, mode: str, password: str):
@@ -115,20 +132,40 @@ def change_network(root: xml.etree.ElementTree, hostname: str, ip: str):
     element = root.find(".//HostName")
     element.text = hostname
 
-    element = root.find(".//IPv4/Configuration/IPSrc")
-    element.text = "Static"
 
-    element = root.find(".//IPv4/Configuration/IPAddr")
-    element.text = ip
+    if root.find(".//IPv4/Configuration/IPSrc"):
+        element = root.find(".//IPv4/Configuration/IPSrc")
+        element.text = "Static"
 
-    element = root.find(".//IPv4/Configuration/SubNetMask")
-    element.text = "255.255.255.0"
+        element = root.find(".//IPv4/Configuration/IPAddr")
+        element.text = ip
 
-    element = root.find(".//IPv4/Configuration/DefaultGateWayAddr")
-    element.text = "10.10.23.1"
+        element = root.find(".//IPv4/Configuration/SubNetMask")
+        element.text = "255.255.255.0"
 
-    element = root.find(".//IPv4/Configuration/DNSAddr")
-    element.text = "8.8.8.8"
+        element = root.find(".//IPv4/Configuration/DefaultGateWayAddr")
+        element.text = "10.10.23.1"
+
+        element = root.find(".//IPv4/Configuration/DNSAddr")
+        element.text = "8.8.8.8"
+    else:
+        element = root.find(".//IPv4/Configuration/DHCPEnabled")
+        element.text = "Disable"
+
+        element = root.find(".//IPv4/Configuration/Address")
+        element.text = ip
+
+        element = root.find(".//IPv4/Configuration/SubNetMask")
+        element.text = "255.255.255.0"
+
+        element = root.find(".//IPv4/Configuration/Gateway")
+        element.text = "10.10.23.254"
+
+        element = root.find(".//IPv4/Configuration/IPv4UseDNSServers")
+        element.text = "Disable"
+
+        element = root.find(".//IPv4/Configuration/IPv4StaticNameServer1")
+        element.text = "8.8.8.8"
 
 
 def change_bmc_settings(root: xml.etree.ElementTree):
@@ -136,27 +173,28 @@ def change_bmc_settings(root: xml.etree.ElementTree):
     element.text = "0"
 
 
-def change_virtual_media(root: xml.etree.ElementTree):
-    element = root.find(".//VirtualMedia/Information/DeviceStatus")
-    element.text = "Unmounted"
-
-    element = root.find(".//VirtualMedia/Configuration/ShareHost")
-    element.text = "10.10.23.1"
-
-    element = root.find(".//VirtualMedia/Configuration/PathToImage")
-    element.text = r'\media\ubuntu-autoinstall-osism-4.iso'
-
-    element = root.find(".//VirtualMedia/Configuration/UserName")
-    element.text = "osism"
-
-    element = root.find(".//VirtualMedia/Configuration/UserPassword")
-    element.text = "osism"
+# def change_virtual_media(root: xml.etree.ElementTree):
+#     element = root.find(".//VirtualMedia/Information/DeviceStatus")
+#     element.text = "Unmounted"
+#
+#     element = root.find(".//VirtualMedia/Configuration/ShareHost")
+#     element.text = "10.10.23.254"
+#
+#     element = root.find(".//VirtualMedia/Configuration/PathToImage")
+#     element.text = r'\media\ubuntu-autoinstall-osism-4.iso'
+#
+#     element = root.find(".//VirtualMedia/Configuration/UserName")
+#     element.text = "osism"
+#
+#     element = root.find(".//VirtualMedia/Configuration/UserPassword")
+#     element.text = "osism"
 
 
 def template_bmc_config(bmc_hosts: list[str]):
     host_data = parse_configuration_data()
     for hostname in bmc_hosts:
-        matching_files = glob.glob(f"{get_basedir()}/config/*_{hostname}.xml")
+        print(get_server_documentation_dir())
+        matching_files = glob.glob(f"{get_device_configurations_dir("server")}/*_{hostname}.xml")
 
         if len(matching_files) != 1:
             LOGGER.error(f"So such host {hostname}")
@@ -176,11 +214,11 @@ def template_bmc_config(bmc_hosts: list[str]):
         root_elem = ElementTree.fromstring(xml_string)
 
         change_bmc_settings(root_elem)
-        change_network(root_elem, hostname, host_data[hostname]["ip"])
+        change_network(root_elem, hostname, host_data[hostname]["bmc_ip_v4"])
         change_syslog(root_elem)
         change_ntp(root_elem)
         change_snmp(root_elem)
-        change_virtual_media(root_elem)
+        #change_virtual_media(root_elem)
 
         modified_xml_string = ElementTree.tostring(root_elem).decode()
         with open(filename, 'w') as file:
