@@ -12,9 +12,13 @@ from lib.helpers import get_unique_hosts, get_unique_hosts_full, setup_logging, 
 parser = argparse.ArgumentParser(
     prog='Configure Servers')
 
-parser.add_argument('node', metavar='host', default=["all"], type=str, nargs='*')
+parser.add_argument('node', metavar='host', help="One or more hostnames, use 'all' as a"
+                                                 " shortcut for all servers", type=str, nargs='+')
 
 exclusive_group = parser.add_mutually_exclusive_group(required=True)
+
+exclusive_group.add_argument('--open', '-o', action="store_true",
+                    help="Open hosts in your preferred browser and output the login credentials")
 
 exclusive_group.add_argument('--bmc_template', action="store_true",
                              help='Modify existing bmc configuration')
@@ -41,9 +45,8 @@ exclusive_group.add_argument('--backup_cfg', type=CfgTypes,
 exclusive_group.add_argument('--restore_cfg', type=CfgTypes,
                              help='restore system configuration (possible values: both, bmc, bios)')
 
-
-exclusive_group.add_argument('--open','-o', action="store_true",
-                             help="Open hosts in your preferred browser and output the login credentials")
+parser.add_argument('--watch', '-w', action="store_true",
+                    help="Open hosts in your preferred browser and output the login credentials")
 
 parser.add_argument('--media_url', metavar='url', type=str,
                     default="auto",
@@ -58,20 +61,6 @@ args = parser.parse_args()
 
 setup_logging(args.log_level)
 
-if args.show:
-    print()
-    print("The following hosts are configured:")
-    if args.verbose:
-        hosts = get_unique_hosts_full(args.node)
-    else:
-        hosts = get_unique_hosts(args.node)
-
-    for host in hosts:
-        pprint(host, indent=2)
-
-if args.open:
-    open_servers(get_unique_hosts(args.node))
-    sys.exit(0)
 
 if args.bmc_template:
     template_bmc_config(get_unique_hosts(args.node))
@@ -80,7 +69,7 @@ if args.ansible:
     template_ansible_config(get_unique_hosts(args.node))
 
 if args.install_os:
-    install_server(get_unique_hosts(args.node), args.media_url)
+    install_server(get_unique_hosts(args.node), args.media_url, args.watch)
 
 if args.power_on:
     control_servers(get_unique_hosts(args.node), "ForceOn")
@@ -96,5 +85,20 @@ if args.backup_cfg:
 
 if args.restore_cfg:
     restore_config(get_unique_hosts(args.node), args.restore_cfg)
+
+if args.show:
+    print()
+    print("The following hosts are configured:")
+    if args.verbose:
+        hosts = get_unique_hosts_full(args.node)
+    else:
+        hosts = get_unique_hosts(args.node)
+
+    for host in hosts:
+        pprint(host, indent=2)
+
+if args.open:
+    open_servers(get_unique_hosts(args.node))
+    sys.exit(0)
 
 sys.exit(0)

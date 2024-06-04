@@ -11,7 +11,7 @@ import sushy
 from sushy import auth
 import urllib3
 
-from .helpers import parse_configuration_data, get_ansible_host_inventory_dir
+from .helpers import parse_configuration_data, get_ansible_host_inventory_dir, get_install_media_url
 from sushy.resources.manager.manager import Manager
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 import yaml
@@ -109,8 +109,7 @@ def control_servers(host_list: list[str], mode="ForceOff"):
 
 def virtual_media_insert_new(media_url: str, mgr_inst: Manager):
     # Password is not critical
-    # smbclient --max-protocol NT1 --user osism --password Oji2aet6 '\\10.10.23.1\media\'
-    # get ubuntu-autoinstall-osism-4.iso
+    # smbclient --max-protocol NT1 --user osism --password osism '\\10.10.23.1\media\'
 
     virtual_media_col = mgr_inst.virtual_media
     if len(virtual_media_col.members_identities) > 0:
@@ -149,29 +148,38 @@ def virtual_media_insert_new(media_url: str, mgr_inst: Manager):
     return virtual_media_inst
 
 
-def install_server(host_list: list[str], media_url: str):
+def install_server(host_list: list[str], media_url: str, open: bool):
     host_data = parse_configuration_data()
 
     for host_name in host_list:
         (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
 
+        server_ident = f"{host_name} / {host_data[host_name]['bmc_ip_v4']}"
+
+        if open:
+            open_servers([host_name])
+
         if not check_power_off(redfish_url, http_auth):
-            LOGGER.error("Power is not OFF for host, cowardly refusing to continue")
+            LOGGER.error(f"** {server_ident} - Power is not OFF for host, cowardly refusing to continue")
             exit(1)
 
-        LOGGER.info("** Starting phase 1 of the installation")
+        LOGGER.info(f"** {server_ident} - Starting phase 1 of the installation")
+
+        if media_url == "auto":
+            media_url = get_install_media_url(host_data[host_name]["device_model"])
+
         virtual_media_inst = virtual_media_insert_new(media_url, mgr_inst)
 
-        LOGGER.info("** Starting phase 2 of the installation")
         control_server(redfish_url, http_auth, "ForceOn")
         sleep(30)
         wait_power_off(redfish_url, http_auth)
         virtual_media_inst.eject_media()
 
-        LOGGER.info("** Installation finished")
-        LOGGER.info("Starting Server")
+        LOGGER.info(f"** {server_ident} - Starting phase 2 of the installation")
         control_server(redfish_url, http_auth, "ForceOn")
-
+        wait_power_off(redfish_url, http_auth)
+        LOGGER.info(f"** {server_ident} - Installation finished, starting server now")
+        control_server(redfish_url, http_auth, "ForceOn")
 
 def open_servers(host_list: list[str]):
     host_data = parse_configuration_data()

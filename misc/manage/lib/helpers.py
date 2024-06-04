@@ -10,12 +10,15 @@ import coloredlogs
 
 LOGGER = logging.getLogger()
 
+MGMT_GATEWAY_IP = "10.10.23.1"
 
 def get_rundir() -> str:
     return os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + "/../")
 
+
 def get_basedir() -> str:
     return get_rundir() + "/../../"
+
 
 def get_server_documentation_dir() -> str:
     return f"{get_basedir()}/documentation/devices/servers/"
@@ -28,8 +31,10 @@ def get_ansible_host_inventory_dir() -> str:
 def get_device_configurations_dir(device_type: str) -> str:
     return f"{get_basedir()}/device_configurations/{device_type}/"
 
+
 def get_install_media_url(model: str):
-    return f"http://10.10.23.254/{model}.iso"
+    return f"http://10.10.23.254:8080/{model}.iso"
+
 
 def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
     log_format_string = \
@@ -125,7 +130,7 @@ def get_unique_hosts_full(host_list: list[str]) -> list[dict[str, str]]:
     return result
 
 
-def regex_replace_in_file(file_path: str, replacements: list[tuple[str,str]]):
+def regex_replace_in_file(file_path: str, replacements: list[tuple[str, str]]):
     modified_content = ""
     with open(file_path, 'r') as file:
         for line in file.readlines():
