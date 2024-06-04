@@ -51,8 +51,8 @@ H12SSL-NT.iso: node-image
 		--arg interface1_name=enp65s0f0np0 \
 		--arg interface2_name=enp65s0f1np1 \
 		--arg layer3_underlay=true \
-		--build node-image-build-osism-1
-	mv node-image/ubuntu-autoinstall-osism-1.iso H12SSL-NT.iso
+		--build node-image-build-1
+	mv node-image/ubuntu-autoinstall-1.iso H12SSL-NT.iso
 	touch H12SSL-NT.iso
 
 
