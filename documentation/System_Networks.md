@@ -10,7 +10,7 @@ Domain nameing scheme: <net>.landscape.sovereignit.de
 |---------------|---------------------|------------------|---------|-------------------------------------------------|
 | vpn1          | 10.10.1.0/24        | 10.10.2.1        | -       | VPN transfer/client network                     |
 | prod1         | 10.10.21.0/24       | 10.10.21.1       | -       | Production Node Network                         |
-| mgmt-p2p      | 10.10.22.0/24       | 10.10.22.1       | -       | Out of band p2p access for switches and servers |
+| mgmt-p2p      | 10.10.22.0/24       | 10.10.22.1       | -       | Out of band for rack level                      |
 | mgmt          | 10.10.23.0/24       | 10.10.23.1       | 23      | Out of band access for switches and servers     |
 | lab           | 10.10.24.0/24       | 10.10.24.1       | 24      | Lab Node Network                                |
 
