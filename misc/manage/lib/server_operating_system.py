@@ -71,7 +71,7 @@ def check_power_servers(host_list: list[str]):
             LOGGER.warning(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered OFF")
         else:
             if tcp_test_connect(host_data[host_name]['node_ip_v4'], 22, 1):
-                reachable = "reachable on tcp port 22/ssh"
+                reachable = "online (tcp 22/ssh)"
             else:
                 reachable = "not reachable on tcp port 22/ssh"
             LOGGER.info(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered ON, {reachable}")
