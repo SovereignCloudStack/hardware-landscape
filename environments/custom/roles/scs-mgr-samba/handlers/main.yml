@@ -1,0 +1,12 @@
+---
+# handlers file for samba
+- name: Restart samba service
+  become: true
+  ansible.builtin.service:
+    name: "{{ samba_service_name }}"
+    state: restarted
+  notify: Create osism user
+
+- name: Create osism user
+  become: true
+  ansible.builtin.command: docker exec samba bash -c 'useradd -m osism;echo -e "osism\nosism" | smbpasswd -s -a osism'

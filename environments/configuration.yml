@@ -1,6 +1,4 @@
 ---
-
-
 ##########################################################
 # proxy/client
 
@@ -22,13 +20,15 @@ proxy_proxies: {}
 squid_configuration_directory: /opt/squid/configuration
 squid_docker_compose_directory: /opt/squid
 
-squid_network: 10.10.21.0/24
-squid_service_name: "docker-compose@squid"
-
-squid_host: 0.0.0.0
-squid_port: 3128
+squid_host: 10.10.21.10
 
 squid_tag: 5.7-23.04_beta  # don't get fooled by "beta". this is actually production ready
+
+
+##########################
+# system settings
+
+motd_show_ssh: true
 
 ##########################
 # docker
@@ -39,6 +39,7 @@ docker_user: "{{ operator_user }}"
 # operator
 
 operator_user: dragon
+user_sudoers_type: "user"
 
 user_list:
   - name: "scoopex"
@@ -95,7 +96,6 @@ user_list:
     uid: 45009
     groups:
       - docker
-
 
 # yamllint disable rule:line-length
 operator_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC2wE2xiuO+i3qmDvu8kCCKX7U7H1diOICbWmR2UrKIxqWgcfWMQsT3WclotJKuVJuKIWyFD6ZNwwLuvC3RxVSqhCiWjqxg3jzJBj7/C1O3IYyLGTUl/x7Cky530lf/aj4wrwt3Ketk/4QNwgget2nCvOy0S2NDCJ3rL6oIUjdJekvRrFf9IbWeX8fqYYCoh1cYJWto1XYPnhMDAB/lqtjN1ssurLSKoJg/bUT7q/KkIvvA/BOR2NMqS0aGx+bKhdkeB22V/t75Ct8ymoCYk9+MTC9i/QX20Fi7835/W7Gl18J8NiO9ebaWyYbsxZ5klWXQa5EiLLBDZ82OR88G+0FjXp1Z3VG6FcpdYpW7sxrT21HEvWOnQACZCdlzwyBJ31id/LjDRhJU6BmZm0Sa9EOJNL8XVOUUzuoa0XL1mIVTsmLpUwqLSfw6Ditb+q4afFi0iYMe3JKOt+JmftvBgeQCjNUsCzk+Ny2j6dZKv2aeF5LOQZGRM3HzG39Gkir3q1zdWmCl4lc3QQBfr5ZcdAp+wQMFSgJAudKffO9kdDVNoyjgih7rD3E+JjJdhY9//WQEEBm2vfEqm7qqEQUAELd0JBCivJmOhUVH0rGbTrnkTBtLR4Au40W5aYaNQJ7+U3hTRrvpycSC1pUU3Wq3OXJd2FRDgKQJljQcpBw4V9j8GQ==

@@ -1,0 +1,29 @@
+---
+##########################
+# operator
+
+operator_user: "dragon"
+operator_group: "dragon"
+
+##########################
+# docker
+
+docker_network_mtu: 1500
+
+docker_registry_httpd: index.docker.io
+
+##########################
+# httpd
+
+httpd_configuration_directory: /opt/httpd/configuration
+httpd_media_directory: /srv/www
+httpd_docker_compose_directory: /opt/httpd
+
+httpd_network: 172.31.103.144/28
+httpd_service_name: "docker-compose@httpd"
+
+httpd_host: 0.0.0.0
+
+httpd_tag: 2.4
+httpd_image: "{{ docker_registry_httpd }}/httpd:{{ httpd_tag }}"
+httpd_container_name: httpd

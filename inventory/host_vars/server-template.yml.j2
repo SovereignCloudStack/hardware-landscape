@@ -1,0 +1,32 @@
+---
+##########################################################
+# ansible
+
+ansible_host: {{ node_ip_v4 }}
+
+##########################################################
+# generic
+
+device_model: {{ device_model }}
+internal_interface: dummy0
+internal_ip: {{ node_ip_v4 }}
+mgmt_ip: {{ bmc_ip_v4 }}
+mgmt_mac: {{ bmc_mac }}
+
+
+##########################################################
+# network
+
+network_type: netplan
+network_ethernets:
+  dummy0:
+      addresses:
+      - {{ node_ip_v4 }}/32
+      - {{ node_ip_v6 }}/128
+{% for interface in interfaces %}
+  {{ interface }}:
+      mtu: 9100
+      dhcp4: "no"
+      dhcp6: "no"
+{% endfor %}
+

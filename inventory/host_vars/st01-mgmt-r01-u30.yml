@@ -2,6 +2,9 @@
 ##########################################################
 # ansible
 
+
+inventory_generate_strategy: keep
+
 #External Usage
 #ansible_host: 188.244.101.28
 
@@ -15,8 +18,7 @@ internal_interface: dummy0
 internal_ip: 10.10.21.10
 external_interface: eno2
 mgmt_interface: eno3
-
-
+mgmt_ip: 10.10.23.10
 
 
 ##########################################################
@@ -36,10 +38,11 @@ network_ethernets:
       mtu: 9100
       dhcp4: "no"
       dhcp6: "no"
-  # P2P Link to Switch st01-sw1g-r01-u47
-  eno1:
+
+  # Access to mangement network
+  eno6:
     addresses:
-      - "10.10.22.1/24"
+      - "10.10.23.254/24"
   # Internet Uplink
   eno2:
     addresses:
@@ -52,11 +55,11 @@ network_ethernets:
     - to: default
       via: 192.168.104.41
     mtu: 1500
-  # Access to mangement network
-  eno3:
-    addresses:
-      - "10.10.23.10/24"
 
+  # P2P Link to Switch st01-sw1g-r01-u47
+  eno1:
+    addresses:
+      - "10.10.22.1/24"
 
 motd_content: |
   .

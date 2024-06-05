@@ -1,0 +1,47 @@
+---
+# tasks file for samba
+
+- name: Install smbclient
+  apt:
+    name:
+    - smbclient
+
+- name: Create required directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0775
+  loop:
+    - "{{ samba_configuration_directory }}"
+    - "{{ samba_media_directory }}"
+    - "{{ samba_docker_compose_directory }}"
+
+- name: Copy samba configuration files
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ samba_configuration_directory }}/{{ item }}"
+    mode: 0644
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+  loop:
+    - smb.conf
+  notify: Restart samba service
+
+- name: Copy docker-compose.yml file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ samba_docker_compose_directory }}/docker-compose.yml"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+  notify: Restart samba service
+
+- name: Manage samba service
+  become: true
+  ansible.builtin.service:
+    name: "{{ samba_service_name }}"
+    state: started
+    enabled: true

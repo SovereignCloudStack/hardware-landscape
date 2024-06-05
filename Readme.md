@@ -6,7 +6,9 @@
   * [Hostname Naming](documentation/standards/Hostname_Naming.md)
   * [Network Connections](documentation/standards/System_Network_Connections.md)
 * Documentation of the System
-  * [Administration of the Hardware Landscape](documentation/System_Administration.md)
+  * Operational documentation
+    * [Deployment of the System(s)][documentation/System_Deployment.md]
+    * [Runbooks](documentation/System_Runbooks.md)
   * [The rack configuration](documentation/System_Rack_Setup.md)
   * [General Network Information](documentation/System_Networks.md)
   * [The Networking Diagram](documentation/System_Network_Diagram.md)
