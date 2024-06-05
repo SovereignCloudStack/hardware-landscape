@@ -7,7 +7,7 @@ from pprint import pprint
 from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
     template_ansible_config
 from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes
-from lib.helpers import get_unique_hosts, get_unique_hosts_full, setup_logging, get_basedir
+from lib.helpers import get_unique_servers, get_unique_servers_full, setup_logging, get_basedir
 
 parser = argparse.ArgumentParser(
     prog='Configure Servers')
@@ -18,7 +18,7 @@ parser.add_argument('node', metavar='host', help="One or more hostnames, use 'al
 exclusive_group = parser.add_mutually_exclusive_group(required=True)
 
 exclusive_group.add_argument('--open', '-o', action="store_true",
-                    help="Open hosts in your preferred browser and output the login credentials")
+                             help="Open hosts in your preferred browser and output the login credentials")
 
 exclusive_group.add_argument('--bmc_template', action="store_true",
                              help='Modify existing bmc configuration')
@@ -55,50 +55,52 @@ parser.add_argument('--media_url', metavar='url', type=str,
 parser.add_argument('--log_level', metavar='loglevel', type=str,
                     default="INFO", help='The loglevel')
 
+parser.add_argument('--filter', '-f', metavar='loglevel', type=str,
+                    default=None, help='A filter expression <key>=<regex for values>')
+
 parser.add_argument('--verbose', '-v', action='store_true')
 
 args = parser.parse_args()
 
 setup_logging(args.log_level)
 
-
 if args.bmc_template:
-    template_bmc_config(get_unique_hosts(args.node))
+    template_bmc_config(get_unique_servers(args.node))
 
 if args.ansible:
-    template_ansible_config(get_unique_hosts(args.node))
+    template_ansible_config(get_unique_servers(args.node))
 
 if args.install_os:
-    install_server(get_unique_hosts(args.node), args.media_url, args.watch)
+    install_server(get_unique_servers(args.node), args.media_url, args.watch)
 
 if args.power_on:
-    control_servers(get_unique_hosts(args.node), "ForceOn")
+    control_servers(get_unique_servers(args.node), "ForceOn")
 
 if args.power_off:
-    control_servers(get_unique_hosts(args.node), "ForceOff")
+    control_servers(get_unique_servers(args.node), "ForceOff")
 
 if args.power_check:
-    check_power_servers(get_unique_hosts(args.node))
+    check_power_servers(get_unique_servers(args.node))
 
 if args.backup_cfg:
-    backup_config(get_unique_hosts(args.node), args.backup_cfg)
+    backup_config(get_unique_servers(args.node), args.backup_cfg)
 
 if args.restore_cfg:
-    restore_config(get_unique_hosts(args.node), args.restore_cfg)
+    restore_config(get_unique_servers(args.node), args.restore_cfg)
 
 if args.show:
     print()
-    print("The following hosts are configured:")
+    print("The following hosts are configured:", file=sys.stderr)
     if args.verbose:
-        hosts = get_unique_hosts_full(args.node)
+        hosts = get_unique_servers_full(args.node, args.filter)
     else:
-        hosts = get_unique_hosts(args.node)
+        hosts = get_unique_servers(args.node, args.filter)
 
     for host in hosts:
         pprint(host, indent=2)
 
 if args.open:
-    open_servers(get_unique_hosts(args.node))
+    open_servers(get_unique_servers(args.node, args.filter))
     sys.exit(0)
 
 sys.exit(0)

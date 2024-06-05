@@ -191,7 +191,7 @@ def change_bmc_settings(root: xml.etree.ElementTree):
 
 
 def template_bmc_config(bmc_hosts: list[str]):
-    host_data = parse_configuration_data()
+    host_data = parse_configuration_data()["servers"]
     for hostname in bmc_hosts:
         print(get_server_documentation_dir())
         matching_files = glob.glob(f"{get_device_configurations_dir('server')}/*_{hostname}.xml")
@@ -261,7 +261,7 @@ class CfgTypes(str, Enum):
 
 
 def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
-    host_data = parse_configuration_data()
+    host_data = parse_configuration_data()["servers"]
     for hostname in bmc_hosts:
         LOGGER.info(f"Processing server {hostname}")
         data = host_data[hostname]
@@ -286,7 +286,7 @@ def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
 
 
 def restore_config(bmc_hosts: list[str], filetype: CfgTypes):
-    host_data = parse_configuration_data()
+    host_data = parse_configuration_data()["servers"]
     for hostname in bmc_hosts:
         LOGGER.info(f"Processing server {hostname}")
         data = host_data[hostname]

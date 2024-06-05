@@ -17,7 +17,6 @@ from sushy.resources.manager.manager import Manager
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 import yaml
 
-
 MAX_WAIT = 120
 STEP_WAIT = 15
 
@@ -63,7 +62,7 @@ def tcp_test_connect(host: str, port: int, timeout: float = 5):
 
 
 def check_power_servers(host_list: list[str]):
-    host_data = parse_configuration_data()
+    host_data = parse_configuration_data()["servers"]
     for host_name in host_list:
         (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
         if check_power_off(redfish_url, http_auth):
@@ -117,7 +116,7 @@ def _setup_bmc_connection(host_details: dict[str, str]):
 
 
 def control_servers(host_list: list[str], mode="ForceOff"):
-    host_data = parse_configuration_data()
+    host_data = parse_configuration_data()["servers"]
     for host_name in host_list:
         LOGGER.info(f"Invoking operation '{mode}' on {host_name}")
         (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
@@ -166,7 +165,7 @@ def virtual_media_insert_new(media_url: str, mgr_inst: Manager):
 
 
 def install_server(host_list: list[str], media_url: str, open: bool):
-    host_data = parse_configuration_data()
+    host_data = parse_configuration_data()["servers"]
 
     for host_name in host_list:
         (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
@@ -198,8 +197,9 @@ def install_server(host_list: list[str], media_url: str, open: bool):
         LOGGER.info(f"** {server_ident} - Installation finished, starting server now")
         control_server(redfish_url, http_auth, "ForceOn")
 
+
 def open_servers(host_list: list[str]):
-    host_data = parse_configuration_data()
+    host_data = parse_configuration_data()["servers"]
 
     for host_name in host_list:
         LOGGER.info(f"** {host_name} / {host_data[host_name]['bmc_ip_v4']}")
@@ -210,7 +210,7 @@ def open_servers(host_list: list[str]):
 
 
 def template_ansible_config(host_list: list[str]):
-    host_data = parse_configuration_data()
+    host_data = parse_configuration_data()["servers"]
 
     template_loader = FileSystemLoader(searchpath=get_ansible_host_inventory_dir())
     template_env = Environment(loader=template_loader, undefined=StrictUndefined)

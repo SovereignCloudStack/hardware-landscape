@@ -12,6 +12,7 @@ LOGGER = logging.getLogger()
 
 MGMT_GATEWAY_IP = "10.10.23.1"
 
+
 def get_rundir() -> str:
     return os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + "/../")
 
@@ -22,6 +23,10 @@ def get_basedir() -> str:
 
 def get_server_documentation_dir() -> str:
     return f"{get_basedir()}/documentation/devices/servers/"
+
+
+def get_switch_documentation_dir() -> str:
+    return f"{get_basedir()}/documentation/devices/network/"
 
 
 def get_ansible_host_inventory_dir() -> str:
@@ -50,20 +55,60 @@ def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
     return logger, log_file
 
 
-CONFIG_FIELDS = ['name', 'serial', 'bmc_ip_v4', 'bmc_mac', 'node_ip_v4', 'node_ip_v6', 'bmc_password', 'bmc_username',
-                 'interfaces']
-
-
 @functools.lru_cache
-def parse_configuration_data() -> dict[str, dict[str, str]]:
+def parse_configuration_data() -> dict[str, dict[str, dict[str, str]]]:
+    data = {}
+    data["servers"] = parse_configuration_data_servers(data)
+    data["switches"] = parse_configuration_data_switches(data)
+    return data
+
+
+CONFIG_FIELDS_SWITCHES = ["name", "serial", "bmc_ip_v4", "bmc_mac", "serial_device"]
+
+
+def parse_configuration_data_switches(data) -> dict[str, dict[str, str]]:
     data = {}
 
+    for docu_file_name in glob.glob(f"{get_switch_documentation_dir()}/Edgecore_*.md"):
+        m = re.match(r".*/Edgecore_(..+).md", docu_file_name)
+        if not m:
+            LOGGER.error("Unable to parse machine type from filename")
+            sys.exit(1)
+        switch_type = m.group(1)
+
+        LOGGER.debug(f"loading data from: {docu_file_name}")
+        with open(docu_file_name, 'r') as file:
+            for line in file.readlines():
+                m = re.fullmatch(
+                    r"\|\s*(?P<name>[a-z0-9-]+?)\s*\|"
+                    r"\s*(?P<serial>[\da-zA-Z-]+?)\s*"
+                    r"\|.+"
+                    r"\|\s*(?P<bmc_ip_v4>\d+\.\d+\.\d+\.\d+?)\s*"
+                    r"\|\s*(?P<bmc_mac>[a-f0-9:]+)\s*"
+                    r"\|\s*(?P<serial_device>[A-F0-9:]+)\s*"
+                    r".*\|.*",
+                    line.strip())
+                if m:
+                    data[m.group("name")] = m.groupdict()
+                    data[m.group("name")]["device_model"] = switch_type
+                    for field in CONFIG_FIELDS_SWITCHES:
+                        if field not in data[m.group("name")]:
+                            LOGGER.error(f"field '{field}' not in line : >>{line.strip()}<<")
+
+    return data
+
+
+CONFIG_FIELDS_SERVERS = ['name', 'serial', 'bmc_ip_v4', 'bmc_mac', 'node_ip_v4',
+                         'node_ip_v6', 'bmc_password', 'bmc_username', 'interfaces']
+
+
+def parse_configuration_data_servers(data) -> dict[str, dict[str, str]]:
+    data = {}
     password_dict = {}
     server_passwords_file = f"{get_basedir()}/secrets/server.passwords"
     if not os.path.isfile(server_passwords_file):
         LOGGER.error(f"Unable to open the server passwords file {server_passwords_file}")
         sys.exit(1)
-
     with open(server_passwords_file, 'r') as file:
         LOGGER.debug("Reading ")
         for line in file.readlines():
@@ -71,7 +116,6 @@ def parse_configuration_data() -> dict[str, dict[str, str]]:
                              line.strip())
             if m:
                 password_dict[m.group("mac")] = {"username": m.group("username"), "password": m.group("password")}
-
     for docu_file_name in glob.glob(f"{get_server_documentation_dir()}/Supermicro_*.md"):
         m = re.match(r".*/Supermicro_(..+).md", docu_file_name)
         if not m:
@@ -104,29 +148,60 @@ def parse_configuration_data() -> dict[str, dict[str, str]]:
                     data[m.group("name")]["bmc_username"] = password_dict[m.group("bmc_mac")]["username"]
                     data[m.group("name")]["device_model"] = machine_type
                     data[m.group("name")]["interfaces"] = sorted(interfaces)
-                    for field in CONFIG_FIELDS:
+                    for field in CONFIG_FIELDS_SERVERS:
                         if field not in data[m.group("name")]:
                             LOGGER.error(f"field not in line : >>{line.strip()}<<")
 
     return data
 
 
-def get_unique_hosts(host_list: list[str]) -> list[str]:
-    host_data = parse_configuration_data()
+def get_unique_servers(host_list: list[str], filter_hosts: str | None = None) -> list[str]:
+    return get_unique("servers", host_list, filter_hosts)
+
+
+def get_unique_servers_full(host_list: list[str], filter_hosts: str | None = None) -> list[dict[str, str]]:
+    return get_unique_full("servers", host_list, filter_hosts)
+
+
+def get_unique_switches(host_list: list[str], filter_hosts: str | None = None) -> list[str]:
+    return get_unique("switches", host_list, filter_hosts)
+
+
+def get_unique_switches_full(host_list: list[str], filter_hosts: str | None = None) -> list[dict[str, str]]:
+    return get_unique_full("switches", host_list, filter_hosts)
+
+
+def get_unique(item_type: str, host_list: list[str], filter_hosts: str | None = None) -> list[str]:
+    host_data = parse_configuration_data()[item_type]
     result = set()
-    for host in host_list:
-        if host == "all":
+    for item_name in host_list:
+        if item_name == "all":
             result = result | set(host_data.keys())
         else:
-            result.add(host)
+            result.add(item_name)
+
+    if filter_hosts:
+        new_result = set()
+        key, value = filter_hosts.split("=")
+        for item_name in result:
+            if re.fullmatch(value.strip(), host_data[item_name][key.strip()]):
+                new_result.add(item_name)
+        result = new_result
+
     return sorted(list(result))
 
 
-def get_unique_hosts_full(host_list: list[str]) -> list[dict[str, str]]:
+def get_unique_full(item_type: str, host_list: list[str], filter_hosts: str | None = None) -> list[dict[str, str]]:
     result = []
-    host_data = parse_configuration_data()
-    for host in get_unique_hosts(host_list):
-        result.append(host_data[host])
+    host_data = parse_configuration_data()[item_type]
+
+    if item_type == "servers":
+        items = get_unique_servers(host_list, filter_hosts)
+    else:
+        items = get_unique_switches(host_list, filter_hosts)
+
+    for item_name in items:
+        result.append(host_data[item_name])
     return result
 
 
