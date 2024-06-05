@@ -7,9 +7,10 @@ SERVER_MEDIA_PATH = /srv/www
 A2SDV-4C-LN8F.iso: node-image
 	node-image/create-image.sh \
 		--config $(PWD)/template.yaml \
-		--arg interface1_name=enp2s0f0np0 \
-		--arg interface2_name=enp2s0f1np1 \
-		--arg layer3_underlay=true \
+		--parameters \
+			interface1_name=enp2s0f0np0 \
+			interface2_name=enp2s0f1np1 \
+		 	layer3_underlay=true \
 		--build node-image-build-osism-1
 	mv node-image/ubuntu-autoinstall-osism-1.iso A2SDV-4C-LN8F.iso
 	touch A2SDV-4C-LN8F.iso
@@ -17,9 +18,10 @@ A2SDV-4C-LN8F.iso: node-image
 A2SDV-8C-LN8F.iso: node-image
 	node-image/create-image.sh \
 		--config $(PWD)/template.yaml \
-		--arg interface1_name=enp2s0f0np0 \
-		--arg interface2_name=enp2s0f1np1 \
-		--arg layer3_underlay=true \
+		--parameters \
+			interface1_name=enp2s0f0np0 \
+			interface2_name=enp2s0f1np1 \
+			layer3_underlay=true \
 		--build node-image-build-1
 	mv node-image/ubuntu-autoinstall-osism-1.iso A2SDV-8C-LN8F.iso
 	touch A2SDV-8C-LN8F.iso
@@ -28,9 +30,10 @@ A2SDV-8C-LN8F.iso: node-image
 ARS-110M-NR.iso: node-image
 	node-image/create-image.sh \
 		--config $(PWD)/template.yaml \
-		--arg interface1_name=enp1p1s0f0np0 \
-		--arg interface2_name=enp1p1s0f1np1 \
-		--arg layer3_underlay=true \
+		--parameters \
+			interface1_name=enp1p1s0f0np0 \
+			interface2_name=enp1p1s0f1np1 \
+			layer3_underlay=true \
 		--build node-image-build-osism-1
 	mv node-image/ubuntu-autoinstall-osism-1.iso ARS-110M-NR.iso
 	touch ARS-110M-NR.iso
@@ -38,9 +41,10 @@ ARS-110M-NR.iso: node-image
 H12SSL-CT.iso: node-image
 	node-image/create-image.sh \
 		--config $(PWD)/template.yaml \
-		--arg interface1_name=enp66s0f0np0 \
-		--arg interface2_name=enp66s0f1np1 \
-		--arg layer3_underlay=true \
+		--parameters \
+			interface1_name=enp66s0f0np0 \
+			interface2_name=enp66s0f1np1 \
+			layer3_underlay=true \
 		--build node-image-build-osism-3
 	mv node-image/ubuntu-autoinstall-osism-3.iso H12SSL-CT.iso
 	touch H12SSL-CT.iso
@@ -48,11 +52,12 @@ H12SSL-CT.iso: node-image
 H12SSL-NT.iso: node-image
 	node-image/create-image.sh \
 		--config $(PWD)/template.yaml \
-		--arg interface1_name=enp65s0f0np0 \
-		--arg interface2_name=enp65s0f1np1 \
-		--arg layer3_underlay=true \
-		--build node-image-build-osism-1
-	mv node-image/ubuntu-autoinstall-osism-1.iso H12SSL-NT.iso
+		--parameters \
+			interface1_name=enp65s0f0np0 \
+			interface2_name=enp65s0f1np1 \
+			layer3_underlay=true \
+		--build node-image-build-1
+	mv node-image/ubuntu-autoinstall-1.iso H12SSL-NT.iso
 	touch H12SSL-NT.iso
 
 
