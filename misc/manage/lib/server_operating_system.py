@@ -10,12 +10,14 @@ import requests
 from requests.auth import HTTPBasicAuth
 import sushy
 from sushy import auth
+from sushy.resources.manager.manager import Manager
 import urllib3
 
-from .helpers import parse_configuration_data, get_ansible_host_inventory_dir, get_install_media_url
-from sushy.resources.manager.manager import Manager
+from .global_helpers import get_ansible_host_inventory_dir, get_install_media_url
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 import yaml
+
+from .helpers import parse_configuration_data
 
 MAX_WAIT = 120
 STEP_WAIT = 15
@@ -103,6 +105,10 @@ def _setup_bmc_connection(host_details: dict[str, str]):
     logger.setLevel(logging.INFO)
     logger.addHandler(logging.StreamHandler())
 
+    if host_details["device_model"].startswith("ARS"):
+        # https://github.com/openbmc/docs/blob/master/REDFISH-cheatsheet.md
+        raise RuntimeError("redfish not implemented")
+
     redfish_url = "https://%s/redfish/v1" % host_details["bmc_ip_v4"]
 
     basic_auth = auth.BasicAuth(username=host_details["bmc_username"], password=host_details["bmc_password"])
@@ -111,7 +117,6 @@ def _setup_bmc_connection(host_details: dict[str, str]):
     s = sushy.Sushy(redfish_url, auth=basic_auth, verify=False)
 
     mgr_inst = s.get_manager()
-
     return mgr_inst, http_auth, redfish_url
 
 

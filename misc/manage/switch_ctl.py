@@ -4,7 +4,8 @@ import argparse
 import sys
 from pprint import pprint
 
-from lib.helpers import get_unique_switches, setup_logging
+from lib.global_helpers import setup_logging
+from lib.switch_model import get_unique_switches
 from lib.switch_operating_system import CfgTypes
 
 

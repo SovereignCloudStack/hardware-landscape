@@ -7,7 +7,8 @@ from pprint import pprint
 from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
     template_ansible_config
 from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes
-from lib.helpers import get_unique_servers, setup_logging
+from lib.global_helpers import setup_logging
+from lib.server_model import get_unique_servers
 
 parser = argparse.ArgumentParser(
     prog='Configure Servers')
@@ -65,28 +66,28 @@ args = parser.parse_args()
 setup_logging(args.log_level)
 
 if args.bmc_template:
-    template_bmc_config(get_unique_servers(args.node))
+    template_bmc_config(get_unique_servers(args.node, False))
 
 if args.ansible:
-    template_ansible_config(get_unique_servers(args.node))
+    template_ansible_config(get_unique_servers(args.node, False))
 
 if args.install_os:
-    install_server(get_unique_servers(args.node), args.media_url, args.watch)
+    install_server(get_unique_servers(args.node, False), args.media_url, args.watch)
 
 if args.power_on:
-    control_servers(get_unique_servers(args.node), "ForceOn")
+    control_servers(get_unique_servers(args.node, False), "ForceOn")
 
 if args.power_off:
-    control_servers(get_unique_servers(args.node), "ForceOff")
+    control_servers(get_unique_servers(args.node, False), "ForceOff")
 
 if args.power_check:
-    check_power_servers(get_unique_servers(args.node))
+    check_power_servers(get_unique_servers(args.node, False))
 
 if args.backup_cfg:
-    backup_config(get_unique_servers(args.node), args.backup_cfg)
+    backup_config(get_unique_servers(args.node, False), args.backup_cfg)
 
 if args.restore_cfg:
-    restore_config(get_unique_servers(args.node), args.restore_cfg)
+    restore_config(get_unique_servers(args.node, False), args.restore_cfg)
 
 if args.show:
     print()
@@ -96,7 +97,7 @@ if args.show:
         pprint(host, indent=2)
 
 if args.open:
-    open_servers(get_unique_servers(args.node, args.filter))
+    open_servers(get_unique_servers(args.node, False, args.filter))
     sys.exit(0)
 
 sys.exit(0)
