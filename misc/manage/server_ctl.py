@@ -7,7 +7,7 @@ from pprint import pprint
 from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
     template_ansible_config
 from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes
-from lib.helpers import get_unique_servers, get_unique_servers_full, setup_logging, get_basedir
+from lib.helpers import get_unique_servers, setup_logging
 
 parser = argparse.ArgumentParser(
     prog='Configure Servers')
@@ -91,11 +91,7 @@ if args.restore_cfg:
 if args.show:
     print()
     print("The following hosts are configured:", file=sys.stderr)
-    if args.verbose:
-        hosts = get_unique_servers_full(args.node, args.filter)
-    else:
-        hosts = get_unique_servers(args.node, args.filter)
-
+    hosts = get_unique_servers(args.node, args.verbose, args.filter)
     for host in hosts:
         pprint(host, indent=2)
 

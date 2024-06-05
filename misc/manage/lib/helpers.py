@@ -155,23 +155,16 @@ def parse_configuration_data_servers(data) -> dict[str, dict[str, str]]:
     return data
 
 
-def get_unique_servers(host_list: list[str], filter_hosts: str | None = None) -> list[str]:
-    return get_unique("servers", host_list, filter_hosts)
+def get_unique_servers(host_list: list[str], full: bool, filter_hosts: str | None = None) -> list[str]:
+    return get_unique("servers", full, host_list, filter_hosts)
 
 
-def get_unique_servers_full(host_list: list[str], filter_hosts: str | None = None) -> list[dict[str, str]]:
-    return get_unique_full("servers", host_list, filter_hosts)
+def get_unique_switches(host_list: list[str], full: bool, filter_hosts: str | None = None) -> list[str]:
+    return get_unique("switches", full, host_list, filter_hosts)
 
 
-def get_unique_switches(host_list: list[str], filter_hosts: str | None = None) -> list[str]:
-    return get_unique("switches", host_list, filter_hosts)
-
-
-def get_unique_switches_full(host_list: list[str], filter_hosts: str | None = None) -> list[dict[str, str]]:
-    return get_unique_full("switches", host_list, filter_hosts)
-
-
-def get_unique(item_type: str, host_list: list[str], filter_hosts: str | None = None) -> list[str]:
+def get_unique(item_type: str, full: bool, host_list: list[str], filter_hosts: str | None = None) -> (
+        list[str] | list[dict[str, str]]):
     host_data = parse_configuration_data()[item_type]
     result = set()
     for item_name in host_list:
@@ -188,21 +181,13 @@ def get_unique(item_type: str, host_list: list[str], filter_hosts: str | None = 
                 new_result.add(item_name)
         result = new_result
 
-    return sorted(list(result))
-
-
-def get_unique_full(item_type: str, host_list: list[str], filter_hosts: str | None = None) -> list[dict[str, str]]:
-    result = []
-    host_data = parse_configuration_data()[item_type]
-
-    if item_type == "servers":
-        items = get_unique_servers(host_list, filter_hosts)
+    if full:
+        result_full: list[dict[str, str]] = []
+        for item_name in sorted(list(result)):
+            result_full.append(host_data[item_name])
+        return result_full
     else:
-        items = get_unique_switches(host_list, filter_hosts)
-
-    for item_name in items:
-        result.append(host_data[item_name])
-    return result
+        return sorted(list(result))
 
 
 def regex_replace_in_file(file_path: str, replacements: list[tuple[str, str]]):
