@@ -194,7 +194,7 @@ def template_bmc_config(bmc_hosts: list[str]):
     host_data = parse_configuration_data()
     for hostname in bmc_hosts:
         print(get_server_documentation_dir())
-        matching_files = glob.glob(f"{get_device_configurations_dir("server")}/*_{hostname}.xml")
+        matching_files = glob.glob(f"{get_device_configurations_dir('server')}/*_{hostname}.xml")
 
         if len(matching_files) != 1:
             LOGGER.error(f"So such host {hostname}")
