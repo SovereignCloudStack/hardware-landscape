@@ -54,9 +54,10 @@ def check_power_servers(host_list: list[str]):
     for host_name in host_list:
         (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
         if check_power_off(redfish_url, http_auth):
-            LOGGER.warning(f"Server {host_name} is powered OFF")
+            LOGGER.warning(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered OFF")
         else:
-            LOGGER.info(f"Server {host_name} is powered ON")
+            
+            LOGGER.info(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered ON")
 
 
 def wait_power_off(url: str, http_auth: HTTPBasicAuth):
