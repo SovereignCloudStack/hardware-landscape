@@ -1,0 +1,1045 @@
+<?xml version="1.0"?>
+<BmcCfg>
+  <!--Supermicro Update Manager 2.13.0 (2023/08/25)-->
+  <!--File generated at UNIFIED-->
+  <!--Usage notes:-->
+  <!--You can remove unnecessary elements so that-->
+  <!--their values will not be changed after update-->
+  <!--Please refer to SUM User's guide 'Format of the BMC Configuration Text File' for more details.-->
+  <?BMC_CONFIG_SOURCE BMC configuration for OOB usage?>
+  <StdCfg Action="Change">
+    <!--Supported Action:None/Change-->
+    <!--Standard BMC configuration tables-->
+    <FRU Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for FRU data-->
+        <BoardMfgDateTime>2023/5/24 19:10</BoardMfgDateTime>
+        <!--YYYY/MM/DD HH:MM-->
+        <!--year range: 1996~2026-->
+        <BoardMfgName>Supermicro</BoardMfgName>
+        <!--string value-->
+        <BoardProductName></BoardProductName>
+        <!--string value-->
+        <BoardSerialNum>ZM235S601794</BoardSerialNum>
+        <!--string value-->
+        <BoardPartNum></BoardPartNum>
+        <!--string value-->
+        <ProductMfgName>Memorysolution GmbH</ProductMfgName>
+        <!--string value-->
+        <ProductName></ProductName>
+        <!--string value-->
+        <ProductPartModelNum></ProductPartModelNum>
+        <!--string value-->
+        <ProductVersion></ProductVersion>
+        <!--string value-->
+        <ProductSerialNum>231210-BTO</ProductSerialNum>
+        <!--string value-->
+        <ProductAssetTag></ProductAssetTag>
+        <!--string value-->
+        <ChassisType>0x0</ChassisType>
+        <!--byte value, 0x00 to 0xFF-->
+        <ChassisPartNumber></ChassisPartNumber>
+        <!--string value-->
+        <ChassisSerialNumber></ChassisSerialNumber>
+        <!--string value-->
+      </Configuration>
+    </FRU>
+    <SOL Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for SOL properties-->
+        <Access>Enable</Access>
+        <!--Enable/Disable-->
+        <PrivilegeLimit>Operator</PrivilegeLimit>
+        <!--Operator/Administrator-->
+        <BitRate>115200</BitRate>
+        <!--9600/19200/38400/57600/115200/-->
+        <CharAccTime>0</CharAccTime>
+        <!--0~255 (times 5ms)-->
+        <CharAccSize>0</CharAccSize>
+        <!--0~255 characters-->
+        <RetryLimit>0</RetryLimit>
+        <!--0~7 times-->
+        <RetryTime>0</RetryTime>
+        <!--0~255 (times 10ms)-->
+      </Configuration>
+    </SOL>
+    <BOOT Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for Boot properties-->
+        <!--Configuration will take effect in system power cycle or power up-->
+        <!--Configuration content will be cleared when-->
+        <!--System power cycle/System power up/BMC reset/BMC boot up-->
+        <NextBootOnly>Enable</NextBootOnly>
+        <!--Enable/Disable-->
+        <BypassPassword>Disable</BypassPassword>
+        <!--Enable/Disable-->
+        <BootMode>Legacy</BootMode>
+        <!--Legacy/UEFI-->
+        <LegacyDeviceType>No Override</LegacyDeviceType>
+        <!--No Override/PXE/Hard Drive/CD DVD/BIOS Setup/Virtual Floppy/ISO Image/USB Key/Virtual USB Hard Drive-->
+        <!--Take effect only when BootMode is Legacy-->
+        <UEFIDeviceType>No Override</UEFIDeviceType>
+        <!--No Override/UEFI: PXE/UEFI: USB Key/UEFI: CD DVD/UEFI: BIOS Shell/UEFI: Floppy|Virtual Floppy/ISO Image/UEFI: Hard Drive/Virtual UEFI: USB Hard Drive-->
+        <!--Take effect only when BootMode is UEFI-->
+      </Configuration>
+    </BOOT>
+  </StdCfg>
+  <OemCfg Action="Change">
+    <!--Supported Action:None/Change-->
+    <!--OEM BMC configuration tables-->
+    <SMCRAKP Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for SMCRAKP-->
+        <RAKPEnable>Disable</RAKPEnable>
+        <!--Enable/Disable-->
+        <!--Disabling SMC RAKP will result in known IPMI RAKP vulnerability issues-->
+      </Configuration>
+    </SMCRAKP>
+    <KCSPrivilege Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration of KCS privilege-->
+        <PrivilegeLimit>Administrator</PrivilegeLimit>
+        <!--Call Back/User/Operator/Administrator-->
+        <!--Take effect only in OOB usage mode.-->
+      </Configuration>
+    </KCSPrivilege>
+    <ServiceEnabling Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for ServiceEnabling-->
+        <HTTP>Enable</HTTP>
+        <!--Enable/Disable-->
+        <HTTPS>Enable</HTTPS>
+        <!--Enable/Disable-->
+        <IKVM>Enable</IKVM>
+        <!--Enable/Disable-->
+        <!--When IKVM is disabled, VirtualMedia should also be disabled.-->
+        <VirtualMedia>Enable</VirtualMedia>
+        <!--Enable/Disable-->
+        <!--When IKVM is disabled, VirtualMedia should also be disabled.-->
+        <SSH>Enable</SSH>
+        <!--Enable/Disable-->
+        <WS_Management>Disable</WS_Management>
+        <!--Enable/Disable-->
+        <SSL_Redirect>Enable</SSL_Redirect>
+        <!--Enable/Disable-->
+        <SNMP>Enable</SNMP>
+        <!--Enable/Disable-->
+      </Configuration>
+    </ServiceEnabling>
+    <ServicePort Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for ServicePort-->
+        <HTTP>80</HTTP>
+        <!--[1-65535]-->
+        <HTTPS>443</HTTPS>
+        <!--[1-65535]-->
+        <IKVM>5900</IKVM>
+        <!--[1-65535]-->
+        <VirtualMedia>623</VirtualMedia>
+        <!--[1-65535]-->
+        <SSH>22</SSH>
+        <!--[1-65535]-->
+        <WS_Management>5985</WS_Management>
+        <!--[1-65535]-->
+        <SNMP>161</SNMP>
+        <!--[1-65535]-->
+      </Configuration>
+    </ServicePort>
+    <LLDP Action="Change">
+      <!--Supported Action:None/Change-->
+      <Information>
+        <ChassisIdSubtype></ChassisIdSubtype>
+        <ManagementAddressIPv4></ManagementAddressIPv4>
+        <ManagementAddressIPv6></ManagementAddressIPv6>
+        <ManagementAddressMAC></ManagementAddressMAC>
+        <ManagementVlanId></ManagementVlanId>
+        <ChassisId></ChassisId>
+        <PortIdSubtype></PortIdSubtype>
+        <PortId></PortId>
+      </Information>
+      <Configuration>
+        <!--Configuration for LLDP-->
+        <LLDPEnable>Disable</LLDPEnable>
+        <!--Enable/Disable-->
+        <!--setting for LLDP Enable or Disable-->
+      </Configuration>
+    </LLDP>
+    <SMTP Action="Change">
+      <!--Supported Action:None/Change-->
+      <!--SMTP configurations for BMC to send e-mail-->
+      <!--DNS configuration in LAN table should be configured-->
+      <Configuration>
+        <!--Configuration for SMTP-->
+        <ServerAddress>0.0.0.0</ServerAddress>
+        <!--string value; length limit = 255 characters-->
+        <!--Should be a valid IPV4/IPV6/Domain Name-->
+        <!--Will be skipped if empty-->
+        <Port>587</Port>
+        <!--[1-65535]-->
+        <!--Will be skipped if value is 0-->
+        <ConnectionProtocol>None</ConnectionProtocol>
+        <!--AutoDetect/None/StartTLS/TLS_SSL-->
+        <Authentication>None</Authentication>
+        <!--AutoDetect/CRAM_MD5/Login/None/Plain-->
+        <!--AutoDetect will be skipped if ConnectionProtocol is None-->
+        <UserName></UserName>
+        <!--string value; length limit = 64 characters-->
+        <!--Allow a-z, A-Z, 0-9 and special characters like !#$%&'*+-/=?^_`{|-->
+        <!--Will be skipped if empty-->
+        <Password></Password>
+        <!--string value; length limit = 64 characters-->
+        <!--Will be skipped if empty-->
+        <FromAddress></FromAddress>
+        <!--string value; length limit = 255 characters-->
+        <!--Should be a valid e-mail address-->
+        <!--Will be skipped if empty-->
+      </Configuration>
+    </SMTP>
+    <AlertList Action="Change">
+      <!--Supported Action:None/Change-->
+      <Information>
+        <!--To send alert by email, SMTP must be correctly configured-->
+        <MaximumAvailableAlerts>16</MaximumAvailableAlerts>
+        <TotalConfiguredAlerts>0</TotalConfiguredAlerts>
+      </Information>
+      <Configuration>
+        <!--Will not list alerts with default/empty configuration-->
+        <Alert Action="Change" AlertNumber="1">
+          <!--Supported Action:None/Change/Delete/SendAlert-->
+          <Configuration>
+            <!--Configuration for Alert-->
+            <Enable>Disable</Enable>
+            <!--Enable/Disable-->
+            <!--All protocol should fill this setting.-->
+            <Protocol>SNMPv1</Protocol>
+            <!--SNMPv1/SMTP/Redfish/SNMPv3-->
+            <!--All protocol should fill this setting.-->
+            <!--Will be skipped if Alert is disabled-->
+            <EventType></EventType>
+            <!--Alert/ResourceAdded/ResourceRemoved/ResourceUpdated/StatusChange-->
+            <!--All protocol should fill this setting.-->
+            <!--Portocol "SNMPv1" and "SNMPv3" only support event type: "Alert"-->
+            <!--Will be skipped if Alert is disabled-->
+            <Destination>0.0.0.0</Destination>
+            <!--All protocol should fill this setting.-->
+            <!--For "SNMPv1" and "SNMPv3" protocol: IP or domain.-->
+            <!--For "SMTP" protocol: e-mail address-->
+            <!--For "Redfish" protocol: Start with "http://" or "https://" and also need port.-->
+            <!--Will be skipped if Alert is disabled-->
+            <Severity>Information</Severity>
+            <!--Protocol "SNMPv1", "SMTP" and "SNMPv3" should fill this setting.-->
+            <!--Information/Warning/Critical-->
+            <!--Will be skipped if Alert is disabled-->
+            <TrapCommunity></TrapCommunity>
+            <!--Protocol "SNMPv1" should fill this setting.-->
+            <!--string value; length limit: 1-63 characters-->
+            <!--Will be skipped if empty-->
+            <!--Will be skipped if Alert is disabled-->
+            <MailMessage></MailMessage>
+            <!--Protocol "SMTP" and "Redfish" should fill this setting.-->
+            <!--Will be skipped if empty-->
+            <!--Will be skipped if Alert is disabled-->
+            <MailSubject></MailSubject>
+            <!--Protocol "SMTP" should fill this setting.-->
+            <!--Will be skipped if empty-->
+            <!--Will be skipped if Alert is disabled-->
+            <UserName></UserName>
+            <!--Protocol "SNMPv3" should fill this setting.-->
+            <!--string value; length limit: 31 characters-->
+            <!--Will be skipped if Alert is disabled-->
+            <AuthenticationKey></AuthenticationKey>
+            <!--Protocol "SNMPv3" should fill this setting.-->
+            <!--string value; length limit: 8-63 characters-->
+            <!--Must contain all type characters from three of the following categories-->
+            <!--a-z, A-Z, 0-9-->
+            <!--Not allow to contain any special character-->
+            <!--Will be skipped if empty-->
+            <!--Will be skipped if Alert is disabled-->
+            <AuthenticationProtocol>HMAC_MD5</AuthenticationProtocol>
+            <!--Protocol "SNMPv3" should fill this setting.-->
+            <!--HMAC_MD5/HMAC_SHA96-->
+            <!--Will be skipped if Alert is disabled-->
+            <EncryptionKey></EncryptionKey>
+            <!--Protocol "SNMPv3" should fill this setting.-->
+            <!--string value; length limit: 8-63 characters-->
+            <!--Must contain all type characters from three of the following categories-->
+            <!--a-z, A-Z, 0-9-->
+            <!--Not allow to contain any special character-->
+            <!--Will be skipped if empty-->
+            <!--Will be skipped if Alert is disabled-->
+            <EncryptionProtocol>CBC_DES</EncryptionProtocol>
+            <!--Protocol "SNMPv3" should fill this setting.-->
+            <!--CBC_DES/CFB128_AES128-->
+            <!--Will be skipped if Alert is disabled-->
+          </Configuration>
+        </Alert>
+      </Configuration>
+    </AlertList>
+    <DateTime Action="Change">
+      <!--Supported Action:None/Change-->
+      <!--Configurations for BMC to tick date and time-->
+      <Information>
+        <!--Information for date and time-->
+        <DateTime>2024/6/1 11:33</DateTime>
+        <!--YYYY/MM/DD HH:MM-->
+      </Information>
+      <Configuration>
+        <!--Configuration for DateTime-->
+        <NTPEnable>Enable</NTPEnable>
+        <!--Enable/Disable-->
+        <PrimaryNTPServer>192.53.103.103</PrimaryNTPServer>
+        <!--string value; length limit = 127 characters-->
+        <SecondaryNTPServer>192.53.103.104</SecondaryNTPServer>
+        <!--string value; length limit = 127 characters-->
+        <TimeZone>(UTC+00:00) Coordinated Universal Time</TimeZone>
+        <!--Please check available TimeZone format in ExternalData/timezone -->
+        <AutoDSTEnabled>Disable</AutoDSTEnabled>
+        <!--Enable/Disable-->
+        <!--AutoDSTEnabled is to enable auto daylight saving-->
+        <!--Please refer to the ExternalData/supportAutoDST to confirm whether the timezone supports auto daylight saving-->
+      </Configuration>
+    </DateTime>
+    <HostInterface Action="Change">
+      <!--Supported Action:None/Change-->
+      <Information>
+        <HostIpAddress>169.254.3.1</HostIpAddress>
+        <ServiceIpAddress>169.254.3.254</ServiceIpAddress>
+      </Information>
+      <Configuration>
+        <!--Configuration for enable or disable host interface with Redfish-->
+        <HostInterfaceControl>Enable</HostInterfaceControl>
+        <!--Enable/Disable-->
+      </Configuration>
+    </HostInterface>
+    <LDAP Action="Overwrite">
+      <!--Supported Action:None/Change/Overwrite-->
+      <!--Action Overwrite will overwrite all configuration.-->
+      <!--Action Overwrite will ignore the following table Action.-->
+      <Information>
+        <MaximumAvailableADGroup>5</MaximumAvailableADGroup>
+        <TotalConfiguredADGroup>0</TotalConfiguredADGroup>
+      </Information>
+      <Configuration>
+        <!--Lightweight Directory Access Protocol (LDAP)-->
+        <!--LDAP configurations for Bmc web login-->
+        <!--AD/RADIUS/LDAP: only one of them can be enabled-->
+        <LDAPEnable>Disable</LDAPEnable>
+        <!--Enable/Disable-->
+        <!--Will be skipped if LDAP is disabled-->
+        <BindDN></BindDN>
+        <!--string value; length limit = 255 characters-->
+        <!--Will be skipped if empty-->
+        <!--Will be skipped if LDAP is disabled-->
+        <BindPassword></BindPassword>
+        <!--string value; length limit = 255 characters-->
+        <!--Will be skipped if empty-->
+        <!--Will be skipped if LDAP is disabled-->
+        <UsernameAttribute></UsernameAttribute>
+        <!--string value; length limit = 255 characters-->
+        <!--Will be skipped if LDAP is disabled-->
+        <GroupsAttribute></GroupsAttribute>
+        <!--string value; length limit = 255 characters-->
+        <!--Will be skipped if LDAP is disabled-->
+        <SearchBase1></SearchBase1>
+        <!--string value; length limit = 255 characters-->
+        <!--Will be skipped if empty-->
+        <!--Will be skipped if LDAP is disabled-->
+        <SearchBase2></SearchBase2>
+        <!--string value; length limit = 255 characters-->
+        <!--Will be skipped if empty-->
+        <!--Will be skipped if LDAP is disabled-->
+        <SearchBase3></SearchBase3>
+        <!--string value; length limit = 255 characters-->
+        <!--Will be skipped if empty-->
+        <!--Will be skipped if LDAP is disabled-->
+        <ServiceAddr1></ServiceAddr1>
+        <!--string value; length limit = 255 characters-->
+        <!--Will be cleared if empty-->
+        <!--Will be skipped if LDAP is disabled for Change action-->
+        <ServiceAddr2></ServiceAddr2>
+        <!--string value; length limit = 255 characters-->
+        <!--Will be cleared if empty-->
+        <!--Will be skipped if LDAP is disabled for Change action-->
+        <ServiceAddr3></ServiceAddr3>
+        <!--string value; length limit = 255 characters-->
+        <!--Will be cleared if empty-->
+        <!--Will be skipped if LDAP is disabled for Change action-->
+        <LDAPRule Action="Change" RuleID="0">
+          <!--Supported Action:None/Change/Delete-->
+          <!--LDAPRule configurations for BMC web login-->
+          <!--Will provide default RuleID with id = 0, if LDAPRule is empty-->
+          <!--When RuleID is 0, there would be no operation-->
+          <!--RuleID must be from 1 to 5-->
+          <Configuration>
+            <!--Configuration for LDAPRule-->
+            <RemoteUser><![CDATA[]]></RemoteUser>
+            <!--string value; length limit = 255 characters-->
+            <RemoteGroup><![CDATA[]]></RemoteGroup>
+            <!--string value; length limit = 255 characters-->
+            <RulePrivilege>None</RulePrivilege>
+            <!--None/ReadOnly/Operator/Administrator-->
+            <!--Empty should be "None"-->
+          </Configuration>
+        </LDAPRule>
+      </Configuration>
+    </LDAP>
+    <AD Action="Overwrite">
+      <!--Supported Action:None/Change/Overwrite-->
+      <!--Action Overwrite will overwrite all configuration.-->
+      <!--Action Overwrite will ignore the following table Action.-->
+      <!--Active directory configurations for Bmc web login-->
+      <Information>
+        <MaximumAvailableADGroup>5</MaximumAvailableADGroup>
+        <TotalConfiguredADGroup>0</TotalConfiguredADGroup>
+      </Information>
+      <Configuration>
+        <!--Configuration for AD-->
+        <ADEnable>Disable</ADEnable>
+        <!--Enable/Disable-->
+        <ServiceAddr1></ServiceAddr1>
+        <!--string value; length limit = 254 characters-->
+        <!--Will be skipped if empty-->
+        <!--Will be skipped if AD is disabled-->
+        <ServiceAddr2></ServiceAddr2>
+        <!--string value; length limit = 254 characters-->
+        <!--Will be skipped if empty-->
+        <!--Will be skipped if AD is disabled-->
+        <ServiceAddr3></ServiceAddr3>
+        <!--string value; length limit = 254 characters-->
+        <!--Will be skipped if empty-->
+        <!--Will be skipped if AD is disabled-->
+        <ADRule Action="Change" RuleID="1">
+          <!--Supported Action:None/Change/Delete-->
+          <!--ADGroup configurations for BMC web login-->
+          <Configuration>
+            <!--Configuration for ADRule-->
+            <RemoteUser><![CDATA[]]></RemoteUser>
+            <!--string value; length limit = 256 characters-->
+            <!--Will be skipped if empty-->
+            <RemoteGroup><![CDATA[]]></RemoteGroup>
+            <!--string value; length limit = 64 characters-->
+            <!--Will be skipped if empty-->
+            <RulePrivilege>None</RulePrivilege>
+            <!--None/ReadOnly/Operator/Administrator-->
+            <!--Empty should be "None"-->
+          </Configuration>
+        </ADRule>
+      </Configuration>
+    </AD>
+    <RADIUS Action="Overwrite">
+      <!--Supported Action:None/Change/Overwrite-->
+      <!--Action Overwrite will overwrite all configuration.-->
+      <!--Action Overwrite will ignore the following table Action.-->
+      <Configuration>
+        <!--Remote Authentication Dial In User Service (RADIUS)-->
+        <!--RADIUS configurations for Bmc web login-->
+        <!--AD/RADIUS/LDAP: only one of them can be enabled-->
+        <RADIUSEnable>Disable</RADIUSEnable>
+        <!--Enable/Disable-->
+        <Port>1812</Port>
+        <!--Integer is in [1-65535]-->
+        <!--Will be skipped if value is 0-->
+        <!--Will be skipped if RADIUS is disabled-->
+        <ServerAddress>0.0.0.0</ServerAddress>
+        <!--X.X.X.X-->
+        <!--The ServerAddress field supports IPv4/IPv6/Hostname format-->
+        <!--IPv4 each field is an integer in [0-255] if the IPv4 format is used-->
+        <!--Will be skipped if RADIUS is disabled-->
+        <Secret></Secret>
+        <!--string value; length limit = 31 characters-->
+        <!--Will be skipped if empty-->
+        <!--Will be skipped if RADIUS is disabled-->
+      </Configuration>
+    </RADIUS>
+    <DeviceControl Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for DeviceControl-->
+        <FanMode>Optimal</FanMode>
+        <!--Standard/Full/Optimal/Heavy IO-->
+        <!--Smart Cooling will be treated as Smart Speed on GPU system-->
+      </Configuration>
+    </DeviceControl>
+    <VirtualMedia Action="Change">
+      <!--Supported Action:None/Change-->
+      <!--Configurations for emulating a shared CD/DVD/Floppy image to the remote host system as a virtual media.-->
+      <!--Maximum size of CD/DVD image : 10 GB-->
+      <!--Maximum size of floppy image : 1,474,560 byte-->
+      <!--Maximum file size user can totally mount 3 ISO files to remote host system is 30 GB.-->
+      <!--Action Requirement : Changes will take effect only when IKVM and VirtualMedia are both enabled in ServiceEnabling table.-->
+      <Information>
+        <MaximumAvailableDevNums>3</MaximumAvailableDevNums>
+      </Information>
+      <Configuration>
+        <VMDevice Action="Change" DeviceNumber="1">
+          <!--Supported Action:None/Change-->
+          <!--Will be skipped if this device is mounted by iKVM.-->
+          <!--The device is mounted by iKVM if the field "Image" is kvm_usb/kvm_cd/kvm_floppy.-->
+          <Information>
+            <MediaType></MediaType>
+            <!--CD/DVD/Floppy/USBStick-->
+            <!--Will empty if the device is unmounted.-->
+          </Information>
+          <Configuration>
+            <!--Configuration for VMDevice-->
+            <ShareHost></ShareHost>
+            <!--string value; length limit = 127 characters-->
+            <!--Allowed special characters for ShareHost: '-' and '.' -->
+            <!--Example (SAMBA) : 192.168.34.56 or 192.168.34.56:137-->
+            <!--Example (HTTP) : http://supermicro.com or http://supermicro.com:80-->
+            <!--Example (HTTPS) : https://supermicro.com or https://supermicro.com:80-->
+            <!--DNS must be properly set for hostname resolution if a domain name is employed.-->
+            <!--IPv6 link-local address starts with fe80 is not allowed.-->
+            <PathToImage></PathToImage>
+            <!--string value; length limit = 127 characters-->
+            <!--Allowed special characters for PathToImage: '@', '^', '-', '_', '.', '/' and '\' (/ and \ can only be used in a path) -->
+            <!--Special characters like backslashes \ and slashes / should only be used once; repeated use (e.g., //, \\, /\ and \/) is not allowed.-->
+            <!--Example : Bar.ISO or Foo/Bar.iso-->
+            <!--The device is mounted by IKVM if the field is kvm_usb/kvm_cd/kvm_floppy.-->
+            <UserName></UserName>
+            <!--(optional) string value; length limit = 127 characters-->
+            <!--Allowed special characters for UserName: '^' -->
+            <UserPassword></UserPassword>
+            <!--(optional) string value; length limit = 127 characters-->
+            <!--Allowed special characters for UserPassword: '^' -->
+            <VerifyCert>Disable</VerifyCert>
+            <!--Enable/Disable-->
+            <!--Verifies SSL certificate if the field "VerifyCert" is Enable.-->
+            <!--Only for HTTPS protocol.-->
+            <AcceptSelfSigned>Disable</AcceptSelfSigned>
+            <!--Enable/Disable-->
+            <!--Accepts self-signed certificate for SSL if the fields "VerifyCert" and "AcceptSelfSigned" are both Enable.-->
+            <!--Only for HTTPS protocol.-->
+            <Inserted>Disable</Inserted>
+            <!--Enable/Disable-->
+            <!--Mounts the image file if the field "Inserted" is Enable.-->
+            <!--Unmounts the image file if the field "Inserted" is Disable.-->
+          </Configuration>
+        </VMDevice>
+        <VMDevice Action="Change" DeviceNumber="2">
+          <!--Supported Action:None/Change-->
+          <!--Will be skipped if this device is mounted by iKVM.-->
+          <!--The device is mounted by iKVM if the field "Image" is kvm_usb/kvm_cd/kvm_floppy.-->
+          <Information>
+            <MediaType></MediaType>
+            <!--CD/DVD/Floppy/USBStick-->
+            <!--Will empty if the device is unmounted.-->
+          </Information>
+          <Configuration>
+            <!--Configuration for VMDevice-->
+            <ShareHost></ShareHost>
+            <!--string value; length limit = 127 characters-->
+            <!--Allowed special characters for ShareHost: '-' and '.' -->
+            <!--Example (SAMBA) : 192.168.34.56 or 192.168.34.56:137-->
+            <!--Example (HTTP) : http://supermicro.com or http://supermicro.com:80-->
+            <!--Example (HTTPS) : https://supermicro.com or https://supermicro.com:80-->
+            <!--DNS must be properly set for hostname resolution if a domain name is employed.-->
+            <!--IPv6 link-local address starts with fe80 is not allowed.-->
+            <PathToImage></PathToImage>
+            <!--string value; length limit = 127 characters-->
+            <!--Allowed special characters for PathToImage: '@', '^', '-', '_', '.', '/' and '\' (/ and \ can only be used in a path) -->
+            <!--Special characters like backslashes \ and slashes / should only be used once; repeated use (e.g., //, \\, /\ and \/) is not allowed.-->
+            <!--Example : Bar.ISO or Foo/Bar.iso-->
+            <!--The device is mounted by IKVM if the field is kvm_usb/kvm_cd/kvm_floppy.-->
+            <UserName></UserName>
+            <!--(optional) string value; length limit = 127 characters-->
+            <!--Allowed special characters for UserName: '^' -->
+            <UserPassword></UserPassword>
+            <!--(optional) string value; length limit = 127 characters-->
+            <!--Allowed special characters for UserPassword: '^' -->
+            <VerifyCert>Disable</VerifyCert>
+            <!--Enable/Disable-->
+            <!--Verifies SSL certificate if the field "VerifyCert" is Enable.-->
+            <!--Only for HTTPS protocol.-->
+            <AcceptSelfSigned>Disable</AcceptSelfSigned>
+            <!--Enable/Disable-->
+            <!--Accepts self-signed certificate for SSL if the fields "VerifyCert" and "AcceptSelfSigned" are both Enable.-->
+            <!--Only for HTTPS protocol.-->
+            <Inserted>Disable</Inserted>
+            <!--Enable/Disable-->
+            <!--Mounts the image file if the field "Inserted" is Enable.-->
+            <!--Unmounts the image file if the field "Inserted" is Disable.-->
+          </Configuration>
+        </VMDevice>
+        <VMDevice Action="Change" DeviceNumber="3">
+          <!--Supported Action:None/Change-->
+          <!--Will be skipped if this device is mounted by iKVM.-->
+          <!--The device is mounted by iKVM if the field "Image" is kvm_usb/kvm_cd/kvm_floppy.-->
+          <Information>
+            <MediaType></MediaType>
+            <!--CD/DVD/Floppy/USBStick-->
+            <!--Will empty if the device is unmounted.-->
+          </Information>
+          <Configuration>
+            <!--Configuration for VMDevice-->
+            <ShareHost></ShareHost>
+            <!--string value; length limit = 127 characters-->
+            <!--Allowed special characters for ShareHost: '-' and '.' -->
+            <!--Example (SAMBA) : 192.168.34.56 or 192.168.34.56:137-->
+            <!--Example (HTTP) : http://supermicro.com or http://supermicro.com:80-->
+            <!--Example (HTTPS) : https://supermicro.com or https://supermicro.com:80-->
+            <!--DNS must be properly set for hostname resolution if a domain name is employed.-->
+            <!--IPv6 link-local address starts with fe80 is not allowed.-->
+            <PathToImage></PathToImage>
+            <!--string value; length limit = 127 characters-->
+            <!--Allowed special characters for PathToImage: '@', '^', '-', '_', '.', '/' and '\' (/ and \ can only be used in a path) -->
+            <!--Special characters like backslashes \ and slashes / should only be used once; repeated use (e.g., //, \\, /\ and \/) is not allowed.-->
+            <!--Example : Bar.ISO or Foo/Bar.iso-->
+            <!--The device is mounted by IKVM if the field is kvm_usb/kvm_cd/kvm_floppy.-->
+            <UserName></UserName>
+            <!--(optional) string value; length limit = 127 characters-->
+            <!--Allowed special characters for UserName: '^' -->
+            <UserPassword></UserPassword>
+            <!--(optional) string value; length limit = 127 characters-->
+            <!--Allowed special characters for UserPassword: '^' -->
+            <VerifyCert>Disable</VerifyCert>
+            <!--Enable/Disable-->
+            <!--Verifies SSL certificate if the field "VerifyCert" is Enable.-->
+            <!--Only for HTTPS protocol.-->
+            <AcceptSelfSigned>Disable</AcceptSelfSigned>
+            <!--Enable/Disable-->
+            <!--Accepts self-signed certificate for SSL if the fields "VerifyCert" and "AcceptSelfSigned" are both Enable.-->
+            <!--Only for HTTPS protocol.-->
+            <Inserted>Disable</Inserted>
+            <!--Enable/Disable-->
+            <!--Mounts the image file if the field "Inserted" is Enable.-->
+            <!--Unmounts the image file if the field "Inserted" is Disable.-->
+          </Configuration>
+        </VMDevice>
+      </Configuration>
+    </VirtualMedia>
+    <UIControl Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for UIControl-->
+        <MouseMode>Absolute</MouseMode>
+        <!--Absolute/Relative/Single-->
+      </Configuration>
+    </UIControl>
+    <WebSession Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for web session properties-->
+        <Timeout>0</Timeout>
+        <!--[1:30] minutes-->
+        <!--0 means never timeout-->
+      </Configuration>
+    </WebSession>
+    <RedfishSession Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for Redfish session-->
+        <RedfishSessionTimeout>300</RedfishSessionTimeout>
+        <!--[30:86400] seconds-->
+      </Configuration>
+    </RedfishSession>
+    <Certification Action="Change">
+      <!--Supported Action:None/Change-->
+      <Information>
+        <CertStartDate>Mar 23 00:00:00 2023 GMT</CertStartDate>
+        <CertEndDate>Mar 23 00:00:00 2033 GMT</CertEndDate>
+      </Information>
+      <Configuration>
+        <!--Configurations for BMC certifications-->
+        <CertFile></CertFile>
+        <!--string value; path to file-->
+        <PrivKeyFile></PrivKeyFile>
+        <!--string value; path to file-->
+        <!--BMC will be reset after uploading this file-->
+      </Configuration>
+    </Certification>
+    <SSDP Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <SSDPEnable>Enable</SSDPEnable>
+        <!--Enable/Disable-->
+        <Port>1900</Port>
+        <!--Integer is in [1-65535]-->
+        <!--Will be skipped if value is 0-->
+        <!--Will be skipped if SSDP is disabled-->
+        <NotifyTTL>2</NotifyTTL>
+        <!--Each field is an integer in [0-255]-->
+        <NotifyIPv6Scope>Link</NotifyIPv6Scope>
+        <!--Link/Site/Organization-->
+      </Configuration>
+    </SSDP>
+    <SNMP Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration of SNMP V2 and V3.-->
+        <!--Please enable SNMP service in ServiceEnabling table before changing SNMP V2 or V3 configuration.-->
+        <!--Configuration of V2 and V3 will be skipped if the SNMP service in ServiceEnabling table is disabled.-->
+        <SNMPV2 Action="Change">
+          <!--Supported Action:None/Change-->
+          <EnableSNMPv2c>Enable</EnableSNMPv2c>
+          <!--Enable/Disable-->
+          <!--Enable or disable SNMPV2 service-->
+          <!--Will be disabled if there is no community string-->
+          <HideCommunityStrings>Disable</HideCommunityStrings>
+          <!--Enable/Disable-->
+          <CommunityStrings Action="Change" CommunityStringID="1">
+            <!--Supported Action:None/Change/Delete/Create-->
+            <!--Will provide default communityStrings with id = 0 if CommunityStrings is empty-->
+            <!--When community string id is 0, there would be no operation-->
+            <!--Community string id must be from 1 to 5-->
+            <Configuration>
+              <AccessMode>ReadOnly</AccessMode>
+              <!--ReadOnly/ReadWrite-->
+              <!--Will be skipped if empty-->
+              <Name>ReadOnly</Name>
+              <!--string value; length limit = 31 characters-->
+              <!--Allow a-z, A-Z, 0-9-->
+              <CommunityString>Eevaid7xoh4m</CommunityString>
+              <!--string value; length limit = 63 characters-->
+              <!--Allow a-z, A-Z, 0-9-->
+            </Configuration>
+          </CommunityStrings>
+          <CommunityStrings Action="Change" CommunityStringID="2">
+            <!--Supported Action:None/Change/Delete/Create-->
+            <!--Will provide default communityStrings with id = 0 if CommunityStrings is empty-->
+            <!--When community string id is 0, there would be no operation-->
+            <!--Community string id must be from 1 to 5-->
+            <Configuration>
+              <AccessMode>ReadWrite</AccessMode>
+              <!--ReadOnly/ReadWrite-->
+              <!--Will be skipped if empty-->
+              <Name>ReadWrite</Name>
+              <!--string value; length limit = 31 characters-->
+              <!--Allow a-z, A-Z, 0-9-->
+              <CommunityString>lohz3kaG5ted</CommunityString>
+              <!--string value; length limit = 63 characters-->
+              <!--Allow a-z, A-Z, 0-9-->
+            </Configuration>
+          </CommunityStrings>
+        </SNMPV2>
+        <SNMPV3 Action="Change">
+          <!--Supported Action:None/Change-->
+          <EnableSNMPv3>Disable</EnableSNMPv3>
+          <!--Enable/Disable-->
+          <!--Enable or disable SNMPV3 service-->
+          <AuthenticationProtocol>HMAC_MD5</AuthenticationProtocol>
+          <!--Protocol of authorized key, Support values are: HMAC_MD5/HMAC_SHA96/Account-->
+          <EncryptionProtocol>CBC_DES</EncryptionProtocol>
+          <!--Protocol of private key, Support values are: None/CBC_DES/CFB128_AES128/Account-->
+        </SNMPV3>
+      </Configuration>
+    </SNMP>
+    <IPAccessControl Action="Overwrite">
+      <!--IP access rules to configure your IP access policy.-->
+      <!--Supported Action:None/Change/Overwrite-->
+      <!--Action Overwrite will overwrite all configuration.-->
+      <!--Action Overwrite will ignore the following table Action.-->
+      <Information>
+        <MaxAvailControlRule>10</MaxAvailControlRule>
+        <CurrentAvailControlRule>0</CurrentAvailControlRule>
+      </Information>
+      <Configuration>
+        <!--Below is IP access control table. You can Change/Add/Delete-->
+        <!--Will not list ControlRules with default or empty configuration-->
+        <IPAccessControlStatus>Disable</IPAccessControlStatus>
+        <!--Enable/Disable-->
+        <!--If IPAccessControlStatus is disabled, all ControlRules will be skipped.-->
+        <!--Current ControlRule list is available only when IPAccessControlStatus is enabled.-->
+        <!--After changing IPAccessControlStatus from 'Disable' to 'Enable', please get current ControlRule list again by GetBmcCfg command.-->
+        <ControlRule Action="Change" IPControlRuleNumber="0">
+          <!--Supported Action:None/Change/Add/Delete-->
+          <!--When rule number is 0, there would be no operation-->
+          <!--Rule number must be from 1 to MaxAvailControlRule-->
+          <!--Each action is executed sequentially to update rule table-->
+          <!--Adding an IP access control rule would append the rule to the-->
+          <!--end of the rule table ignoring the rule number assigned-->
+          <!--For Change and Delete action, rule number must be-->
+          <!--from 1 to CurrentAvailControlRule-->
+          <!--CurrentAvailControlRule is subject to change-->
+          <!--after each action-->
+          <!--For each rule, IPControlIPAddr/IPControlPrefix would be saved-->
+          <!--in a way similar to iptables; For example, 10.10.10.10/24-->
+          <!--would be saved as 10.10.10.0/24, i.e., IPControlIPAddr would-->
+          <!--be 0 after the 24th bit-->
+          <Configuration>
+            <!--Configuration for ControlRule-->
+            <IPControlIPAddr></IPControlIPAddr>
+            <!--IPv4 format: X.X.X.X-->
+            <!--Each field is an integer in [0-255]-->
+            <!--IPv6 format: X:X:X:X:X:X:X:X-->
+            <!--Each field is a four digits hex string-->
+            <IPControlPrefixLength>0</IPControlPrefixLength>
+            <!--For IPv4: Integer is in [0-32]-->
+            <!--For IPv6: Integer is in [0-128]-->
+            <IPControlPolicy>Accept</IPControlPolicy>
+            <!--Drop/Accept-->
+          </Configuration>
+        </ControlRule>
+      </Configuration>
+    </IPAccessControl>
+    <DDNS Action="Change">
+      <!--Supported Action:None/Change-->
+      <!--NTP must be configured for DDNS to take effect-->
+      <Configuration>
+        <!--Configurations for BMC to register its host name in DDNS server-->
+        <!--After registration, BMC can change its IP address dynamically-->
+        <!--Users can point DNS to the DDNS server and access BMC -->
+        <!--using the registered BMC host name-->
+        <DDNSEnable>Disable</DDNSEnable>
+        <!--Enable/Disable-->
+        <TSIGEnable>Disable</TSIGEnable>
+        <!--Enable/Disable-->
+        <ServerIP>0.0.0.0</ServerIP>
+        <!--X.X.X.X-->
+        <!--Each field is an integer in [0-255]-->
+        <BMCHostName>localhost</BMCHostName>
+        <!--string value; length limit = 63 characters-->
+        <?Note Will be skipped in multiple system usage without --individually option.?>
+        <TSIGPubKeyFile></TSIGPubKeyFile>
+        <!--string value; path to file-->
+        <TSIGPrivKeyFile></TSIGPrivKeyFile>
+        <!--string value; path to file-->
+      </Configuration>
+    </DDNS>
+    <AdvanceEventLog Action="Change">
+      <!--Supported Action:None/Change-->
+      <!--Configurations for BMC advanced event log-->
+      <Configuration>
+        <!--Configuration for AdvanceEventLog-->
+        <ACPowerOnEventLog>Enable</ACPowerOnEventLog>
+        <!--Support value: Enable/Disable-->
+        <!--Enable/Disable AC power on event log-->
+        <FIFOEventLog>Enable</FIFOEventLog>
+        <!--Support value: Enable/Disable-->
+        <!--Enable/Disable FIFO event log-->
+      </Configuration>
+    </AdvanceEventLog>
+    <Syslog Action="Change">
+      <!--Supported Action:None/Change-->
+      <Configuration>
+        <!--Configuration for Syslog-->
+        <SyslogEnable>Enable</SyslogEnable>
+        <!--Enable/Disable-->
+        <!--Enable or disable BMC syslog-->
+        <SyslogServerIP>10.10.23.1</SyslogServerIP>
+        <!--Syslog server address-->
+        <SyslogPortNumber>514</SyslogPortNumber>
+        <!--[1-65535]-->
+      </Configuration>
+    </Syslog>
+    <Account Action="Change">
+      <!--Supported Action:None/Change-->
+      <Information>
+        <!--Including User 1 (reserved user)-->
+        <MaximumAvailableIDs>16</MaximumAvailableIDs>
+        <TotalIDEnabled>1</TotalIDEnabled>
+      </Information>
+      <Configuration>
+        <!--AccountLockout configurations for BMC login-->
+        <AccountLockoutThreshold>3</AccountLockoutThreshold>
+        <!--0~5 times-->
+        <!--The number of failed login attempts allowed before a user account is locked for a specified duration.-->
+        <!--No lockout occurs if set to 0.-->
+        <AccountLockoutCounterResetAfter>30</AccountLockoutCounterResetAfter>
+        <!--0~1800 seconds-->
+        <!--The value must be less than or equal to AccountLockoutDuration.-->
+        <!--The interval of time in seconds between the last failed login attempt and reset of the lockout threshold counter.-->
+        <!--No lockout occurs if set to 0.-->
+        <AccountLockoutDuration>30</AccountLockoutDuration>
+        <!--0~1800 seconds-->
+        <!--The time in seconds an account is locked out.-->
+        <User Action="Change" UserID="2">
+          <!--Supported Action:None/Change/Delete/Create-->
+          <Configuration>
+            <!--Skip User 1 (reserved user)-->
+            <!--Will not show user password-->
+            <!--Will not list users with empty configuration-->
+            <!--Please create user and specify user ID from lower unused user ID.-->
+            <UserName><![CDATA[ADMIN]]></UserName>
+            <!--string value; length limit 4-15 characters-->
+            <!--UserName supports the following characters:-->
+            <!--a-z, A-Z, 0-9 and special characters like !$%&()*+./<>=?@[]\^_`{}|~-->
+            <Password><![CDATA[]]></Password>
+            <!--- Password must be 8 to 19 characters in length.-->
+            <!--- Will not change password if no value is assigned.-->
+            <!--- Password cannot be reverse of or the same as user name.-->
+            <!--- The password must contain at least one character from three of the-->
+            <!--following categories:-->
+            <!--a-z, A-Z, 0-9 and special characters like !$%&()*+./<>=?@[]\^_`{}|~,#-;-->
+            <RoleId>Administrator</RoleId>
+            <!--User/Operator/Administrator-->
+            <!--User is ReadOnly privilege-->
+            <!--If user ID = 2, privilege Administrator should not be changed-->
+            <Locked>false</Locked>
+            <!--false-->
+            <!--Only support setting "false" to unlock account-->
+            <Enabled>Enable</Enabled>
+            <!--Enable/Disable-->
+            <!--Should not disable default user ID = 2 account-->
+            <!--Should not disable current connecting user account-->
+          </Configuration>
+        </User>
+      </Configuration>
+    </Account>
+    <LAN Action="Change">
+      <!--Supported Action:None/Change-->
+      <Information>
+        <!--Information for LAN properties-->
+        <MacAddress>3C:EC:EF:9E:D0:9B</MacAddress>
+        <SpeedMbps>1000</SpeedMbps>
+        <Duplex>Full Duplex</Duplex>
+      </Information>
+      <Configuration>
+        <!--Configuration for LAN properties-->
+        <IPProtocolStatus>Dual</IPProtocolStatus>
+        <!--IPv4/IPv6/Dual-->
+        <!--The value shall indicate which IP protocol can be accessed.-->
+        <LanInterface>Failover</LanInterface>
+        <!--Dedicated/Shared/Failover-->
+        <!--Changing this setting may cause the LAN to be unavailable.-->
+        <Link>Auto Negotiation</Link>
+        <!--Auto Negotiation/100M Half Duplex/100M Full Duplex/1G Full Duplex-->
+        <!--Link can only be updated if LanInterface is Dedicated.-->
+        <!--Link will be empty if LanInterface is Shared.-->
+        <!--Will be skipped if empty.-->
+        <HostName>st01-stor-r01-u05</HostName>
+        <!--BMC host name-->
+        <!--string value; length limit = 63 characters-->
+        <?Note Will be skipped in multiple system usage without --individually option.?>
+        <VLANEnable>Disable</VLANEnable>
+        <!--Enable/Disable-->
+        <!--Changing this setting may cause the LAN to be unavailable.-->
+        <VLANId>1</VLANId>
+        <!--Integer value is in [1-4094].-->
+        <!--0 and 4095 for special purposes.-->
+        <!--When VLAN is enabled, 0 is prohibited.-->
+        <!--When VLAN is disabled, value will not be changed.-->
+        <!--Changing this setting may cause the LAN to be unavailable.-->
+        <RMCP_Port>623</RMCP_Port>
+        <!--[1-65535]-->
+        <!--In OOB usage, default RMCP port is 623.-->
+        <!--If the RMCP port is updated, please configure the 'rmcp_port' in .sumrc file for OOB BMC connection.-->
+        <IPv4 Action="Change">
+          <!--Supported Action:None/Change-->
+          <Information>
+            <!--Information for IPv4 properties-->
+            <IPv4NameServer1></IPv4NameServer1>
+            <!--This represents DNS name servers that are currently in use on this interface.-->
+            <IPv4NameServer2></IPv4NameServer2>
+            <!--This represents DNS name servers that are currently in use on this interface.-->
+          </Information>
+          <Configuration>
+            <!--Configuration for IPv4 properties-->
+            <DHCPEnabled>Disable</DHCPEnabled>
+            <!--Enable/Disable-->
+            <Address>10.10.23.23</Address>
+            <!--X.X.X.X-->
+            <!--Each field is an integer in [0-255].-->
+            <?Note Will be skipped in multiple system usage without --individually option.?>
+            <SubNetMask>255.255.255.0</SubNetMask>
+            <!--X.X.X.X-->
+            <!--Each field is an integer in [0-255].-->
+            <?Note Will be skipped in multiple system usage without --individually option.?>
+            <Gateway>10.10.23.1</Gateway>
+            <!--X.X.X.X-->
+            <!--Each field is an integer in [0-255].-->
+            <?Note Will be skipped in multiple system usage without --individually option.?>
+            <IPv4UseDNSServers>Disable</IPv4UseDNSServers>
+            <!--Enable/Disable-->
+            <!--Determines whether to use DHCPv4-supplied DNS servers.-->
+            <IPv4StaticNameServer1></IPv4StaticNameServer1>
+            <!--X.X.X.X-->
+            <!--Each field is an integer in [0-255].-->
+            <!--IPv4StaticNameServer1 is readonly if IPv4UseDNSServers is Enable.-->
+            <!--Will be deleted if empty.-->
+            <IPv4StaticNameServer2></IPv4StaticNameServer2>
+            <!--X.X.X.X-->
+            <!--Each field is an integer in [0-255].-->
+            <!--IPv4StaticNameServer2 is readonly if IPv4UseDNSServers is Enable.-->
+            <!--Will be deleted if empty.-->
+          </Configuration>
+        </IPv4>
+        <IPv6 Action="Change">
+          <!--Supported Action:None/Change-->
+          <Information>
+            <!--Information for IPv6 properties-->
+            <IPv6LinkLocalAddress>fe80::3eec:efff:fe9e:d09b</IPv6LinkLocalAddress>
+            <IPv6LinkLocalAddressPrefixLength>64</IPv6LinkLocalAddressPrefixLength>
+            <!--Address is valid only for this link network segment.-->
+            <IPv6NameServer1>fd00::cece:1eff:fe65:f9ac</IPv6NameServer1>
+            <!--This represents DNS name servers that are currently in use on this interface.-->
+            <IPv6NameServer2></IPv6NameServer2>
+            <!--This represents DNS name servers that are currently in use on this interface.-->
+          </Information>
+          <Configuration>
+            <!--Configuration for IPv6 properties-->
+            <IPv6UseDNSServers>Disable</IPv6UseDNSServers>
+            <!--Enable/Disable-->
+            <!--When enabled, DNS server addresses supplied via DHCPv6 stateless mode.-->
+            <DynamicIPv6 Action="Change">
+              <!--Supported Action:None/Change-->
+              <Information>
+                <!--Information for dynamic IPv6 properties-->
+                <TotalDynamicIPv6Group>0</TotalDynamicIPv6Group>
+                <DUID>0E:00:00:01:00:01:2C:00:75:9A:3C:EC:EF:9E:D0:9B</DUID>
+              </Information>
+              <Configuration>
+                <!--Configuration for dynamic IPv6 properties-->
+                <IPv6AutoConfigEnabled>Enable</IPv6AutoConfigEnabled>
+                <!--Enable/Disable-->
+                <OperatingMode>Stateless</OperatingMode>
+                <!--Stateless/Stateful/Disabled-->
+                <!--When OperatingMode is set to 'Disabled', IPv6 UseDnsServers must be 'Disable'.-->
+                <!--When OperatingMode is set to 'Stateful', IPv6 UseDnsServers must be 'Enable'.-->
+              </Configuration>
+            </DynamicIPv6>
+            <StaticIPv6 Action="Change">
+              <!--Supported Action:None/Change-->
+              <Information>
+                <!--Information for static IPv6 properties-->
+                <TotalStaticIPv6Group>0</TotalStaticIPv6Group>
+              </Information>
+              <Configuration>
+                <!--Configuration for static IPv6 properties-->
+                <IPv6StaticNameServer1></IPv6StaticNameServer1>
+                <!--DNS server for IPv6.-->
+                <!--X:X:X:X:X:X:X:X-->
+                <!--Each field is a four digits hex string.-->
+                <!--IPv6StaticNameServer1 is readonly if IPv6UseDNSServers is Enable.-->
+                <!--Will be deleted if empty.-->
+                <IPv6StaticNameServer2></IPv6StaticNameServer2>
+                <!--DNS server for IPv6.-->
+                <!--X:X:X:X:X:X:X:X-->
+                <!--Each field is a four digits hex string.-->
+                <!--IPv6StaticNameServer2 is readonly if IPv6UseDNSServers is Enable.-->
+                <!--Will be deleted if empty.-->
+                <IPv6StaticDefaultGateway></IPv6StaticDefaultGateway>
+                <!--Default Gateway for IPv6StaticGroup.-->
+                <!--X:X:X:X:X:X:X:X-->
+                <!--Each field is a four digits hex string.-->
+                <!--IPv6StaticDefaultGateway cannot be set if DynamicIPv6 IPv6AutoConfigEnabled is Enable.-->
+                <!--IPv6StaticDefaultGateway cannot be set if DynamicIPv6 DNSv6Mode is Stateful.-->
+                <!--Will be deleted if empty.-->
+                <?Note Will be skipped in multiple system usage without --individually option.?>
+                <IPv6StaticGroup Action="Change" ID="1">
+                  <!--Supported Action:None/Change/Delete-->
+                  <Configuration>
+                    <!--Configuration for static IPv6 group-->
+                    <?Note Will be skipped in multiple system usage without --individually option.?>
+                    <Address></Address>
+                    <!--X:X:X:X:X:X:X:X-->
+                    <!--Each field is a four digits hex string.-->
+                    <PrefixLength>64</PrefixLength>
+                    <!--Integer is in [1-128].-->
+                  </Configuration>
+                </IPv6StaticGroup>
+              </Configuration>
+            </StaticIPv6>
+          </Configuration>
+        </IPv6>
+      </Configuration>
+    </LAN>
+  </OemCfg>
+</BmcCfg>

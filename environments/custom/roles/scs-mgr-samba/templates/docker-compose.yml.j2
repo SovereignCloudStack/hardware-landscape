@@ -1,0 +1,28 @@
+---
+services:
+  samba:
+    container_name: "{{ samba_container_name }}"
+    restart: unless-stopped
+    image: "{{ samba_image }}"
+    ports:
+      - "137:137"
+      - "139:139"
+      - "445:445"
+    volumes:
+      - "{{ samba_configuration_directory }}/:/etc/samba/:ro"
+      - "{{ samba_media_directory }}/:/srv/:ro" 
+    # Automatic user creation not seems to work
+    #command: ["/sbin/tini", "--", "/usr/bin/samba.sh", "-u", "osism;osism"]
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: {{ docker_network_mtu }}
+    ipam:
+      driver: default
+      config:
+        - subnet: {{ samba_network }}
+
+#volumes:
+#  samba:

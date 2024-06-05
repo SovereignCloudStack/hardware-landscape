@@ -296,10 +296,6 @@ show interfaces status PortChannel04
 | st01-comp-r01-u24    |               |                     |               |              |                  |            |                                  |
 | st01-comp-r01-u25    |               |                     |               |              |                  |            |                                  |
 | st01-comp-r01-u26    |               |                     |               |              |                  |            |                                  |
-| st01-ctl-r01-u27     |               |                     |               |              |                  |            |                                  |
-| st01-ctl-r01-u28     |               |                     |               |              |                  |            |                                  |
-| st01-ctl-r01-u29     |               |                     |               |              |                  |            |                                  |
-| st01-mgmt-r01-u31    |               |                     |               |              |                  |            |                                  |
 | st01-stor-r01-u01    |               |                     |               |              |                  |            |                                  |
 | st01-stor-r01-u03    |               |                     |               |              |                  |            |                                  |
 | st01-stor-r01-u07    |               |                     |               |              |                  |            |                                  |

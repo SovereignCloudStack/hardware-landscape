@@ -1,0 +1,30 @@
+---
+##########################
+# operator
+
+operator_user: "dragon"
+operator_group: "dragon"
+
+##########################
+# docker
+
+docker_network_mtu: 1500
+
+docker_registry_samba: index.docker.io
+
+##########################
+# samba
+
+samba_configuration_directory: /opt/samba/configuration
+samba_media_directory: /srv/www
+samba_docker_compose_directory: /opt/samba
+
+samba_network: 172.31.102.144/28
+samba_service_name: "docker-compose@samba"
+
+samba_host: 0.0.0.0
+
+samba_tag: latest
+# https://hub.docker.com/r/dockurr/samba
+samba_image: "{{ docker_registry_samba }}/dockurr/samba:{{ samba_tag }}"
+samba_container_name: samba

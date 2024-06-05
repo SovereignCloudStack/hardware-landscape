@@ -1,0 +1,5 @@
+asn_node_base: '42100210'
+interface1_asn: '65405'
+interface2_asn: '65404'
+ipv4_base: 10.10.21.
+ipv6_base: 'fd0c:cc24:75a0:1:10:10:21:'

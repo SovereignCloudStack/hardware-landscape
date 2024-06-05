@@ -1,0 +1,7 @@
+---
+# handlers file for httpd
+- name: Restart httpd service
+  become: true
+  ansible.builtin.service:
+    name: "{{ httpd_service_name }}"
+    state: restarted
