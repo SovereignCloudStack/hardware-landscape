@@ -20,11 +20,7 @@ proxy_proxies: {}
 squid_configuration_directory: /opt/squid/configuration
 squid_docker_compose_directory: /opt/squid
 
-squid_network: 10.10.21.0/24
-squid_service_name: "docker-compose@squid"
-
-squid_host: 0.0.0.0
-squid_port: 3128
+squid_host: 10.10.21.10
 
 squid_tag: 5.7-23.04_beta  # don't get fooled by "beta". this is actually production ready
 
