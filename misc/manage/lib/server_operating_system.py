@@ -1,6 +1,7 @@
 import json
 import logging
 import os.path
+import socket
 from time import sleep
 
 import webbrowser
@@ -49,6 +50,19 @@ def check_power_off(url: str, http_auth: HTTPBasicAuth):
     return False
 
 
+def tcp_test_connect(host, port, timeout=5):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(timeout)
+    try:
+        sock.connect((host, port))
+        return True
+    except socket.error as e:
+        return False
+    finally:
+        # Close the socket to clean up
+        sock.close()
+
+
 def check_power_servers(host_list: list[str]):
     host_data = parse_configuration_data()
     for host_name in host_list:
@@ -56,8 +70,11 @@ def check_power_servers(host_list: list[str]):
         if check_power_off(redfish_url, http_auth):
             LOGGER.warning(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered OFF")
         else:
-            
-            LOGGER.info(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered ON")
+            if tcp_test_connect(host_data[host_name]['node_ip_v4'], 22, 1):
+                reachable = "reachable on tcp port 22/ssh"
+            else:
+                reachable = "not reachable on tcp port 22/ssh"
+            LOGGER.info(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered ON, {reachable}")
 
 
 def wait_power_off(url: str, http_auth: HTTPBasicAuth):
