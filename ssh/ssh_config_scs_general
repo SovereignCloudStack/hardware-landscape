@@ -1,0 +1,8 @@
+
+Host scs-jumphost
+   Hostname 153.92.93.119
+   Port 41115
+
+Host scs-manager
+   Hostname 188.244.101.28
+

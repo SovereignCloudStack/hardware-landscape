@@ -6,7 +6,7 @@ from pprint import pprint
 
 from lib.global_helpers import setup_logging
 from lib.switch_model import get_unique_switches
-from lib.switch_operating_system import CfgTypes, backup_config, restore_config
+from lib.switch_operating_system import CfgTypes, backup_config, restore_config, create_configs
 from lib.helpers import template_ansible_config
 
 parser = argparse.ArgumentParser(
@@ -29,6 +29,8 @@ exclusive_group.add_argument('--backup_cfg', type=CfgTypes,
 exclusive_group.add_argument('--restore_cfg', type=CfgTypes,
                              help='restore system configuration (possible values: both, bmc, bios)')
 
+exclusive_group.add_argument('--configs', '-c', help="create config snippets for environment", action='store_true')
+
 parser.add_argument('--log_level', metavar='loglevel', type=str,
                     default="INFO", help='The loglevel')
 
@@ -45,10 +47,13 @@ if args.ansible:
     template_ansible_config(get_unique_switches(args.node, False, args.filter), "switches")
 
 if args.backup_cfg:
-     backup_config(get_unique_switches(args.node, False, args.filter), args.backup_cfg)
+    backup_config(get_unique_switches(args.node, False, args.filter), args.backup_cfg)
 
 if args.restore_cfg:
-     restore_config(get_unique_switches(args.node, False, args.filter), args.restore_cfg)
+    restore_config(get_unique_switches(args.node, False, args.filter), args.restore_cfg)
+
+if args.configs:
+    create_configs(get_unique_switches(args.node, False, args.filter))
 
 if args.show:
     print()

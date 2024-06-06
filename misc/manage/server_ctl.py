@@ -5,7 +5,7 @@ import sys
 from pprint import pprint
 
 from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
-    PowerActionTypes
+    PowerActionTypes, create_configs
 from lib.helpers import template_ansible_config
 from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes
 from lib.global_helpers import setup_logging
@@ -45,6 +45,8 @@ exclusive_group.add_argument('--backup_cfg', choices=[e.name for e in CfgTypes],
 
 exclusive_group.add_argument('--restore_cfg', choices=[e.name for e in CfgTypes],
                              help='restore system configuration (possible values: both, bmc, bios)')
+
+exclusive_group.add_argument('--configs', '-c', help="create config snippets for environment", action='store_true')
 
 parser.add_argument('--watch', '-w', action="store_true",
                     help="Open hosts in your preferred browser and output the login credentials")
@@ -96,5 +98,10 @@ if args.show:
 if args.open:
     open_servers(get_unique_servers(args.node, False, args.filter))
     sys.exit(0)
+
+if args.configs:
+    create_configs(get_unique_servers(args.node, False, args.filter))
+
+
 
 sys.exit(0)

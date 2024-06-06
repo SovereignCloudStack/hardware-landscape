@@ -1,0 +1,147 @@
+Host scs-node-bmc-st01-comp-r01-u09
+   Hostname 10.10.23.25
+   User ADMIN
+
+Host scs-node-st01-comp-r01-u09
+   Hostname 10.10.21.25
+
+Host scs-node-bmc-st01-comp-r01-u11
+   Hostname 10.10.23.26
+   User ADMIN
+
+Host scs-node-st01-comp-r01-u11
+   Hostname 10.10.21.26
+
+Host scs-node-bmc-st01-comp-r01-u13
+   Hostname 10.10.23.27
+   User ADMIN
+
+Host scs-node-st01-comp-r01-u13
+   Hostname 10.10.21.27
+
+Host scs-node-bmc-st01-comp-r01-u15
+   Hostname 10.10.23.28
+   User ADMIN
+
+Host scs-node-st01-comp-r01-u15
+   Hostname 10.10.21.28
+
+Host scs-node-bmc-st01-comp-r01-u17
+   Hostname 10.10.23.29
+   User ADMIN
+
+Host scs-node-st01-comp-r01-u17
+   Hostname 10.10.21.29
+
+Host scs-node-bmc-st01-comp-r01-u19
+   Hostname 10.10.23.30
+   User ADMIN
+
+Host scs-node-st01-comp-r01-u19
+   Hostname 10.10.21.30
+
+Host scs-node-bmc-st01-comp-r01-u21
+   Hostname 10.10.23.15
+   User root
+
+Host scs-node-st01-comp-r01-u21
+   Hostname 10.10.21.15
+
+Host scs-node-bmc-st01-comp-r01-u22
+   Hostname 10.10.23.16
+   User root
+
+Host scs-node-st01-comp-r01-u22
+   Hostname 10.10.21.16
+
+Host scs-node-bmc-st01-comp-r01-u23
+   Hostname 10.10.23.17
+   User root
+
+Host scs-node-st01-comp-r01-u23
+   Hostname 10.10.21.17
+
+Host scs-node-bmc-st01-comp-r01-u24
+   Hostname 10.10.23.18
+   User root
+
+Host scs-node-st01-comp-r01-u24
+   Hostname 10.10.21.18
+
+Host scs-node-bmc-st01-comp-r01-u25
+   Hostname 10.10.23.19
+   User root
+
+Host scs-node-st01-comp-r01-u25
+   Hostname 10.10.21.19
+
+Host scs-node-bmc-st01-comp-r01-u26
+   Hostname 10.10.23.20
+   User root
+
+Host scs-node-st01-comp-r01-u26
+   Hostname 10.10.21.20
+
+Host scs-node-bmc-st01-ctl-r01-u27
+   Hostname 10.10.23.12
+   User ADMIN
+
+Host scs-node-st01-ctl-r01-u27
+   Hostname 10.10.21.12
+
+Host scs-node-bmc-st01-ctl-r01-u28
+   Hostname 10.10.23.13
+   User ADMIN
+
+Host scs-node-st01-ctl-r01-u28
+   Hostname 10.10.21.13
+
+Host scs-node-bmc-st01-ctl-r01-u29
+   Hostname 10.10.23.14
+   User ADMIN
+
+Host scs-node-st01-ctl-r01-u29
+   Hostname 10.10.21.14
+
+Host scs-node-bmc-st01-mgmt-r01-u30
+   Hostname 10.10.23.10
+   User ADMIN
+
+Host scs-node-st01-mgmt-r01-u30
+   Hostname 10.10.21.10
+
+Host scs-node-bmc-st01-mgmt-r01-u31
+   Hostname 10.10.23.11
+   User ADMIN
+
+Host scs-node-st01-mgmt-r01-u31
+   Hostname 10.10.21.11
+
+Host scs-node-bmc-st01-stor-r01-u01
+   Hostname 10.10.23.21
+   User ADMIN
+
+Host scs-node-st01-stor-r01-u01
+   Hostname 10.10.21.21
+
+Host scs-node-bmc-st01-stor-r01-u03
+   Hostname 10.10.23.22
+   User ADMIN
+
+Host scs-node-st01-stor-r01-u03
+   Hostname 10.10.21.22
+
+Host scs-node-bmc-st01-stor-r01-u05
+   Hostname 10.10.23.23
+   User ADMIN
+
+Host scs-node-st01-stor-r01-u05
+   Hostname 10.10.21.23
+
+Host scs-node-bmc-st01-stor-r01-u07
+   Hostname 10.10.23.24
+   User ADMIN
+
+Host scs-node-st01-stor-r01-u07
+   Hostname 10.10.21.24
+

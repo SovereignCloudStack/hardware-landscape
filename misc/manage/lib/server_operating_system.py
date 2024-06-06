@@ -13,7 +13,7 @@ from sushy import auth
 from sushy.resources.manager.manager import Manager
 import urllib3
 
-from .global_helpers import get_install_media_url
+from .global_helpers import get_install_media_url, get_basedir
 
 from .helpers import parse_configuration_data
 
@@ -224,3 +224,20 @@ def open_servers(host_list: list[str]):
         webbrowser.get("google-chrome").open(f"https://{host_data[host_name]['bmc_ip_v4']}", new=2)
 
 
+def create_configs(host_list: list[str]):
+    host_data = parse_configuration_data()["servers"]
+
+    results_file = f"{get_basedir()}/ssh/ssh_config_scs_servers"
+    LOGGER.info(f"writing {results_file}")
+    with open(results_file, 'w') as f_out:
+        for host_name in host_list:
+            LOGGER.info(f"** {host_name} / {host_data[host_name]['bmc_ip_v4']}")
+
+            f_out.write(f"Host scs-node-bmc-{host_name}\n")
+            f_out.write(f"   Hostname {host_data[host_name]['bmc_ip_v4']}\n")
+            f_out.write(f"   User {host_data[host_name]['bmc_username']}\n")
+            f_out.write(f"\n")
+
+            f_out.write(f"Host scs-node-{host_name}\n")
+            f_out.write(f"   Hostname {host_data[host_name]['node_ip_v4']}\n")
+            f_out.write(f"\n")
