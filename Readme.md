@@ -7,7 +7,7 @@
   * [Network Connections](documentation/standards/System_Network_Connections.md)
 * Documentation of the System
   * Operational documentation
-    * [Deployment of the System(s)][documentation/System_Deployment.md]
+    * [Deployment of the System(s)](documentation/System_Deployment.md)
     * [Runbooks](documentation/System_Runbooks.md)
   * [The rack configuration](documentation/System_Rack_Setup.md)
   * [General Network Information](documentation/System_Networks.md)
