@@ -81,7 +81,7 @@ def wait_power_off(url: str, http_auth: HTTPBasicAuth):
     control_server(url, http_auth, "ForceOn")
     sleep(120)
 
-    wait = 10
+    wait = 15
     while wait > 0:
         LOGGER.info("Waiting for power off")
         if check_power_off(url, http_auth):
