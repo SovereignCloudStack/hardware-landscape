@@ -7,7 +7,7 @@ from pprint import pprint
 from lib.global_helpers import setup_logging
 from lib.switch_model import get_unique_switches
 from lib.switch_operating_system import CfgTypes
-
+from lib.helpers import template_ansible_config
 
 parser = argparse.ArgumentParser(
     prog='Configure Switches')
@@ -16,7 +16,6 @@ parser.add_argument('node', metavar='host', help="One or more hostnames, use 'al
                                                  " shortcut for all switches", type=str, nargs='+')
 
 exclusive_group = parser.add_mutually_exclusive_group(required=True)
-
 
 exclusive_group.add_argument('--show', '-s', action="store_true",
                              help="Show hosts")
@@ -42,8 +41,8 @@ args = parser.parse_args()
 
 setup_logging(args.log_level)
 
-# if args.ansible:
-#     template_ansible_config(get_unique_hosts(args.node))
+if args.ansible:
+    template_ansible_config(get_unique_switches(args.node, False, args.filter), "switches")
 #
 # if args.backup_cfg:
 #     backup_config(get_unique_hosts(args.node), args.backup_cfg)
@@ -57,6 +56,5 @@ if args.show:
     hosts = get_unique_switches(args.node, args.verbose, args.filter)
     for host in hosts:
         pprint(host, indent=2)
-
 
 sys.exit(0)

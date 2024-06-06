@@ -5,7 +5,8 @@ import sys
 from pprint import pprint
 
 from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
-    template_ansible_config, PowerActionTypes
+    PowerActionTypes
+from lib.helpers import template_ansible_config
 from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes
 from lib.global_helpers import setup_logging
 from lib.server_model import get_unique_servers

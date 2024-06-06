@@ -1,6 +1,5 @@
 import json
 import logging
-import os.path
 import socket
 from enum import Enum
 from time import sleep
@@ -14,9 +13,7 @@ from sushy import auth
 from sushy.resources.manager.manager import Manager
 import urllib3
 
-from .global_helpers import get_ansible_host_inventory_dir, get_install_media_url
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
-import yaml
+from .global_helpers import get_install_media_url
 
 from .helpers import parse_configuration_data
 
@@ -227,32 +224,3 @@ def open_servers(host_list: list[str]):
         webbrowser.get("google-chrome").open(f"https://{host_data[host_name]['bmc_ip_v4']}", new=2)
 
 
-def template_ansible_config(host_list: list[str]):
-    host_data = parse_configuration_data()["servers"]
-
-    template_loader = FileSystemLoader(searchpath=get_ansible_host_inventory_dir())
-    template_env = Environment(loader=template_loader, undefined=StrictUndefined)
-    results_template = template_env.get_template("server-template.yml.j2")
-
-    for host_name in host_list:
-        results_filename = f"{get_ansible_host_inventory_dir()}{host_name}.yml"
-
-        LOGGER.info(f"rendering file : {results_filename}")
-        templated_string = results_template.render(host_data[host_name])
-        templated_data = yaml.safe_load(templated_string)
-
-        if os.path.exists(results_filename):
-            with open(results_filename, 'r') as file:
-                existing_config = yaml.safe_load(file)
-                if existing_config.get("inventory_generate_strategy", "replace") == "keep":
-                    LOGGER.warning(f"Not templating {host_name} inventory file, inventory_generate_strategy=keep")
-                    continue
-                if existing_config.get("inventory_generate_strategy", "replace") == "update":
-                    LOGGER.warning(f"Updating existing {host_name} inventory file, inventory_generate_strategy=update")
-                    # TODO: do a better merge strategy without messing up the formatting
-                    merged_data = {**templated_data, **existing_config}
-                    with open(results_filename, 'w') as f_out:
-                        yaml.dump(merged_data, f_out)
-        else:
-            with open(results_filename, mode="w", encoding="utf-8") as results:
-                results.write(templated_string)
