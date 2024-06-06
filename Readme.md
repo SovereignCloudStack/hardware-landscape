@@ -7,6 +7,7 @@
   * [Network Connections](documentation/standards/System_Network_Connections.md)
 * Documentation of the System
   * Operational procedures
+    * [Work with the environment](documentation/System_Usage.md)
     * [Deployment of the System(s)](documentation/System_Deployment.md)
     * [Runbooks](documentation/System_Runbooks.md)
   * Documentation of the system setup
