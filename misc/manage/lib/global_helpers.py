@@ -1,5 +1,7 @@
 import logging
 import os
+import time
+from datetime import datetime, timezone
 from typing import Tuple
 
 import coloredlogs
@@ -43,3 +45,20 @@ def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
 
 def shorten_string(string: str, length: int = 300):
     return (string[:length] + ' ...') if len(string) > length else string
+
+
+def get_string_with_formatted_timestamp(string: str):
+    utc_dt = datetime.now(timezone.utc)
+    iso_date = utc_dt.isoformat().replace(":","-").replace(".","_").replace("+","-")
+    return string % iso_date
+
+
+def ask_for_confirmation(prompt="Are you sure?"):
+    while True:
+        response = input(prompt+" (y-es/n-o)").strip().lower()
+        if response in ['yes', 'y']:
+            return True
+        elif response in ['no', 'n']:
+            return False
+        else:
+            print("Please respond with 'yes' or 'no'.")

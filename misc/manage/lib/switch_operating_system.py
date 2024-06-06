@@ -8,7 +8,8 @@ from enum import Enum
 import yaml
 from jinja2 import FileSystemLoader, Environment, StrictUndefined
 
-from .global_helpers import get_device_configurations_dir, get_ansible_host_inventory_dir, shorten_string
+from .global_helpers import get_device_configurations_dir, get_ansible_host_inventory_dir, shorten_string, \
+    get_string_with_formatted_timestamp, ask_for_confirmation
 from .helpers import parse_configuration_data, regex_replace_in_file
 
 LOGGER = logging.getLogger()
@@ -51,11 +52,6 @@ def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
     for hostname in bmc_hosts:
         LOGGER.info(f"Processing switch {hostname}")
         data = host_data[hostname]
-
-        if data["device_model"] == "ARS-110M-NR":
-            LOGGER.warning("Device dos not support backup/restore using sum")
-            continue
-
         base_file_name = f"{get_device_configurations_dir('network')}{data['device_model']}_{hostname}"
 
         if filetype in ["frr", "both"]:
@@ -70,7 +66,7 @@ def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
                         config_started = True
                     if config_started:
                         f_out.write(line)
-                        
+
         if filetype in ["main", "both"]:
             frr_backup = """sudo config save config_db_backup.json -y >&2 && cat config_db_backup.json"""
             result = execute_switch_commands(host_data[hostname], frr_backup)
@@ -87,12 +83,39 @@ def restore_config(bmc_hosts: list[str], filetype: CfgTypes):
     for hostname in bmc_hosts:
         LOGGER.info(f"Processing switch {hostname}")
         data = host_data[hostname]
-        # if data["device_model"] == "ARS-110M-NR":
-        #     LOGGER.warning("Device dos not support backup/restore using sum")
-        #     continue
-        #
-        # base_file_name = f"{get_device_configurations_dir('server')}{data['device_model']}_{hostname}"
-        # if filetype in ["bios", "both"]:
-        #     execute_sum(data, f"-c ChangeBiosCfg --file {base_file_name}.cfg")
-        # if filetype in ["bmc", "both"]:
-        #     execute_sum(data, f"-c ChangeBmcCfg --file {base_file_name}.xml")
+        base_file_name = f"{get_device_configurations_dir('network')}{data['device_model']}_{hostname}"
+
+        if filetype in ["frr", "both"]:
+            backup_file = get_string_with_formatted_timestamp("config_db_%s_frr_backup.conf")
+
+            subprocess.run(f"scp {base_file_name}_frr.conf {data['bmc_username']}@{data['bmc_ip_v4']}:frr_restore.conf",
+                           check=True,
+                           shell=True,
+                           )
+
+            command = f"sudo vtysh -c 'show running-config' > {backup_file} && " + \
+                      "sudo cp frr_restore.conf /etc/sonic/frr/frr.conf && " + \
+                      "sudo chown 300:300 /etc/sonic/frr/frr.conf && docker restart bgp"
+
+            execute_switch_commands(host_data[hostname], command)
+
+        if filetype in ["main", "both"]:
+            backup_file = get_string_with_formatted_timestamp("config_db_%s_main_backup.json")
+
+            subprocess.run(
+                f"scp {base_file_name}_main.json {data['bmc_username']}@{data['bmc_ip_v4']}:config_db_restore.json",
+                check=True,
+                shell=True,
+            )
+
+            command = f"sudo config save {backup_file}.json -y && " + \
+                      "sudo cp config_db_restore.json /etc/sonic/config_db.json && " + \
+                      "sudo config reload -y"
+            execute_switch_commands(host_data[hostname], command)
+
+        if ask_for_confirmation("Do you want to reboot the device?"):
+            subprocess.run(
+                f"ssh {data['bmc_username']}@{data['bmc_ip_v4']} sudo reboot",
+                check=True,
+                shell=True,
+            )
