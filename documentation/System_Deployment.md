@@ -89,11 +89,11 @@ Please just add issues to this project with hints or directly [contact me](https
   (Just press F11 at boot to select the virtual CDROM as boot device, unfortunately Supermicro ignores the setting for the next boot device.)
   ```
   # Storage Servers
-  ./server_ctl --power_off --filter device_model=H12SSL-CT all
+  ./server_ctl --power_action ForceOff --filter device_model=H12SSL-CT all
   ./server_ctl --install_os -w --filter device_model=H12SSL-CT all
 
   # Intel Compute Servers
-  ./server_ctl --power_off --filter device_model=H12SSL-NT all
+  ./server_ctl --power_action ForceOff --filter device_model=H12SSL-NT all
   ./server_ctl --install_os -w --filter device_model=H12SSL-NT all
 
   # ARM Compute Servers

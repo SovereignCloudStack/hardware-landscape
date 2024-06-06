@@ -2,6 +2,7 @@ import json
 import logging
 import os.path
 import socket
+from enum import Enum
 from time import sleep
 
 import webbrowser
@@ -23,6 +24,18 @@ MAX_WAIT = 120
 STEP_WAIT = 15
 
 LOGGER = logging.getLogger()
+
+
+class PowerActionTypes(str, Enum):
+    ForceOff = "Turn off the unit immediately (non-graceful shutdown)."
+    ForceOn = "Turn on the unit immediately."
+    ForceRestart = "Shut down immediately and non-gracefully and restart the system."
+    GracefulRestart = "Shut down gracefully and restart the system."
+    GracefulShutdown = "Shut down gracefully and power off."
+    Nmi = "Generate a diagnostic interrupt, which is usually an NMI on x86 systems, to stop normal"
+    On = "Turn on the unit."
+    PowerCycle = "Power cycle the unit."
+    PushPowerButton = "Simulate the pressing of the physical power button on this unit."
 
 
 def control_server(url: str, http_auth: HTTPBasicAuth, mode: str):
