@@ -39,3 +39,7 @@ def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
     coloredlogs.install(fmt=log_format_string, level=log_level)
 
     return logger, log_file
+
+
+def shorten_string(string: str, length: int = 300):
+    return (string[:length] + ' ...') if len(string) > length else string

@@ -6,7 +6,7 @@ from pprint import pprint
 
 from lib.global_helpers import setup_logging
 from lib.switch_model import get_unique_switches
-from lib.switch_operating_system import CfgTypes
+from lib.switch_operating_system import CfgTypes, backup_config, restore_config
 from lib.helpers import template_ansible_config
 
 parser = argparse.ArgumentParser(
@@ -43,12 +43,12 @@ setup_logging(args.log_level)
 
 if args.ansible:
     template_ansible_config(get_unique_switches(args.node, False, args.filter), "switches")
-#
-# if args.backup_cfg:
-#     backup_config(get_unique_hosts(args.node), args.backup_cfg)
-#
-# if args.restore_cfg:
-#     restore_config(get_unique_hosts(args.node), args.restore_cfg)
+
+if args.backup_cfg:
+     backup_config(get_unique_switches(args.node, False, args.filter), args.backup_cfg)
+
+if args.restore_cfg:
+     restore_config(get_unique_switches(args.node, False, args.filter), args.restore_cfg)
 
 if args.show:
     print()
