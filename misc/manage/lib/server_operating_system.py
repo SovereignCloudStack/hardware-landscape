@@ -83,7 +83,7 @@ def wait_power_off(url: str, http_auth: HTTPBasicAuth):
 
     wait = 15
     while wait > 0:
-        LOGGER.info("Waiting for power off")
+        LOGGER.info(f"Waiting for power off, {wait} minutes")
         if check_power_off(url, http_auth):
             break
         wait -= 1
