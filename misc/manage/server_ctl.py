@@ -5,7 +5,8 @@ import sys
 from pprint import pprint
 
 from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
-    template_ansible_config
+    PowerActionTypes, create_configs
+from lib.helpers import template_ansible_config
 from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes
 from lib.global_helpers import setup_logging
 from lib.server_model import get_unique_servers
@@ -27,10 +28,9 @@ exclusive_group.add_argument('--bmc_template', action="store_true",
 exclusive_group.add_argument('--install_os', '-i', action="store_true",
                              help='Install a server os')
 
-exclusive_group.add_argument('--power_off', action="store_true",
-                             help='Stop system')
-exclusive_group.add_argument('--power_on', action="store_true",
-                             help='Start system')
+exclusive_group.add_argument('--power_action', choices=[e.name for e in PowerActionTypes],
+                             help='Perform a power action')
+
 exclusive_group.add_argument('--power_check', action="store_true",
                              help='Check power status')
 
@@ -40,11 +40,13 @@ exclusive_group.add_argument('--show', '-s', action="store_true",
 exclusive_group.add_argument('--ansible', '-a', action="store_true",
                              help="Create ansible inventory files")
 
-exclusive_group.add_argument('--backup_cfg', type=CfgTypes,
+exclusive_group.add_argument('--backup_cfg', choices=[e.name for e in CfgTypes],
                              help='backup system configuration (possible values: both, bmc, bios)')
 
-exclusive_group.add_argument('--restore_cfg', type=CfgTypes,
+exclusive_group.add_argument('--restore_cfg', choices=[e.name for e in CfgTypes],
                              help='restore system configuration (possible values: both, bmc, bios)')
+
+exclusive_group.add_argument('--configs', '-c', help="create config snippets for environment", action='store_true')
 
 parser.add_argument('--watch', '-w', action="store_true",
                     help="Open hosts in your preferred browser and output the login credentials")
@@ -66,28 +68,25 @@ args = parser.parse_args()
 setup_logging(args.log_level)
 
 if args.bmc_template:
-    template_bmc_config(get_unique_servers(args.node, False))
+    template_bmc_config(get_unique_servers(args.node, False, args.filter))
 
 if args.ansible:
-    template_ansible_config(get_unique_servers(args.node, False))
+    template_ansible_config(get_unique_servers(args.node, False, args.filter))
 
 if args.install_os:
-    install_server(get_unique_servers(args.node, False), args.media_url, args.watch)
+    install_server(get_unique_servers(args.node, False, args.filter), args.media_url, args.watch)
 
-if args.power_on:
-    control_servers(get_unique_servers(args.node, False), "ForceOn")
-
-if args.power_off:
-    control_servers(get_unique_servers(args.node, False), "ForceOff")
+if args.power_action:
+    control_servers(get_unique_servers(args.node, False, args.filter), args.power_action)
 
 if args.power_check:
-    check_power_servers(get_unique_servers(args.node, False))
+    check_power_servers(get_unique_servers(args.node, False, args.filter))
 
 if args.backup_cfg:
-    backup_config(get_unique_servers(args.node, False), args.backup_cfg)
+    backup_config(get_unique_servers(args.node, False, args.filter), args.backup_cfg)
 
 if args.restore_cfg:
-    restore_config(get_unique_servers(args.node, False), args.restore_cfg)
+    restore_config(get_unique_servers(args.node, False, args.filter), args.restore_cfg)
 
 if args.show:
     print()
@@ -99,5 +98,10 @@ if args.show:
 if args.open:
     open_servers(get_unique_servers(args.node, False, args.filter))
     sys.exit(0)
+
+if args.configs:
+    create_configs(get_unique_servers(args.node, False, args.filter))
+
+
 
 sys.exit(0)

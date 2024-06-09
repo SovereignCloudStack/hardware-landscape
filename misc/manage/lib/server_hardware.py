@@ -7,7 +7,7 @@ from enum import Enum
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
-from .helpers import regex_replace_in_file
+from .helpers import regex_replace_in_file, parse_configuration_data
 from .global_helpers import get_rundir, get_basedir, get_device_configurations_dir
 from .server_model import get_server_documentation_dir
 
