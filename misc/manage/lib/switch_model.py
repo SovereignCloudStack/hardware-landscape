@@ -8,7 +8,7 @@ from .helpers import get_unique
 
 LOGGER = logging.getLogger()
 
-CONFIG_FIELDS_SWITCHES = ["name", "serial", "bmc_ip_v4", "bmc_mac", "serial_device"]
+CONFIG_FIELDS_SWITCHES = ["name", "serial", "bmc_ip_v4", "bmc_username", "bmc_mac", "serial_device"]
 
 
 def get_switch_documentation_dir() -> str:
@@ -34,12 +34,13 @@ def parse_configuration_data_switches(data) -> dict[str, dict[str, str]]:
                     r"\|.+"
                     r"\|\s*(?P<bmc_ip_v4>\d+\.\d+\.\d+\.\d+?)\s*"
                     r"\|\s*(?P<bmc_mac>[a-f0-9:]+)\s*"
-                    r"\|\s*(?P<serial_device>[A-F0-9:]+)\s*"
+                    r"\|\s*(?P<serial_device>[A-Za-z0-9:]+)\s*"
                     r".*\|.*",
                     line.strip())
                 if m:
                     data[m.group("name")] = m.groupdict()
                     data[m.group("name")]["device_model"] = switch_type
+                    data[m.group("name")]["bmc_username"] = "admin"
                     for field in CONFIG_FIELDS_SWITCHES:
                         if field not in data[m.group("name")]:
                             LOGGER.error(f"field '{field}' not in line : >>{line.strip()}<<")
