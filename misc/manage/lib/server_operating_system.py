@@ -1,7 +1,7 @@
 import json
 import logging
-import os.path
 import socket
+from enum import Enum
 from time import sleep
 
 import webbrowser
@@ -13,9 +13,7 @@ from sushy import auth
 from sushy.resources.manager.manager import Manager
 import urllib3
 
-from .global_helpers import get_ansible_host_inventory_dir, get_install_media_url
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
-import yaml
+from .global_helpers import get_install_media_url, get_basedir
 
 from .helpers import parse_configuration_data
 
@@ -23,6 +21,18 @@ MAX_WAIT = 120
 STEP_WAIT = 15
 
 LOGGER = logging.getLogger()
+
+
+class PowerActionTypes(str, Enum):
+    ForceOff = "Turn off the unit immediately (non-graceful shutdown)."
+    ForceOn = "Turn on the unit immediately."
+    ForceRestart = "Shut down immediately and non-gracefully and restart the system."
+    GracefulRestart = "Shut down gracefully and restart the system."
+    GracefulShutdown = "Shut down gracefully and power off."
+    Nmi = "Generate a diagnostic interrupt, which is usually an NMI on x86 systems, to stop normal"
+    On = "Turn on the unit."
+    PowerCycle = "Power cycle the unit."
+    PushPowerButton = "Simulate the pressing of the physical power button on this unit."
 
 
 def control_server(url: str, http_auth: HTTPBasicAuth, mode: str):
@@ -81,9 +91,9 @@ def wait_power_off(url: str, http_auth: HTTPBasicAuth):
     control_server(url, http_auth, "ForceOn")
     sleep(120)
 
-    wait = 10
+    wait = 15
     while wait > 0:
-        LOGGER.info("Waiting for power off")
+        LOGGER.info(f"Waiting for power off, {wait} minutes")
         if check_power_off(url, http_auth):
             break
         wait -= 1
@@ -214,32 +224,20 @@ def open_servers(host_list: list[str]):
         webbrowser.get("google-chrome").open(f"https://{host_data[host_name]['bmc_ip_v4']}", new=2)
 
 
-def template_ansible_config(host_list: list[str]):
+def create_configs(host_list: list[str]):
     host_data = parse_configuration_data()["servers"]
 
-    template_loader = FileSystemLoader(searchpath=get_ansible_host_inventory_dir())
-    template_env = Environment(loader=template_loader, undefined=StrictUndefined)
-    results_template = template_env.get_template("server-template.yml.j2")
+    results_file = f"{get_basedir()}/config-snippets/ssh_config_scs_servers"
+    LOGGER.info(f"writing {results_file}")
+    with open(results_file, 'w') as f_out:
+        for host_name in host_list:
+            LOGGER.info(f"** {host_name} / {host_data[host_name]['bmc_ip_v4']}")
 
-    for host_name in host_list:
-        results_filename = f"{get_ansible_host_inventory_dir()}{host_name}.yml"
+            f_out.write(f"Host scs-bmc-{host_name}\n")
+            f_out.write(f"   Hostname {host_data[host_name]['bmc_ip_v4']}\n")
+            f_out.write(f"   User {host_data[host_name]['bmc_username']}\n")
+            f_out.write(f"\n")
 
-        LOGGER.info(f"rendering file : {results_filename}")
-        templated_string = results_template.render(host_data[host_name])
-        templated_data = yaml.safe_load(templated_string)
-
-        if os.path.exists(results_filename):
-            with open(results_filename, 'r') as file:
-                existing_config = yaml.safe_load(file)
-                if existing_config.get("inventory_generate_strategy", "replace") == "keep":
-                    LOGGER.warning(f"Not templating {host_name} inventory file, inventory_generate_strategy=keep")
-                    continue
-                if existing_config.get("inventory_generate_strategy", "replace") == "update":
-                    LOGGER.warning(f"Updating existing {host_name} inventory file, inventory_generate_strategy=update")
-                    # TODO: do a better merge strategy without messing up the formatting
-                    merged_data = {**templated_data, **existing_config}
-                    with open(results_filename, 'w') as f_out:
-                        yaml.dump(merged_data, f_out)
-        else:
-            with open(results_filename, mode="w", encoding="utf-8") as results:
-                results.write(templated_string)
+            f_out.write(f"Host scs-node-{host_name}\n")
+            f_out.write(f"   Hostname {host_data[host_name]['node_ip_v4']}\n")
+            f_out.write(f"\n")
