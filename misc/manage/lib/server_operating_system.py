@@ -227,7 +227,7 @@ def open_servers(host_list: list[str]):
 def create_configs(host_list: list[str]):
     host_data = parse_configuration_data()["servers"]
 
-    results_file = f"{get_basedir()}/ssh/ssh_config_scs_servers"
+    results_file = f"{get_basedir()}/config-snippets/ssh_config_scs_servers"
     LOGGER.info(f"writing {results_file}")
     with open(results_file, 'w') as f_out:
         for host_name in host_list:
