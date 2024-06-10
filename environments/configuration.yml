@@ -4,15 +4,13 @@
 
 # docker
 docker_configure_proxy: false
-docker_proxy_http: "http://{{ groups['manager'][0]['internal_ip'] }}:3128"
+docker_proxy_http: "http://{{ squid_host }}:3128"
 docker_proxy_https: "{{ docker_proxy_http }}"
 
 # apt
-proxy_proxies: {}
-#  http: "http://{{ groups['manager'][0]['internal_ip'] }}:3128"
-#  https: "http://{{ groups['manager'][0]['internal_ip'] }}:3128"
-#  http: ""
-#  https: ""
+proxy_proxies: 
+  http: "http://{{ squid_host }}:3128"
+  https: "http://{{ squid_host  }}:3128"
 
 ##########################################################
 # proxy/server

@@ -15,12 +15,47 @@
 # The "all" group is not used in OSISM. Therefore it is important
 # that all nodes are explicitly listed here.
 [generic]
+st01-comp-r01-u09
+st01-comp-r01-u11
+st01-comp-r01-u13
+st01-comp-r01-u15
+st01-comp-r01-u17
+st01-comp-r01-u19
+#st01-comp-r01-u21
+#st01-comp-r01-u22
+#st01-comp-r01-u23
+#st01-comp-r01-u24
+#st01-comp-r01-u25
+#st01-comp-r01-u26
+st01-ctl-r01-u27
+st01-ctl-r01-u28
+st01-ctl-r01-u29
 st01-mgmt-r01-u30
+st01-mgmt-r01-u31
+st01-stor-r01-u01
+st01-stor-r01-u03
+st01-stor-r01-u05
+st01-stor-r01-u07
 
 # Nodes that act as manager (sometimes called deployment node)
 # are included in this group.
 [manager]
 st01-mgmt-r01-u30
+#st01-mgmt-r01-u31
+
+#[network]
+#st01-sw100g-r01-u36
+#st01-sw100g-r01-u37
+#st01-sw100g-r01-u41
+#st01-sw10g-r01-u38
+#st01-sw10g-r01-u39
+#st01-sw1g-r01-u32
+#st01-sw1g-r01-u33
+#st01-sw1g-r01-u42
+#st01-sw1g-r01-u47
+#st01-sw25g-r01-u34
+#st01-sw25g-r01-u35
+#st01-sw25g-r01-u40
 
 # Nodes which are intended for monitoring services belong to
 # this group
@@ -29,10 +64,27 @@ st01-mgmt-r01-u30
 # Nodes that serve as controllers, so things like scheduler,
 # API or database run there, of the environment.
 [control]
+st01-ctl-r01-u27
+st01-ctl-r01-u28
+st01-ctl-r01-u29
+
 
 # Virtual systems managed by OpenStack Nova are placed on
 # nodes in this group.
 [compute]
+st01-comp-r01-u09
+st01-comp-r01-u11
+st01-comp-r01-u13
+st01-comp-r01-u15
+st01-comp-r01-u17
+st01-comp-r01-u19
+#st01-comp-r01-u21
+#st01-comp-r01-u22
+#st01-comp-r01-u23
+#st01-comp-r01-u24
+#st01-comp-r01-u25
+#st01-comp-r01-u26
+
 
 # Network resources managed by OpenStack Neutron, such as
 # L3 routers, are placed on these nodes. This group has nothing
@@ -42,10 +94,18 @@ st01-mgmt-r01-u30
 # Nodes that serve as controllers for Ceph, so things like the
 # Ceph Monitor service run here.
 [ceph-control]
+st01-ctl-r01-u27
+st01-ctl-r01-u28
+st01-ctl-r01-u29
+
 
 # The storage available in these systems is provided in the
 # form of OSDs for Ceph.
 [ceph-resource]
+st01-stor-r01-u01
+st01-stor-r01-u03
+st01-stor-r01-u05
+st01-stor-r01-u07
 
 [ceph-rgw:children]
 ceph-control
