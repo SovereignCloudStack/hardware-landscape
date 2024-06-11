@@ -4,9 +4,9 @@
 # chrony
 
 chrony_servers:
-  - ptbtime1.ptb.de
-  - ptbtime2.ptb.de
-  - ptbtime3.ptb.de
+  - st01-ctl-r01-u27
+  - st01-ctl-r01-u28
+  - st01-ctl-r01-u29
   - 10.10.21.10
 chrony_allowed_subnets:
   - 127.0.0.1/32
