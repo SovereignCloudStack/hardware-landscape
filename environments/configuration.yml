@@ -4,13 +4,13 @@
 
 # docker
 docker_configure_proxy: false
-docker_proxy_http: "http://{{ squid_host }}:3128"
+docker_proxy_http: "http://{{ squid_host }}:8888"
 docker_proxy_https: "{{ docker_proxy_http }}"
 
 # apt
 proxy_proxies: 
-  http: "http://{{ squid_host }}:3128"
-  https: "http://{{ squid_host  }}:3128"
+  http: "http://{{ squid_host }}:8888"
+  https: "http://{{ squid_host  }}:8888"
 
 ##########################################################
 # proxy/server
@@ -19,8 +19,8 @@ squid_configuration_directory: /opt/squid/configuration
 squid_docker_compose_directory: /opt/squid
 
 squid_host: 10.10.21.10
-
-squid_tag: 5.7-23.04_beta  # don't get fooled by "beta". this is actually production ready
+#squid_tag: 5.7-23.04_beta  # don't get fooled by "beta". this is actually production ready
+squid_tag: edge
 
 
 ##########################
@@ -122,16 +122,6 @@ hosts_type: template
 hosts_additional_entries:
   api-int.int1.landscape.sovereignit.de: 192.168.32.9
   api.int1.landscape.sovereignit.de: 192.168.96.9
-
-##########################
-# chrony
-
-chrony_servers:
-  - ptbtime1.ptb.de
-  - ptbtime2.ptb.de
-  - ptbtime3.ptb.de
-chrony_allowed_subnets:
-  - 127.0.0.1/32
 
 ##########################
 # ceph

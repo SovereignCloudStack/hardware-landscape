@@ -1,0 +1,30 @@
+---
+- name: Synchronize date/time across remote hosts
+  hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Set time by http request to www.google.com
+      shell: |
+        #!/bin/bash
+        HOST=www.google.com
+        DATESTRING=$(curl -sI "https://$HOST/" | grep -i "^date: ")
+
+        if [[ $? -ne 0 ]]; then
+                echo "Can't connect to $HOST"
+                exit 1
+        fi
+
+        DATESTRING="$(echo "$DATESTRING"|sed '~s,date: ,,i;~s,^ *,,;~s, *$,,')"
+        echo "Set system time"
+        date -s "${DATESTRING}" > /dev/null
+        echo "Set hardware clock"
+        hwclock --systohc
+
+        if [[ $? -ne 0 ]];then
+           echo "Time setting failed - maybe you are not root?"
+        fi
+        date
+      args:
+        executable: /bin/bash
+

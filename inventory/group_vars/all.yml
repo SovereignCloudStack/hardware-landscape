@@ -1,4 +1,17 @@
 
+
+##########################
+# chrony
+
+chrony_servers:
+  - ptbtime1.ptb.de
+  - ptbtime2.ptb.de
+  - ptbtime3.ptb.de
+  - 10.10.21.10
+chrony_allowed_subnets:
+  - 127.0.0.1/32
+
+
 motd_content: |
   .
    ____   ____ ____    _                    _
