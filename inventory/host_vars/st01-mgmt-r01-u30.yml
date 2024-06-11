@@ -69,10 +69,9 @@ chrony_local_conf_template: "{{ configuration_directory }}/environments/generic/
 
 # Use the following NTP servers.
 chrony_servers:
-  - 0.de.pool.ntp.org
-  - 1.de.pool.ntp.org
-  - 2.de.pool.ntp.org
-  - 3.de.pool.ntp.org
+  - ptbtime1.ptb.de 
+  - ptbtime2.ptb.de
+  - ptbtime3.ptb.de 
 
 # NTP server options.
 chrony_server_options: iburst
