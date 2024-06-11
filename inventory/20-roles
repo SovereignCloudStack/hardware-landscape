@@ -41,7 +41,6 @@ st01-stor-r01-u07
 # are included in this group.
 [manager]
 st01-mgmt-r01-u30
-#st01-mgmt-r01-u31
 
 #[network]
 #st01-sw100g-r01-u36
@@ -60,6 +59,7 @@ st01-mgmt-r01-u30
 # Nodes which are intended for monitoring services belong to
 # this group
 [monitoring]
+#st01-mgmt-r01-u31
 
 # Nodes that serve as controllers, so things like scheduler,
 # API or database run there, of the environment.
