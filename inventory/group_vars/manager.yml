@@ -1,0 +1,8 @@
+
+
+chrony_servers:
+  - ptbtime1.ptb.de
+  - ptbtime2.ptb.de
+  - ptbtime3.ptb.de
+  - time.google.com
+  - time.cloudflare.com
