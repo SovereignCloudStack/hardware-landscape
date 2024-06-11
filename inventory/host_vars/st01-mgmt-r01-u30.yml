@@ -62,34 +62,6 @@ network_ethernets:
       - "10.10.22.1/24"
 
 
-chrony_package_name: chrony
-
-configuration_directory: /opt/configuration
-chrony_local_conf_template: "{{ configuration_directory }}/environments/generic/templates/chrony.conf.j2"
-
-# Use the following NTP servers.
-chrony_servers:
-  - ptbtime1.ptb.de 
-  - ptbtime2.ptb.de
-  - ptbtime3.ptb.de 
-
-# NTP server options.
-chrony_server_options: iburst
-
-# Configure Chrony to synchronize the hardware clock
-chrony_sync_rtc: true
-
-# Chrony limits access to clients that are on certain subnets.  Adjust the
-# following subnets here to limit client access to chrony servers.
-chrony_allowed_subnets:
-  - 10/8
-  - 192.168/16
-  - 172.16/12
-
-# If set to true, chronyd will never open the server port and will operate
-# strictly in a client-only mode.
-chrony_bind_local_interfaces_only: false
-
 # Bind Chrony to specific addresses
 # NOTE: It is only possible to set at most
 chrony_bindaddresses: [ "10.10.21.10" ]
