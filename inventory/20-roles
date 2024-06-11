@@ -42,20 +42,6 @@ st01-stor-r01-u07
 [manager]
 st01-mgmt-r01-u30
 
-#[network]
-#st01-sw100g-r01-u36
-#st01-sw100g-r01-u37
-#st01-sw100g-r01-u41
-#st01-sw10g-r01-u38
-#st01-sw10g-r01-u39
-#st01-sw1g-r01-u32
-#st01-sw1g-r01-u33
-#st01-sw1g-r01-u42
-#st01-sw1g-r01-u47
-#st01-sw25g-r01-u34
-#st01-sw25g-r01-u35
-#st01-sw25g-r01-u40
-
 # Nodes which are intended for monitoring services belong to
 # this group
 [monitoring]

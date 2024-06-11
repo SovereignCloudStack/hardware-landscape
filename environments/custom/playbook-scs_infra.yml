@@ -9,3 +9,11 @@
     - scs-mgr-samba
     - scs-mgr-httpd
 
+- name: Assign roles to bastion hosts
+  hosts: bastion
+  become: true
+  roles:
+    - osism.services.squid
+    - osism.commons.motd
+    - scs-landscape-nodes
+

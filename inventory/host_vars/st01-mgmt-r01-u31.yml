@@ -34,3 +34,8 @@ network_ethernets:
       dhcp4: "no"
       dhcp6: "no"
 
+# Bind Chrony to specific addresses
+# NOTE: It is only possible to set at most
+chrony_bindaddresses: [ "10.10.21.11" ]
+
+
