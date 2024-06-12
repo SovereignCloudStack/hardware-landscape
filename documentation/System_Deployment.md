@@ -101,6 +101,8 @@ Please just add issues to this project with hints or directly [contact me](https
   TODO
   ```
 * Set basic system time to prevent problems with apt and signatures
+  based on a http request to www.google.com.
+  (prevents problems with gpg signatures of packages)
   ```
   osism apply scs_set_time_initial -l 'all:!manager'
   ```
