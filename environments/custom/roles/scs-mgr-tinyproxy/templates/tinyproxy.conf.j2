@@ -29,7 +29,7 @@ Port 8888
 # only one. If this is commented out, tinyproxy will bind to all
 # interfaces present.
 #
-{% if tinyproxy_listen_ip %}
+{% if tinyproxy_listen_ip is defined %}
 Listen {{ tinyproxy_listen_ip }}
 {% endif %}
 #
@@ -206,11 +206,11 @@ MaxClients 100
 #Allow 172.16.0.0/12
 #Allow 10.0.0.0/8
 
-{% if tinyproxy_allowed_networks %}
+{% if tinyproxy_allowed_networks is defined %}
 Allow 127.0.0.1
 Allow ::1
 {% for allow in tinyproxy_allowed_networks %}
-Allow {{ item }}
+Allow {{ allow }}
 {% endfor %}
 {% endif %}
 

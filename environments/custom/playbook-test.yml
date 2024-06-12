@@ -1,7 +1,7 @@
 ---
-- name: Assign roles to manager hosts
+- name: Assign roles to all hosts
   hosts: manager
-  tasks:
-    - debug:
-        var=hostvars[inventory_hostname]
+  become: true
+  roles:
+    - scs-mgr-tinyproxy
 

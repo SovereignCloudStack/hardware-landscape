@@ -3,6 +3,7 @@
 # tiny proxy
 
 tinyproxy_package_name: "tinyproxy"
+tinyproxy_service_name: "tinyproxy"
 
 # Binds to all IPs if not set
 #tinyproxy_listen_ip: "<ip>"
