@@ -3,5 +3,5 @@
   hosts: manager
   become: true
   roles:
-    - scs-mgr-tinyproxy
+    - scs-mgr-serial-terminals
 
