@@ -11,13 +11,11 @@
 * Step 2: Template the configurations
   ```
   ./server_ctl --bmc_template all
-  ./server_ctl --bmc_template st01-comp-r01-u09
   git diff
   ```
 * Step 3: Configure the nodes
   ```
   ./server_ctl --restore_cfg bmc all
-  ./server_ctl --restore_cfg bmc st01-comp-r01-u09
   ```
 
 ## Deployment of the nodes
@@ -41,7 +39,7 @@
 3. Install Manager Infrastructure from manager
    ```
    sudo -u dragon -i
-   osism apply manager_infra
+   osism apply scs_infra -l manager
    ```
 
 ### Step 2: Create and publish node images
@@ -67,12 +65,15 @@ Please just add issues to this project with hints or directly [contact me](https
 
 * Create node node-images on manager
   ```
-  st01-mgmt-r01-u30
+  ssh dragon@scs-node-st01-mgmt-r01-u30
   cd /opt/configuration/misc/node-images
   make all
   ```
 * Configure  "local shell on your local system
   * Add the passwords file for BMC password data (TODO, add this later to ansible secrets) : ``secrets/server.passwords``
+
+### Install the node images
+
 * Bootstrap legacy AMI BMC systems:
   (A2SDV-4C-LN8F and A2SDV-4C-LN8F, `st01-mgmt-*` and `st01-ctl`)
     1. Configure Virtual Media
@@ -97,6 +98,18 @@ Please just add issues to this project with hints or directly [contact me](https
   ./server_ctl --install_os -w --filter device_model=H12SSL-NT all
 
   # ARM Compute Servers
-  ```
-* Bootstrap legacy ARM systems
   TODO
+  ```
+* Set basic system time to prevent problems with apt and signatures
+  ```
+  osism apply scs_set_time_initial -l 'all:!manager'
+  ```
+* Install the installation infrastructure
+  ```
+  osism apply scs_infra -l 'all:!manager'
+  ```
+* Execute the [bootstrap procedure](https://osism.tech/de/docs/guides/deploy-guide/bootstrap)
+* Run Basic customizations
+  ```
+  osism apply scs_all_nodes -l 'all:!manager'
+  ```
