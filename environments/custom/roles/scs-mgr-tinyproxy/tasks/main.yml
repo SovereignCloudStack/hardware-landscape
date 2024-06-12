@@ -1,0 +1,29 @@
+---
+- name: Include distribution specific install tasks
+  ansible.builtin.include_tasks: "install-{{ ansible_os_family }}-family.yml"
+
+- name: Manage tinyproxy service
+  become: true
+  ansible.builtin.service:
+    name: tinyproxy
+    state: started
+    enabled: true
+
+- name: Copy tinyproxy base config file
+  ansible.builtin.template:
+    src: tinyproxy.conf.j2
+    dest: "/etc/tinyproxy/tinyproxy.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: Restart tinyproxy service
+
+- name: Copy tinyproxy filter file
+  ansible.builtin.template:
+    src: filter.j2
+    dest: "/etc/tinyproxy/filter"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: Restart tinyproxy service
+

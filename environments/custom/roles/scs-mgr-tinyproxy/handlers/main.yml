@@ -1,0 +1,7 @@
+---
+# handlers file for tinyproxy
+- name: Restart tinyproxy service
+  become: true
+  ansible.builtin.service:
+    name: "{{ tinyproxy_service_name }}"
+    state: restarted
