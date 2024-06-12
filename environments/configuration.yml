@@ -27,6 +27,10 @@ squid_tag: edge
 # system settings
 
 motd_show_ssh: true
+sshconfig_extra: |
+  PasswordAuthentication yes
+# TODO: change later
+operator_password: password
 
 ##########################
 # docker
@@ -38,6 +42,9 @@ docker_user: "{{ operator_user }}"
 
 operator_user: dragon
 user_sudoers_type: "user"
+
+user_delete:
+  - name: "osism"
 
 user_list:
   - name: "scoopex"

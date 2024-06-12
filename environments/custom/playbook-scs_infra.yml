@@ -6,6 +6,7 @@
     - osism.services.squid
     - osism.commons.motd
     - scs-landscape-nodes
+    - scs-mgr-tinyproxy
     - scs-mgr-samba
     - scs-mgr-httpd
 
