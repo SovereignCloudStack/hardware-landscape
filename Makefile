@@ -33,7 +33,8 @@ check_vault_pass:
 .PHONY: ansible_vault_rekey
 ansible_vault_rekey: deps check_vault_pass
 	git diff
-	pwgen -1 32 > secrets/vaultpass.new
+	bash -c 'echo $RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM|base64|head -c 32 > secrets/vaultpass.new
+	echo "CREATING A BACKUP"
 	cp secrets/vaultpass secrets/vaultpass_backup_$(shell date --date="today" "+%Y-%m-%d_%H-%M-%S")
 	${venv} && find environments/ inventory/ -name "*.yml" -not -path "*/.venv/*" -exec grep -l ANSIBLE_VAULT {} \+|\
 		sort -u|\
