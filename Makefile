@@ -23,10 +23,16 @@ sync: deps
 .PHONY: check_vault_pass
 check_vault_pass:
 	@test -r secrets/vaultpass  || ( echo "the file secrets/vaultpass does not exist"; exit 1)
+	@if ! git diff-index --quiet HEAD --; then \
+	    echo "Error: Uncommitted changes found in the repository."; \
+		 git diff; \
+	    exit 1; \
+	fi
 
 
 .PHONY: ansible_vault_rekey
 ansible_vault_rekey: deps check_vault_pass
+	git diff
 	pwgen -1 32 > secrets/vaultpass.new
 	cp secrets/vaultpass secrets/vaultpass_backup_$(shell date --date="today" "+%Y-%m-%d_%H-%M-%S")
 	${venv} && find environments/ inventory/ -name "*.yml" -not -path "*/.venv/*" -exec grep -l ANSIBLE_VAULT {} \+|\
