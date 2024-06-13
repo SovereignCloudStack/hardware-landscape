@@ -287,7 +287,7 @@
       <!--Configurations for BMC to tick date and time-->
       <Information>
         <!--Information for date and time-->
-        <DateTime>2024/6/1 11:26</DateTime>
+        <DateTime>2024/6/13 16:44</DateTime>
         <!--YYYY/MM/DD HH:MM-->
       </Information>
       <Configuration>
@@ -489,7 +489,7 @@
           </Information>
           <Configuration>
             <!--Configuration for VMDevice-->
-            <ShareHost></ShareHost>
+            <ShareHost>http://10.10.23.254:8080</ShareHost>
             <!--string value; length limit = 127 characters-->
             <!--Allowed special characters for ShareHost: '-' and '.' -->
             <!--Example (SAMBA) : 192.168.34.56 or 192.168.34.56:137-->
@@ -497,7 +497,7 @@
             <!--Example (HTTPS) : https://supermicro.com or https://supermicro.com:80-->
             <!--DNS must be properly set for hostname resolution if a domain name is employed.-->
             <!--IPv6 link-local address starts with fe80 is not allowed.-->
-            <PathToImage></PathToImage>
+            <PathToImage>/H12SSL-NT.iso</PathToImage>
             <!--string value; length limit = 127 characters-->
             <!--Allowed special characters for PathToImage: '@', '^', '-', '_', '.', '/' and '\' (/ and \ can only be used in a path) -->
             <!--Special characters like backslashes \ and slashes / should only be used once; repeated use (e.g., //, \\, /\ and \/) is not allowed.-->
@@ -949,7 +949,7 @@
             <IPv4UseDNSServers>Disable</IPv4UseDNSServers>
             <!--Enable/Disable-->
             <!--Determines whether to use DHCPv4-supplied DNS servers.-->
-            <IPv4StaticNameServer1></IPv4StaticNameServer1>
+            <IPv4StaticNameServer1>8.8.8.8</IPv4StaticNameServer1>
             <!--X.X.X.X-->
             <!--Each field is an integer in [0-255].-->
             <!--IPv4StaticNameServer1 is readonly if IPv4UseDNSServers is Enable.-->
