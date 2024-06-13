@@ -32,15 +32,16 @@ check_vault_pass:
 
 .PHONY: ansible_vault_rekey
 ansible_vault_rekey: deps check_vault_pass
-	git diff
-	bash -c 'echo $RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM|base64|head -c 32 > secrets/vaultpass.new
+	openssl rand -base64 24 | tr -dc 'A-Za-z0-9' | head -c 32  > secrets/vaultpass.new
 	echo "CREATING A BACKUP"
 	cp secrets/vaultpass secrets/vaultpass_backup_$(shell date --date="today" "+%Y-%m-%d_%H-%M-%S")
+	echo "PERFORM REKEYING"
 	${venv} && find environments/ inventory/ -name "*.yml" -not -path "*/.venv/*" -exec grep -l ANSIBLE_VAULT {} \+|\
 		sort -u|\
 		xargs -n 1 --verbose ansible-vault rekey  -v \
 		--vault-password-file secrets/vaultpass \
 		--new-vault-password-file secrets/vaultpass.new
+	echo "MOVE NEW KEY IN PLACE"
 	mv secrets/vaultpass.new secrets/vaultpass
 
 .PHONY: ansible_vault_show
