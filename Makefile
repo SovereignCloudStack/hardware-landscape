@@ -22,7 +22,7 @@ sync: deps
 .PHONY: ansible_vault_rekey
 ansible_vault_rekey: deps
 	pwgen -1 32 > secrets/vaultpass.new
-	${venv} && find environments/ inventory/ -name "*.yml" -exec grep -l ANSIBLE_VAULT {} \+|\
+	${venv} && find environments/ inventory/ -name "*.yml" -not -path "*/.venv/*" -exec grep -l ANSIBLE_VAULT {} \+|\
 		sort -u|\
 		xargs -n 1 --verbose ansible-vault rekey  -v \
 		--vault-password-file secrets/vaultpass \
@@ -31,6 +31,14 @@ ansible_vault_rekey: deps
 
 .PHONY: ansible_vault_show
 ansible_vault_show: deps
-	${venv} && find environments/ inventory/ -name "*.yml" -exec grep -l ANSIBLE_VAULT {} \+|\
+	${venv} && find environments/ inventory/ -name "*.yml" -and -not -path "*/.venv/*" -exec grep -l ANSIBLE_VAULT {} \+|\
 		sort -u|\
-		xargs -n 1 --verbose ansible-vault view --vault-password-file secrets/vaultpass | cat
+		xargs -n 1 --verbose ansible-vault view --vault-password-file secrets/vaultpass 2>&1 | less
+
+
+.PHONY: ansible_vault_edit
+ansible_vault_edit: deps
+ifndef FILE
+	$(error FILE variable is not set)
+endif
+	${venv} && ansible-vault edit --vault-password-file secrets/vaultpass ${FILE}

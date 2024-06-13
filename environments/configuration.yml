@@ -27,7 +27,6 @@ squid_tag: edge
 # system settings
 
 motd_show_ssh: true
-#TODO: operator_password: password
 
 ##########################
 # docker
