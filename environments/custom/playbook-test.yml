@@ -3,5 +3,5 @@
   hosts: manager
   become: true
   roles:
-    - scs-mgr-serial-terminals
+    - scs-serial-terminals
 

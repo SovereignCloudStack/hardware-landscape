@@ -12,7 +12,7 @@
   loop:
     - "/var/log/screen"
 
-- name: Create a file with specific content
+- name: Create /usr/local/bin/scs_serial_access
   copy:
     dest: /usr/local/bin/scs_serial_access
     mode: 0755
@@ -40,6 +40,15 @@
       fi
       echo "INFO: Attaching to screen session"
       $screen -c ${cfg} -xS ${ident}
+
+- name: Create sudoers permission for screen
+  copy:
+    dest: /etc/sudoers.d/scs_serial_access
+    mode: 0644
+    owner: "root"
+    group: "root"
+    content: |
+      ALL ALL=(dragon) NOPASSWD: /usr/bin/screen
 
 - name: Create configuration
   ansible.builtin.template:
