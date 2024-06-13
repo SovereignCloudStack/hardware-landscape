@@ -23,15 +23,15 @@ sync: deps
 .PHONY: check_vault_pass
 check_vault_pass:
 	@test -r secrets/vaultpass  || ( echo "the file secrets/vaultpass does not exist"; exit 1)
+
+
+.PHONY: ansible_vault_rekey
+ansible_vault_rekey: deps check_vault_pass
 	@if ! git diff-index --quiet HEAD --; then \
 	    echo "Error: Uncommitted changes found in the repository."; \
 		 git diff; \
 	    exit 1; \
 	fi
-
-
-.PHONY: ansible_vault_rekey
-ansible_vault_rekey: deps check_vault_pass
 	openssl rand -base64 24 | tr -dc 'A-Za-z0-9' | head -c 32  > secrets/vaultpass.new
 	echo "CREATING A BACKUP"
 	cp secrets/vaultpass secrets/vaultpass_backup_$(shell date --date="today" "+%Y-%m-%d_%H-%M-%S")
