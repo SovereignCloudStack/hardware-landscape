@@ -1,7 +1,7 @@
 sushy==5.0.0
-requests==2.31.0
+requests==2.32.2
 cachetools==5.3.2
-requests==2.31.0
+requests==2.32.2
 coloredlogs==15.0.1
 setuptools==70.0.0
 Jinja2==3.1.4
