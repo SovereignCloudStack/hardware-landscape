@@ -1,0 +1,51 @@
+# This lets me have autoindent mode in vi.
+register [ "\033:se noai\015a"
+register ] "\033:se ai\015a"
+bind ^] paste [.]
+
+bindkey -k kD stuff \177
+
+################
+#
+# default windows
+#
+caption always "%3n %t%? @%u%?%? [%h]%?"
+
+### add colour to the caption...
+caption string "%{.ck} %n %t %{.gk}"
+hardstatus alwayslastline
+hardstatus string "%{.rw}%c:%s [%l] %{.bw} %n %t %{.wk} %W %{.wk}(use STRG+y instead of STRG+a)"
+
+multiuser on
+
+escape ^yy
+
+#####################################
+
+# Vom Screen aus in VIM pasten
+register [ "\033:se paste\015a"
+register ] "\033:se nopaste\015a"
+
+bind ^] paste [.]
+
+defutf8 on
+
+
+activity  "activity in %n (%t) [%w:%s]~" # NOTE: beep included!
+vbell_msg " *beep* "
+
+logfile /var/log/screen/screen.log
+logfile flush 1
+log on
+logtstamp after 1
+logtstamp string "[ %t: %Y-%m-%d %c:%s ]\012"
+logtstamp on
+zombie kr
+
+{% for item in groups[serial_terminals_group | default("network")] | default([]) | sort %}
+{% if hostvars[item]['serial_device'] is defined %}
+# Host: {{ item }} // {{ hostvars[item]['ansible_host'] }}
+screen -t {{ item }}-{{ hostvars[item]['serial_device']  }} {{ serial_terminal_device_prefix }}{{ hostvars[item]['serial_device']  }}{{ serial_terminal_device_suffix  }} {{ serial_terminal_boud_rate }}
+{% endif %}
+{% endfor %}
+

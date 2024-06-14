@@ -1,5 +1,6 @@
 import glob
 import logging
+import os
 import subprocess
 import sys
 import xml
@@ -7,7 +8,7 @@ from enum import Enum
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
-from .helpers import regex_replace_in_file
+from .helpers import regex_replace_in_file, parse_configuration_data
 from .global_helpers import get_rundir, get_basedir, get_device_configurations_dir
 from .server_model import get_server_documentation_dir
 
@@ -201,7 +202,7 @@ def template_bmc_config(bmc_hosts: list[str]):
             LOGGER.error(f"So such host {hostname}")
             break
 
-        filename = matching_files[0]
+        filename = os.path.realpath(matching_files[0])
 
         LOGGER.info(f"Processing {filename}")
         xml_string = None

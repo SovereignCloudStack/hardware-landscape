@@ -1,0 +1,6 @@
+---
+- name: Assign roles to all hosts
+  hosts: manager
+  become: true
+  roles:
+    - scs-landscape-nodes

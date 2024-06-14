@@ -11,13 +11,11 @@
 * Step 2: Template the configurations
   ```
   ./server_ctl --bmc_template all
-  ./server_ctl --bmc_template st01-comp-r01-u09
   git diff
   ```
 * Step 3: Configure the nodes
   ```
   ./server_ctl --restore_cfg bmc all
-  ./server_ctl --restore_cfg bmc st01-comp-r01-u09
   ```
 
 ## Deployment of the nodes
@@ -41,7 +39,7 @@
 3. Install Manager Infrastructure from manager
    ```
    sudo -u dragon -i
-   osism apply manager_infra
+   osism apply scs_infra -l manager
    ```
 
 ### Step 2: Create and publish node images
@@ -55,7 +53,7 @@ Unfortunately, Supermicro is causing us unnecessary problems at various levels:
 
 - it is necessary to buy a BMC license to be able to automate the system at all (which surprises us in 2024 if the systems are intended for use in the data center)
 - we have three generations of systems in use here, these are automated in different ways, but some features are also missing in new generations (AMI BMC 04.0, AMI BMC 01.01.10, OpenBMC 51.02.13.00)
-- various functions such as setting the next boot device do not work, although the Redfish API accepts the setting without complaint
+- various functions such as setting the next boot device do not work or work only on specific devices, although the Redfish API accepts the setting without complaint
 - there are no usable or clearly understandable API specifications as is typically known from systems that use OpenAPI
 - The Redfish API realized by Supermicro is simply a rather cumbersome API
 - The systems reconfigure their boot order independently, the exact meaning behind this is not clear to us and we have not found a way to change this behavior
@@ -67,12 +65,15 @@ Please just add issues to this project with hints or directly [contact me](https
 
 * Create node node-images on manager
   ```
-  st01-mgmt-r01-u30
+  ssh dragon@scs-node-st01-mgmt-r01-u30
   cd /opt/configuration/misc/node-images
   make all
   ```
 * Configure  "local shell on your local system
   * Add the passwords file for BMC password data (TODO, add this later to ansible secrets) : ``secrets/server.passwords``
+
+### Install the node images
+
 * Bootstrap legacy AMI BMC systems:
   (A2SDV-4C-LN8F and A2SDV-4C-LN8F, `st01-mgmt-*` and `st01-ctl`)
     1. Configure Virtual Media
@@ -89,24 +90,28 @@ Please just add issues to this project with hints or directly [contact me](https
   (Just press F11 at boot to select the virtual CDROM as boot device, unfortunately Supermicro ignores the setting for the next boot device.)
   ```
   # Storage Servers
-  ./server_ctl --power_off \
-    st01-stor-r01-u01 st01-stor-r01-u03 st01-stor-r01-u05 st01-stor-r01-u07
-  ./server_ctl --install_os -w st01-stor-r01-u01
-  ./server_ctl --install_os -w st01-stor-r01-u03
-  ./server_ctl --install_os -w st01-stor-r01-u05
-  ./server_ctl --install_os -w st01-stor-r01-u07
+  ./server_ctl --power_action ForceOff --filter device_model=H12SSL-CT all
+  ./server_ctl --install_os -w --filter device_model=H12SSL-CT all
 
   # Intel Compute Servers
-  ./server_ctl --power_off \
-    st01-comp-r01-u09 st01-comp-r01-u11 st01-comp-r01-u13 st01-comp-r01-u15 st01-comp-r01-u17 st01-comp-r01-u19
-  ./server_ctl --install_os -w st01-comp-r01-u09
-  ./server_ctl --install_os -w st01-comp-r01-u11
-  ./server_ctl --install_os -w st01-comp-r01-u13
-  ./server_ctl --install_os -w st01-comp-r01-u15
-  ./server_ctl --install_os -w st01-comp-r01-u17
-  ./server_ctl --install_os -w st01-comp-r01-u19
+  ./server_ctl --power_action ForceOff --filter device_model=H12SSL-NT all
+  ./server_ctl --install_os -w --filter device_model=H12SSL-NT all
 
   # ARM Compute Servers
+  TODO
   ```
-* Bootstrap legacy ARM systems
-
+* Set basic system time to prevent problems with apt and signatures
+  based on a http request to www.google.com.
+  (prevents problems with gpg signatures of packages)
+  ```
+  osism apply scs_set_time_initial -l 'all:!manager'
+  ```
+* Install the installation infrastructure
+  ```
+  osism apply scs_infra -l 'all:!manager'
+  ```
+* Execute the [bootstrap procedure](https://osism.tech/de/docs/guides/deploy-guide/bootstrap)
+* Run Basic customizations
+  ```
+  osism apply scs_all_nodes -l 'all:!manager'
+  ```
