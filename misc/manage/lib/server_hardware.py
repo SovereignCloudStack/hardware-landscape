@@ -1,5 +1,6 @@
 import glob
 import logging
+import os
 import subprocess
 import sys
 import xml
@@ -201,7 +202,7 @@ def template_bmc_config(bmc_hosts: list[str]):
             LOGGER.error(f"So such host {hostname}")
             break
 
-        filename = matching_files[0]
+        filename = os.path.realpath(matching_files[0])
 
         LOGGER.info(f"Processing {filename}")
         xml_string = None

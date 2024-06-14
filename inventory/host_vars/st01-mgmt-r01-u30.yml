@@ -61,6 +61,12 @@ network_ethernets:
     addresses:
       - "10.10.22.1/24"
 
+
+# Bind Chrony to specific addresses
+# NOTE: It is only possible to set at most
+chrony_bindaddresses: [ "10.10.21.10" ]
+
+
 motd_content: |
   .
    ____   ____ ____    _                    _

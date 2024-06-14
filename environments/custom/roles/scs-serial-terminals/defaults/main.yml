@@ -1,0 +1,13 @@
+---
+##########################
+# operator
+
+operator_user: "dragon"
+operator_group: "dragon"
+
+#operator_groups: [ ..., "dialout" ]
+
+serial_terminal_device_prefix: "/dev/serial/by-id/usb-Prolific_Technology_Inc._USB-Serial_Controller_"
+serial_terminal_device_suffix: "-if00-port0"
+# serial_device: ""
+serial_terminal_boud_rate: 115200

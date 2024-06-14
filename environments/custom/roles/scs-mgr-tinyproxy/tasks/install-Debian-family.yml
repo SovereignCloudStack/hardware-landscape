@@ -1,0 +1,8 @@
+---
+- name: Install tinyproxy package
+  become: true
+  ansible.builtin.apt:
+    name: "{{ tinyproxy_package_name }}"
+    state: present
+    lock_timeout: "{{ apt_lock_timeout | default(300) }}"
+

@@ -1,0 +1,59 @@
+---
+# tasks file for httpd
+
+- name: Create required directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0775
+  loop:
+    - "/var/log/screen"
+
+- name: Create /usr/local/bin/scs_serial_access
+  copy:
+    dest: /usr/local/bin/scs_serial_access
+    mode: 0755
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    content: |
+      #!/bin/bash
+
+      ident="scs_serial_access"
+      cfg="/etc/screenrc_serial"
+      logdir="/var/log/screen"
+
+      screen="sudo -u dragon /usr/bin/screen"
+
+      if [ "$($screen -ls ${ident}|grep Multi|wc -l)" -gt 1 ];then
+         echo "ERROR: not exactly on session available"
+         sudo screen -ls ${ident}
+         exit 1
+      elif [ "$($screen -ls ${ident}|grep Multi|wc -l)" -eq 0 ];then
+         mkdir -p $logdir
+         echo "INFO: Starting a new screen session"
+         set -x
+         $screen -c ${cfg} -S ${ident} -dm
+         sleep 2
+      fi
+      echo "INFO: Attaching to screen session"
+      $screen -c ${cfg} -xS ${ident}
+
+- name: Create sudoers permission for screen
+  copy:
+    dest: /etc/sudoers.d/scs_serial_access
+    mode: 0644
+    owner: "root"
+    group: "root"
+    content: |
+      ALL ALL=(dragon) NOPASSWD: /usr/bin/screen
+
+- name: Create configuration
+  ansible.builtin.template:
+    src: screenrc_serial.j2
+    dest: /etc/screenrc_serial
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0644

@@ -405,7 +405,7 @@
       </Information>
       <Configuration>
         <!--Configuration for VirtualMedia-->
-        <ShareHost>10.10.23.1</ShareHost>
+        <ShareHost>10.10.23.254</ShareHost>
         <!--string value; length limit = 127 characters-->
         <!--Allowed special characters for ShareHost: '-' and '.' -->
         <!--Example (SAMBA) : 192.168.34.56 or 192.168.34.56:137-->
@@ -414,7 +414,7 @@
         <!--Port number may not be supported by older versions of BMC firmware.-->
         <!--DNS must be properly set for hostname resolution if a domain name is employed.-->
         <!--IPv6 link-local address starts with fe80 is not allowed.-->
-        <PathToImage>\media\ubuntu-autoinstall-osism-4.iso</PathToImage>
+        <PathToImage>\media\A2SDV-8C-LN8F.iso</PathToImage>
         <!--(optional) string value; length limit = 127 characters-->
         <!--Allowed special characters for PathToImage: '@', '^', '-', '_', '.', '/' and '\' (/ and \ can only be used in a path) -->
         <!--Special characters like backslashes \ and slashes / should only be used once; repeated use (e.g., //, \\, /\ and \/) is not allowed.-->
@@ -424,7 +424,7 @@
         <!--(optional) string value; length limit = 127 characters-->
         <!--Allowed special characters for UserName: '^' -->
         <!--Special character ^ is not available for use in older versions of BMC firmware.-->
-        <UserPassword>Oji2aet6</UserPassword>
+        <UserPassword>osism</UserPassword>
         <!--(optional) string value; length limit = 127 characters-->
         <!--Allowed special characters for UserPassword: '^' -->
         <!--Special character ^ is not available for use in older versions of BMC firmware.-->
@@ -491,7 +491,7 @@
           <Status>Disable</Status>
           <!--Enable/Disable-->
           <!--Enable or disable SNMPV3 service-->
-          <UserName>N.A</UserName>
+          <UserName>MD5</UserName>
           <!--String value, it must not be empty and length can not over than 32.-->
           <AuthProtocol>MD5</AuthProtocol>
           <!--Protocol of authorized key, Support values are: MD5/SHA1-->
@@ -672,7 +672,7 @@
           <Information>
             <!--Information for dynamic IPv6 properties-->
             <TotalDynamicIPv6Group>0</TotalDynamicIPv6Group>
-            <DUID>0E 00 00 01 00 01 2D 02 2E 00 3C EC EF 5B B5 B9</DUID>
+            <DUID>0E 00 00 01 00 01 2D F0 52 CE 3C EC EF 5B B5 B9</DUID>
           </Information>
           <Configuration>
             <!--Configuration for dynamic IPv6 properties-->
