@@ -62,6 +62,7 @@ parser.add_argument('--filter', '-f', metavar='loglevel', type=str,
                     default=None, help='A filter expression <key>=<regex for values>')
 
 parser.add_argument('--verbose', '-v', action='store_true')
+parser.add_argument('--ansible_inventory_update_strategy', type=str, default="keep")
 
 args = parser.parse_args()
 
@@ -71,8 +72,8 @@ if args.bmc_template:
     template_bmc_config(get_unique_servers(args.node, False, args.filter))
 
 if args.ansible:
-    template_ansible_config(get_unique_servers(args.node, False, args.filter))
-
+    template_ansible_config(get_unique_servers(args.node, False, args.filter), "servers",
+                            args.ansible_inventory_update_strategy)
 if args.install_os:
     install_server(get_unique_servers(args.node, False, args.filter), args.media_url, args.watch)
 
@@ -101,7 +102,5 @@ if args.open:
 
 if args.configs:
     create_configs(get_unique_servers(args.node, False, args.filter))
-
-
 
 sys.exit(0)
