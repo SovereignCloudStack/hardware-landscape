@@ -8,4 +8,6 @@
     - scs-landscape-nodes
     - scs-mgr-samba
     - scs-mgr-httpd
+    - scs-mgr-tinyproxy
+    - scs-dnscrypt
 

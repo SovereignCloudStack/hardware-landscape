@@ -2,23 +2,28 @@
 ##########################################################
 # ansible
 
-
-inventory_generate_strategy: keep
-
 #External Usage
 #ansible_host: 188.244.101.28
 
 #Internal Usage
-ansible_host: 192.168.104.43
+ansible_host: 10.10.21.10
+#ansible_host: 192.168.104.43
 
 ##########################################################
 # generic
 
+device_model: A2SDV-4C-LN8F
 internal_interface: dummy0
-internal_ip: 10.10.21.10
-external_interface: eno2
+network_interface: dummy0
+internal_address: 10.10.21.10
+
+netdata_host_type: client
+
 mgmt_interface: eno3
-mgmt_ip: 10.10.23.10
+mgmt_address: 10.10.23.10
+mgmt_mac: ac:1f:6b:5c:54:95
+
+external_interface: eno2
 
 
 ##########################################################
@@ -30,10 +35,12 @@ network_ethernets:
       addresses:
       - 10.10.21.10/32
       - fd0c:cc24:75a0:1:10:10:21:10/128
+
   enp2s0f0np0:
       mtu: 9100
       dhcp4: "no"
       dhcp6: "no"
+
   enp2s0f1np1:
       mtu: 9100
       dhcp4: "no"
@@ -43,6 +50,7 @@ network_ethernets:
   eno6:
     addresses:
       - "10.10.23.254/24"
+
   # Internet Uplink
   eno2:
     addresses:

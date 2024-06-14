@@ -3,14 +3,14 @@
 # proxy/client
 
 # docker
-docker_configure_proxy: false
-docker_proxy_http: "http://{{ squid_host }}:8888"
-docker_proxy_https: "{{ docker_proxy_http }}"
+docker_configure_proxy: true
+docker_proxy_http: "http://{{ groups['manager'][0] }}:8888"
+docker_proxy_https: "http://{{ groups['manager'][0] }}:8888"
 
 # apt
 proxy_proxies: 
-  http: "http://{{ squid_host }}:8888"
-  https: "http://{{ squid_host  }}:8888"
+  http: "http://{{ groups['manager'][0] }}:8888"
+  https: "http://{{ groups['manager'][0] }}:8888"
 
 ##########################################################
 # proxy/server
@@ -27,6 +27,18 @@ squid_tag: edge
 # system settings
 
 motd_show_ssh: true
+network_interface: dummy0
+
+##########################
+# dnscrypt
+
+# DNS Crypt acts as a DNS proxy, but is currently not really needed.
+# It was a experiment.
+# TODO: decide if we remove or keep it
+dnscrypt_cloaks:
+  - "api-int.int1.landscape.sovereignit.de      10.10.21.200"
+  - "api.int1.landscape.sovereignit.de          10.10.21.201"
+
 
 ##########################
 # docker
@@ -124,6 +136,8 @@ operator_authorized_keys:
 # resolvconf
 
 resolvconf_nameserver:
+  - 10.10.21.10
+  - 10.10.21.11
   - 8.8.8.8
   - 9.9.9.9
 resolvconf_search: int1.landscape.sovereignit.de
@@ -133,8 +147,8 @@ resolvconf_search: int1.landscape.sovereignit.de
 
 hosts_type: template
 hosts_additional_entries:
-  api-int.int1.landscape.sovereignit.de: 192.168.32.9
-  api.int1.landscape.sovereignit.de: 192.168.96.9
+  api-int.int1.landscape.sovereignit.de: 10.10.21.200
+  api.int1.landscape.sovereignit.de: 10.10.21.201
 
 ##########################
 # ceph

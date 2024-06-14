@@ -9,8 +9,12 @@ ansible_host: 10.10.21.16
 
 device_model: ARS-110M-NR
 internal_interface: dummy0
-internal_ip: 10.10.21.16
-mgmt_ip: 10.10.23.16
+network_interface: dummy0
+internal_address: 10.10.21.16
+
+netdata_host_type: client
+
+mgmt_address: 10.10.23.16
 mgmt_mac: 7c:c2:55:86:38:80
 
 

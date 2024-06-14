@@ -9,8 +9,12 @@ ansible_host: 10.10.21.11
 
 device_model: A2SDV-4C-LN8F
 internal_interface: dummy0
-internal_ip: 10.10.21.11
-mgmt_ip: 10.10.23.11
+network_interface: dummy0
+internal_address: 10.10.21.11
+
+netdata_host_type: client
+
+mgmt_address: 10.10.23.11
 mgmt_mac: ac:1f:6b:5c:54:96
 
 
@@ -33,9 +37,4 @@ network_ethernets:
       mtu: 9100
       dhcp4: "no"
       dhcp6: "no"
-
-# Bind Chrony to specific addresses
-# NOTE: It is only possible to set at most
-chrony_bindaddresses: [ "10.10.21.11" ]
-
 

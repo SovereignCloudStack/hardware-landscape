@@ -63,4 +63,4 @@ configuration_git_protocol: ssh
 configuration_git_repository: SovereignCloudStack/hardware-landscape
 configuration_git_username: git
 
-configuration_git_version: rollout_nodes
+configuration_git_version: rollout-services

@@ -7,7 +7,7 @@ from pprint import pprint
 from lib.global_helpers import setup_logging
 from lib.switch_model import get_unique_switches
 from lib.switch_operating_system import CfgTypes, backup_config, restore_config, create_configs
-from lib.helpers import template_ansible_config
+from lib.helpers import template_ansible_config, AnsibleInvertoryStrategy
 
 parser = argparse.ArgumentParser(
     prog='Configure Switches')
@@ -37,7 +37,8 @@ parser.add_argument('--log_level', metavar='loglevel', type=str,
 parser.add_argument('--filter', '-f', metavar='loglevel', type=str,
                     default=None, help='A filter expression <key>=<regex for values>')
 
-parser.add_argument('--ansible_inventory_update_strategy', type=str, default="keep")
+parser.add_argument('--ansible_inventory_update_strategy',
+                    choices=[e.name for e in AnsibleInvertoryStrategy], default=AnsibleInvertoryStrategy.replace)
 parser.add_argument('--verbose', '-v', action='store_true')
 
 args = parser.parse_args()
