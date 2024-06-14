@@ -28,7 +28,7 @@ check_vault_pass:
 .PHONY: ansible_vault_rekey
 ansible_vault_rekey: deps check_vault_pass
 	@if ! git diff-index --quiet HEAD --; then \
-	    echo "Error: Uncommitted changes found in the repository."; \
+	    echo "Error: Uncommitted changes found in the repository. Stash or drop them before rekeying."; \
 		 git diff; \
 	    exit 1; \
 	fi
