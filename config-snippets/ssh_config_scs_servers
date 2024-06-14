@@ -1,5 +1,6 @@
 Host scs-bmc-st01-comp-r01-u09
    Hostname 10.10.23.25
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-comp-r01-u09
@@ -7,6 +8,7 @@ Host scs-node-st01-comp-r01-u09
 
 Host scs-bmc-st01-comp-r01-u11
    Hostname 10.10.23.26
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-comp-r01-u11
@@ -14,6 +16,7 @@ Host scs-node-st01-comp-r01-u11
 
 Host scs-bmc-st01-comp-r01-u13
    Hostname 10.10.23.27
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-comp-r01-u13
@@ -21,6 +24,7 @@ Host scs-node-st01-comp-r01-u13
 
 Host scs-bmc-st01-comp-r01-u15
    Hostname 10.10.23.28
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-comp-r01-u15
@@ -28,6 +32,7 @@ Host scs-node-st01-comp-r01-u15
 
 Host scs-bmc-st01-comp-r01-u17
    Hostname 10.10.23.29
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-comp-r01-u17
@@ -35,6 +40,7 @@ Host scs-node-st01-comp-r01-u17
 
 Host scs-bmc-st01-comp-r01-u19
    Hostname 10.10.23.30
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-comp-r01-u19
@@ -42,6 +48,7 @@ Host scs-node-st01-comp-r01-u19
 
 Host scs-bmc-st01-comp-r01-u21
    Hostname 10.10.23.15
+   HostKeyAlgorithms=+ssh-rsa
    User root
 
 Host scs-node-st01-comp-r01-u21
@@ -49,6 +56,7 @@ Host scs-node-st01-comp-r01-u21
 
 Host scs-bmc-st01-comp-r01-u22
    Hostname 10.10.23.16
+   HostKeyAlgorithms=+ssh-rsa
    User root
 
 Host scs-node-st01-comp-r01-u22
@@ -56,6 +64,7 @@ Host scs-node-st01-comp-r01-u22
 
 Host scs-bmc-st01-comp-r01-u23
    Hostname 10.10.23.17
+   HostKeyAlgorithms=+ssh-rsa
    User root
 
 Host scs-node-st01-comp-r01-u23
@@ -63,6 +72,7 @@ Host scs-node-st01-comp-r01-u23
 
 Host scs-bmc-st01-comp-r01-u24
    Hostname 10.10.23.18
+   HostKeyAlgorithms=+ssh-rsa
    User root
 
 Host scs-node-st01-comp-r01-u24
@@ -70,6 +80,7 @@ Host scs-node-st01-comp-r01-u24
 
 Host scs-bmc-st01-comp-r01-u25
    Hostname 10.10.23.19
+   HostKeyAlgorithms=+ssh-rsa
    User root
 
 Host scs-node-st01-comp-r01-u25
@@ -77,6 +88,7 @@ Host scs-node-st01-comp-r01-u25
 
 Host scs-bmc-st01-comp-r01-u26
    Hostname 10.10.23.20
+   HostKeyAlgorithms=+ssh-rsa
    User root
 
 Host scs-node-st01-comp-r01-u26
@@ -84,6 +96,7 @@ Host scs-node-st01-comp-r01-u26
 
 Host scs-bmc-st01-ctl-r01-u27
    Hostname 10.10.23.12
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-ctl-r01-u27
@@ -91,6 +104,7 @@ Host scs-node-st01-ctl-r01-u27
 
 Host scs-bmc-st01-ctl-r01-u28
    Hostname 10.10.23.13
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-ctl-r01-u28
@@ -98,6 +112,7 @@ Host scs-node-st01-ctl-r01-u28
 
 Host scs-bmc-st01-ctl-r01-u29
    Hostname 10.10.23.14
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-ctl-r01-u29
@@ -105,6 +120,7 @@ Host scs-node-st01-ctl-r01-u29
 
 Host scs-bmc-st01-mgmt-r01-u30
    Hostname 10.10.23.10
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-mgmt-r01-u30
@@ -112,6 +128,7 @@ Host scs-node-st01-mgmt-r01-u30
 
 Host scs-bmc-st01-mgmt-r01-u31
    Hostname 10.10.23.11
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-mgmt-r01-u31
@@ -119,6 +136,7 @@ Host scs-node-st01-mgmt-r01-u31
 
 Host scs-bmc-st01-stor-r01-u01
    Hostname 10.10.23.21
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-stor-r01-u01
@@ -126,6 +144,7 @@ Host scs-node-st01-stor-r01-u01
 
 Host scs-bmc-st01-stor-r01-u03
    Hostname 10.10.23.22
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-stor-r01-u03
@@ -133,6 +152,7 @@ Host scs-node-st01-stor-r01-u03
 
 Host scs-bmc-st01-stor-r01-u05
    Hostname 10.10.23.23
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-stor-r01-u05
@@ -140,6 +160,7 @@ Host scs-node-st01-stor-r01-u05
 
 Host scs-bmc-st01-stor-r01-u07
    Hostname 10.10.23.24
+   HostKeyAlgorithms=+ssh-rsa
    User ADMIN
 
 Host scs-node-st01-stor-r01-u07

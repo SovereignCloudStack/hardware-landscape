@@ -235,6 +235,8 @@ def create_configs(host_list: list[str]):
 
             f_out.write(f"Host scs-bmc-{host_name}\n")
             f_out.write(f"   Hostname {host_data[host_name]['bmc_ip_v4']}\n")
+            # Workaround for crappy old supermicro boxes
+            f_out.write(f"   HostKeyAlgorithms=+ssh-rsa\n")
             f_out.write(f"   User {host_data[host_name]['bmc_username']}\n")
             f_out.write(f"\n")
 

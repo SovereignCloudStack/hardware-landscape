@@ -43,33 +43,11 @@
 
 # FAQ for Edgecore Switches
 
-## Serial Switch Console Access
-
-* Attach to a running screen session which provides access to the ttypS0..ttyS3 interfaces
-  or create automatically a new one
-  ```
-  scs_serial_access
-  ```
-  -> Leave with "STRG+y d" (we use a different command/escape key)
-* Restart all sessions
-  1. Attach to running session
-     ```
-     scs_serial_access
-     ```
-  2. Terminate sessions by STRG+y :quit
-  3. Restart terminals
-     ```
-     scs_serial_access
-     ```
-* Review console output
-  see /var/log/screen
-
-
 ## Use Sysrq to restart
 
 https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html
 
-- Open a serial sccreen to the hardware
+- Open a serial screen to the hardware
 - Use the screen command (STRG+y or STRG+a) to send a break signal
   :break<ENTER>
 - Hit the sysrq char "b" multiple times

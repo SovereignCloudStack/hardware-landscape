@@ -37,6 +37,7 @@ parser.add_argument('--log_level', metavar='loglevel', type=str,
 parser.add_argument('--filter', '-f', metavar='loglevel', type=str,
                     default=None, help='A filter expression <key>=<regex for values>')
 
+parser.add_argument('--ansible_inventory_update_strategy', type=str, default="keep")
 parser.add_argument('--verbose', '-v', action='store_true')
 
 args = parser.parse_args()
@@ -44,7 +45,8 @@ args = parser.parse_args()
 setup_logging(args.log_level)
 
 if args.ansible:
-    template_ansible_config(get_unique_switches(args.node, False, args.filter), "switches")
+    template_ansible_config(get_unique_switches(args.node, False, args.filter), "switches",
+                            args.ansible_inventory_update_strategy)
 
 if args.backup_cfg:
     backup_config(get_unique_switches(args.node, False, args.filter), args.backup_cfg)

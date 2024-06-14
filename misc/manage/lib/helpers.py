@@ -2,6 +2,9 @@ import functools
 import logging
 import os
 import re
+import subprocess
+import sys
+from enum import Enum
 
 import yaml
 from jinja2 import FileSystemLoader, Environment, StrictUndefined
@@ -60,8 +63,12 @@ def regex_replace_in_file(file_path: str, replacements: list[tuple[str, str]]):
     with open(file_path, 'w') as file:
         file.write(modified_content)
 
+class AnsibleInvertoryStrategy(str, Enum):
+    update = 'update'
+    keep = 'keep'
 
-def template_ansible_config(host_list: list[str], item_type: str):
+
+def template_ansible_config(host_list: list[str], item_type: str, strategy: AnsibleInvertoryStrategy):
     host_data = parse_configuration_data()[item_type]
 
     template_loader = FileSystemLoader(searchpath=get_ansible_host_inventory_dir())
@@ -70,23 +77,26 @@ def template_ansible_config(host_list: list[str], item_type: str):
 
     for host_name in host_list:
         results_filename = f"{get_ansible_host_inventory_dir()}{host_name}.yml"
-
-        LOGGER.info(f"rendering file : {results_filename}")
+        results_filename = os.path.realpath(results_filename)
         templated_string = results_template.render(host_data[host_name])
-        templated_data = yaml.safe_load(templated_string)
 
         if os.path.exists(results_filename):
             with open(results_filename, 'r') as file:
-                existing_config = yaml.safe_load(file)
-                if existing_config.get("inventory_generate_strategy", "replace") == "keep":
-                    LOGGER.warning(f"Not templating {host_name} inventory file, inventory_generate_strategy=keep")
-                    continue
-                if existing_config.get("inventory_generate_strategy", "replace") == "update":
-                    LOGGER.warning(f"Updating existing {host_name} inventory file, inventory_generate_strategy=update")
-                    # TODO: do a better merge strategy without messing up the formatting
-                    merged_data = {**templated_data, **existing_config}
-                    with open(results_filename, 'w') as f_out:
-                        yaml.dump(merged_data, f_out)
+                if strategy:
+                    if strategy == "keep":
+                        LOGGER.warning(f"Not templating {host_name} inventory file {results_filename}, inventory_generate_strategy=keep")
+                        continue
+                    elif strategy == "update":
+                        LOGGER.warning(f"Updating existing {host_name} file {results_filename}, inventory_generate_strategy=update")
+                        with open(results_filename, 'w') as f_out:
+                            f_out.write(templated_string)
+                else:
+                    LOGGER.error("inventory_generate_strategy not set")
+                    sys.exit(1)
+
         else:
+            LOGGER.warning(f"Create a new file for {host_name}")
             with open(results_filename, mode="w", encoding="utf-8") as results:
                 results.write(templated_string)
+
+    subprocess.run(f"git --no-pager diff {get_ansible_host_inventory_dir()}", shell=True)
