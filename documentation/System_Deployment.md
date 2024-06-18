@@ -72,7 +72,7 @@ Please just add issues to this project with hints or directly [contact me](https
 * Configure  "local shell on your local system
   * Add the passwords file for BMC password data (TODO, add this later to ansible secrets) : ``secrets/server.passwords``
 
-### Install the node images
+### Step 3: Provision / Install the node images
 
 * Bootstrap legacy AMI BMC systems:
   (A2SDV-4C-LN8F and A2SDV-4C-LN8F, `st01-mgmt-*` and `st01-ctl`)
@@ -100,6 +100,9 @@ Please just add issues to this project with hints or directly [contact me](https
   # ARM Compute Servers
   TODO
   ```
+
+### Step 4: Bootstrap the nodes
+
 * Set basic system time to prevent problems with apt and signatures
   based on a http request to www.google.com.
   (prevents problems with gpg signatures of packages)
@@ -115,3 +118,44 @@ Please just add issues to this project with hints or directly [contact me](https
   ```
   osism apply scs_all_nodes -l 'all:!manager'
   ```
+* Check if the ntp time setup is correct
+  ```
+  osism apply scs_check_ntp
+  ```
+
+## Deploy the infratructure servcies
+
+Deployment order
+
+1. [Infrastructure](https://osism.tech/de/docs/guides/deploy-guide/services/infrastructure.md)
+2. [Network](https://osism.tech/de/docs/guides/deploy-guide/services/network.md)
+3. [Logging & Monitoring](https://osism.tech/de/docs/guides/deploy-guide/services/logging-monitoring.md)
+4. [Ceph](https://osism.tech/de/docs/guides/deploy-guide/services/ceph.mdx)
+5. [OpenStack](https://osism.tech/de/docs/guides/deploy-guide/services/openstack.md)
+
+### Step 2: Network
+
+The OVN database is deployed to the first 3 compute nodes because the ATOM CPUs do not not support the suitable AVX instructions.
+
+### Step 3: Logging & Monitoring
+
+TODO
+
+### Step 4: Ceph
+
+For the steps described in the osd configurtion there are the following exceptions:
+
+1. After the file generation
+   Copy the generated files using the following step to the inventory:
+   ```
+   for filename in /tmp/st01-stor*.yml; do
+     node="$(basename $filename|sed '~s,-ceph-lvm-configuration.yml,,')";
+     cp -v $filename /opt/configuration/inventory/host_vars/${node}/10_ceph.yml ;
+   done
+   cd /opt/configuration
+   git mv inventory/group_vars/ceph-resource.yml inventory/group_vars/ceph-resource.yml.disabled
+   git add -A .
+   git commit -m "osd-generation" -a -s
+   git push
+   ```
+

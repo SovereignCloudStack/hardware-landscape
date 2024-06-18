@@ -1,12 +1,8 @@
 import json
 import logging
-import os
 import subprocess
 import sys
 from enum import Enum
-
-import yaml
-from jinja2 import FileSystemLoader, Environment, StrictUndefined
 
 from .global_helpers import get_device_configurations_dir, get_ansible_host_inventory_dir, shorten_string, \
     get_string_with_formatted_timestamp, ask_for_confirmation, get_basedir
@@ -119,28 +115,4 @@ def restore_config(bmc_hosts: list[str], filetype: CfgTypes):
                 check=True,
                 shell=True,
             )
-
-
-def create_configs(host_list: list[str]):
-    host_data = parse_configuration_data()["switches"]
-
-    results_file = f"{get_basedir()}/config-snippets/ssh_config_scs_switches"
-    LOGGER.info(f"writing {results_file}")
-    with open(results_file, 'w') as f_out:
-        for host_name in host_list:
-            LOGGER.info(f"** {host_name} / {host_data[host_name]['bmc_ip_v4']}")
-            f_out.write(f"Host scs-bmc-{host_name}\n")
-            f_out.write(f"   Hostname {host_data[host_name]['bmc_ip_v4']}\n")
-            f_out.write(f"   User {host_data[host_name]['bmc_username']}\n")
-            f_out.write(f"\n")
-
-    results_file = f"{get_basedir()}/config-snippets/screenrc_config"
-    LOGGER.info(f"writing {results_file}")
-    with open(results_file, 'w') as f_out:
-        for host_name in host_list:
-            LOGGER.info(f"** {host_name} / {host_data[host_name]['serial_device']}")
-            f_out.write(f"Host scs-bmc-{host_name}\n")
-            f_out.write(f"   Hostname {host_data[host_name]['bmc_ip_v4']}\n")
-            f_out.write(f"   User {host_data[host_name]['bmc_username']}\n")
-            f_out.write(f"\n")
 

@@ -9,9 +9,8 @@ chrony_sync_rtc: true
 # Chrony limits access to clients that are on certain subnets.  Adjust the
 # following subnets here to limit client access to chrony servers.
 chrony_allowed_subnets:
-  - 10/8
-  - 192.168/16
-  - 172.16/12
+  - 10.10.21.0/24
+  - 10.10.23.0/24
 
 # If set to true, chronyd will never open the server port and will operate
 # strictly in a client-only mode.

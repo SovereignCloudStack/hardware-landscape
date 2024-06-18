@@ -76,6 +76,9 @@ st01-comp-r01-u19
 # L3 routers, are placed on these nodes. This group has nothing
 # to do with the general network configuration.
 [network]
+st01-comp-r01-u09
+st01-comp-r01-u11
+st01-comp-r01-u13
 
 # Nodes that serve as controllers for Ceph, so things like the
 # Ceph Monitor service run here.

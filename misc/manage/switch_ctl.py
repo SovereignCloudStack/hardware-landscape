@@ -6,8 +6,8 @@ from pprint import pprint
 
 from lib.global_helpers import setup_logging
 from lib.switch_model import get_unique_switches
-from lib.switch_operating_system import CfgTypes, backup_config, restore_config, create_configs
-from lib.helpers import template_ansible_config, AnsibleInvertoryStrategy
+from lib.switch_operating_system import CfgTypes, backup_config, restore_config
+from lib.helpers import template_ansible_config, AnsibleInvertoryStrategy, create_configs
 
 parser = argparse.ArgumentParser(
     prog='Configure Switches')
@@ -56,7 +56,7 @@ if args.restore_cfg:
     restore_config(get_unique_switches(args.node, False, args.filter), args.restore_cfg)
 
 if args.configs:
-    create_configs(get_unique_switches(args.node, False, args.filter))
+    create_configs(get_unique_switches(args.node, False, args.filter), "switches")
 
 if args.show:
     print()

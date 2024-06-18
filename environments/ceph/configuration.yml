@@ -7,8 +7,8 @@ fsid: 44bc2d19-fd83-4b92-a6c4-eed358e35672
 ##########################
 # network
 
-public_network: 10.26.0.0/22
-cluster_network: 10.26.0.0/22
+public_network: 10.10.21.0/22
+cluster_network: 10.10.21.0/22
 
 ##########################
 # openstack

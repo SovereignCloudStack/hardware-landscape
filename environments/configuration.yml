@@ -29,6 +29,9 @@ squid_tag: edge
 motd_show_ssh: true
 network_interface: dummy0
 
+management_domain: mgmt.sovereignit.de
+management_gw: 10.10.23.254
+
 ##########################
 # dnscrypt
 
@@ -56,6 +59,13 @@ user_delete:
   - name: "osism"
 
 user_list:
+    # The user gets a password because this is sometimes useful on the bmc console 
+    # for debugging in exceptional problem situations where "dragon" is not usable.
+    # (i.e. extremly high load, sudo configuration and file system status of /home)
+    # The system will not provide root login by ssh.
+  - name: "root"
+    password: "{{ operator_password_root }}"
+    key: ""
   - name: "scoopex"
     key: "github"
     primary_group: dragon

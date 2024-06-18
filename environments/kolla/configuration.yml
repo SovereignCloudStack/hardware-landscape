@@ -68,7 +68,7 @@ ceph_nova_user: nova
 ceph_nova_keyring: ceph.client.nova.keyring
 
 # NOTE: public_network from environments/ceph/configuration.yml
-ceph_public_network: 10.26.0.0/22
+ceph_public_network: 10.10.21.0/22
 
 ##########################################################
 # keystone

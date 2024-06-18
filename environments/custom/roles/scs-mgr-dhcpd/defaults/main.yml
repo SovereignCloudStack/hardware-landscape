@@ -1,0 +1,21 @@
+---
+##########################
+# isc-dhcp-server
+
+isc_dhcp_server_package_name: "isc-dhcp-server"
+isc_dhcp_server_service_name: "isc-dhcp-server"
+
+isc_dhcp_server_subnet_definition: []
+dhcp_mgmt_static_nodes_group: "dhcp-static-nodes"
+
+#isc_dhcp_server_subnet_definition:
+#  - description: "Managment Network"
+#    config: |
+#      subnet 10.10.23.0 netmask 255.255.255.0 {
+#       range 10.10.23.2040 10.10.23.250;
+#       option routers 10.10.23.1;
+#       option broadcast-address 10.10.23.255;
+#       option domain-name-servers 8.8.8.8;
+#       option ntp-servers 10.10.23.10;
+#      }
+#

@@ -5,7 +5,6 @@
 *-new.json
 note
 note-*
-hardware/servers/setup/sum*
 *.passwords
 sum.log
 Supermicro_*_*.*.log.*_*

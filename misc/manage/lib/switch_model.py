@@ -19,11 +19,12 @@ def parse_configuration_data_switches(data) -> dict[str, dict[str, str]]:
     data = {}
 
     for docu_file_name in glob.glob(f"{get_switch_documentation_dir()}/Edgecore_*.md"):
-        m = re.match(r".*/Edgecore_(..+).md", docu_file_name)
+        m = re.match(r".*/(.+?)_(..+).md", docu_file_name)
         if not m:
             LOGGER.error("Unable to parse machine type from filename")
             sys.exit(1)
-        switch_type = m.group(1)
+        switch_vendor = m.group(1)
+        switch_type = m.group(2)
 
         LOGGER.debug(f"loading data from: {docu_file_name}")
         with open(docu_file_name, 'r') as file:
@@ -39,6 +40,7 @@ def parse_configuration_data_switches(data) -> dict[str, dict[str, str]]:
                     line.strip())
                 if m:
                     data[m.group("name")] = m.groupdict()
+                    data[m.group("name")]["device_vendor"] = switch_vendor
                     data[m.group("name")]["device_model"] = switch_type
                     data[m.group("name")]["bmc_username"] = "admin"
                     for field in CONFIG_FIELDS_SWITCHES:
