@@ -9,4 +9,5 @@ ansible_host: 10.10.23.107
 
 device_model: 7326-56X-O-AC-B
 mgmt_mac: d0:77:ce:4b:b4:7a
+mgmt_address: 10.10.23.107
 serial_device: CGBSb113318
