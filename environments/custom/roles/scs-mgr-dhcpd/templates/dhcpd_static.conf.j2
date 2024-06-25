@@ -1,6 +1,6 @@
-{% for item in groups[dhcp_mgmt_static_nodes_group | default("dhcp-static-nodes")] | default([]) | sort %}
-{% if hostvars[item]['mgmt_address'] is defined and hostvars[item]['mgmt_mac'] is defined %}
+{% for item in groups[isc_dhcp_mgmt_static_nodes_group] | sort %}
 # Host: {{ item }}
+{% if hostvars[item]['mgmt_address'] is defined and hostvars[item]['mgmt_mac'] is defined %}
 host {{ item }} {
   hardware ethernet {{ hostvars[item]['mgmt_mac'] }};
   server-name "{{ item }}.{{ management_domain }}";

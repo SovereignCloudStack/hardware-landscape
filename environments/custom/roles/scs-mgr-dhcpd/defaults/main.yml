@@ -6,7 +6,7 @@ isc_dhcp_server_package_name: "isc-dhcp-server"
 isc_dhcp_server_service_name: "isc-dhcp-server"
 
 isc_dhcp_server_subnet_definition: []
-dhcp_mgmt_static_nodes_group: "dhcp-static-nodes"
+isc_dhcp_mgmt_static_nodes_group: "dhcp-static-nodes"
 
 #isc_dhcp_server_subnet_definition:
 #  - description: "Managment Network"

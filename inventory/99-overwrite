@@ -16,3 +16,6 @@
 # set (grep avx /proc/cpuinfo)  needed for ovn
 [ovn-database:children]
 network
+
+[all:children]
+generic

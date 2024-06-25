@@ -29,7 +29,7 @@
     mode: 0644
   notify: Restart isc-dhcp-server service
 
-- name: Copy isc-dhcp-server static associations
+- name: "Copy isc-dhcp-server static definitions for group '{{ isc_dhcp_mgmt_static_nodes_group }}'"
   become: true
   ansible.builtin.template:
     src: dhcpd_static.conf.j2
