@@ -1,3 +1,4 @@
+import argparse
 import functools
 import logging
 import os
@@ -63,8 +64,19 @@ def regex_replace_in_file(file_path: str, replacements: list[tuple[str, str]]):
 
 
 class AnsibleInvertoryStrategy(str, Enum):
-    update = 'update'
-    keep = 'keep'
+    REPLACE = 'replace'
+    KEEP = 'keep'
+
+    def __str__(self):
+        return self.value
+
+def ansible_inventory_strategy_type(arg_value: str):
+    try:
+        return AnsibleInvertoryStrategy[arg_value.upper()]
+    except KeyError:
+        raise argparse.ArgumentTypeError(
+            f"Invalid option: '{arg_value.upper}'. Valid options are: "
+            f"{', '.join(c.name.lower() for c in AnsibleInvertoryStrategy)}")
 
 
 def template_ansible_config(host_list: list[str], item_type: str, strategy: AnsibleInvertoryStrategy):
@@ -75,6 +87,7 @@ def template_ansible_config(host_list: list[str], item_type: str, strategy: Ansi
     results_template = template_env.get_template(f"{item_type}-template.yml.j2")
 
     for host_name in host_list:
+        LOGGER.info(f"host: {host_name}, strategy {strategy}")
         results_dir = f"{get_ansible_host_inventory_dir()}{host_name}/"
         os.makedirs(results_dir, exist_ok=True)
 
@@ -85,18 +98,17 @@ def template_ansible_config(host_list: list[str], item_type: str, strategy: Ansi
 
         if os.path.exists(results_filename):
             with open(results_filename, 'r') as file:
-                if strategy:
-                    if strategy == "keep":
-                        LOGGER.warning(
-                            f"Not templating {host_name} inventory file {results_filename}, inventory_generate_strategy=keep")
-                        continue
-                    elif strategy == "update":
-                        LOGGER.warning(
-                            f"Updating existing {host_name} file {results_filename}, inventory_generate_strategy=update")
-                        with open(results_filename, 'w') as f_out:
-                            f_out.write(templated_string)
+                if strategy is AnsibleInvertoryStrategy.KEEP:
+                    LOGGER.warning(
+                        f"Not templating {host_name} inventory file {results_filename}, inventory_generate_strategy=keep")
+                    continue
+                elif strategy is AnsibleInvertoryStrategy.REPLACE:
+                    LOGGER.warning(
+                        f"Updating existing {host_name} file {results_filename}, inventory_generate_strategy=update")
+                    with open(results_filename, 'w') as f_out:
+                        f_out.write(templated_string)
                 else:
-                    LOGGER.error("inventory_generate_strategy not set")
+                    LOGGER.error(f"inventory_generate_strategy invalid {strategy}")
                     sys.exit(1)
 
         else:
