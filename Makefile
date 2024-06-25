@@ -7,7 +7,7 @@ ifeq (,$(wildcard ${VAULTPASS_FILE}))
     ifneq (,$(shell docker ps --filter 'name=osism-ansible' --format '{{.Names}}'))
         VAULTPASS_FILE := ${PWD}/secrets/vaultpass-wrapper.sh
         $(shell echo "#!/usr/bin/env bash" > ${VAULTPASS_FILE})
-        $(shell echo "docker exec -ti osism-ansible /ansible-vault.py" >> ${VAULTPASS_FILE})
+        $(shell echo "docker exec osism-ansible /ansible-vault.py" >> ${VAULTPASS_FILE})
         $(shell chmod +x ${VAULTPASS_FILE})
     else
         $(error ERROR: the file VAULTPASS_FILE='${VAULTPASS_FILE}' does not exist and no running 'osism-ansible' container)
@@ -41,7 +41,7 @@ check_vault_pass:
 
 .PHONY: ansible_vault_encrypt_ceph_keys
 ansible_vault_encrypt_ceph_keys: deps check_vault_pass
-	${venv} ;find . -name "ceph.client.*.keyring"|while read FILE; do \
+	 @${venv} ; find . -name "ceph.client.*.keyring"|while read FILE; do \
 	 echo "-> $${FILE}"; \
 	 if ! ( grep -q ANSIBLE_VAULT $${FILE} );then \
 		ansible-vault encrypt $${FILE} --output $${FILE}.vaulted --vault-password-file ${VAULTPASS_FILE} && \
@@ -51,7 +51,7 @@ ansible_vault_encrypt_ceph_keys: deps check_vault_pass
 
 .PHONY: ansible_vault_decrypt_ceph_keys
 ansible_vault_decrypt_ceph_keys: deps check_vault_pass
-	${venv} ;find . -name "ceph.client.*.keyring"|while read FILE; do \
+	 @${venv} ; find . -name "ceph.client.*.keyring"|while read FILE; do \
 	 echo "-> $${FILE}"; \
 	 if ( grep -q ANSIBLE_VAULT $${FILE} );then \
 		ansible-vault decrypt $${FILE} --output $${FILE}.unvaulted --vault-password-file ${VAULTPASS_FILE} && \
