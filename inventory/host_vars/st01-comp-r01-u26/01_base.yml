@@ -1,0 +1,40 @@
+---
+##########################################################
+# ansible
+
+ansible_host: 10.10.21.20
+
+##########################################################
+# generic
+
+device_model: ARS-110M-NR
+internal_interface: dummy0
+network_interface: dummy0
+internal_address: 10.10.21.20
+
+netdata_host_type: client
+
+mgmt_address: 10.10.23.20
+mgmt_mac: 7c:c2:55:81:8c:0b
+
+
+##########################################################
+# network
+
+network_type: netplan
+network_ethernets:
+  dummy0:
+      addresses:
+      - 10.10.21.20/32
+      - fd0c:cc24:75a0:1:10:10:21:20/128
+
+  enp1p1s0f0np0:
+      mtu: 9100
+      dhcp4: "no"
+      dhcp6: "no"
+
+  enp1p1s0f1np1:
+      mtu: 9100
+      dhcp4: "no"
+      dhcp6: "no"
+

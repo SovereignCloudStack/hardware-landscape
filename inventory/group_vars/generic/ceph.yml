@@ -1,0 +1,25 @@
+os_tuning_params:
+  - { name: fs.file-max, value: 26234859 }
+  - { name: vm.zone_reclaim_mode, value: 0 }
+  - { name: vm.swappiness, value: 0 }
+  - { name: vm.min_free_kbytes, value: "{{ vm_min_free_kbytes }}" }
+
+openstack_cinder_rbd001_pool:
+  name: rbd001
+  pg_num: "{{ openstack_pool_default_pg_num }}"
+  pgp_num: "{{ openstack_pool_default_pg_num }}"
+  rule_name: "replicated_rule"
+  min_size: "{{ openstack_pool_default_min_size }}"
+  application: "rbd"
+
+openstack_cinder_rgw001_pool:
+  name: rgw001
+  pg_num: "{{ openstack_pool_default_pg_num }}"
+  pgp_num: "{{ openstack_pool_default_pg_num }}"
+  rule_name: "replicated_rule"
+  min_size: "{{ openstack_pool_default_min_size }}"
+  application: "rgw"
+
+openstack_pools_extra:
+  - "{{ openstack_cinder_rbd001_pool }}"
+  - "{{ openstack_cinder_rgw001_pool }}"

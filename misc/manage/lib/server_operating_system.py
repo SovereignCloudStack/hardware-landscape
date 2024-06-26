@@ -222,24 +222,3 @@ def open_servers(host_list: list[str]):
         LOGGER.info(f"Password: {host_data[host_name]['bmc_password']}")
         # Supermciro BMC does not work with other browsers like "firefox"
         webbrowser.get("google-chrome").open(f"https://{host_data[host_name]['bmc_ip_v4']}", new=2)
-
-
-def create_configs(host_list: list[str]):
-    host_data = parse_configuration_data()["servers"]
-
-    results_file = f"{get_basedir()}/config-snippets/ssh_config_scs_servers"
-    LOGGER.info(f"writing {results_file}")
-    with open(results_file, 'w') as f_out:
-        for host_name in host_list:
-            LOGGER.info(f"** {host_name} / {host_data[host_name]['bmc_ip_v4']}")
-
-            f_out.write(f"Host scs-bmc-{host_name}\n")
-            f_out.write(f"   Hostname {host_data[host_name]['bmc_ip_v4']}\n")
-            # Workaround for crappy old supermicro boxes
-            f_out.write(f"   HostKeyAlgorithms=+ssh-rsa\n")
-            f_out.write(f"   User {host_data[host_name]['bmc_username']}\n")
-            f_out.write(f"\n")
-
-            f_out.write(f"Host scs-node-{host_name}\n")
-            f_out.write(f"   Hostname {host_data[host_name]['node_ip_v4']}\n")
-            f_out.write(f"\n")

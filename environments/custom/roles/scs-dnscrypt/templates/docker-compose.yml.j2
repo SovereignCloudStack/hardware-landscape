@@ -1,0 +1,23 @@
+---
+services:
+  dnscrypt:
+    container_name: "{{ dnscrypt_container_name }}"
+    restart: unless-stopped
+    image: "{{ dnscrypt_image }}"
+    environment:
+      - TZ=UTC
+    ports:
+      - "{{ internal_address }}:53:5353"
+      - "{{ internal_address }}:53:5353/udp"
+    volumes:
+      - "{{ dnscrypt_configuration_directory }}/:/etc/dnscrypt-proxy/:ro"
+      - "{{ dnscrypt_log_directory }}/:/var/log/dnscrypt-proxy/:rw"
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: {{ docker_network_mtu }}
+    ipam:
+      driver: default
+      config:
+        - subnet: {{ dnscrypt_network }}

@@ -1,0 +1,7 @@
+---
+# handlers file for isc-dhcp-server
+- name: Restart isc-dhcp-server service
+  become: true
+  ansible.builtin.service:
+    name: "{{ isc_dhcp_server_service_name }}"
+    state: restarted
