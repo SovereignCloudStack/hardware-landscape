@@ -39,6 +39,7 @@ manager_listener_broker_uri: "{% for host in manager_listener_broker_hosts %}amq
 
 netbox_enable: true
 netbox_api_url: "http://{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}:8121"
+netbox_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}"
 
 ##########################
 # celery

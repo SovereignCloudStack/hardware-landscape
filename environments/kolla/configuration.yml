@@ -64,9 +64,6 @@ ceph_gnocchi_pool_name: "metrics"
 cinder_backup_driver: "ceph"
 glance_backend_file: "no"
 
-ceph_nova_user: nova
-ceph_nova_keyring: ceph.client.nova.keyring
-
 # NOTE: public_network from environments/ceph/configuration.yml
 ceph_public_network: 10.10.21.0/22
 
@@ -89,3 +86,5 @@ keystone_logout_url: "https://api.testbed.osism.xyz/auth/"
 
 #########################################################
 # other
+
+enable_proxysql: no

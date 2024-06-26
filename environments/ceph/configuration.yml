@@ -15,7 +15,7 @@ cluster_network: 10.10.21.0/22
 
 # NOTE: After the initial deployment of the Ceph Clusters, the following parameter can be
 #       set to false. It must only be set to true again when new pools or keys are added.
-openstack_config: true
+openstack_config: false
 
 ##########################
 # custom
