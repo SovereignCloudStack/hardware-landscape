@@ -1,3 +1,4 @@
+import argparse
 import functools
 import logging
 import os
@@ -5,11 +6,9 @@ import re
 import subprocess
 import sys
 from enum import Enum
-
-import yaml
 from jinja2 import FileSystemLoader, Environment, StrictUndefined
 
-from .global_helpers import get_ansible_host_inventory_dir
+from .global_helpers import get_ansible_host_inventory_dir, get_basedir
 
 LOGGER = logging.getLogger()
 
@@ -63,9 +62,21 @@ def regex_replace_in_file(file_path: str, replacements: list[tuple[str, str]]):
     with open(file_path, 'w') as file:
         file.write(modified_content)
 
+
 class AnsibleInvertoryStrategy(str, Enum):
-    update = 'update'
-    keep = 'keep'
+    REPLACE = 'replace'
+    KEEP = 'keep'
+
+    def __str__(self):
+        return self.value
+
+def ansible_inventory_strategy_type(arg_value: str):
+    try:
+        return AnsibleInvertoryStrategy[arg_value.upper()]
+    except KeyError:
+        raise argparse.ArgumentTypeError(
+            f"Invalid option: '{arg_value.upper}'. Valid options are: "
+            f"{', '.join(c.name.lower() for c in AnsibleInvertoryStrategy)}")
 
 
 def template_ansible_config(host_list: list[str], item_type: str, strategy: AnsibleInvertoryStrategy):
@@ -76,22 +87,28 @@ def template_ansible_config(host_list: list[str], item_type: str, strategy: Ansi
     results_template = template_env.get_template(f"{item_type}-template.yml.j2")
 
     for host_name in host_list:
-        results_filename = f"{get_ansible_host_inventory_dir()}{host_name}.yml"
+        LOGGER.info(f"host: {host_name}, strategy {strategy}")
+        results_dir = f"{get_ansible_host_inventory_dir()}{host_name}/"
+        os.makedirs(results_dir, exist_ok=True)
+
+        results_filename = f"{results_dir}/01_base.yml"
         results_filename = os.path.realpath(results_filename)
+
         templated_string = results_template.render(host_data[host_name])
 
         if os.path.exists(results_filename):
             with open(results_filename, 'r') as file:
-                if strategy:
-                    if strategy == "keep":
-                        LOGGER.warning(f"Not templating {host_name} inventory file {results_filename}, inventory_generate_strategy=keep")
-                        continue
-                    elif strategy == "update":
-                        LOGGER.warning(f"Updating existing {host_name} file {results_filename}, inventory_generate_strategy=update")
-                        with open(results_filename, 'w') as f_out:
-                            f_out.write(templated_string)
+                if strategy is AnsibleInvertoryStrategy.KEEP:
+                    LOGGER.warning(
+                        f"Not templating {host_name} inventory file {results_filename}, inventory_generate_strategy=keep")
+                    continue
+                elif strategy is AnsibleInvertoryStrategy.REPLACE:
+                    LOGGER.warning(
+                        f"Updating existing {host_name} file {results_filename}, inventory_generate_strategy=update")
+                    with open(results_filename, 'w') as f_out:
+                        f_out.write(templated_string)
                 else:
-                    LOGGER.error("inventory_generate_strategy not set")
+                    LOGGER.error(f"inventory_generate_strategy invalid {strategy}")
                     sys.exit(1)
 
         else:
@@ -100,3 +117,29 @@ def template_ansible_config(host_list: list[str], item_type: str, strategy: Ansi
                 results.write(templated_string)
 
     subprocess.run(f"git --no-pager diff {get_ansible_host_inventory_dir()}", shell=True)
+
+
+def create_configs(host_list: list[str], config_type: str):
+    host_data = parse_configuration_data()[config_type]
+
+    results_file = f"{get_basedir()}/config-snippets/ssh_config_scs_{config_type}"
+    LOGGER.info(f"writing {results_file}")
+    with open(results_file, 'w') as f_out:
+        for host_name in host_list:
+            LOGGER.info(f"** {host_name}")
+
+            if 'bmc_ip_v4' in host_data[host_name]:
+                f_out.write(f"Host scs-{host_name}-bmc\n")
+                f_out.write(f"   Hostname {host_data[host_name]['bmc_ip_v4']}\n")
+
+                if host_data[host_name]["device_vendor"] == "Supermicro":
+                    # Workaround for crappy supermicro boxes
+                    f_out.write(f"   HostKeyAlgorithms=+ssh-rsa\n")
+
+                f_out.write(f"   User {host_data[host_name]['bmc_username']}\n")
+                f_out.write(f"\n")
+
+            if 'node_ip_v4' in host_data[host_name]:
+                f_out.write(f"Host scs-{host_name}\n")
+                f_out.write(f"   Hostname {host_data[host_name]['node_ip_v4']}\n")
+                f_out.write(f"\n")

@@ -1,0 +1,2 @@
+
+chrony_bindaddresses: [ "{{ internal_address }}" ]

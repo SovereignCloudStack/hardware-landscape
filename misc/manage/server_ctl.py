@@ -5,8 +5,9 @@ import sys
 from pprint import pprint
 
 from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
-    PowerActionTypes, create_configs
-from lib.helpers import template_ansible_config
+    PowerActionTypes
+from lib.helpers import template_ansible_config, AnsibleInvertoryStrategy, create_configs, \
+    ansible_inventory_strategy_type
 from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes
 from lib.global_helpers import setup_logging
 from lib.server_model import get_unique_servers
@@ -62,7 +63,10 @@ parser.add_argument('--filter', '-f', metavar='loglevel', type=str,
                     default=None, help='A filter expression <key>=<regex for values>')
 
 parser.add_argument('--verbose', '-v', action='store_true')
-parser.add_argument('--ansible_inventory_update_strategy', type=str, default="keep")
+
+parser.add_argument('--ansible_inventory_update_strategy',
+                    type=ansible_inventory_strategy_type,
+                    choices=list(AnsibleInvertoryStrategy), default=AnsibleInvertoryStrategy.KEEP)
 
 args = parser.parse_args()
 
@@ -101,6 +105,6 @@ if args.open:
     sys.exit(0)
 
 if args.configs:
-    create_configs(get_unique_servers(args.node, False, args.filter))
+    create_configs(get_unique_servers(args.node, False, args.filter), "servers")
 
 sys.exit(0)

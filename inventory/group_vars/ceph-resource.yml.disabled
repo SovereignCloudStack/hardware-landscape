@@ -1,0 +1,37 @@
+# Put WAL and RocksDB on the same device
+# https://docs.ceph.com/en/latest/rados/configuration/bluestore-config-ref/
+# DB devices make this possible because whenever a DB device is specified but an explicit WAL device is not, i
+# the WAL will be implicitly colocated with the DB on the faster device.
+ceph_db_devices:
+  nvme0n1: # 420 GB
+    num_osds: 6
+    db_size: 70 GB
+  nvme1n1: # 420 GB
+    num_osds: 6
+    db_size: 70 GB
+
+ceph_osd_devices:
+   sda:
+     db_pv: nvme0n1
+   sdb:
+     db_pv: nvme0n1
+   sdc:
+     db_pv: nvme0n1
+   sdd:
+     db_pv: nvme0n1
+   sde:
+     db_pv: nvme0n1
+   sdf:
+     db_pv: nvme0n1
+   sdg:
+     db_pv: nvme1n1
+   sdh:
+     db_pv: nvme1n1
+   sdi:
+     db_pv: nvme1n1
+   sdj:
+     db_pv: nvme1n1
+   sdk:
+     db_pv: nvme1n1
+   sdl:
+     db_pv: nvme1n1

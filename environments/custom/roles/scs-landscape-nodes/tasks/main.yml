@@ -3,4 +3,5 @@
   loop:
     - vim.yml
     - packages.yml
+    - scripts.yml
 

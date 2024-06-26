@@ -1,0 +1,43 @@
+---
+# tasks file for dnscrypt
+
+- name: Create required directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0775
+  loop:
+    - "{{ dnscrypt_configuration_directory }}"
+    - "{{ dnscrypt_log_directory }}"
+    - "{{ dnscrypt_docker_compose_directory }}"
+
+- name: Copy dnscrypt configuration files
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ dnscrypt_configuration_directory }}/{{ item }}"
+    mode: 0644
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+  loop:
+    - dnscrypt-proxy.toml
+    - cloaking-rules.txt
+  notify: Restart dnscrypt service
+
+- name: Copy docker-compose.yml file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ dnscrypt_docker_compose_directory }}/docker-compose.yml"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+  notify: Restart dnscrypt service
+
+- name: Manage dnscrypt service
+  become: true
+  ansible.builtin.service:
+    name: "{{ dnscrypt_service_name }}"
+    state: started
+    enabled: true

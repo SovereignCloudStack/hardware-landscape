@@ -31,11 +31,12 @@ def parse_configuration_data_servers(data) -> dict[str, dict[str, str]]:
             if m:
                 password_dict[m.group("mac")] = {"username": m.group("username"), "password": m.group("password")}
     for docu_file_name in glob.glob(f"{get_server_documentation_dir()}/Supermicro_*.md"):
-        m = re.match(r".*/Supermicro_(..+).md", docu_file_name)
+        m = re.match(r".*/(.+)_(..+).md", docu_file_name)
         if not m:
-            LOGGER.error("Unable to parse machine type from filename")
+            LOGGER.error("Unable to parse vendor and machine type from filename")
             sys.exit(1)
-        machine_type = m.group(1)
+        machine_vendor = m.group(1)
+        machine_type = m.group(2)
 
         LOGGER.debug(f"loading data from: {docu_file_name}")
         interfaces: list[str] = []
@@ -61,6 +62,7 @@ def parse_configuration_data_servers(data) -> dict[str, dict[str, str]]:
                     data[m.group("name")]["bmc_password"] = password_dict[m.group("bmc_mac")]["password"]
                     data[m.group("name")]["bmc_username"] = password_dict[m.group("bmc_mac")]["username"]
                     data[m.group("name")]["device_model"] = machine_type
+                    data[m.group("name")]["device_vendor"] = machine_vendor
                     data[m.group("name")]["interfaces"] = sorted(interfaces)
                     for field in CONFIG_FIELDS_SERVERS:
                         if field not in data[m.group("name")]:
