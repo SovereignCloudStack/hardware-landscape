@@ -9,8 +9,12 @@ ansible_host: {{ node_ip_v4 }}
 
 device_model: {{ device_model }}
 internal_interface: dummy0
-internal_ip: {{ node_ip_v4 }}
-mgmt_ip: {{ bmc_ip_v4 }}
+network_interface: dummy0
+internal_address: {{ node_ip_v4 }}
+
+netdata_host_type: client
+
+mgmt_address: {{ bmc_ip_v4 }}
 mgmt_mac: {{ bmc_mac }}
 
 

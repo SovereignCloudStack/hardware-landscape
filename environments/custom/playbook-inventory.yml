@@ -1,0 +1,6 @@
+---
+- name: Dump inventory structure
+  hosts: manager
+  tasks:
+    - debug:
+        var=groups

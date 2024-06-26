@@ -228,11 +228,12 @@ def template_bmc_config(bmc_hosts: list[str]):
 
 
 def execute_sum(data: dict[str, str], cmd: str):
+    sum_log = "/tmp/sum"
+    os.makedirs(sum_log, mode=0o777, exist_ok=True)
     sum_connect = \
-        f"{get_rundir()}/venv/sum/sum -i {data['bmc_ip_v4']} -u {data['bmc_username']} -p {data['bmc_password']}"
+        f"{get_rundir()}/venv/sum/sum --journal_path {sum_log} -i {data['bmc_ip_v4']} -u {data['bmc_username']} -p {data['bmc_password']}"
     command = f"{sum_connect} {cmd}"
     LOGGER.info("EXEC: >>>%s<<<", command.replace(data["bmc_password"], "REDACTED"))
-
     p = subprocess.run(command, capture_output=True, shell=True, text=True)
 
     print("stdout: >>>%s<<<" % p.stdout.replace(data["bmc_password"], "REDACTED"))

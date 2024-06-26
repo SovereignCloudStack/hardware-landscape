@@ -6,3 +6,18 @@ chrony_servers:
   - st01-mgmt-r01-u30
   - st01-mgmt-r01-u31
 
+# NTP server options.
+chrony_server_options: iburst
+
+# Configure Chrony to synchronize the hardware clock
+chrony_sync_rtc: true
+
+# Chrony limits access to clients that are on certain subnets.  Adjust the
+# following subnets here to limit client access to chrony servers.
+chrony_allowed_subnets:
+  - 10.10.21.0/24
+
+# If set to true, chronyd will never open the server port and will operate
+# strictly in a client-only mode.
+chrony_bind_local_interfaces_only: false
+

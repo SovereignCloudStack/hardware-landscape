@@ -1,0 +1,40 @@
+---
+##########################################################
+# ansible
+
+ansible_host: 10.10.21.28
+
+##########################################################
+# generic
+
+device_model: H12SSL-NT
+internal_interface: dummy0
+network_interface: dummy0
+internal_address: 10.10.21.28
+
+netdata_host_type: client
+
+mgmt_address: 10.10.23.28
+mgmt_mac: 3c:ec:ef:9f:e2:0c
+
+
+##########################################################
+# network
+
+network_type: netplan
+network_ethernets:
+  dummy0:
+      addresses:
+      - 10.10.21.28/32
+      - fd0c:cc24:75a0:1:10:10:21:28/128
+
+  enp65s0f0np0:
+      mtu: 9100
+      dhcp4: "no"
+      dhcp6: "no"
+
+  enp65s0f1np1:
+      mtu: 9100
+      dhcp4: "no"
+      dhcp6: "no"
+

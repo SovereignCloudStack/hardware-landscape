@@ -4,8 +4,11 @@
 * Model: Supermicro A2SDV-8C-LN8F
 * Feature overview:
   * Intel
-  * Single-CPU 8-Core Server
-  * two 1+ Gbps 
+  * Single-CPU 8-Core Server:
+    * [Intel(R) Atom(TM) CPU C3758 @ 2.20GHz](https://ark.intel.com/content/www/de/de/ark/products/97926/intel-atom-processor-c3758-16m-cache-up-to-2-20-ghz.html)
+    * Low budget CPU, missing support for avx cpu instructions
+      (no chance to run ovs/ovn instrastructure)
+  * two 1+ Gbps
   * two 25 Gbps SFP+
     * NIC: enp2s0f0np0
     * NIC: enp2s0f1np1

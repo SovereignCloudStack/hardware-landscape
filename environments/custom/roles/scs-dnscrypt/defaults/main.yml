@@ -1,0 +1,31 @@
+---
+##########################
+# operator
+
+operator_user: "dragon"
+operator_group: "dragon"
+
+##########################
+# docker
+
+docker_network_mtu: 1500
+
+docker_registry_dnscrypt: index.docker.io
+
+##########################
+# dnscrypt
+
+dnscrypt_configuration_directory: /opt/dnscrypt/configuration
+dnscrypt_log_directory: /var/log/dnscrypt
+dnscrypt_docker_compose_directory: /opt/dnscrypt
+
+dnscrypt_network: 172.31.105.144/28
+dnscrypt_service_name: "docker-compose@dnscrypt"
+
+dnscrypt_host: 0.0.0.0
+
+dnscrypt_tag: latest
+dnscrypt_image: "{{ docker_registry_dnscrypt }}/zydou/dnscrypt:{{ dnscrypt_tag }}"
+dnscrypt_container_name: dnscrypt
+
+dnscrypt_cloaks: []

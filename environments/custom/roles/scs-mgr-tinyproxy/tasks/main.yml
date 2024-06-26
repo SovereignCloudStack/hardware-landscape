@@ -9,6 +9,14 @@
     state: started
     enabled: true
 
+- name: Update permissions of logdir
+  file:
+    path: /var/log/tinyproxy/
+    state: directory
+    mode: '0755'
+    owner: 'tinyproxy'
+    group: 'tinyproxy'
+
 - name: Copy tinyproxy base config file
   ansible.builtin.template:
     src: tinyproxy.conf.j2

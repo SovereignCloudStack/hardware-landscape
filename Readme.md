@@ -10,6 +10,7 @@
     * [(Start to) work with the environment](documentation/System_Usage.md)
     * [Deployment of the System(s)](documentation/System_Deployment.md)
     * [Runbooks](documentation/System_Runbooks.md)
+    * [Operational Procedures](documentation/System_Operational_Workflows.md)
   * Documentation of the system setup
     * [The rack configuration](documentation/System_Rack_Setup.md)
     * [General Network Information](documentation/System_Networks.md)
