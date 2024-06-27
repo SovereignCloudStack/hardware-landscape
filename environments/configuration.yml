@@ -29,6 +29,8 @@ squid_tag: edge
 motd_show_ssh: true
 network_interface: dummy0
 
+osism_setup_gather_subset: custom
+
 management_domain: mgmt.sovereignit.de
 management_gw: 10.10.23.254
 
