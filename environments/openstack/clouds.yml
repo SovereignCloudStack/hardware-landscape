@@ -17,5 +17,5 @@ clouds:
       auth_url: http://api.int1.landscape.sovereignit.de:5000/v3
       project_domain_name: default
       user_domain_name: default
-    cacert: /etc/ssl/certs/ca-certificates.crt
+    #cacert: /etc/ssl/certs/ca-certificates.crt
     identity_api_version: 3
