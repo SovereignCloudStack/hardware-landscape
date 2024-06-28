@@ -17,5 +17,8 @@
 [ovn-database:children]
 network
 
+[octavia:children]
+network
+
 [all:children]
 generic
