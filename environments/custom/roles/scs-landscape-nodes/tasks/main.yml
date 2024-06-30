@@ -1,7 +1,7 @@
 - name: Setup Manager
   include_tasks: "{{ item }}"
   loop:
+    - scripts.yml
     - vim.yml
     - packages.yml
-    - scripts.yml
 
