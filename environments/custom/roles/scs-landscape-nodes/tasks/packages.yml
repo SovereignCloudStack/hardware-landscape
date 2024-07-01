@@ -1,6 +1,7 @@
 ---
 # https://www.brendangregg.com/blog/2024-03-24/linux-crisis-tools.html
 - name: Install required packages
+  become: true
   apt:
     update_cache: yes
     name:
