@@ -1,0 +1,6 @@
+
+wireguard_users:
+  - name: scoopex
+    key: 3XfXCmSo5+2kCrUgI/OmQDxSrx3gnomvFESNUhXVflw=
+    ip: 10.10.1.20
+
