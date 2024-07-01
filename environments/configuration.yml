@@ -13,7 +13,7 @@ docker_proxy_http: "http://{{ groups['manager'][0] }}:8888"
 docker_proxy_https: "http://{{ groups['manager'][0] }}:8888"
 
 # apt
-proxy_proxies: 
+proxy_proxies:
   http: "http://{{ groups['manager'][0] }}:8888"
   https: "http://{{ groups['manager'][0] }}:8888"
 
