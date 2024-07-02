@@ -5,16 +5,16 @@
 * Edit [environments/configuration.yml](../environments/configuration.yml)
   * Add new users in `user_list` section
   * Actively remove users by adding them in the `user_delete
-* Rollout changes 
+* Rollout changes
   ```
-  ssh st01-mgmt-r01-u30
+  ssh scs-manager
   osism apply user
   osism apply operator
   ```
 
 # Manage VPN Access
 
-* Generate a keypair localally and add the public key 
+* User: Generate a keypair localally and add the public key
   ```
   VPN_KEYDIR="${HOME}/.vpn/scs_hardware_landscape"
   mkdir -m 0700 -p "${VPN_KEYDIR?The wireguard keydir}"
@@ -22,13 +22,23 @@
   echo "${VPN_KEYDIR?}"
   cat ${VPN_KEYDIR?}/wireguard_public.key
   ```
-* Edit [environments/configuration.yml](../environments/configuration.yml) in section ``wireguard_users``
+* User: Edit [../inventory/group_vars/wireguard.yml](../inventory/group_vars/wireguard.yml) in section ``wireguard_users``
   * Add username (same as github handle)
   * Add public key to user entry
-* Rollout changes
+* Admin: Rollout changes
   ```
-  ssh st01-mgmt-r01-u30
+  ssh scs-manager
   osism apply wireguard -l manager
   ```
-* Download config from the homedir of the managers
-* Add your private key
+* User: Download config from the homedir of the managers and ad private key
+  ```
+  VPN_KEYDIR="${HOME}/.vpn/scs_hardware_landscape"
+  scp scs-manager:wg0-*.conf ${VPN_KEYDIR?}/wg.conf
+  sed -i "~s,CHANGEME.*,$(cat ${VPN_KEYDIR?}/wireguard_private.key)," "${VPN_KEYDIR?}/wg.conf"
+  ```
+* User: Start/stop connection
+  ```
+  sudo wg-quick up "${VPN_KEYDIR?}/wg.conf"
+  sudo wg-quick down "${VPN_KEYDIR?}/wg.conf"
+  ```
+
