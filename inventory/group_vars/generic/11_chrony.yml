@@ -1,0 +1,15 @@
+
+
+##########################
+# chrony
+
+chrony_servers:
+  - st01-ctl-r01-u27
+  - st01-ctl-r01-u28
+  - st01-ctl-r01-u29
+  - st01-mgmt-r01-u30
+  - st01-mgmt-r01-u31
+
+
+chrony_allowed_subnets:
+  - 127.0.0.1/32
