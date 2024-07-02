@@ -1,6 +1,6 @@
 ---
 - name: Check the state of all ntp daemons
-  hosts: all
+  hosts: generic
   gather_facts: no
   become: yes
   tasks:

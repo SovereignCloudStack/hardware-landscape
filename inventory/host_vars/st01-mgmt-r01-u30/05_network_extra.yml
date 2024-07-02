@@ -1,0 +1,5 @@
+
+network_dispatcher_scripts:
+  - src: /opt/configuration/environments/custom/roles/scs-landscape-nodes/files/scripts/scs_add_netfilter_rules.sh
+    dest: routable.d/scs_add_netfilter_rules.sh
+
