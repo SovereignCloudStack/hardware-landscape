@@ -1,6 +1,4 @@
 
 
-wireguard_listen_port: 51820
-wireguard_server_public_address: 153.92.93.119
+wireguard_server_public_address: 188.244.101.28
 wireguard_endpoint: "{{ wireguard_server_public_address }}:{{ wireguard_listen_port }}"
-wireguard_client_allowed_ips: 10.10.1.0/24,10.10.23.0/24,10.10.24.0/24
