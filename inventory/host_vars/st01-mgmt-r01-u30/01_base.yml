@@ -21,10 +21,10 @@ mgmt_mac: ac:1f:6b:5c:54:95
 ##########################################################
 # network
 
+network_type: netplan
+
 network_dummy_interfaces:
   - dummy0
-
-network_type: netplan
 
 network_ethernets_generated:
   dummy0:
@@ -41,5 +41,6 @@ network_ethernets_generated:
       mtu: 9100
       dhcp4: "no"
       dhcp6: "no"
+
 
 network_ethernets: "{{ network_ethernets_generated | combine(network_ethernets_extra|default({}), recursive=True) }}"
