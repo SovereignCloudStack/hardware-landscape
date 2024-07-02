@@ -23,6 +23,9 @@ mgmt_mac: {{ bmc_mac }}
 
 network_type: netplan
 
+network_dummy_interfaces:
+  - dummy0
+
 network_ethernets_generated:
   dummy0:
       addresses:
@@ -35,5 +38,6 @@ network_ethernets_generated:
       dhcp6: "no"
 {% endfor %}
 
-network_ethernets: "\{\{ network_ethernets_generated | combine(network_ethernets_extra|default({}), recursive=True) \}\}"
+# Merge extra configuration with the generated configuration
+network_ethernets: "{{ '{{ network_ethernets_generated | combine(network_ethernets_extra|default({}), recursive=True) }}' }}"
 
