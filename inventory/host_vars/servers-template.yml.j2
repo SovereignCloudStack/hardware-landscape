@@ -22,7 +22,8 @@ mgmt_mac: {{ bmc_mac }}
 # network
 
 network_type: netplan
-network_ethernets:
+
+network_ethernets_generated:
   dummy0:
       addresses:
       - {{ node_ip_v4 }}/32
@@ -33,4 +34,6 @@ network_ethernets:
       dhcp4: "no"
       dhcp6: "no"
 {% endfor %}
+
+network_ethernets: "\{\{ network_ethernets_generated | combine(network_ethernets_extra|default({}), recursive=True) \}\}"
 
