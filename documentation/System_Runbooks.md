@@ -1,11 +1,14 @@
 # Runbooks of the Hardware Landscape
 
+# How to get access
+
 # Manage SSH Access and Adminstrative Permissions
 
-* Edit [environments/configuration.yml](../environments/configuration.yml)
+* Clone repository and create PR
+* User: Edit [environments/configuration.yml](../environments/configuration.yml)
   * Add new users in `user_list` section
   * Actively remove users by adding them in the `user_delete
-* Rollout changes
+* Admin: Rollout changes
   ```
   ssh scs-manager
   osism apply user
@@ -14,6 +17,7 @@
 
 # Manage VPN Access
 
+* User: Clone repository and create PR
 * User: Generate a keypair localally and add the public key
   ```
   VPN_KEYDIR="${HOME}/.vpn/scs_hardware_landscape"
@@ -22,9 +26,10 @@
   echo "${VPN_KEYDIR?}"
   cat ${VPN_KEYDIR?}/wireguard_public.key
   ```
-* User: Edit [../inventory/group_vars/wireguard.yml](../inventory/group_vars/wireguard.yml) in section ``wireguard_users``
+* User: Edit [../inventory/group_vars/all.yml](../inventory/group_vars/all.yml) in section ``wireguard_users``
   * Add username (same as github handle)
   * Add public key to user entry
+  * Remove outdated users
 * Admin: Rollout changes
   ```
   ssh scs-manager
