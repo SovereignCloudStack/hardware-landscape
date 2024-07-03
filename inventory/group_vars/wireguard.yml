@@ -1,7 +1,7 @@
 
 wireguard_server_address: 10.10.1.1/24
 wireguard_listen_port: 51820
-wireguard_client_allowed_ips: 10.10.1.0/24,10.10.23.0/24,10.10.24.0/24,10.10.21.0/24
+wireguard_client_allowed_ips: 10.10.1.0/24,10.10.23.0/24,10.10.24.0/24,10.10.21.0/24,10.10.22.0/24
 
 # Debug: 
 # echo module wireguard +p > /sys/kernel/debug/dynamic_debug/control
