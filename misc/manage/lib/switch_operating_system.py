@@ -20,6 +20,7 @@ class CfgTypes(str, Enum):
     def __str__(self):
         return self.value
 
+
 def configuration_type_strategy(arg_value: str):
     try:
         return CfgTypes[arg_value.upper()]
@@ -28,30 +29,35 @@ def configuration_type_strategy(arg_value: str):
             f"Invalid option: '{arg_value.upper}'. Valid options are: "
             f"{', '.join(c.name.lower() for c in CfgTypes)}")
 
-def execute_switch_commands(data: dict[str, str], cmd: str) -> str:
+
+def execute_switch_commands(data: dict[str, str], cmd: str, timeout=15) -> str | None:
     ssh_connect = f"ssh {data['bmc_username']}@{data['bmc_ip_v4']}"
     command = f"{ssh_connect} \"{cmd}\""
     LOGGER.info("EXEC: >>>%s<<<", command)
 
-    p = subprocess.run(command, capture_output=True, shell=True, text=True)
+    try:
+        p = subprocess.run(command, capture_output=True, shell=True, text=True, timeout=timeout)
 
-    if p.returncode == 0:
-        LOGGER.info(
-            "SUCCESS - STDOUT: >>>%s<<<, STDERR: >>>%s<<<" % (
-                shorten_string(p.stdout),
-                shorten_string(p.stderr)
+        if p.returncode == 0:
+            LOGGER.info(
+                "SUCCESS - STDOUT: >>>%s<<<, STDERR: >>>%s<<<" % (
+                    shorten_string(p.stdout),
+                    shorten_string(p.stderr)
+                )
             )
-        )
-        return str(p.stdout)
-    else:
-        LOGGER.error("ERROR[%s] - STDOUT: >>>%s<<<, STDERR: >>>%s<<<" %
-                     (
-                         p.returncode,
-                         p.stdout,
-                         p.stderr
-                     )
-                     )
-        sys.exit(1)
+            return str(p.stdout)
+        else:
+            LOGGER.error("ERROR[%s] - STDOUT: >>>%s<<<, STDERR: >>>%s<<<" %
+                         (
+                             p.returncode,
+                             p.stdout,
+                             p.stderr
+                         )
+                         )
+            sys.exit(1)
+    except subprocess.TimeoutExpired as e:
+        LOGGER.warning(f"Timeout of {timeout} seconds reached, skipping")
+        return None
 
 
 def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
@@ -64,6 +70,8 @@ def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
         if filetype in ["frr", "both"]:
             frr_backup = """sudo vtysh -c 'show running-config' > frr_backup.conf && cat frr_backup.conf"""
             result = execute_switch_commands(host_data[hostname], frr_backup)
+            if result is None:
+                continue
             results_file = f"{base_file_name}_frr.conf"
             print(f"writing {results_file}")
             with open(results_file, 'w') as f_out:
@@ -72,11 +80,13 @@ def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
                     if line.startswith("!"):
                         config_started = True
                     if config_started:
-                        f_out.write(line)
+                        f_out.write(line + "\n")
 
         if filetype in ["main", "both"]:
             frr_backup = """sudo config save config_db_backup.json -y >&2 && cat config_db_backup.json"""
             result = execute_switch_commands(host_data[hostname], frr_backup)
+            if result is None:
+                continue
             json_data = json.loads(result)
 
             results_file = f"{base_file_name}_main.json"

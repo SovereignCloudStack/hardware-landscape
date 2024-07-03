@@ -43,11 +43,11 @@ exclusive_group.add_argument('--ansible', '-a', action="store_true",
                              help="Create ansible inventory files")
 
 exclusive_group.add_argument('--backup_cfg', type=configuration_type_strategy,
-                             choices=list(CfgTypes), default=CfgTypes.BOTH,
+                             choices=list(CfgTypes),
                              help='backup system configuration (possible values: both, bmc, bios)')
 
 exclusive_group.add_argument('--restore_cfg', type=configuration_type_strategy,
-                             choices=list(CfgTypes), default=CfgTypes.BOTH,
+                             choices=list(CfgTypes),
                              help='restore system configuration (possible values: both, bmc, bios)')
 
 exclusive_group.add_argument('--configs', '-c', help="create config snippets for environment", action='store_true')
