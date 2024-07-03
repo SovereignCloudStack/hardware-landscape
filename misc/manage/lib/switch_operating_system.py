@@ -1,3 +1,4 @@
+import argparse
 import json
 import logging
 import subprocess
@@ -12,10 +13,20 @@ LOGGER = logging.getLogger()
 
 
 class CfgTypes(str, Enum):
-    main = 'main'
-    frr = 'frr'
-    both = "both"
+    MAIN = 'main'
+    FRR = 'frr'
+    BOTH = "both"
 
+    def __str__(self):
+        return self.value
+
+def configuration_type_strategy(arg_value: str):
+    try:
+        return CfgTypes[arg_value.upper()]
+    except KeyError:
+        raise argparse.ArgumentTypeError(
+            f"Invalid option: '{arg_value.upper}'. Valid options are: "
+            f"{', '.join(c.name.lower() for c in CfgTypes)}")
 
 def execute_switch_commands(data: dict[str, str], cmd: str) -> str:
     ssh_connect = f"ssh {data['bmc_username']}@{data['bmc_ip_v4']}"
@@ -115,4 +126,3 @@ def restore_config(bmc_hosts: list[str], filetype: CfgTypes):
                 check=True,
                 shell=True,
             )
-

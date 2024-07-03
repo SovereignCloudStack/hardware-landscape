@@ -70,6 +70,7 @@ class AnsibleInvertoryStrategy(str, Enum):
     def __str__(self):
         return self.value
 
+
 def ansible_inventory_strategy_type(arg_value: str):
     try:
         return AnsibleInvertoryStrategy[arg_value.upper()]

@@ -8,7 +8,8 @@ from lib.server_operating_system import install_server, control_servers, open_se
     PowerActionTypes
 from lib.helpers import template_ansible_config, AnsibleInvertoryStrategy, create_configs, \
     ansible_inventory_strategy_type
-from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes
+from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes, \
+    configuration_type_strategy
 from lib.global_helpers import setup_logging
 from lib.server_model import get_unique_servers
 
@@ -41,10 +42,12 @@ exclusive_group.add_argument('--show', '-s', action="store_true",
 exclusive_group.add_argument('--ansible', '-a', action="store_true",
                              help="Create ansible inventory files")
 
-exclusive_group.add_argument('--backup_cfg', choices=[e.name for e in CfgTypes],
+exclusive_group.add_argument('--backup_cfg', type=configuration_type_strategy,
+                             choices=list(CfgTypes), default=CfgTypes.BOTH,
                              help='backup system configuration (possible values: both, bmc, bios)')
 
-exclusive_group.add_argument('--restore_cfg', choices=[e.name for e in CfgTypes],
+exclusive_group.add_argument('--restore_cfg', type=configuration_type_strategy,
+                             choices=list(CfgTypes), default=CfgTypes.BOTH,
                              help='restore system configuration (possible values: both, bmc, bios)')
 
 exclusive_group.add_argument('--configs', '-c', help="create config snippets for environment", action='store_true')

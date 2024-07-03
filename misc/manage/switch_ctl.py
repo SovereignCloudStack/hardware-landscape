@@ -6,7 +6,7 @@ from pprint import pprint
 
 from lib.global_helpers import setup_logging
 from lib.switch_model import get_unique_switches
-from lib.switch_operating_system import CfgTypes, backup_config, restore_config
+from lib.switch_operating_system import CfgTypes, backup_config, restore_config, configuration_type_strategy
 from lib.helpers import template_ansible_config, AnsibleInvertoryStrategy, create_configs, \
     ansible_inventory_strategy_type
 
@@ -24,10 +24,12 @@ exclusive_group.add_argument('--show', '-s', action="store_true",
 exclusive_group.add_argument('--ansible', '-a', action="store_true",
                              help="Create ansible inventory files")
 
-exclusive_group.add_argument('--backup_cfg', type=CfgTypes,
+exclusive_group.add_argument('--backup_cfg', type=configuration_type_strategy,
+                             choices=list(CfgTypes), default=CfgTypes.BOTH,
                              help='backup system configuration (possible values: both, bmc, bios)')
 
-exclusive_group.add_argument('--restore_cfg', type=CfgTypes,
+exclusive_group.add_argument('--restore_cfg', type=configuration_type_strategy,
+                             choices=list(CfgTypes), default=CfgTypes.BOTH,
                              help='restore system configuration (possible values: both, bmc, bios)')
 
 exclusive_group.add_argument('--configs', '-c', help="create config snippets for environment", action='store_true')
