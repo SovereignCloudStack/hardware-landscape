@@ -101,15 +101,15 @@ def template_ansible_config(host_list: list[str], item_type: str, strategy: Ansi
             with open(results_filename, 'r') as file:
                 if strategy is AnsibleInvertoryStrategy.KEEP:
                     LOGGER.warning(
-                        f"Not templating {host_name} inventory file {results_filename}, inventory_generate_strategy=keep")
+                        f"Not templating {host_name} inventory file {results_filename}, ansible_inventory_update_strategy=keep")
                     continue
                 elif strategy is AnsibleInvertoryStrategy.REPLACE:
                     LOGGER.warning(
-                        f"Updating existing {host_name} file {results_filename}, inventory_generate_strategy=update")
+                        f"Updating existing {host_name} file {results_filename}, ansible_inventory_update_strategy=update")
                     with open(results_filename, 'w') as f_out:
                         f_out.write(templated_string)
                 else:
-                    LOGGER.error(f"inventory_generate_strategy invalid {strategy}")
+                    LOGGER.error(f"ansible_inventory_update_strategy invalid {strategy}")
                     sys.exit(1)
 
         else:
