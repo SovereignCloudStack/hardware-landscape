@@ -1,0 +1,11 @@
+
+
+##########################
+# resolvconf
+
+resolvconf_nameserver:
+  - 10.10.21.10
+  - 10.10.21.11
+
+resolvconf_search: int1.landscape.sovereignit.de
+
