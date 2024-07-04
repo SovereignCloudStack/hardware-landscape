@@ -57,10 +57,13 @@ dnscrypt_cloaks:
   - "api-int.int1.landscape.sovereignit.de      10.10.21.200"
   - "api.int1.landscape.sovereignit.de          10.10.21.201"
 
-
-# K3s configuration
+############################
+# kubernetes - K3s configuration
 apiserver_endpoint: "10.10.21.202"
 metal_lb_ip_range: "10.10.21.220-10.10.21.239"
+
+metal_lb_type: "frr"
+metal_lb_mode: "bgp"
 
 ##########################
 # docker
