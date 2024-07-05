@@ -17,12 +17,17 @@ netdata_host_type: client
 mgmt_address: 10.10.23.19
 mgmt_mac: 7c:c2:55:86:36:c4
 
+bgp_asn: 4210021019
 
 ##########################################################
 # network
 
 network_type: netplan
-network_ethernets:
+
+network_dummy_interfaces:
+  - dummy0
+
+network_ethernets_generated:
   dummy0:
       addresses:
       - 10.10.21.19/32
@@ -38,3 +43,6 @@ network_ethernets:
       dhcp4: "no"
       dhcp6: "no"
 
+
+# Merge extra configuration with the generated configuration
+network_ethernets: "{{ network_ethernets_generated | combine(network_ethernets_extra|default({}), recursive=True) }}"

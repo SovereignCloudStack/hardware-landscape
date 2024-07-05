@@ -1,3 +1,4 @@
+import argparse
 import glob
 import logging
 import os
@@ -258,9 +259,29 @@ def execute_sum(data: dict[str, str], cmd: str):
 
 
 class CfgTypes(str, Enum):
-    bios = 'bios'
-    bmc = 'bmc'
-    both = "both"
+    BIOS = 'bios'
+    BMC = 'bmc'
+    BOTH = "both"
+
+    def __str__(self):
+        return self.value
+
+
+def configuration_type_strategy(arg_value: str):
+    try:
+        return CfgTypes[arg_value.upper()]
+    except KeyError:
+        raise argparse.ArgumentTypeError(
+            f"Invalid option: '{arg_value.upper}'. Valid options are: "
+            f"{', '.join(c.name.lower() for c in CfgTypes)}")
+
+def configuration_type_strategy(arg_value: str):
+    try:
+        return CfgTypes[arg_value.upper()]
+    except KeyError:
+        raise argparse.ArgumentTypeError(
+            f"Invalid option: '{arg_value.upper}'. Valid options are: "
+            f"{', '.join(c.name.lower() for c in CfgTypes)}")
 
 
 def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
