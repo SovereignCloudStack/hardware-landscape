@@ -14,9 +14,9 @@ of your local system to simplify access to systems of the vp18 hardware landscap
 * Add this snippet to your SSH configuration:
   ```
   cat >> ~/.ssh/config <<EOF
-  Include ${SCS_ENV_DIR:?}/hardware-landscape/config-snippets/ssh_config_scs_servers
-  Include ${SCS_ENV_DIR:?}/hardware-landscape/config-snippets/ssh_config_scs_switches
-  Include ${SCS_ENV_DIR:?}/hardware-landscape/config-snippets/ssh_config_scs_general
+  Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_servers
+  Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_switches
+  Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_general
 
   Host scs-node-*
       ProxyJump scs-manager
