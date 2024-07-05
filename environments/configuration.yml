@@ -77,11 +77,15 @@ operator_user: dragon
 operator_groups: [ "dragon", "adm", "sudo", "docker", "dialout" ]
 user_sudoers_type: "user"
 
+# Do not add users here, because they are deleted enirely
+# please add state=absent to the users to be deleted in user_list to
+# have proper numeric uid management and to not delete relevant files
+# If you really want to delete a user add remove=true and force=true to the user.
 user_delete:
-  - name: "osism"
+  - "osism"
 
 user_list:
-    # The user gets a password because this is sometimes useful on the bmc console 
+    # The user gets a password because this is sometimes useful on the bmc console
     # for debugging in exceptional problem situations where "dragon" is not usable.
     # (i.e. extremly high load, sudo configuration and file system status of /home)
     # The system will not provide root login by ssh.
@@ -113,6 +117,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45004
+    #state: absent
     groups:
       - docker
       - dialout
@@ -120,6 +125,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45005
+    #state: absent
     groups:
       - docker
       - dialout
