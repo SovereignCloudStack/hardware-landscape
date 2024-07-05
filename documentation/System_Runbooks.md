@@ -26,7 +26,7 @@
   echo "${VPN_KEYDIR?}"
   cat ${VPN_KEYDIR?}/wireguard_public.key
   ```
-* User: Edit [../inventory/group_vars/all.yml](../inventory/group_vars/all.yml) in section ``wireguard_users``
+* User: Edit [../inventory/group_vars/wireguard.yml](../inventory/group_vars/wireguard.yml) in section ``wireguard_users``
   * Add username (same as github handle)
   * Add public key to user entry
   * Remove outdated users
@@ -35,7 +35,7 @@
   ssh scs-manager
   osism apply wireguard -l manager
   ```
-* User: Download config from the homedir of the managers and ad private key
+* User: Download config from the homedir of the managers and add private key
   ```
   VPN_KEYDIR="${HOME}/.vpn/scs_hardware_landscape"
   scp scs-manager:wg0-*.conf ${VPN_KEYDIR?}/wg.conf
