@@ -17,7 +17,7 @@ netdata_host_type: client
 mgmt_address: 10.10.23.22
 mgmt_mac: 3c:ec:ef:94:94:f4
 
-metal_lb_bgp_my_asn: 4210021022
+bgp_asn: 4210021022
 
 ##########################################################
 # network
