@@ -11,5 +11,6 @@ wireguard_users:
   - name: scoopex
     key: 3XfXCmSo5+2kCrUgI/OmQDxSrx3gnomvFESNUhXVflw=
     ip: 10.10.1.20
-
-
+  - name: matofeder
+    key: EkL7bli2t4EJSDYo4Edyhg8enHI1zOR+A54Ghco1OlY=
+    ip: 10.10.1.21
