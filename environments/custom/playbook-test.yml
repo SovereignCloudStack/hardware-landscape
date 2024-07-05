@@ -3,5 +3,5 @@
   hosts: manager
   become: false
   roles:
-    - scs-mgr-dhcpd
+    - scs-landscape-nodes
 

@@ -1,30 +1,29 @@
-- name: Create ceph wrapper
-  when: "'ceph-control' in group_names"
-  tags: scripts
-  copy:
-    dest: /usr/local/bin/ceph
-    mode: 0755
-    owner: root
-    group: users
-    content: |
-      #!/bin/bash
-
-      CONTAINER_ID=$(docker ps --filter "name=ceph-mon-" --format \{\{.ID\}\} | head -n 1)
-
-      if [ -z "$CONTAINER_ID" ]; then
-        echo "No container found with a name starting with 'ceph-mon-'."
-        exit 1
-      fi
-
-      docker exec -it "$CONTAINER_ID" /usr/bin/ceph --cluster ceph $@
+- name: Remove ceph wrapper
+  become: yes
+  file:
+    path: /usr/local/bin/ceph
+    state: absent
 
 - name: Synchronize all scs helper scripts
-  become: false
+  become: yes
   tags: scripts
   synchronize:
     src: "{{ role_path }}/files/scripts/"
-    dest: /home/dragon/scripts
+    dest: /usr/local/scripts
     owner: false
     delete: true
     dirs: true
 
+- name: Set permisssions for /usr/local/scripts and /opt/configuration
+  become: yes
+  shell: |
+    /bin/bash /usr/local/scripts/scs_fix_permissions.sh
+  args:
+    executable: /bin/bash
+
+- name: Create symbolic link to scs profile
+  become: yes
+  file:
+    src: /usr/local/scripts/scs_profile.sh
+    dest: /etc/profile.d/Z99-scs-env.sh
+    state: link

@@ -22,3 +22,7 @@ network
 
 [all:children]
 generic
+
+[manager-infra]
+st01-mgmt-r01-u30
+st01-mgmt-r01-u31

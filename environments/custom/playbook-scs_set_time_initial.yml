@@ -1,6 +1,6 @@
 ---
 - name: Synchronize date/time across remote hosts for an inital installation
-  hosts: all
+  hosts: generic
   gather_facts: no
   become: yes
   tasks:

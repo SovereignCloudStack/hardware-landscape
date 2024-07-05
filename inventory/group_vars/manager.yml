@@ -1,5 +1,10 @@
 
 
+resolvconf_nameserver:
+  - 8.8.8.8
+  - 9.9.9.9
+  - 1.1.1.1
+
 # NTP server options.
 chrony_server_options: iburst
 

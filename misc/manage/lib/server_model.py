@@ -53,6 +53,7 @@ def parse_configuration_data_servers(data) -> dict[str, dict[str, str]]:
                     r"\|\s*(?P<bmc_ip_v4>\d+\.\d+\.\d+\.\d+?)\s*"
                     r"\|.+"
                     r"\|\s*(?P<bmc_mac>[a-f0-9:]+)\s*"
+                    r"\|\s*(?P<asn>\d+)\s*"
                     r"\|\s*(?P<node_ip_v4>\d+\.\d+\.\d+\.\d+?)\s*"
                     r"\|\s*(?P<node_ip_v6>(?:[a-f0-9]{1,4}:){7}[a-f0-9]{1,4})\s*"
                     r"\|.*",

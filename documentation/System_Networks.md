@@ -14,6 +14,18 @@ Domain nameing scheme: <net>.landscape.sovereignit.de
 | mgmt          | 10.10.23.0/24       | 10.10.23.1       | 23      | Out of band access for switches and servers     |
 | lab           | 10.10.24.0/24       | 10.10.24.1       | 24      | Lab Node Network                                |
 
+## Reserved Adress Ranges
+
+The following list describes all dynamic adress ranges.
+The containing ips are not statically assigned to a particular host.
+
+| Networkname   | From                | To               | Description                                               |
+|---------------|---------------------|------------------|-----------------------------------------------------------|
+| prod1         | 10.10.21.200        | 10.10.21.201     | Openstack API Endpoints                                   |
+| prod1         | 10.10.21.202        | 10.10.21.202     | Loadbalancer URLs, Kubernetes, Static                     |
+| prod1         | 10.10.21.220        | 10.10.21.239     | Loadbalancer URLs, Kubernetes, Dynamic                    |
+| mgmt          | 10.10.21.240        | 10.10.21.250     | DHCP range for deployments                                |
+
 
 ## Port Forwarding Access
 
