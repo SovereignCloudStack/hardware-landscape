@@ -3,9 +3,9 @@
 add_rule(){
    local POS_WANTED="$1"
    local RULE="$2"
+   local RULE_MARKER="$3"
    local RULE_EXISTS="false"
    local OUTDATED_RULES_HANDLES=""
-   local RULE_MARKER="SCS-MASQ"
 
    while read RULE_HANDL POS;
    do
@@ -36,5 +36,6 @@ add_rule(){
 }
 
 FORCE="${1:-add}"
-add_rule 0 'ip saddr { 172.31.100.0/23, 10.10.1.0/24 } ip daddr 10.10.21.0/24 snat to 10.10.21.10'
-add_rule 0 'ip saddr { 172.31.100.0/23, 10.10.1.0/24 } ip daddr 10.10.23.0/24 snat to 10.10.23.254'
+
+add_rule 0 'ip saddr { 172.31.100.0/23, 10.10.1.0/24 } ip daddr 10.10.21.0/24 snat to 10.10.21.10' SCS-MASQINT
+add_rule 1 'ip saddr { 172.31.100.0/23, 10.10.1.0/24 } ip daddr 10.10.23.0/24 snat to 10.10.23.254' SCS_MASQMGMT
