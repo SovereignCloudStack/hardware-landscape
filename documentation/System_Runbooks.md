@@ -26,7 +26,7 @@
   echo "${VPN_KEYDIR?}"
   cat ${VPN_KEYDIR?}/wireguard_public.key
   ```
-* User: Edit [../inventory/group_vars/all.yml](../inventory/group_vars/all.yml) in section ``wireguard_users``
+* User: Edit [../inventory/group_vars/wireguard.yml](../inventory/group_vars/wireguard.yml) in section ``wireguard_users``
   * Add username (same as github handle)
   * Add public key to user entry
   * Remove outdated users
