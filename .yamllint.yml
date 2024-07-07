@@ -9,3 +9,5 @@ rules:
 ignore: |
   .git
   .tox
+  secrets.yml
+  secrets-*.yml
