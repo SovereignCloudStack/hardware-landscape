@@ -2,4 +2,7 @@
 allow_duplicate_keys = false
 line_length = 100
 preserve_quotes = true
-sequence_style = block_style
+sequence_style = "block_style"
+quote_basic_values = true
+whitelines = 3
+comments_whitelines = 3
