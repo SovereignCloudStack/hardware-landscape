@@ -1,5 +1,6 @@
 # base.toml
 allow_duplicate_keys = false
-line_length = 100
+line_length = 160
 preserve_quotes = true
 sequence_style = "block_style"
+whitelines = 1
