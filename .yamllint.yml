@@ -1,12 +1,10 @@
 ---
 extends: default
-
 rules:
   comments: enable
   line-length: disable
   empty-lines: disable
-
-ignore: |
+ignore: |-
   .git
   .tox
   secrets.yml

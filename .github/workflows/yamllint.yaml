@@ -1,14 +1,14 @@
-name: 'Yamllint'
-on:
-  - pull_request
+---
+name: Yamllint
+on: [pull_request]
 jobs:
   yamllint:
-    name: 'Yamllint'
+    name: Yamllint
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout'
+      - name: Checkout
         uses: actions/checkout@master
-      - name: 'Yamllint'
+      - name: Yamllint
         uses: karancode/yamllint-github-action@master
         with:
           yamllint_strict: false

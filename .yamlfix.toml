@@ -1,0 +1,3 @@
+# base.toml
+allow_duplicate_keys = false
+line_length = 100

@@ -1,5 +1,6 @@
 venv = . venv/bin/activate
 export PATH := ${PATH}:${PWD}/venv/bin
+basedir = ${PWD}
 
 VAULTPASS_FILE ?= ${PWD}/secrets/vaultpass
 
@@ -29,6 +30,12 @@ venv/bin/activate: Makefile requirements.txt
 	@[ -e venv/bin/python ] || python3 -m venv venv --prompt osism-$(shell basename ${PWD})
 	@${venv} && pip3 install -r requirements.txt
 	touch venv/bin/activate
+
+
+.PHONY: yamlfix_check
+yamlfix_check: deps
+	${venv} && find . -type f \( -not -path "*/.venv/*" -and -not -path "*/venv/*" -regex ".*\.ya?ml" \) \
+		-exec yamlfix -check --config-file ${basedir}/.yamlfix.toml {} +
 
 .PHONY: deps
 sync: deps
@@ -93,3 +100,5 @@ ifndef FILE
 	$(error FILE variable is not set, example 'make ansible_vault_edit FILE=environments/secrets.yml')
 endif
 	${venv} && ansible-vault edit --vault-password-file ${VAULTPASS_FILE} ${FILE}
+
+
