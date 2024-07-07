@@ -1,2 +1,3 @@
 ---
 # defaults file for scs-landscape
+logical_volumes: []

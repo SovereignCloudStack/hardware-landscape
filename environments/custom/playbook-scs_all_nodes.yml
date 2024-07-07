@@ -4,4 +4,3 @@
   become: true
   roles:
     - scs-landscape-nodes
-    - debops.lvm

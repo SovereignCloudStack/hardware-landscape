@@ -1,0 +1,12 @@
+# https://docs.debops.org/en/stable-3.1/ansible/roles/lvm/defaults/main.html#volume-groups-and-logical-volumes
+- name: Manage LVM Logical Volumes
+  community.general.lvol:
+    lv: '{{ lv_item.lv }}'
+    vg: '{{ lv_item.vg }}'
+    size: '{{ lv_item.size }}'
+    force: '{{ lv_item.force | d(omit) }}'
+    state: 'present'
+  loop: '{{ logical_volumes }}'
+  loop_control:
+    loop_var: lv_item
+  tags: manage_lvm

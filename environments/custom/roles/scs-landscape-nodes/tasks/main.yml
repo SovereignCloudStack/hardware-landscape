@@ -1,7 +1,9 @@
-- name: Setup Manager
+- name: Setup Node
   include_tasks: "{{ item }}"
   loop:
+    - lvm.yml
     - scripts.yml
     - vim.yml
     - packages.yml
+  tags: manage_lvm
 
