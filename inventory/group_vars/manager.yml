@@ -37,3 +37,14 @@ tinyproxy_allowed_networks:
 #  - ^.*debian.*$
 #  - ^.*ubuntu.*$
 
+logical_volumes:
+  - lv: 'log'
+    vg: 'system'
+    size: '30G'
+    resizefs: true
+    force: true
+  - lv: 'docker'
+    vg: 'system'
+    size: '100G'
+    resizefs: true
+    force: true

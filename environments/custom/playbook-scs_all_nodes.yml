@@ -1,6 +1,7 @@
 ---
 - name: Assign roles to all hosts
   hosts: generic
-  become: true
+  become: yes
+  gather_facts: no
   roles:
     - scs-landscape-nodes

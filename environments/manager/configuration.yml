@@ -64,4 +64,4 @@ configuration_git_protocol: ssh
 configuration_git_repository: SovereignCloudStack/hardware-landscape
 configuration_git_username: git
 
-configuration_git_version: rework-post7-0-5
+configuration_git_version: rework-post-kubernetes
