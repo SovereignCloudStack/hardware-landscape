@@ -32,7 +32,7 @@ venv/bin/activate: Makefile requirements.txt
 	touch venv/bin/activate
 
 #################################################
-### EXPERIMENTAL
+### EXPERIMENTAL, yamlfix is still very broken
 
 .PHONY: lint-check
 lint-check: deps
