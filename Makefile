@@ -32,10 +32,14 @@ venv/bin/activate: Makefile requirements.txt
 	touch venv/bin/activate
 
 
-.PHONY: yamlfix_check
-yamlfix_check: deps
-	${venv} && find . -type f \( -not -path "*/.venv/*" -and -not -path "*/venv/*" -regex ".*\.ya?ml" \) \
-		-exec yamlfix -check --config-file ${basedir}/.yamlfix.toml {} +
+.PHONY: check
+check: deps
+	$(MAKE) fix CHECK="--check"
+
+.PHONY: fix
+fix: deps
+	${venv} && find . -type f \( -not -path "misc/node-images/node-image/*" -and -not -path "*/.venv/*" -and -not -path "*/venv/*" -regex ".*\.ya?ml" \) \
+		-exec yamlfix --verbose ${CHECK} --config-file ${basedir}/.yamlfix.toml {} +
 
 .PHONY: deps
 sync: deps
