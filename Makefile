@@ -31,16 +31,22 @@ venv/bin/activate: Makefile requirements.txt
 	@${venv} && pip3 install -r requirements.txt
 	touch venv/bin/activate
 
+#################################################
+### EXPERIMENTAL
 
 .PHONY: lint-check
 lint-check: deps
 	$(MAKE) lint-fix DO_CHECK="--check"
 
+# Just for testing, currently yamllint seems to be broken
 .PHONY: lint-fix
 lint-fix: deps
-	# 
 	${venv} && find . -type f \( -not -path "misc/node-images/node-image/*" -and -not -path "*/.venv/*" -and -not -path "*/venv/*" -regex ".*\.ya?ml" \) \
-		-exec yamlfix --verbose ${DO_CHECK} --config-file ${basedir}/.yamlfix.toml {} +
+		-print \
+		-exec yamlfix --verbose ${DO_CHECK} --config-file ${basedir}/.yamlfix.toml {} \;
+
+### EXPERIMENTAL
+#################################################
 
 .PHONY: deps
 sync: deps

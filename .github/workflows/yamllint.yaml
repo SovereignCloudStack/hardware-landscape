@@ -1,6 +1,7 @@
 ---
 name: Yamllint
-on: [pull_request]
+on:
+  - pull_request
 jobs:
   yamllint:
     name: Yamllint
