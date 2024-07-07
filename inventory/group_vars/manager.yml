@@ -37,7 +37,6 @@ tinyproxy_allowed_networks:
 #  - ^.*debian.*$
 #  - ^.*ubuntu.*$
 
-
 logical_volumes:
   - lv: 'log'
     vg: 'system'

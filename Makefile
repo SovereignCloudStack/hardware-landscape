@@ -93,5 +93,3 @@ ifndef FILE
 	$(error FILE variable is not set, example 'make ansible_vault_edit FILE=environments/secrets.yml')
 endif
 	${venv} && ansible-vault edit --vault-password-file ${VAULTPASS_FILE} ${FILE}
-
-
