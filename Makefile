@@ -1,6 +1,5 @@
 venv = . venv/bin/activate
 export PATH := ${PATH}:${PWD}/venv/bin
-basedir = ${PWD}
 
 VAULTPASS_FILE ?= ${PWD}/secrets/vaultpass
 
