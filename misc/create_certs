@@ -11,7 +11,7 @@ create_cert(){
    local target_path="${1?}"
    local key="${2?}"
    local domain="$(awk -v "type=${key}" '$0 ~ type{print $2}' environments/kolla/configuration.yml)"
-   echo "CREATE: $key -> $domain"
+   echo "CREATE SERVER CERT: $key -> $domain"
    set -xe
    openssl genpkey -algorithm RSA -out secrets/${key}.key -pkeyopt rsa_keygen_bits:4096 
    openssl req -new -key secrets/${key}.key -out secrets/${key}.csr \
@@ -27,10 +27,12 @@ create_cert(){
 }
 
 
-echo "CREATE CA"
-openssl genpkey -algorithm RSA -out secrets/ca.key -aes256 -pass pass:dummypassword -pkeyopt rsa_keygen_bits:4096
-openssl req -x509 -new -key secrets/ca.key -sha256 -days 3650 -out secrets/ca.crt -passin pass:dummypassword  -subj "/C=DE/ST=Berlin/L=Berlin/O=OSBA e.V./OU=Fake CA"
-cat > secrets/server_cert.cnf<< 'EOF'
+create_ca(){
+   echo "CREATE CA CERT"
+   set -xe
+   openssl genpkey -algorithm RSA -out secrets/ca.key -aes256 -pass pass:dummypassword -pkeyopt rsa_keygen_bits:4096
+   openssl req -x509 -new -key secrets/ca.key -sha256 -days 3650 -out secrets/ca.crt -passin pass:dummypassword  -subj "/C=DE/ST=Berlin/L=Berlin/O=OSBA e.V./OU=Fake CA"
+   cat > secrets/server_cert.cnf << 'EOF'
 [ v3_req ]
 basicConstraints = CA:FALSE
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
@@ -40,7 +42,19 @@ subjectAltName = @alt_names
 [ alt_names ]
 DNS.1 = your_common_name
 EOF
+   (
+   cat <<EOF
+certificates_ca:
+  - name: custom.crt
+    certificate: |
+EOF
+   cat secrets/ca.crt |sed '~s,^,       ,' 
+   ) > environments/secrets-ca.yml
+   git add environments/secrets-ca.yml
+   set +xe
+}
 
+create_ca
 create_cert environments/kolla/certificates/haproxy.pem kolla_external_fqdn
 create_cert environments/kolla/certificates/haproxy-internal.pem kolla_internal_fqdn
 echo "SUCCESS"
