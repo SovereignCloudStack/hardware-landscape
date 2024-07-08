@@ -1,9 +1,3 @@
-- name: Remove ceph wrapper
-  become: yes
-  file:
-    path: /usr/local/bin/ceph
-    state: absent
-
 - name: Synchronize all scs helper scripts
   become: yes
   tags: scripts

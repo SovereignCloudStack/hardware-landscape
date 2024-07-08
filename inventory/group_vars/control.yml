@@ -21,3 +21,14 @@ chrony_allowed_subnets:
 # strictly in a client-only mode.
 chrony_bind_local_interfaces_only: false
 
+logical_volumes:
+  - lv: 'log'
+    vg: 'system'
+    size: '30G'
+    resizefs: true
+    force: true
+  - lv: 'docker'
+    vg: 'system'
+    size: '100G'
+    resizefs: true
+    force: true
