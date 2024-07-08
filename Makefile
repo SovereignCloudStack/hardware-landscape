@@ -82,9 +82,16 @@ ansible_vault_rekey: deps check_vault_pass
 
 .PHONY: ansible_vault_show
 ansible_vault_show: deps check_vault_pass
-	${venv} && find environments/ inventory/ -name "*.yml" -and -not -path "*/.venv/*" -exec grep -l ANSIBLE_VAULT {} \+|\
-		sort -u|\
-		xargs -n 1 --verbose ansible-vault view --vault-password-file ${VAULTPASS_FILE} 2>&1 | less
+ifndef FILE
+	$(error FILE variable is not set, example 'make ansible_vault_edit FILE=environments/secrets.yml' or 'make ansible_vault_edit FILE=all')
+endif
+	@if [ "${FILE}" = "all" ] ; then \
+		${venv} && find environments/ inventory/ -name "*.yml" -and -not -path "*/.venv/*" -exec grep -l ANSIBLE_VAULT {} \+|\
+			sort -u|\
+			xargs -n 1 --verbose ansible-vault view --vault-password-file ${VAULTPASS_FILE} 2>&1 | less;\
+	else \
+		${venv} ; ansible-vault view --vault-password-file ${VAULTPASS_FILE} ${FILE}; \
+	fi
 
 
 .PHONY: ansible_vault_edit
@@ -92,4 +99,8 @@ ansible_vault_edit: deps check_vault_pass
 ifndef FILE
 	$(error FILE variable is not set, example 'make ansible_vault_edit FILE=environments/secrets.yml')
 endif
-	${venv} && ansible-vault edit --vault-password-file ${VAULTPASS_FILE} ${FILE}
+	@if test -f $(FILE); then \
+		${venv} && ansible-vault edit --vault-password-file ${VAULTPASS_FILE} ${FILE}; \
+	else \
+		${venv} && ansible-vault create --vault-password-file ${VAULTPASS_FILE} ${FILE}; \
+	fi
