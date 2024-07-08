@@ -1,0 +1,25 @@
+#!/bin/bash
+
+
+basedir="$(readlink -f $(dirname $0)/../)"
+cd $basedir  || exit 1
+
+create_cert(){
+   local target_path="${1?}"
+   local key="${2?}"
+   local domain="$(awk -v "type=${key}" '$0 ~ type{print $2}' environments/kolla/configuration.yml)"
+   echo "CREATE: $key -> $domain"
+   openssl req -nodes -x509 -newkey rsa:4096 \
+      -keyout secrets/${key}.key \
+      -out secrets/${key}.crt \
+      -subj "/CN=${domain?}" \
+      -days 730
+   cat secrets/${key}.key secrets/${key}.crt > $target_path
+
+   echo "created $target_path"
+   openssl x509 -in $target_path -text -noout|head -20
+   git add $target_path
+}
+
+create_cert environments/kolla/certificates/haproxy.pem kolla_external_fqdn
+create_cert environments/kolla/certificates/haproxy-internal.pem kolla_internal_fqdn
