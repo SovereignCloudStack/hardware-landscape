@@ -99,8 +99,10 @@ ansible_vault_edit: deps check_vault_pass
 ifndef FILE
 	$(error FILE variable is not set, example 'make ansible_vault_edit FILE=environments/secrets.yml')
 endif
-	@if test -f $(FILE); then \
+	@if ( test -f $(FILE) && grep -q ANSIBLE_VAULT $(FILE) ); then \
 		${venv} && ansible-vault edit --vault-password-file ${VAULTPASS_FILE} ${FILE}; \
+	elif test -f $(FILE) ; then \
+		${venv} && ansible-vault encrypt --vault-password-file ${VAULTPASS_FILE} ${FILE}; \
 	else \
 		${venv} && ansible-vault create --vault-password-file ${VAULTPASS_FILE} ${FILE}; \
 	fi

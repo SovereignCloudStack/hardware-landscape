@@ -2,24 +2,45 @@
 
 
 basedir="$(readlink -f $(dirname $0)/../)"
+subject="/C=DE/ST=Berlin/L=Berlin/O=OSBA e.V./OU=Fake CA"
+
 cd $basedir  || exit 1
+
 
 create_cert(){
    local target_path="${1?}"
    local key="${2?}"
    local domain="$(awk -v "type=${key}" '$0 ~ type{print $2}' environments/kolla/configuration.yml)"
    echo "CREATE: $key -> $domain"
-   openssl req -nodes -x509 -newkey rsa:4096 \
-      -keyout secrets/${key}.key \
-      -out secrets/${key}.crt \
-      -subj "/CN=${domain?}" \
-      -days 730
+   set -xe
+   openssl genpkey -algorithm RSA -out secrets/${key}.key -pkeyopt rsa_keygen_bits:4096 
+   openssl req -new -key secrets/${key}.key -out secrets/${key}.csr \
+      -subj "${subject}/CN=${domain}" 
+   openssl x509 -req -in secrets/${key}.csr -CA secrets/ca.crt -CAkey secrets/ca.key -CAcreateserial \
+      -out secrets/${key}.crt -days 730 -sha256 \
+      -extfile secrets/server_cert.cnf -extensions v3_req -passin pass:dummypassword
    cat secrets/${key}.key secrets/${key}.crt > $target_path
-
-   echo "created $target_path"
    openssl x509 -in $target_path -text -noout|head -20
+   make ansible_vault_edit FILE=$target_path
    git add $target_path
+   set +xe
 }
+
+
+echo "CREATE CA"
+openssl genpkey -algorithm RSA -out secrets/ca.key -aes256 -pass pass:dummypassword -pkeyopt rsa_keygen_bits:4096
+openssl req -x509 -new -key secrets/ca.key -sha256 -days 3650 -out secrets/ca.crt -passin pass:dummypassword  -subj "/C=DE/ST=Berlin/L=Berlin/O=OSBA e.V./OU=Fake CA"
+cat > secrets/server_cert.cnf<< 'EOF'
+[ v3_req ]
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = your_common_name
+EOF
 
 create_cert environments/kolla/certificates/haproxy.pem kolla_external_fqdn
 create_cert environments/kolla/certificates/haproxy-internal.pem kolla_internal_fqdn
+echo "SUCCESS"
