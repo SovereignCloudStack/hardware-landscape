@@ -37,7 +37,7 @@ ceph_conf_overrides:
     "rgw keystone admin user": "ceph_rgw"
     "rgw keystone api version": "3"
     "rgw keystone implicit tenants": "true"
-    "rgw keystone url": "http://api-int.int1.landscape.sovereignit.de:5000"
+    "rgw keystone url": "https://api-int.int1.landscape.sovereignit.de:5000"
     "rgw keystone verify ssl": "false"
     "rgw s3 auth use keystone": "true"
     "rgw swift account in url": "true"

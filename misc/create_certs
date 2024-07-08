@@ -44,11 +44,15 @@ DNS.1 = your_common_name
 EOF
    (
    cat <<EOF
+manager_environment_extra:
+  REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+kolla_copy_ca_into_containers: "yes"
+openstack_cacert: /etc/ssl/certs/ca-certificates.crt
 certificates_ca:
   - name: custom.crt
     certificate: |
 EOF
-   cat secrets/ca.crt |sed '~s,^,       ,' 
+   cat secrets/ca.crt |sed '~s,^,       ,'
    ) > environments/secrets-ca.yml
    git add environments/secrets-ca.yml
    set +xe

@@ -103,6 +103,12 @@ Please just add issues to this project with hints or directly [contact me](https
 
 ### Step 4: Bootstrap the nodes
 
+* Create certificates
+  ```
+  misc/create_certs
+  # Use this if you change the certificates later
+  # osism apply certificates
+  ```
 * Set basic system time to prevent problems with apt and signatures
   based on a http request to www.google.com.
   (prevents problems with gpg signatures of packages)
