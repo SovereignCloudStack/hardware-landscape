@@ -45,10 +45,6 @@ DNS.1 = your_common_name
 EOF
    (
    cat <<EOF
-manager_environment_extra:
-  REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
-kolla_copy_ca_into_containers: "yes"
-openstack_cacert: /etc/ssl/certs/ca-certificates.crt
 certificates_ca:
   - name: custom.crt
     certificate: |
@@ -56,7 +52,18 @@ EOF
    cat secrets/ca.crt |sed '~s,^,       ,'
    ) > environments/secrets-ca.yml
    make ansible_vault_edit FILE=environments/secrets-ca.yml
-   git add environments/secrets-ca.yml
+
+   cat > environments/manager/configuration-ca.yml <<EOF
+manager_environment_extra:
+  REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+EOF
+
+   cat > environments/kolla/configuration-ca.yml <<EOF
+kolla_copy_ca_into_containers: "yes"
+openstack_cacert: /etc/ssl/certs/ca-certificates.crt
+EOF
+
+   git add environments/secrets-ca.yml environments/manager/configuration-ca.yml  environments/kolla/configuration-ca.yml
    set +xe
 }
 
