@@ -6,3 +6,7 @@ Host scs-jumphost
 Host scs-manager
    Hostname 188.244.101.28
 
+Host scs-manager-screen
+   Hostname 188.244.101.28
+   RemoteCommand screen -x ssh-persistent-remote || screen -S ssh-persistent-remote
+   RequestTTY yes

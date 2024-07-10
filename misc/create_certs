@@ -3,6 +3,7 @@
 
 basedir="$(readlink -f $(dirname $0)/../)"
 subject="/C=DE/ST=Berlin/L=Berlin/O=OSBA e.V./OU=Fake CA"
+password="dummypassword"
 
 cd $basedir  || exit 1
 
@@ -13,12 +14,12 @@ create_cert(){
    local domain="$(awk -v "type=${key}" '$0 ~ type{print $2}' environments/kolla/configuration.yml)"
    echo "CREATE SERVER CERT: $key -> $domain"
    set -xe
-   openssl genpkey -algorithm RSA -out secrets/${key}.key -pkeyopt rsa_keygen_bits:4096 
+   openssl genpkey -algorithm RSA -out secrets/${key}.key -pkeyopt rsa_keygen_bits:4096
    openssl req -new -key secrets/${key}.key -out secrets/${key}.csr \
       -subj "${subject}/CN=${domain}" 
    openssl x509 -req -in secrets/${key}.csr -CA secrets/ca.crt -CAkey secrets/ca.key -CAcreateserial \
       -out secrets/${key}.crt -days 730 -sha256 \
-      -extfile secrets/server_cert.cnf -extensions v3_req -passin pass:dummypassword
+      -extfile secrets/server_cert.cnf -extensions v3_req -passin pass:${password}
    cat secrets/${key}.key secrets/${key}.crt > $target_path
    openssl x509 -in $target_path -text -noout|head -20
    make ansible_vault_edit FILE=$target_path
@@ -30,8 +31,8 @@ create_cert(){
 create_ca(){
    echo "CREATE CA CERT"
    set -xe
-   openssl genpkey -algorithm RSA -out secrets/ca.key -aes256 -pass pass:dummypassword -pkeyopt rsa_keygen_bits:4096
-   openssl req -x509 -new -key secrets/ca.key -sha256 -days 3650 -out secrets/ca.crt -passin pass:dummypassword  -subj "/C=DE/ST=Berlin/L=Berlin/O=OSBA e.V./OU=Fake CA"
+   openssl genpkey -algorithm RSA -out secrets/ca.key -aes256 -pass pass:${password} -pkeyopt rsa_keygen_bits:4096
+   openssl req -x509 -new -key secrets/ca.key -sha256 -days 3650 -out secrets/ca.crt -passin pass:${password}  -subj "/C=DE/ST=Berlin/L=Berlin/O=OSBA e.V./OU=Fake CA"
    cat > secrets/server_cert.cnf << 'EOF'
 [ v3_req ]
 basicConstraints = CA:FALSE
@@ -54,6 +55,7 @@ certificates_ca:
 EOF
    cat secrets/ca.crt |sed '~s,^,       ,'
    ) > environments/secrets-ca.yml
+   make ansible_vault_edit FILE=environments/secrets-ca.yml
    git add environments/secrets-ca.yml
    set +xe
 }
