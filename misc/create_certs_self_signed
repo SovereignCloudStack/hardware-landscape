@@ -31,8 +31,13 @@ create_cert(){
 create_ca(){
    echo "CREATE CA CERT"
    set -xe
-   openssl genpkey -algorithm RSA -out secrets/ca.key -aes256 -pass pass:${password} -pkeyopt rsa_keygen_bits:4096
-   openssl req -x509 -new -key secrets/ca.key -sha256 -days 3650 -out secrets/ca.crt -passin pass:${password}  -subj "/C=DE/ST=Berlin/L=Berlin/O=OSBA e.V./OU=Fake CA"
+   openssl genpkey -algorithm RSA \
+      -out secrets/ca.key -aes256 \
+      -pass pass:${password} -pkeyopt rsa_keygen_bits:4096
+   openssl req -x509 -new \
+      -key secrets/ca.key -sha256 -days 3650 \
+      -out secrets/ca.crt -passin pass:${password} \
+      -subj "/C=DE/ST=Berlin/L=Berlin/O=OSBA e.V./OU=Fake CA"
    cat > secrets/server_cert.cnf << 'EOF'
 [ v3_req ]
 basicConstraints = CA:FALSE
@@ -58,12 +63,15 @@ manager_environment_extra:
   REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
 EOF
 
-   cat > environments/kolla/configuration-ca.yml <<EOF
+   mkdir -p environments/kolla/group_vars/generic/
+   cat > environments/kolla/group_vars/generic/ca.yml <<EOF
 kolla_copy_ca_into_containers: "yes"
 openstack_cacert: /etc/ssl/certs/ca-certificates.crt
 EOF
 
-   git add environments/secrets-ca.yml environments/manager/configuration-ca.yml  environments/kolla/configuration-ca.yml
+   git add environments/secrets-ca.yml \
+      environments/manager/configuration-ca.yml \
+      environments/kolla/group_vars/generic/ca.yml
    set +xe
 }
 

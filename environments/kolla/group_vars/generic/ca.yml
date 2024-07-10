@@ -1,0 +1,2 @@
+kolla_copy_ca_into_containers: "yes"
+openstack_cacert: /etc/ssl/certs/ca-certificates.crt
