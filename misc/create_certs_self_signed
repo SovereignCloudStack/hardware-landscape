@@ -59,9 +59,9 @@ certificates_ca:
     certificate: |
 EOF
    cat secrets/ca.crt |sed '~s,^,       ,'
-   ) >  inventory/group_vars/generic/ca.yml
-   make ansible_vault_edit FILE=inventory/group_vars/generic/ca.yml
-   git add inventory/group_vars/generic/ca.yml
+   ) >  inventory/group_vars/generic/99_ca.yml
+   make ansible_vault_edit FILE=inventory/group_vars/generic/99_ca.yml
+   git add inventory/group_vars/generic/99_ca.yml
    set +xe
 }
 
