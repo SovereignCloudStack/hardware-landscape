@@ -106,3 +106,8 @@ endif
 	else \
 		${venv} && ansible-vault create --vault-password-file ${VAULTPASS_FILE} ${FILE}; \
 	fi
+
+
+.PHONY: ansible_vault_encrypt_string
+ansible_vault_encrypt_string: deps check_vault_pass
+		@${venv} && ansible-vault encrypt_string --vault-password-file ${VAULTPASS_FILE}
