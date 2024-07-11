@@ -102,6 +102,7 @@ EOF
 
 if [ "$1" = "add" ];then
    create_ca
+   chmod 770 environments/kolla/certificates/
    create_cert environments/kolla/certificates/haproxy.pem kolla_external_fqdn
    create_cert environments/kolla/certificates/haproxy-internal.pem kolla_internal_fqdn
    echo "SUCCESS"
