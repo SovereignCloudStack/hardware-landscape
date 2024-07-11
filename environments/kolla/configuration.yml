@@ -88,3 +88,7 @@ keystone_logout_url: "https://api.testbed.osism.xyz/auth/"
 # other
 
 enable_proxysql: no
+# BEGIN: TLS
+kolla_copy_ca_into_containers: "yes"
+openstack_cacert: /etc/ssl/certs/ca-certificates.crt
+# END: TLS
