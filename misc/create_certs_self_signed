@@ -35,9 +35,11 @@ create_cert(){
    openssl genpkey -algorithm RSA -out secrets/${key}.key -pkeyopt rsa_keygen_bits:4096
    openssl req -new -key secrets/${key}.key -out secrets/${key}.csr \
       -subj "${subject}/CN=${domain}" 
+   sed "~s,your_common_name,$domain," ${server_cnf} > ${server_cnf}.new
+
    openssl x509 -req -in secrets/${key}.csr -CA secrets/ca.crt -CAkey secrets/ca.key -CAcreateserial \
       -out secrets/${key}.crt -days 730 -sha256 \
-      -extfile ${server_cnf} -extensions v3_req -passin pass:${password}
+      -extfile ${server_cnf}.new -extensions v3_req -passin pass:${password}
    cat secrets/${key}.key secrets/${key}.crt > $target_path
    openssl x509 -in $target_path -text -noout|head -20
    make ansible_vault_edit FILE=$target_path
@@ -81,7 +83,7 @@ manager_environment_extra:
   REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
 EOF
    modify_yaml $tmpfile environments/manager/configuration.yml
-   mkdir -m 770 environments/kolla/certificates/ca/
+   mkdir -p -m 770 environments/kolla/certificates/ca/
    cp secrets/ca.crt environments/kolla/certificates/ca/custom.crt
    make ansible_vault_edit FILE=environments/kolla/certificates/ca/custom.crt
 
