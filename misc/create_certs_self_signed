@@ -81,8 +81,9 @@ manager_environment_extra:
   REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
 EOF
    modify_yaml $tmpfile environments/manager/configuration.yml
-   cp secrets/ca.crt environments/kolla/certificates/ca.crt
-   make ansible_vault_edit FILE=environments/kolla/certificates/ca.crt
+   mkdir -m 770 environments/kolla/certificates/ca/
+   cp secrets/ca.crt environments/kolla/certificates/ca/custom.crt
+   make ansible_vault_edit FILE=environments/kolla/certificates/ca/custom.crt
 
    cat > $tmpfile <<EOF
 kolla_copy_ca_into_containers: "yes"
@@ -92,7 +93,7 @@ EOF
 
    for filename in  environments/configuration.yml \
       environments/manager/configuration.yml \
-      environments/kolla/certificates/ca.crt \
+      environments/kolla/certificates/ca/custom.crt \
       environments/kolla/configuration.yml
    do
       chmod 660 $filename
