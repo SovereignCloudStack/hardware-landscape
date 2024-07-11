@@ -106,10 +106,7 @@ Please just add issues to this project with hints or directly [contact me](https
 * Create and configure certificates
   (creates an configure the certificates as described in the [loadbalancer documentation](https://osism.tech/docs/guides/configuration-guide/loadbalancer))
   ```
-  misc/create_certs_self_signed
-  # Use this if you change the certificates later
-  # osism apply certificates
-  # osism apply loadbalancer
+  misc/create_certs_self_signed.sh add
   ```
 * Set basic system time to prevent problems with apt and signatures
   based on a http request to www.google.com.
