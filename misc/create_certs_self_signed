@@ -41,6 +41,7 @@ create_cert(){
    cat secrets/${key}.key secrets/${key}.crt > $target_path
    openssl x509 -in $target_path -text -noout|head -20
    make ansible_vault_edit FILE=$target_path
+   chmod 660 $target_path
    git add $target_path
    set +xe
 }
@@ -89,11 +90,14 @@ openstack_cacert: /etc/ssl/certs/ca-certificates.crt
 EOF
    modify_yaml $tmpfile environments/kolla/configuration.yml
 
-   git add  \
-      environments/configuration.yml \
+   for filename in  environments/configuration.yml \
       environments/manager/configuration.yml \
       environments/kolla/certificates/ca.crt \
       environments/kolla/configuration.yml
+   do
+      chmod 660 $filename
+      git add $filename
+   done
 }
 
 if [ "$1" = "add" ];then
