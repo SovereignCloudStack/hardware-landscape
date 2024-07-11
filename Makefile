@@ -10,10 +10,10 @@ ifeq (,$(wildcard ${VAULTPASS_FILE}))
         $(shell echo "docker exec osism-ansible /ansible-vault.py" >> ${VAULTPASS_FILE})
         $(shell chmod +x ${VAULTPASS_FILE})
     else
-        $(info  INFO: the file VAULTPASS_FILE='${VAULTPASS_FILE}' does not exist and no running 'osism-ansible' container)
+        $(shell echo "INFO: the file VAULTPASS_FILE='${VAULTPASS_FILE}' does not exist and no running 'osism-ansible' container" >&2)
     endif
 else
-    $(info INFO: ${VAULTPASS_FILE} exists, using the vault password defined in the file)
+    $(shell echo "INFO: ${VAULTPASS_FILE} exists, using the vault password defined in the file" >&2)
 endif
 
 

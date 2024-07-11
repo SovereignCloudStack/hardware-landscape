@@ -106,7 +106,7 @@ Please just add issues to this project with hints or directly [contact me](https
 * Create and configure certificates
   (creates an configure the certificates as described in the [loadbalancer documentation](https://osism.tech/docs/guides/configuration-guide/loadbalancer))
   ```
-  misc/create_certs_self_signed
+  misc/create_certs_self_signed add
   # Use this if you change the certificates later
   # osism apply certificates
   # osism apply loadbalancer
