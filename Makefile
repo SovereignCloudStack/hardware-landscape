@@ -43,7 +43,7 @@ check_vault_pass:
 ansible_vault_encrypt_ceph_keys: deps check_vault_pass
 	 @${venv} ; find . -name "ceph.client.*.keyring"|while read FILE; do \
 	 echo "-> $${FILE}"; \
-	 if ! ( grep -q ANSIBLE_VAULT $${FILE} );then \
+	 if ! ( grep -q "^.ANSIBLE_VAULT" $${FILE} );then \
 		ansible-vault encrypt $${FILE} --output $${FILE}.vaulted --vault-password-file ${VAULTPASS_FILE} && \
 		mv $${FILE}.vaulted $${FILE}; \
 	 fi \
@@ -53,7 +53,7 @@ ansible_vault_encrypt_ceph_keys: deps check_vault_pass
 ansible_vault_decrypt_ceph_keys: deps check_vault_pass
 	 @${venv} ; find . -name "ceph.client.*.keyring"|while read FILE; do \
 	 echo "-> $${FILE}"; \
-	 if ( grep -q ANSIBLE_VAULT $${FILE} );then \
+	 if ( grep -q "^.ANSIBLE_VAULT" $${FILE} );then \
 		ansible-vault decrypt $${FILE} --output $${FILE}.unvaulted --vault-password-file ${VAULTPASS_FILE} && \
 		mv $${FILE}.unvaulted $${FILE}; \
 	 fi \
@@ -72,7 +72,7 @@ ansible_vault_rekey: deps check_vault_pass
 	@echo "INFO: creating a backup"
 	cp ${VAULTPASS_FILE} ${VAULTPASS_FILE}_backup_$(shell date --date="today" "+%Y-%m-%d_%H-%M-%S"); \
 	@echo "INFO: perform rekeying"
-	${venv} && find environments/ inventory/ -name "*.yml" -not -path "*/.venv/*" -exec grep -l ANSIBLE_VAULT {} \+|\
+	${venv} && find environments/ inventory/ -name "*.yml" -not -path "*/.venv/*" -exec grep -l '^.ANSIBLE_VAULT' {} \+|\
 		sort -u|\
 		xargs -n 1 --verbose ansible-vault rekey  -v \
 		--vault-password-file ${VAULTPASS_FILE} \
@@ -83,10 +83,10 @@ ansible_vault_rekey: deps check_vault_pass
 .PHONY: ansible_vault_show
 ansible_vault_show: deps check_vault_pass
 ifndef FILE
-	$(error FILE variable is not set, example 'make ansible_vault_edit FILE=environments/secrets.yml' or 'make ansible_vault_edit FILE=all')
+	$(error FILE variable is not set, example 'make ansible_vault_edit FILE=environments/secrets.yml' or 'make ansible_vault_show FILE=all')
 endif
 	@if [ "${FILE}" = "all" ] ; then \
-		${venv} && find environments/ inventory/ -name "*.yml" -and -not -path "*/.venv/*" -exec grep -l ANSIBLE_VAULT {} \+|\
+		${venv} && find environments/ inventory/ -name "*.yml" -and -not -path "*/.venv/*" -exec grep -l '^.ANSIBLE_VAULT' {} \+|\
 			sort -u|\
 			xargs -n 1 --verbose ansible-vault view --vault-password-file ${VAULTPASS_FILE} 2>&1 | less;\
 	else \
