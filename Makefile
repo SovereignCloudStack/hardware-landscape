@@ -8,7 +8,6 @@ ifeq (,$(wildcard ${VAULTPASS_FILE}))
         VAULTPASS_FILE := ${PWD}/secrets/vaultpass-wrapper.sh
         $(shell echo "#!/usr/bin/env bash" > ${VAULTPASS_FILE})
         $(shell echo "docker exec osism-ansible /ansible-vault.py" >> ${VAULTPASS_FILE})
-        $(shell chmod +x ${VAULTPASS_FILE})
     else
         $(shell echo "INFO: the file VAULTPASS_FILE='${VAULTPASS_FILE}' does not exist and no running 'osism-ansible' container" >&2)
     endif
