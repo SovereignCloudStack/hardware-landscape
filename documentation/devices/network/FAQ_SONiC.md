@@ -401,7 +401,7 @@ cat > /etc/resolv.conf << 'EOF'
 nameserver 8.8.8.8
 nameserver 9.9.9.9
 
-search mgmt.sovereignit.de
+search mgmt.landscape.scs.community
 EOF
 
 
