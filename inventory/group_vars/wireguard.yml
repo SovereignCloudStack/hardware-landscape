@@ -20,3 +20,6 @@ wireguard_users:
   - name: bitkeks
     key: i5zuiuEhpRQiXTEgeDjfWCPnKCxx9SpaxpLKjZsgok8=
     ip: 10.10.1.23
+  - name: fkr
+    key: 0CcpoKi2d+fYeeIQutKWZ4nHc4fKyULjQBwMzAidiT4=
+    ip: 10.10.1.24
