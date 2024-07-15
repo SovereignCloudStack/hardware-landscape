@@ -13,7 +13,6 @@ clouds:
     auth:
       username: octavia
       project_name: service
-      #auth_url: https://api.zone1.landscape.scs.community:5000/v3
       auth_url: https://api.zone1.landscape.scs.community:5000/v3
       project_domain_name: default
       user_domain_name: default

@@ -21,7 +21,7 @@ proxy_proxies:
 proxy_env:
   HTTP_PROXY: "http://{{ groups['manager'][0] }}:8888"
   HTTPS_PROXY: "http://{{ groups['manager'][0] }}:8888"
-  NO_PROXY: "*.zone1.landscape.scs.community,*.landscape.landscape.scs.community,10.10.21.0/24"
+  NO_PROXY: "*.zone1.landscape.scs.community,*.landscape.scs.community,10.10.21.0/24"
 
 ##########################################################
 # proxy/server
