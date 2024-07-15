@@ -69,27 +69,30 @@ The main goals of this environment are:
 ### Zone 1 Environment
 
 :::info
+
 This is list is incomplete.
+
 :::
 
 | Name                     | URL                                                        | Username     | Password Key                   | Note            |
 |:-------------------------|:-----------------------------------------------------------|:-------------|:------------------------------ |:----------------|
-| ARA                      | https://ara.zone1.landscape.scs.community                  | ara          | ara_password                   |                 |
-| Ceph                     | https://api-int.zone1.landscape.scs.community:8140         | admin        |                                |                 |
+| Horizon (via Keystone)   | https://api.zone1.landscape.scs.community                  | admin        | keystone_admin_password        | domain: default |
+| Horizon (via Keystone)   | https://api-internal.zone1.landscape.scs.community         | admin        | keystone_admin_password        | domain: default |
+| ARA                      | https://ara.zone1.landscape.scs.community:8120             | ara          | ara_password                   |                 |
+| Ceph                     | https://api-internal.zone1.landscape.scs.community:8140    | admin        |                                |                 |
 | Flower                   | https://flower.zone1.landscape.scs.community               |              |                                |                 |
-| Grafana                  | https://api-int.zone1.landscape.scs.community:3000         | admin        | grafana_admin_password         |                 |
+| Grafana                  | https://api-internal.zone1.landscape.scs.community:3000    | admin        | grafana_admin_password         |                 |
 | HAProxy (testbed-node-0) | http://testbed-node-0.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
 | HAProxy (testbed-node-1) | http://testbed-node-1.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
 | HAProxy (testbed-node-2) | http://testbed-node-2.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
 | Homer                    | https://homer.zone1.landscape.scs.community                |              |                                |                 |
-| Horizon (via Keystone)   | https://api.zone1.landscape.scs.community                  | admin        | keystone_admin_password        | domain: default |
 | Keycloak                 | https://keycloak.zone1.landscape.scs.community/auth        | admin        |                                |                 |
 | Netbox                   | https://netbox.zone1.landscape.scs.community               | admin        | password                       |                 |
 | Netdata                  | http://testbed-manager.zone1.landscape.scs.community:19999 |              |                                |                 |
 | Nexus                    | https://nexus.zone1.landscape.scs.community                | admin        |                                |                 |
 | OpenSearch Dashboards    | https://api.zone1.landscape.scs.community:5601             | opensearch   | opensearch_dashboards_password |                 |
-| Prometheus               | https://api-int.zone1.landscape.scs.community:9091         | admin        |                                |                 |
-| RabbitMQ                 | https://api-int.zone1.landscape.scs.community:15672        | openstack    | rabbitmq_password              |                 |
+| Prometheus               | https://api-internal.zone1.landscape.scs.community:9091    | admin        |                                |                 |
+| RabbitMQ                 | https://api-internal.zone1.landscape.scs.community:15672   | openstack    | rabbitmq_password              |                 |
 | phpMyAdmin               | https://phpmyadmin.zone1.landscape.scs.community           | root         |                                |                 |
 
 You can gather the passwords using the following command:
