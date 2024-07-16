@@ -11,6 +11,10 @@ traefik_enable: true
 docker_configure_proxy: true
 docker_proxy_http: "http://{{ groups['manager'][0] }}:8888"
 docker_proxy_https: "http://{{ groups['manager'][0] }}:8888"
+docker_proxy_no_proxy_extra:
+  - "*.zone1.landscape.scs.community"
+  - "*.landscape.scs.community"
+  - "10.10.21.0/24"
 
 # apt
 proxy_proxies:
