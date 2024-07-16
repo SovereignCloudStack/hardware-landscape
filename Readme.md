@@ -1,6 +1,40 @@
-# Documentation of the VP18 Environment
+# Documentation of the SCS Hardware Landscape
 
-## Overview
+## Purpose of this repository
+
+This Git repository documents, configures and automates the management and setup of the Sovereign Cloud Stack hardware environment.
+This environment is build in the context of the VP18 project workpackage and in running at a colocation of [JH Computers](https://jh-computers.de/).
+
+The main goals of this environment are:
+
+* Runtime environment for the blueprint of the "SCS Turnkey Solution"
+  * Run, test and demontrate all components
+  * Demonstration showroom for interested parties
+    (A blueprint for potential SCS operators to get an idea of the OSISM setup)
+  * Training and demonstration environment
+  * Testing of new releases
+    (Environment for the future execution of QA tests)
+  * Reproduce and analyze production problems on a real system
+  * Develop and test topics that can only be analyzed, tested or reproduced on a real system
+  * Dogfooding / continuous operation with real workload
+  * Develop operational procdures
+  * Develop and test certification tests
+* Provide a network testing lab for:
+  * Switch/network automation
+  * Sonic packaging
+  * Evaluating network architecture concepts
+  * Test environment to evaluate and test concepts and implementations in layer-3 underlay networking with SONiC
+  * Test environment to evaluate and test improvements to the monitoring stack
+* Run a "production-like" experimentation and testing plattform
+
+## A visual impression
+
+<div style="display: flex">
+    <img src="documentation/assets/rack/rack_frontside.JPG" style="width: 45%;" >&nbsp;
+    <img src="documentation/assets/rack/rack_backside.JPG" style="width: 45%;" />
+</div>
+
+## References
 
 * Standards
   * [Hostname Naming](documentation/standards/Hostname_Naming.md)
@@ -30,35 +64,38 @@
         * [Supermicro A2SDV-4C-LN8F](documentation/devices/servers/Supermicro_A2SDV-4C-LN8F.md)
         * [Supermicro A2SDV-8C-LN8F](documentation/devices/servers/Supermicro_A2SDV-8C-LN8F.md)
 
-## A visual impression
+## Environment Links
 
-<div style="display: flex">
-    <img src="documentation/assets/rack/rack_frontside.JPG" style="width: 45%;" /> <img src="documentation/assets/rack/rack_backside.JPG" style="width: 45%;" />
-</div>
+### Zone 1 Environment
 
-## What describes this repository?
+:::info
 
-This repository describes the envrionment build for VP18.
-VP18 runs a hardware environment in a colocation located at [JH Computers](https://jh-computers.de/).
+This is list is incomplete.
 
-The main goals of this environment are:
+:::
 
-* Provide a network testing lab for:
-  * Switch/network automation
-  * Sonic packaging
-  * Evaluating network architecture concepts
-  * Test environment to evaluate and test concepts and implementations in layer-3 underlay networking with SONiC
-  * Test environment to evaluate and test improvements to the monitoring stack
-* Run a "production-like" experimentation and testing plattform
-  * Demonstration showroom for interested parties
-    (A blueprint for potential SCS operators to get an idea of the OSISM setup)
-  * Training and demonstration environment
-  * Testing of new releases
-    (Environment for the future execution of QA tests)
-  * Reproduce and analyze production problems on a real system
-  * Develop and test topics that can only be analyzed, tested or reproduced on a real system
-  * Dogfooding / continuous operation with real workload
-  * Develop operational procdures
-  * Develop and test certification tests
+| Name                     | URL                                                        | Username     | Password Key                   | Note            |
+|:-------------------------|:-----------------------------------------------------------|:-------------|:------------------------------ |:----------------|
+| Horizon (via Keystone)   | https://api.zone1.landscape.scs.community                  | admin        | keystone_admin_password        | domain: default |
+| Horizon (via Keystone)   | https://api-internal.zone1.landscape.scs.community         | admin        | keystone_admin_password        | domain: default |
+| ARA                      | https://ara.zone1.landscape.scs.community:8120             | ara          | ara_password                   |                 |
+| Ceph                     | https://api-internal.zone1.landscape.scs.community:8140    | admin        |                                |                 |
+| Flower                   | https://flower.zone1.landscape.scs.community               |              |                                |                 |
+| Grafana                  | https://api-internal.zone1.landscape.scs.community:3000    | admin        | grafana_admin_password         |                 |
+| HAProxy (testbed-node-0) | http://testbed-node-0.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
+| HAProxy (testbed-node-1) | http://testbed-node-1.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
+| HAProxy (testbed-node-2) | http://testbed-node-2.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
+| Homer                    | https://homer.zone1.landscape.scs.community                |              |                                |                 |
+| Keycloak                 | https://keycloak.zone1.landscape.scs.community/auth        | admin        |                                |                 |
+| Netbox                   | https://netbox.zone1.landscape.scs.community               | admin        | password                       |                 |
+| Netdata                  | http://testbed-manager.zone1.landscape.scs.community:19999 |              |                                |                 |
+| Nexus                    | https://nexus.zone1.landscape.scs.community                | admin        |                                |                 |
+| OpenSearch Dashboards    | https://api.zone1.landscape.scs.community:5601             | opensearch   | opensearch_dashboards_password |                 |
+| Prometheus               | https://api-internal.zone1.landscape.scs.community:9091    | admin        |                                |                 |
+| RabbitMQ                 | https://api-internal.zone1.landscape.scs.community:15672   | openstack    | rabbitmq_password              |                 |
+| phpMyAdmin               | https://phpmyadmin.zone1.landscape.scs.community           | root         |                                |                 |
 
-
+You can gather the passwords using the following command:
+```
+make ansible_vault_show FILE=all|grep "<Password Key>:"
+```
