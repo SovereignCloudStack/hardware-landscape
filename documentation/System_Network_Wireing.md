@@ -45,6 +45,7 @@
 | st01-sw1g-r01-u47    | Ethernet4     | st01-sw1g-r01-u33   | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet5     | st01-sw1g-r01-u33   | Ethernet0     | RJ45/1GBE    | SPINE-UPSTREAM2  |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet9     | st01-mgmt-r01-u30   | eno6          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
+| st01-sw1g-r01-u47    | Ethernet10    | st01-mgmt-r01-u31   | eno6          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
@@ -220,6 +221,7 @@ sudo config interface startup Ethernet52,Ethernet56,PortChannel02
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-mgmt-r01-u30    | eno2          | S1-S48-MR           | Port37        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT     |
+#TODO| st01-mgmt-r01-u31    | eno2          | S1-S48-MR           | Port37        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT     |
 | st01-gw-r01-u46      | eno2          | S1-S48-MR           | Port48        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT     |
 
 # TODO: Not yet completly configured
