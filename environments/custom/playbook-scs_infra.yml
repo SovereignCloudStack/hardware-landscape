@@ -3,15 +3,7 @@
   hosts: manager
   become: true
   roles:
-    - osism.commons.motd
-    - osism.services.squid
-    - osism.services.wireguard
-    - scs-dnscrypt
-    - scs-landscape-nodes
     - scs-mgr-dhcpd
-    - scs-mgr-httpd
-    - scs-mgr-samba
-    - scs-mgr-tinyproxy
 
 - name: Assign roles to infrastructure hosts
   hosts: manager-infra

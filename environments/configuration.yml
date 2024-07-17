@@ -66,6 +66,12 @@ dnscrypt_cloaks:
 apiserver_endpoint: "10.10.21.202"
 metal_lb_ip_range: "10.10.21.220-10.10.21.239"
 
+k3s_interface: "dummy0"
+kube_vip_iface: "dummy0"
+calico_iface: "dummy0"
+flannel_iface: "dummy0"
+cilium_iface: "dummy0"
+
 #metal_lb_type: "frr"
 #metal_lb_mode: "bgp"
 
