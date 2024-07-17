@@ -3,25 +3,25 @@
   hosts: manager
   become: true
   roles:
-    - scs-mgr-dhcpd
-    - osism.services.squid
     - osism.commons.motd
-    - scs-landscape-nodes
-    - scs-mgr-samba
-    - scs-mgr-httpd
-    - scs-mgr-tinyproxy
+    - osism.services.squid
+    - osism.services.wireguard
     - scs-dnscrypt
-    - wireguard
+    - scs-landscape-nodes
+    - scs-mgr-dhcpd
+    - scs-mgr-httpd
+    - scs-mgr-samba
+    - scs-mgr-tinyproxy
 
-- name: Assign roles to bastion hosts
+- name: Assign roles to infrastructure hosts
   hosts: manager-infra
   become: true
   roles:
     - osism.commons.motd
-    - scs-landscape-nodes
-    - scs-mgr-dhcpd
-    - scs-landscape-nodes
-    - scs-mgr-tinyproxy
+    - osism.services.squid
+    - osism.services.wireguard
     - scs-dnscrypt
-    - wireguard
-
+    - scs-landscape-nodes
+    - scs-mgr-httpd
+    - scs-mgr-samba
+    - scs-mgr-tinyproxy

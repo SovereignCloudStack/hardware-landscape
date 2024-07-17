@@ -45,6 +45,12 @@ logical_volumes:
     force: true
   - lv: 'docker'
     vg: 'system'
-    size: '100G'
+    size: '150G'
     resizefs: true
     force: true
+  - lv: 'home'
+    vg: 'system'
+    size: '50G'
+    resizefs: true
+    force: true
+

@@ -4,7 +4,7 @@
 # In this file any own inventory groups can be defined,
 # which do not exist yet.
 
-[bastion]
+[manager-infra]
 st01-mgmt-r01-u31
 
 [network-switches]
