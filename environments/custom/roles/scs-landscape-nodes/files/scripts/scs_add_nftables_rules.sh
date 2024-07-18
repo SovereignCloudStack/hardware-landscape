@@ -1,41 +1,27 @@
 #!/bin/bash
 
-add_rule(){
-   local POS_WANTED="$1"
-   local RULE="$2"
-   local RULE_MARKER="$3"
-   local RULE_EXISTS="false"
-   local OUTDATED_RULES_HANDLES=""
 
-   while read RULE_HANDL POS;
-   do
-      if ( [ "$POS" = "${POS_WANTED}" ] && [ "$1" != "force" ] );then
-         RULE_EXISTS="true"
-      else
-         OUTDATED_RULES_HANDLES="$RULE_HANDL $OUTDATED_RULES_HANDLES"
-      fi
-   done < <(nft -a list chain nat POSTROUTING|awk -v "marker=$RULE_MARKER" '
-      BEGIN{ pos=-1; }
-      $0 ~ marker {printf("%s %s\n",$(NF),pos); }
-      /# handle [0-9][0-9]*/{ pos++; }'
-   )
+OLD_RULES="$(nft -a list chain nat POSTROUTING|awk -v "marker=SCS-MASQ" '$0 ~ marker {printf("%s ",$(NF)); }')"
 
-   if ( [ "$FORCE" = "force" ] || [ "$RULE_EXISTS" != "true" ] );then
-      echo "adding rule to position ${POS_WANTED}"|logger -s -t scs_add_netfilter_rules
-      nft insert rule "ip nat POSTROUTING position ${POS_WANTED} limit rate 30/minute log prefix $RULE_MARKER $RULE"
-   else
-      echo "rule already on position ${POS_WANTED}"|logger -s -t scs_add_netfilter_rules
-   fi
+LOG=''
+if [ "$1" = "log" ];then
+   LOG='log prefix "SCS-MASQ "'
+fi
 
+mkdir -p /var/backups/nft
+nft list ruleset > /var/backups/nft/nft-`date --date="today" "+%Y-%m-%d_%H-%M-%S"`.nft
+find /var/backups/nft -mtime +30 -type f -delete
 
-   for RULE_HANDL in $OUTDATED_RULES_HANDLES;
-   do
-      echo "removing handle $RULE_HANDL"|logger -s -t scs_add_netfilter_rules
-      nft delete rule nat POSTROUTING handle $RULE_HANDL
-   done
-}
+set -x 
+nft "insert rule ip nat POSTROUTING position 0 $LOG ip saddr 172.31.100.0/23 ip daddr 10.10.21.0/24 snat to 10.10.21.10 comment SCS-MASQ"
+nft "insert rule ip nat POSTROUTING position 0 $LOG ip saddr 172.31.100.0/23 ip daddr 10.10.22.0/24 snat to 10.10.21.1 comment SCS-MASQ"
+nft "insert rule ip nat POSTROUTING position 0 $LOG ip saddr 172.31.100.0/23 ip daddr 10.10.23.0/24 snat to 10.10.23.254 comment SCS-MASQ"
+nft "insert rule ip nat POSTROUTING position 0 $LOG ip saddr 10.10.1.0/24 ip daddr 10.10.21.0/24 snat to 10.10.21.10 comment SCS-MASQ"
+nft "insert rule ip nat POSTROUTING position 0 $LOG ip saddr 10.10.1.0/24 ip daddr 10.10.22.0/24 snat to 10.10.21.1 comment SCS-MASQ"
+nft "insert rule ip nat POSTROUTING position 0 $LOG ip saddr 10.10.1.0/24 ip daddr 10.10.23.0/24 snat to 10.10.23.254 comment SCS-MASQ"
+set +x
+for rule in $OLD_RULES; do
+   echo "remove rule with handle $rule"
+   nft delete rule nat POSTROUTING handle $rule
+done
 
-FORCE="${1:-add}"
-
-add_rule 0 'ip saddr { 172.31.100.0/23, 10.10.1.0/24 } ip daddr 10.10.21.0/24 snat to 10.10.21.10' SCS-MASQINT
-add_rule 1 'ip saddr { 172.31.100.0/23, 10.10.1.0/24 } ip daddr 10.10.23.0/24 snat to 10.10.23.254' SCS_MASQMGMT
