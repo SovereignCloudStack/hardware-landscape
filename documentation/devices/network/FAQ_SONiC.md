@@ -398,14 +398,14 @@ HOSTN="$(hostname)"
 IP="$(ip --json  addr ls eth0|jq -r '.[0].addr_info[] | select(.family == "inet").local')"
 
 cat > /etc/resolv.conf << 'EOF'
-nameserver 8.8.8.8
-nameserver 9.9.9.9
+nameserver 10.10.23.254
+nameserver 10.10.23.253
 
 search mgmt.landscape.scs.community
 EOF
 
 
-config interface ip add eth0 ${IP}/24 10.10.23.1
+config interface ip add eth0 ${IP}/24 10.10.23.254
 show management_interface address
 
 sudo config feature autorestart dhcp_relay disabled
@@ -415,15 +415,12 @@ sudo show feature config dhcp_relay
 INTERFACES="$(show interfaces status|awk '$9 ~ "up" {print $1}'|grep -v "Ethernet0"|tr '\n' ',')"
 config interface shutdown $INTERFACES
 
-config interface ip add eth0 ${IP}/24 10.10.23.1
-
 config hostname $HOSTN
 
-config ntp add 192.53.103.103
-config ntp add 192.53.103.104
-config ntp add 192.53.103.108
+config ntp add 10.10.23.254
+config ntp add 10.10.23.253
 
-config syslog add 10.10.23.1
+config syslog add 10.10.23.254
 
 config snmp community replace public Eevaid7xoh4m
 config snmp community add lohz3kaG5ted RW
