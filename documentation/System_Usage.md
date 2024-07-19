@@ -18,14 +18,22 @@ of your local system to simplify access to systems of the vp18 hardware landscap
    Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_switches
    Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_general
 
-   Host scs-*
-       # Your github id
-       User ${GITHUB_ID:?}
+   Host scs-* !scs-manager !scs-manager1 !scs-manager2
+      ProxyJump scs-manager
+      # Your github id, use "osism" or "dragon" when your are in the
+      # installation process
+      User ${GITHUB_ID:?}
+
+   Host scs-manager scs-manager1 scs-manager2
+      # Your github id, use "osism" or "dragon" when your are in the
+      # installation process
+      User ${GITHUB_ID:?}
+
    EOF
 
    ```
-3. Optional, Admin: Update the SSH configuration
-  (this fetches host information from the documentation in [documentation/devices](./devices) and creates new ssh config snippets)
+3. **Optional**, Admin: Update the SSH configuration
+   (this fetches host information from the documentation in [documentation/devices](./devices) and creates new ssh config snippets)
    ```
    cd ${SCS_ENV_DIR:?}
    git pull
