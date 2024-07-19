@@ -1,6 +1,8 @@
 mgmt_interface: eno6
 external_interface: eno2
 
+mgmt_address_system: 10.10.23.254
+
 network_ethernets_extra:
   # Access to mangement network
   eno6:
