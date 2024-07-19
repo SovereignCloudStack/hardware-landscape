@@ -21,6 +21,10 @@ kolla_external_vip_address: 10.10.21.201
 kolla_enable_tls_external: "yes"
 kolla_enable_tls_internal: "yes"
 
+# Because we use a layer3 underlay, we disable keepalived
+# https://docs.openstack.org/kolla-ansible/latest/reference/high-availability/haproxy-guide.html
+enable_keepalived: no
+
 ##########################################################
 # openstack
 
