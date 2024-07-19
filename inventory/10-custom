@@ -5,6 +5,7 @@
 # which do not exist yet.
 
 [manager-infra]
+st01-mgmt-r01-u30
 st01-mgmt-r01-u31
 
 [network-switches]
