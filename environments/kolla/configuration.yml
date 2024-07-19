@@ -23,6 +23,12 @@ kolla_enable_tls_internal: "yes"
 
 # Because we use a layer3 underlay, we disable keepalived
 # https://docs.openstack.org/kolla-ansible/latest/reference/high-availability/haproxy-guide.html
+#
+# When already active
+# osism console --type clush control
+# >sudo systemctl disable kolla-keepalived-container.service
+# >sudo systemctl stop kolla-keepalived-container.service
+# >sudo systemctl status kolla-keepalived-container.service
 enable_keepalived: no
 
 ##########################################################
