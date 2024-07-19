@@ -29,5 +29,5 @@ motd_content: |
   * Review console output
     see /var/log/screen
 
-  You can distribute OS Images using the folder ~/public_html (make file world readable).
-  Download it using the following URI: http://{{ internal_address }}/~<userid>/<filename>
+  You can distribute OS Images using the folder /srv/www (make directory/file world readable).
+  You can download files from http://{{ mgmt_address_system }}:8080/.
