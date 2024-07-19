@@ -673,11 +673,17 @@
   "INTERFACE": {
     "Ethernet0": {},
     "Ethernet0|10.0.0.0/31": {},
+    "Ethernet100": {},
+    "Ethernet100|10.0.0.50/31": {},
     "Ethernet104": {},
     "Ethernet104|10.0.0.52/31": {},
     "Ethernet108": {},
     "Ethernet108|10.0.0.54/31": {},
+    "Ethernet112": {},
+    "Ethernet112|10.0.0.56/31": {},
     "Ethernet12": {},
+    "Ethernet124": {},
+    "Ethernet124|10.0.0.62/31": {},
     "Ethernet12|10.0.0.6/31": {},
     "Ethernet16": {},
     "Ethernet16|10.0.0.8/31": {},
@@ -722,7 +728,9 @@
     "Ethernet88|10.0.0.44/31": {},
     "Ethernet8|10.0.0.4/31": {},
     "Ethernet92": {},
-    "Ethernet92|10.0.0.46/31": {}
+    "Ethernet92|10.0.0.46/31": {},
+    "Ethernet96": {},
+    "Ethernet96|10.0.0.48/31": {}
   },
   "KDUMP": {
     "config": {
@@ -1334,37 +1342,6 @@
       "speed": "100000"
     }
   },
-  "PORTCHANNEL": {
-    "PortChannel02": {
-      "admin_status": "up",
-      "fast_rate": "false",
-      "lacp_key": "auto",
-      "min_links": "1",
-      "mtu": "9100"
-    },
-    "PortChannel04": {
-      "admin_status": "up",
-      "fast_rate": "false",
-      "lacp_key": "auto",
-      "min_links": "1",
-      "mtu": "9100"
-    },
-    "PortChannel05": {
-      "admin_status": "up",
-      "fast_rate": "false",
-      "lacp_key": "auto",
-      "min_links": "1",
-      "mtu": "9100"
-    }
-  },
-  "PORTCHANNEL_MEMBER": {
-    "PortChannel02|Ethernet100": {},
-    "PortChannel02|Ethernet96": {},
-    "PortChannel04|Ethernet112": {},
-    "PortChannel04|Ethernet116": {},
-    "PortChannel05|Ethernet120": {},
-    "PortChannel05|Ethernet124": {}
-  },
   "SNMP": {
     "LOCATION": {
       "Location": "public"
@@ -1468,22 +1445,6 @@
   "VERSIONS": {
     "DATABASE": {
       "VERSION": "version_4_0_3"
-    }
-  },
-  "VLAN": {
-    "Vlan24": {
-      "vlanid": "24"
-    }
-  },
-  "VLAN_MEMBER": {
-    "Vlan24|PortChannel02": {
-      "tagging_mode": "tagged"
-    },
-    "Vlan24|PortChannel04": {
-      "tagging_mode": "tagged"
-    },
-    "Vlan24|PortChannel05": {
-      "tagging_mode": "tagged"
     }
   }
 }
