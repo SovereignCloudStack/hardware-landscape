@@ -39,12 +39,15 @@
    ```
    VPN_KEYDIR="${HOME}/.vpn/scs_hardware_landscape"
    scp scs-manager:wg0-*.conf ${VPN_KEYDIR?}/wg.conf
-   sed -i "~s,CHANGEME.*,$(cat ${VPN_KEYDIR?}/wireguard_private.key)," "${VPN_KEYDIR?}/wg.conf"
+   scp scs-manager2:wg0-*.conf ${VPN_KEYDIR?}/wg2.conf
+   sed -i "~s,CHANGEME.*,$(cat ${VPN_KEYDIR?}/wireguard_private.key)," "${VPN_KEYDIR?}/wg.conf" "${VPN_KEYDIR?}/wg2.conf"
    ```
-6. User: Start/stop connection
+6. User: Test access - start/stop connection
    ```
    sudo apt-get install wireguard wireguard-tools # or something compareable for your system
    sudo wg-quick up "${VPN_KEYDIR?}/wg.conf"
    sudo wg-quick down "${VPN_KEYDIR?}/wg.conf"
+   sudo wg-quick up "${VPN_KEYDIR?}/wg2.conf"
+   sudo wg-quick down "${VPN_KEYDIR?}/wg2.conf"
    ```
 
