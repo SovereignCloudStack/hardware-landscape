@@ -9,11 +9,11 @@
   hosts: manager-infra
   become: true
   roles:
+    - osism.services.wireguard
+    - scs-landscape-nodes
     - osism.commons.motd
     - osism.services.squid
-    - osism.services.wireguard
     - scs-dnscrypt
-    - scs-landscape-nodes
     - scs-mgr-httpd
     - scs-mgr-samba
     - scs-mgr-tinyproxy

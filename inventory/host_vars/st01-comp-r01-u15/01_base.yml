@@ -45,4 +45,4 @@ network_ethernets_generated:
 
 
 # Merge extra configuration with the generated configuration
-network_ethernets: "{{ network_ethernets_generated | combine(network_ethernets_extra|default({}), recursive=True) }}"
+network_ethernets: "{{ network_ethernets_generated | combine(network_ethernets_extra|default({}), recursive=True, list_merge='append_rp') }}"
