@@ -9,37 +9,80 @@
   * Matrix on https://matrix.to/#/#sonic-net:matrix.org
   * Linkedin on https://www.linkedin.com/groups/12633489/
   * "Good lab environment and very active Discord community" on https://containerlab.dev/manual/kinds/
-
+  * A page, with guides and tutorials https://www.sonicnos.net
 
 # Playing / Testing
 
-* Sonic Software Switch
-  https://github.com/sonic-net/SONiC/wiki/SONiC-P4-Software-Switch seems to to be a valid functionality anymore
-  (https://github.com/sonic-net/SONiC/issues/1618)
+## Sonic Software images
 
-* A virtual machine : https://sonic.software/
-  ```
-  DIR="$(mktemp -d /tmp/sonic.XXXXX)
-  cd $DIR
-  wget https://sonic.software/download-gns3a.sh
-  chmod +x download-gns3a.sh
-  ./download-gns3a.sh master
+There are two reliable places to find SoNiC software images:
+* The output of the automated build pipeline that run in the [sonic-buildimage](https://github.com/sonic-net/sonic-buildimage) repository.
+  * The artifacts are located at https://sonic-build.azurewebsites.net/ui/sonic/Pipelines
+* An unofficial automatic index of the latest SONiC installation images: https://sonic.software/
 
-  qemu-system-x86_64 -machine q35 -m 4096 -smp 4 -hda sonic*.img \
-    -monitor telnet::45454,server,nowait \
-    -nographic -netdev user,id=sonic0,hostfwd=tcp::5555-:22 \
-    -device e1000,netdev=sonic0 -cpu host -accel kvm
+Find additional information about image sources and procedure on how to find the SONiC image in the Azure pipeline artifacts [here](https://containerlab.dev/manual/kinds/sonic-vm/#getting-sonic-images).
 
-  # Password admin / YourPaSsWoRd
-  ssh admin@localhost -p 5555
+## Sonic Software Switch (depreciated)
 
-  # Control QEMU:
-  telnet localhost 45454
+SoNiC wiki describes using the [SoNiC P4 Software switch](https://github.com/sonic-net/SONiC/wiki/SONiC-P4-Software-Switch),
+don't bother to try, this functionality has been depreciated but the Docs still exist, see also [#1618](https://github.com/sonic-net/SONiC/issues/1618). 
 
-  # Stop it the hard way
-  killall qemu-system-x86_64
-  ```
-* GNS3 Simulation environment: https://gns3.com/ (untested)
+## A virtual machine
+
+Download a SONiC VS KVM image, e.g. from https://sonic.software/
+```
+DIR="$(mktemp -d /tmp/sonic.XXXXX)
+cd $DIR
+wget https://sonic.software/download-gns3a.sh
+chmod +x download-gns3a.sh
+./download-gns3a.sh master
+
+qemu-system-x86_64 -machine q35 -m 4096 -smp 4 -hda sonic*.img \
+-monitor telnet::45454,server,nowait \
+-nographic -netdev user,id=sonic0,hostfwd=tcp::5555-:22 \
+-device e1000,netdev=sonic0 -cpu host -accel kvm
+
+# Password admin / YourPaSsWoRd
+ssh admin@localhost -p 5555
+
+# Control QEMU:
+telnet localhost 45454
+
+# Stop it the hard way
+killall qemu-system-x86_64
+```
+
+Note: Find an extended tutorial of building a VM virtual lab using the SONiC VS KVM image [here](https://www.sonicnos.net/content/tutorials/virtual_lab)
+
+## A docker container
+
+Download a SONiC VS docker image, e.g. from https://sonic.software/
+Find the tutorials [here](https://github.com/sonic-net/sonic-buildimage/blob/master/platform/vs/README.vsdocker.md) or [here](https://github.com/sonic-net/sonic-swss/blob/master/tests/README.md#setting-up-a-persistent-testbed)
+to build lightweight testbed environment of SONiC using docker (not tested).
+
+## GNS3 Simulation environment
+
+This section guides you to build a SONiC virtual lab on [GNS3](https://www.gns3.com/).
+Tutorial took inspiration from the following [blog post](https://pine-networks.com/blog/setting-up-sonic-on-gns3/) (note that the blog post is
+outdated and refers to the depreciated SoNiC P4 Software switch image).
+
+* Install and launch GNS3
+  * Select the installer for your favourite OS: https://www.gns3.com/software/download
+* Download a VS SONiC image, refer to [Sonic Software images](#sonic-software-images)
+  * A convenient way how to download and extract the image and also create GNS3 appliance file is via the 
+    download script available at https://sonic.software/download-gns3a.sh
+    ```bash
+    wget https://sonic.software/download-gns3a.sh
+    chmod +x download-gns3a.sh
+    ./download-gns3a.sh <release number>  # 202311
+    ```
+  * The above will download the latest image for the giver release number and create a GNS3 appliance file named e.g. `SONiC-202012-27914.gns3a`
+    * Note that the 202405 release of SONiC VS image is not working due to [#19399](https://github.com/sonic-net/sonic-buildimage/issues/19399)
+    * The release 202311 has also some bugs, like [#13317](https://github.com/sonic-net/sonic-buildimage/issues/13317) but works "better" then 202405 (if you can live without sonic-cli)
+* From this point you can follow the instructions provided in https://pine-networks.com/blog/setting-up-sonic-on-gns3/.
+  * Skip the initial instructions and start with the importing of appliance file you generated above e.g. `SONiC-202012-27914.gns3a`
+  * Once you import the SONiC image you can create a new project or open the existing one and start using the SONiC
+    appliance in GNS3 by dragging the SONiC appliance into the main window of your GNS3 project
 
 # FAQ for Edgecore Switches
 
@@ -342,7 +385,7 @@ config-setup factory
 reboot
 ```
 
-## Managment VRF
+## Management VRF
 
 https://github.com/sonic-net/SONiC/blob/master/doc/mgmt/sonic_stretch_management_vrf_design.md#terminating-on-the-switch
 
@@ -355,9 +398,9 @@ sonic-db-cli CONFIG_DB HGET 'DEVICE_METADATA|localhost'
 ```
 
 
-## Setup the managment IP on a VLAN Interface
+## Setup the management IP on a VLAN Interface
 
-* Setup: "Prevent duplicate MAC adresses"
+* Setup: "Prevent duplicate MAC addresses"
   ```
   vi /etc/sonic/config_db.json
   config load
@@ -489,15 +532,15 @@ Ethernet4 90:2d:77:58:26:50
 ...
 ```
 
-This can be a problem when the switch is connected by managment port and by i.e. Ethernet0 to
-the same vlans/networks. This means that the same MAC address appears on on different ports of your
+This can be a problem when the switch is connected by management port and by i.e. Ethernet0 to
+the same vlans/networks. This means that the same MAC address appears on different ports of your
 switch infrastructure. Packets appear then alternately or randomly to the port on which the IP address is configured or
 to the port on which the IP address is not configured.
 That results in very unstable connections.
 
 You can fix that by defining a dedicated mac address for the EthernetX ports.
 
-Change the mac adress to a adress which is in one of the [private MAC address ranges](https://en.wikipedia.org/wiki/MAC_address#Ranges_of_group_and_locally_administered_addresses).
+Change the mac address to an address which is in one of the [private MAC address ranges](https://en.wikipedia.org/wiki/MAC_address#Ranges_of_group_and_locally_administered_addresses).
 ```
 diff --git a/hardware/network/config/Edgecore_4630-54TE-O-AC-B_st01-sw1g-r01-u32.json b/hardware/network/config/Edgecore_4630-54TE-O-AC-B_st01-sw1g-r01-u32.json
 index 2e5455a..0071378 100644
@@ -548,7 +591,7 @@ Ethernet24 02:77:ce:2b:3f:c4
 The setting does not change the Mac address to eth0, but to EthernetX or the bridge interface.
 
 
-# Remove ip adresses from interfaces
+# Remove ip addresses from interfaces
 
 Outputs the suitable commands
 ```
