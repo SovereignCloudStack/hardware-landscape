@@ -1,0 +1,14 @@
+---
+
+- name: "Add flavors"
+  ansible.builtin.command: "osism manage flavor --cloud admin"
+
+#- name: "Add images"
+#  ansible.builtin.command: "osism manage images --cloud admin"
+
+- name: Include project tasks
+  include_tasks: project.yml
+  with_items: "{{ scs_openstack_projects }}"
+  loop_control:
+    label: "{{ item.name }}"
+    loop_var: "project_item"
