@@ -349,6 +349,19 @@ sonic-db-cli CONFIG_DB HSET 'DEVICE_METADATA|localhost' mac 02:77:ce:2b:3f:c4
 sonic-db-cli CONFIG_DB HGET 'DEVICE_METADATA|localhost'
 ```
 
+## Disable generation of frr.conf
+
+https://github.com/sonic-net/sonic-buildimage/blob/master/src/sonic-yang-models/yang-models/sonic-device_metadata.yang#L62
+https://medium.com/sonic-nos/sonic-dont-use-split-mode-use-frr-mgmt-framework-a67ad76ec1a6
+
+Config can be overwritten, when restarting containers when docker_routing_config_mode=split is not active.
+COnfiguration wille be created from /etc/sonic/config_db.json.
+
+```
+sudo grep -P "docker_routing_config_mode|frr_mgmt_framework_config" /etc/sonic/config_db.json
+sonic-db-cli CONFIG_DB HSET 'DEVICE_METADATA|localhost' docker_routing_config_mode split
+sudo config save -y
+```
 
 ## Setup the managment IP on a VLAN Interface
 
