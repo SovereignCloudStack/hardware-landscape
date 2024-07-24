@@ -1,176 +1,171 @@
 ---
+- name: "Create {{ project_item.name }} domain"
+  openstack.cloud.identity_domain:
+    cloud: admin
+    state: present
+    name: "{{ project_item.name }}"
+
+- name: "Create {{ project_item.name }}-admin user"
+  openstack.cloud.identity_user:
+    cloud: admin
+    state: present
+    name: "{{ project_item.name }}-admin"
+    password: "{{ project_item.password_admin }}"
+    email: "{{ project_item.email_admin }}"
+    domain: default
+  no_log: true
+
+
+# NOTE: The CLI is used here because the corresponding Ansible module does
+#       not find the test-admin user in the default domain.
+- name: "Add manager role to user {{ project_item.name }}-admin"
+  ansible.builtin.command: "openstack --os-cloud admin role add --domain {{ project_item.name }} --user {{ project_item.name }}-admin manager"
+  changed_when: true
+
 - name: "Create {{ project_item.name }} project"
-  hosts: localhost
-  connection: local
+  openstack.cloud.project:
+    cloud: "{{ project_item.name }}-admin"
+    state: present
+    name: "{{ project_item.name }}"
+    domain: "{{ project_item.name }}"
 
-  tasks:
-    - name: "Create {{ project_item.name }} domain"
-      openstack.cloud.identity_domain:
-        cloud: admin
-        state: present
-        name: "{{ project_item.name }}"
+- name: "Check if the file exists {{ project_item.ssh_key }}.pub"
+  stat:
+    path: "{{ project_item.ssh_key }}.pub"
+  register: file_stat
 
-    - name: "Create {{ project_item.name }}-admin user"
-      openstack.cloud.identity_user:
-        cloud: admin
-        state: present
-        name: "{{ project_item.name }}-admin"
-        password: "{{ project_item.password_admin }}"
-        email: "{{ project_item.email_admin }}"
-        domain: default
-      no_log: true
+- name: "Create ssh key"
+  ansible.builtin.command: "ssh-keygen -o -a 256 -t ed25519 -C 'automated creation' -f {{ project_item.ssh_key }} -P '' "
+  when: not file_stat.stat.exists
 
+- name: "Create {{ project_item.name }} user"
+  openstack.cloud.identity_user:
+    cloud: "{{ project_item.name }}-admin"
+    state: present
+    name: "{{ project_item.name }}"
+    password: "{{ project_item.password_user }}"
+    email: "{{ project_item.email_user }}"
+    domain: "{{ project_item.name }}"
+    default_project: "{{ project_item.name }}"
+  no_log: true
 
-    # NOTE: The CLI is used here because the corresponding Ansible module does
-    #       not find the test-admin user in the default domain.
-    - name: "Add manager role to user {{ project_item.name }}-admin"
-      ansible.builtin.command: "openstack --os-cloud admin role add --domain {{ project_item.name }} --user {{ project_item.name }}-admin manager"
-      changed_when: true
+- name: "Add member roles to user {{ project_item.name }}  # noqa: ignore-errors"
+  openstack.cloud.role_assignment:
+    cloud: "{{ project_item.name }}-admin"
+    state: present
+    user: "{{ project_item.name }}"
+    role: "{{ item }}"
+    project: "{{ project_item.name }}"
+  loop:
+    - load-balancer_member
+    - member
+    # NOTE The role creator is required to be able to create encrypted volumes
+    #      If this role is not assigned the following error happens inside the
+    #      cinder-volume service:
+    #
+    #      Forbidden: Order creation attempt not allowed - please review your
+    #      user/project privileges
+    - creator
+  ignore_errors: true  # NOTE: necessary when we have not deployed Barbican
 
-    - name: "Create {{ project_item.name }} project"
-      openstack.cloud.project:
-        cloud: "{{ project_item.name }}-admin"
-        state: present
-        name: "{{ project_item.name }}"
-        domain: "{{ project_item.name }}"
+- name: "Create {{ project_item.name }} network"
+  openstack.cloud.network:
+    cloud: "{{ project_item.name }}"
+    state: present
+    name: "{{ project_item.name }}"
+    mtu: 1342  # NOTE: necessary because VxLAN in Geneve/VxLAN
 
-    - name: "Check if the file exists {{ project_item.ssh_key }}.pub"
-      stat:
-        path: "{{ project_item.ssh_key }}.pub"
-      register: file_stat
+- name: "Create {{ project_item.name }} subnet"
+  openstack.cloud.subnet:
+    cloud: "{{ project_item.name }}"
+    state: present
+    name: "subnet-{{ project_item.name }}"
+    network_name: "{{ project_item.name }}"
+    cidr: 192.168.200.0/24
 
-    - name: "Create ssh key"
-      ansible.builtin.command: "ssh-keygen -o -a 256 -t ed25519 -C 'automated creation' -f {{ project_item.ssh_key }} -P '' "
-      when: not file_stat.stat.exists
+- name: "Create {{ project_item.name }} router"
+  openstack.cloud.router:
+    cloud: "{{ project_item.name }}"
+    state: present
+    name: "router-{{ project_item.name }}"
+    network: public
+    interfaces:
+      - "subnet-{{ project_item.name }}"
 
-    - name: "Create {{ project_item.name }} user"
-      openstack.cloud.identity_user:
-        cloud: "{{ project_item.name }}-admin"
-        state: present
-        name: "{{ project_item.name }}"
-        password: "{{ project_item.password_user }}"
-        email: "{{ project_item.email_user }}"
-        domain: "{{ project_item.name }}"
-        default_project: "{{ project_item.name }}"
-      no_log: true
+- name: "Create {{ project_item.name }} ssh security group"
+  openstack.cloud.security_group:
+    cloud: "{{ project_item.name }}"
+    state: present
+    name: ssh
 
-    - name: "Add member roles to user {{ project_item.name }}  # noqa: ignore-errors"
-      openstack.cloud.role_assignment:
-        cloud: "{{ project_item.name }}-admin"
-        state: present
-        user: "{{ project_item.name }}"
-        role: "{{ item }}"
-        project: "{{ project_item.name }}"
-      loop:
-        - load-balancer_member
-        - member
-        # NOTE The role creator is required to be able to create encrypted volumes
-        #      If this role is not assigned the following error happens inside the
-        #      cinder-volume service:
-        #
-        #      Forbidden: Order creation attempt not allowed - please review your
-        #      user/project privileges
-        - creator
-      ignore_errors: true  # NOTE: necessary when we have not deployed Barbican
+- name: "Add {{ project_item.name }} rule to ssh security group"
+  openstack.cloud.security_group_rule:
+    cloud: "{{ project_item.name }}"
+    state: present
+    security_group: ssh
+    protocol: tcp
+    port_range_min: 22
+    port_range_max: 22
+    remote_ip_prefix: 0.0.0.0/0
 
-    - name: "Create {{ project_item.name }} network"
-      openstack.cloud.network:
-        cloud: "{{ project_item.name }}"
-        state: present
-        name: "{{ project_item.name }}"
-        mtu: 1342  # NOTE: necessary because VxLAN in Geneve/VxLAN
+- name: "Create {{ project_item.name }} icmp security group"
+  openstack.cloud.security_group:
+    cloud: "{{ project_item.name }}"
+    state: present
+    name: icmp
 
-    - name: "Create {{ project_item.name }} subnet"
-      openstack.cloud.subnet:
-        cloud: "{{ project_item.name }}"
-        state: present
-        name: "subnet-{{ project_item.name }}"
-        network_name: "{{ project_item.name }}"
-        cidr: 192.168.200.0/24
+- name: "Add {{ project_item.name }} rule to icmp security group"
+  openstack.cloud.security_group_rule:
+    cloud: "{{ project_item.name }}"
+    state: present
+    security_group: icmp
+    protocol: icmp
+    remote_ip_prefix: 0.0.0.0/0
 
-    - name: "Create {{ project_item.name }} router"
-      openstack.cloud.router:
-        cloud: "{{ project_item.name }}"
-        state: present
-        name: "router-{{ project_item.name }}"
-        network: public
-        interfaces:
-          - "subnet-{{ project_item.name }}"
+- name: "Create {{ project_item.name }} keypair"
+  openstack.cloud.keypair:
+    cloud: "{{ project_item.name }}"
+    state: present
+    name: "{{ project_item.name }}"
+    public_key_file: "{{ project_item.ssh_key }}.pub"
 
-    - name: "Create {{ project_item.name }} ssh security group"
-      openstack.cloud.security_group:
-        cloud: "{{ project_item.name }}"
-        state: present
-        name: ssh
+- name: "Create {{ project_item.name }} instance"
+  openstack.cloud.server:
+    cloud: "{{ project_item.name }}"
+    state: present
+    name: "{{ project_item.name }}"
+    image: "{{ project_item.image }}"
+    flavor: "{{ project_item.flavor }}"
+    delete_fip: true
+    key_name: "{{ project_item.name }}"
+    network: "{{ project_item.name }}"
+    security_groups:
+      - icmp
+      - ssh
 
-    - name: "Add {{ project_item.name }} rule to ssh security group"
-      openstack.cloud.security_group_rule:
-        cloud: "{{ project_item.name }}"
-        state: present
-        security_group: ssh
-        protocol: tcp
-        port_range_min: 22
-        port_range_max: 22
-        remote_ip_prefix: 0.0.0.0/0
+- name: "Create {{ project_item.name }} volume"
+  openstack.cloud.volume:
+    cloud: "{{ project_item.name }}"
+    state: present
+    name: "{{ project_item.name }}"
+    size: 1
 
-    - name: "Create {{ project_item.name }} icmp security group"
-      openstack.cloud.security_group:
-        cloud: "{{ project_item.name }}"
-        state: present
-        name: icmp
+- name: "Attach {{ project_item.name }} volume"
+  openstack.cloud.server_volume:
+    cloud: "{{ project_item.name }}"
+    state: present
+    server: "{{ project_item.name }}"
+    volume: "{{ project_item.name }}"
 
-    - name: "Add {{ project_item.name }} rule to icmp security group"
-      openstack.cloud.security_group_rule:
-        cloud: "{{ project_item.name }}"
-        state: present
-        security_group: icmp
-        protocol: icmp
-        remote_ip_prefix: 0.0.0.0/0
+- name: "Create floating {{ project_item.name }} ip address"
+  openstack.cloud.floating_ip:
+    cloud: "{{ project_item.name }}"
+    state: present
+    server: "{{ project_item.name }}"
+    network: public
+    wait: true
+  register: result
 
-    - name: "Create {{ project_item.name }} keypair"
-      openstack.cloud.keypair:
-        cloud: "{{ project_item.name }}"
-        state: present
-        name: "{{ project_item.name }}"
-        public_key_file: "{{ project_item.ssh_key }}.pub"
-
-    - name: "Create {{ project_item.name }} instance"
-      openstack.cloud.server:
-        cloud: "{{ project_item.name }}"
-        state: present
-        name: "{{ project_item.name }}"
-        image: "{{ project_item.image }}"
-        flavor: "{{ project_item.flavor }}"
-        delete_fip: true
-        key_name: "{{ project_item.name }}"
-        network: "{{ project_item.name }}"
-        security_groups:
-          - icmp
-          - ssh
-
-    - name: "Create {{ project_item.name }} volume"
-      openstack.cloud.volume:
-        cloud: "{{ project_item.name }}"
-        state: present
-        name: "{{ project_item.name }}"
-        size: 1
-
-    - name: "Attach {{ project_item.name }} volume"
-      openstack.cloud.server_volume:
-        cloud: "{{ project_item.name }}"
-        state: present
-        server: "{{ project_item.name }}"
-        volume: "{{ project_item.name }}"
-
-    - name: "Create floating {{ project_item.name }} ip address"
-      openstack.cloud.floating_ip:
-        cloud: "{{ project_item.name }}"
-        state: present
-        server: "{{ project_item.name }}"
-        network: public
-        wait: true
-      register: result
-
-    - name: "Print floating {{ project_item.name }} ip address"
-      ansible.builtin.debug:
-        msg: "{{ result.floating_ip.floating_ip_address }}"
+- name: "Print floating {{ project_item.name }} ip address"
+  ansible.builtin.debug:
+    msg: "{{ result.floating_ip.floating_ip_address }}"
