@@ -217,20 +217,15 @@ sudo config interface shutdown Ethernet52,Ethernet56,PortChannel02
 sudo config interface startup Ethernet52,Ethernet56,PortChannel02
 ```
 
+| Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                           |
+|----------------------|---------------|---------------------|---------------|--------------|------------------|------------|---------------------------------------|
+| st01-mgmt-r01-u30    | eno2          | S1-S48-MR           | Port37        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT          |
+  st01-mgmt-r01-u31    | eno2          | S1-S48-MR           | Port48        | RJ45/1GBE    | OSBA-DL-S7-L     |            | Temp-Downlink-S7-OSBA, IPv4 DNAT/SNAT |
 
-| Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
-|----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
-| st01-mgmt-r01-u30    | eno2          | S1-S48-MR           | Port37        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT     |
-#TODO| st01-mgmt-r01-u31    | eno2          | S1-S48-MR           | Port37        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT     |
-| st01-gw-r01-u46      | eno2          | S1-S48-MR           | Port48        | RJ45/1GBE    | OSBA-DL-S7-L     |            | OSBA-DL-S7-L, IPv4 DNAT/SNAT     |
-
-# TODO: Not yet completly configured
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw100g-r01-u41  | eth0          | st01-sw1g-r01-u47   | Ethernet46    | RJ45/1GBE    | OOB-MGMT         |            |                                  |
-| st01-sw100g-r01-u41  | Ethernet96    | st01-sw1g-r01-u42   | Ethernet56    | QSFP28/100G  | LAB              | PC2        | i                                 |
-| st01-sw100g-r01-u41  | Ethernet100   | st01-sw1g-r01-u42   | Ethernet56    | QSFP28/100G  | LAB              | PC2        |                                  |
 | st01-sw100g-r01-u41  | Ethernet112   | st01-sw10g-r01-u39  | Ethernet64    | QSFP28/100G  | LAB              | PC4        |                                  |
 | st01-sw100g-r01-u41  | Ethernet116   | st01-sw10g-r01-u39  | Ethernet60    | QSFP28/100G  | LAB              | PC4        |                                  |
 | st01-sw100g-r01-u41  | Ethernet120   | st01-sw10g-r01-u38  | Ethernet60    | QSFP28/100G  | LAB              | PC5        |                                  |
@@ -258,6 +253,7 @@ show interfaces status PortChannel04
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
+| st01-sw25g-r01-u40   | eth0          |                     |               |              |                  |            |                                  |
 | st01-sw25g-r01-u40   |               |                     |               |              |                  |            |                                  |
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
@@ -281,7 +277,6 @@ show interfaces status PortChannel04
 | st01-sw100g-r01-u41  | Ethernet120   | st01-sw10g-r01-u38  | Ethernet60    | QSFP28/100G  | LAB              | PC5        |                                  |
 | st01-sw100g-r01-u41  | Ethernet124   | st01-sw10g-r01-u38  | Ethernet64    | QSFP28/100G  | LAB              | PC5        |                                  |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
-| st01-sw25g-r01-u40   |               |                     |               |              |                  |            |                                  |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw10g-r01-u39   |               |                     |               |              |                  |            |                                  |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
