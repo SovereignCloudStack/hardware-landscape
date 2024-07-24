@@ -21,4 +21,11 @@
       - tiptop
       - cpuid
       - msr-tools
+      - iptraf-ng
+      - tcpflow
+      - iftop
+      - pv
+      - ncdu
+      - nuttcp
+      - pigz
     state: present

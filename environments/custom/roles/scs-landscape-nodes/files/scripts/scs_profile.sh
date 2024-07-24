@@ -80,4 +80,6 @@ if [ -d /opt/configuration ];then
    cd /opt/configuration
 fi
 
+alias df='df -h -x squashfs -x tmpfs -x devtmpfs -x overlay'
+
 export PATH="/usr/local/scripts:$PATH"

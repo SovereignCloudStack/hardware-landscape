@@ -1,0 +1,25 @@
+---
+
+- name: "Create openstack domain"
+  openstack.cloud.identity_domain:
+    cloud: admin
+    state: present
+    name: "openstack"
+
+- name: "Create openstack-admin user"
+  openstack.cloud.identity_user:
+    cloud: admin
+    state: present
+    name: "openstack-admin"
+    password: "{{ }}"
+    email: "{{ project_item.email_admin }}"
+    domain: default
+  no_log: true
+
+- name: "Add flavors"
+  ansible.builtin.command: "osism manage flavor --cloud admin"
+
+#- name: "Add images"
+#  ansible.builtin.command: "osism manage images --cloud admin"
+
+

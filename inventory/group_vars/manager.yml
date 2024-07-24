@@ -21,7 +21,6 @@ chrony_allowed_subnets:
 # strictly in a client-only mode.
 chrony_bind_local_interfaces_only: false
 
-
 chrony_servers:
   - ptbtime1.ptb.de
   - ptbtime2.ptb.de
@@ -36,4 +35,21 @@ tinyproxy_allowed_networks:
 #tinyproxy_allowed_domains:
 #  - ^.*debian.*$
 #  - ^.*ubuntu.*$
+
+logical_volumes:
+  - lv: 'log'
+    vg: 'system'
+    size: '30G'
+    resizefs: true
+    force: true
+  - lv: 'docker'
+    vg: 'system'
+    size: '150G'
+    resizefs: true
+    force: true
+  - lv: 'home'
+    vg: 'system'
+    size: '50G'
+    resizefs: true
+    force: true
 

@@ -1,5 +1,6 @@
 mgmt_interface: eno6
 external_interface: eno2
+mgmt_address_system: 10.10.23.253
 
 network_ethernets_extra:
   # Access to mangement network
@@ -9,7 +10,7 @@ network_ethernets_extra:
   # Internet Uplink
   eno2:
     addresses:
-      - "192.168.104.43/29"
+      - "192.168.104.42/29"
     nameservers:
       addresses:
       - 8.8.8.8
@@ -19,4 +20,3 @@ network_ethernets_extra:
     - to: default
       via: 192.168.104.41
     mtu: 1500
-
