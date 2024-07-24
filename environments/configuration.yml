@@ -11,9 +11,11 @@ traefik_enable: true
 docker_configure_proxy: true
 docker_proxy_http: "http://{{ groups['manager'][0] }}:8888"
 docker_proxy_https: "http://{{ groups['manager'][0] }}:8888"
+
 docker_proxy_no_proxy_extra:
-  - "*.zone1.landscape.scs.community"
-  - "*.landscape.scs.community"
+  - localhost
+  - 127.0.0.1
+  - "landscape.scs.community"
   - "10.0.0.0/8"
   - "172.16.0.0/12"
   - "192.168.0.0/16"
@@ -23,17 +25,15 @@ proxy_proxies:
   http: "http://{{ groups['manager'][0] }}:8888"
   https: "http://{{ groups['manager'][0] }}:8888"
 proxy_no_proxy_extra:
-  - "*.zone1.landscape.scs.community"
-  - "*.landscape.scs.community"
-  - "10.0.0.0/8"
-  - "172.16.0.0/12"
-  - "192.168.0.0/16"
+  - "localhost"
+  - "127.0.0.1"
+  - "landscape.scs.community"
 
 # Kubernetes ##############################################
 proxy_env:
   HTTP_PROXY: "http://{{ groups['manager'][0] }}:8888"
   HTTPS_PROXY: "http://{{ groups['manager'][0] }}:8888"
-  NO_PROXY: "*.zone1.landscape.scs.community,*.landscape.scs.community,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+  NO_PROXY: "localhost,127.0.0.1,landscape.scs.community,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
 
 ##########################################################
 # proxy/server
