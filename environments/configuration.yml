@@ -7,21 +7,33 @@ traefik_enable: true
 ##########################################################
 # proxy/client
 
-# docker
+# docker ##################################################
 docker_configure_proxy: true
 docker_proxy_http: "http://{{ groups['manager'][0] }}:8888"
 docker_proxy_https: "http://{{ groups['manager'][0] }}:8888"
 
-# apt
+docker_proxy_no_proxy_extra:
+  - localhost
+  - 127.0.0.1
+  - "landscape.scs.community"
+  - "10.0.0.0/8"
+  - "172.16.0.0/12"
+  - "192.168.0.0/16"
+
+# apt #####################################################
 proxy_proxies:
   http: "http://{{ groups['manager'][0] }}:8888"
   https: "http://{{ groups['manager'][0] }}:8888"
+proxy_no_proxy_extra:
+  - "localhost"
+  - "127.0.0.1"
+  - "landscape.scs.community"
 
-# Needed by the Kubernetes Play
+# Kubernetes ##############################################
 proxy_env:
   HTTP_PROXY: "http://{{ groups['manager'][0] }}:8888"
   HTTPS_PROXY: "http://{{ groups['manager'][0] }}:8888"
-  NO_PROXY: "*.zone1.landscape.scs.community,*.landscape.scs.community,10.10.21.0/24"
+  NO_PROXY: "localhost,127.0.0.1,landscape.scs.community,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
 
 ##########################################################
 # proxy/server
@@ -61,6 +73,15 @@ dnscrypt_cloaks:
 # kubernetes - K3s configuration
 apiserver_endpoint: "10.10.21.202"
 metal_lb_ip_range: "10.10.21.220-10.10.21.239"
+
+cluster_cidr: "10.52.0.0/16"
+cilium_mode: "native"
+
+k3s_interface: "dummy0"
+#kube_vip_iface: "dummy0"
+#calico_iface: "dummy0"
+#flannel_iface: "dummy0"
+#cilium_iface: "dummy0"
 
 #metal_lb_type: "frr"
 #metal_lb_mode: "bgp"

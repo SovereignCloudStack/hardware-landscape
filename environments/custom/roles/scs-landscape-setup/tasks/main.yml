@@ -1,0 +1,12 @@
+---
+- name: Setup Flavors and Images
+  include_tasks: "{{ item }}"
+  loop:
+    - flavors_and_images.yml
+
+#- name: Include project tasks
+#  include_tasks: project.yml
+#  with_items: "{{ scs_openstack_projects }}"
+#  loop_control:
+#    label: "{{ item.name }}"
+#    loop_var: "project_item"

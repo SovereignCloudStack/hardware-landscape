@@ -35,7 +35,7 @@ def parse_configuration_data_switches(data) -> dict[str, dict[str, str]]:
                     r"\|.+"
                     r"\|\s*(?P<bmc_ip_v4>\d+\.\d+\.\d+\.\d+?)\s*"
                     r"\|\s*(?P<bmc_mac>[a-f0-9:]+)\s*"
-                    r"\|\s*(?P<asn>\d+)\s*"
+                    r"\|\s*(?P<asn>\d+|NONE)\s*"
                     r"\|\s*(?P<serial_device>[A-Za-z0-9:]+)\s*"
                     r".*\|.*",
                     line.strip())

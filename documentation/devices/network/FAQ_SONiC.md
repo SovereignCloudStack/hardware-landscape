@@ -248,14 +248,12 @@ sonic-installer set-default SONiC-OS-Edgecore-SONiC_20230420_055428_ec202111_370
 ```
 
 
-## Update a switch to the SONiC image
+## Update SONiC image on the switch
 
 
 1. Create a backup of the current config
    ```
-   SWITCH="st01-sw25g-r01-u34"
-   ./backup_switches.sh $SWITCH
-   git diff config/*${SWITCH}*json
+   ./switch_ctl --backup_cfg both <system name>
    ```
 2. Shutdown all ports on the environmental switches
    ```
@@ -275,11 +273,7 @@ sonic-installer set-default SONiC-OS-Edgecore-SONiC_20230420_055428_ec202111_370
 5. Boot the system
 6. Reestablish the configuration
    ```
-   cd setup
-   ./01_distribute_keys.sh $SWITCH
-   ./02_setup_os.sh $SWITCH
-   cd ..
-   ./restore_switches.sh $SWITCH # Reboot
+   ./switch_ctl --restore_cfg both <system name>
    ```
 7. Startup the ports on the environmental switches
    ```
@@ -289,7 +283,8 @@ sonic-installer set-default SONiC-OS-Edgecore-SONiC_20230420_055428_ec202111_370
 8. Rexecute a backup to check if the righ config is established i
    (no differences should appear)
    ```
-   ./backup_switches.sh $SWITCH
+   ./switch_ctl --backup_cfg both <system name>
+   git diff
    ```
 
 ## Access Package Repositories
@@ -397,6 +392,19 @@ sonic-db-cli CONFIG_DB HSET 'DEVICE_METADATA|localhost' mac 02:77:ce:2b:3f:c4
 sonic-db-cli CONFIG_DB HGET 'DEVICE_METADATA|localhost'
 ```
 
+## Disable generation of frr.conf
+
+https://github.com/sonic-net/sonic-buildimage/blob/master/src/sonic-yang-models/yang-models/sonic-device_metadata.yang#L62
+https://medium.com/sonic-nos/sonic-dont-use-split-mode-use-frr-mgmt-framework-a67ad76ec1a6
+
+Config can be overwritten, when restarting containers when docker_routing_config_mode=split is not active.
+COnfiguration wille be created from /etc/sonic/config_db.json.
+
+```
+sudo grep -P "docker_routing_config_mode|frr_mgmt_framework_config" /etc/sonic/config_db.json
+sonic-db-cli CONFIG_DB HSET 'DEVICE_METADATA|localhost' docker_routing_config_mode split
+sudo config save -y
+```
 
 ## Setup the management IP on a VLAN Interface
 
@@ -441,14 +449,14 @@ HOSTN="$(hostname)"
 IP="$(ip --json  addr ls eth0|jq -r '.[0].addr_info[] | select(.family == "inet").local')"
 
 cat > /etc/resolv.conf << 'EOF'
-nameserver 8.8.8.8
-nameserver 9.9.9.9
+nameserver 10.10.23.254
+nameserver 10.10.23.253
 
 search mgmt.landscape.scs.community
 EOF
 
 
-config interface ip add eth0 ${IP}/24 10.10.23.1
+config interface ip add eth0 ${IP}/24 10.10.23.254
 show management_interface address
 
 sudo config feature autorestart dhcp_relay disabled
@@ -458,15 +466,12 @@ sudo show feature config dhcp_relay
 INTERFACES="$(show interfaces status|awk '$9 ~ "up" {print $1}'|grep -v "Ethernet0"|tr '\n' ',')"
 config interface shutdown $INTERFACES
 
-config interface ip add eth0 ${IP}/24 10.10.23.1
-
 config hostname $HOSTN
 
-config ntp add 192.53.103.103
-config ntp add 192.53.103.104
-config ntp add 192.53.103.108
+config ntp add 10.10.23.254
+config ntp add 10.10.23.253
 
-config syslog add 10.10.23.1
+config syslog add 10.10.23.254
 
 config snmp community replace public Eevaid7xoh4m
 config snmp community add lohz3kaG5ted RW
@@ -497,19 +502,15 @@ config route add prefix 0.0.0.0/0 nexthop 10.10.23.1
 ## Backup switch configuration
 
 ```
-./backup_switches.sh # all switches
-./backup_switches.sh st01-sw1g-r01-u42
-git status
+./switch_ctl --backup_cfg both all
+./switch_ctl --backup_cfg both <system name>
 git diff
-git add
-git commit
 ```
 
 ## Restore switch configuration
 
 ```
-./restore_switches.sh # all switches
-./restore_switches.sh st01-sw1g-r01-u42
+./switch_ctl --restore_cfg both <system name>
 ```
 
 * Before perfoming a restore the scripts takes a backup fo the current configuration

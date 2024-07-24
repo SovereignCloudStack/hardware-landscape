@@ -10,6 +10,16 @@ clouds:
     cacert: /etc/ssl/certs/ca-certificates.crt
     identity_api_version: 3
     endpoint_type: internalURL
+  admin-internal:
+    auth:
+      username: admin
+      project_name: admin
+      auth_url: https://api-internal.zone1.landscape.scs.community:5000/v3
+      project_domain_name: default
+      user_domain_name: default
+    cacert: /etc/ssl/certs/ca-certificates.crt
+    identity_api_version: 3
+    endpoint_type: internalURL
   octavia:
     auth:
       username: octavia
@@ -19,3 +29,4 @@ clouds:
       user_domain_name: default
     cacert: /etc/ssl/certs/ca-certificates.crt
     identity_api_version: 3
+

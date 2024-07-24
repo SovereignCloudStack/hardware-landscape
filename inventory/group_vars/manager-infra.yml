@@ -21,6 +21,7 @@ chrony_allowed_subnets:
 # strictly in a client-only mode.
 chrony_bind_local_interfaces_only: false
 
+
 chrony_servers:
   - ptbtime1.ptb.de
   - ptbtime2.ptb.de
@@ -53,3 +54,28 @@ logical_volumes:
     resizefs: true
     force: true
 
+
+wireguard_server_address: 10.10.1.1/24
+wireguard_listen_port: 51820
+wireguard_client_allowed_ips: 10.10.1.0/24,10.10.23.0/24,10.10.24.0/24,10.10.21.0/24,10.10.22.0/24
+
+# Debug: 
+# echo module wireguard +p > /sys/kernel/debug/dynamic_debug/control
+# journalctl -f
+
+wireguard_users:
+  - name: scoopex
+    key: 3XfXCmSo5+2kCrUgI/OmQDxSrx3gnomvFESNUhXVflw=
+    ip: 10.10.1.20
+  - name: matofeder
+    key: EkL7bli2t4EJSDYo4Edyhg8enHI1zOR+A54Ghco1OlY=
+    ip: 10.10.1.21
+  - name: gtema
+    key: PoXN8ZMMQdJM+BQ/XI/uu/nODCiE9FzZ1mRIEIFbKXs=
+    ip: 10.10.1.22
+  - name: bitkeks
+    key: i5zuiuEhpRQiXTEgeDjfWCPnKCxx9SpaxpLKjZsgok8=
+    ip: 10.10.1.23
+  - name: fkr
+    key: 0CcpoKi2d+fYeeIQutKWZ4nHc4fKyULjQBwMzAidiT4=
+    ip: 10.10.1.24

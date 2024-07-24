@@ -631,7 +631,7 @@
       "speed": "1000"
     },
     "Ethernet10": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth11(Port11)",
       "autoneg": "on",
       "index": "11",
@@ -1220,6 +1220,9 @@
       "tagging_mode": "tagged"
     },
     "Vlan23|Ethernet1": {
+      "tagging_mode": "untagged"
+    },
+    "Vlan23|Ethernet10": {
       "tagging_mode": "untagged"
     },
     "Vlan23|Ethernet2": {
