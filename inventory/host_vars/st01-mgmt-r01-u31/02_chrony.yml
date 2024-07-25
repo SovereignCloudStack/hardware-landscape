@@ -1,28 +1,38 @@
 ---
-## NTP server options.
-#chrony_server_options: iburst
-#
-## Configure Chrony to synchronize the hardware clock
-#chrony_sync_rtc: true
-#
-## Chrony limits access to clients that are on certain subnets.  Adjust the
-## following subnets here to limit client access to chrony servers.
-#chrony_allowed_subnets:
-#  - 10.10.21.0/24
-#  - 10.10.23.0/24
-#
-#chrony_bindaddresses:
-#  - "0.0.0.0"
-#
-## If set to true, chronyd will never open the server port and will operate
-## strictly in a client-only mode.
-#chrony_bind_local_interfaces_only: false
-#
-#
-#chrony_servers:
-#  - ptbtime1.ptb.de
-#  - ptbtime2.ptb.de
-#  - ptbtime3.ptb.de
-#  - time.google.com
-#  - time.cloudflare.com
-#
+# According to the Ansible documentation this should not be neccesary
+# because we defined in inventory/99-overwrite:
+# ---
+# [manager-infra:vars]
+# ansible_group_priority=50
+# ---
+# Therefore the values in group_vars/manager-infra.yml should be used.
+# Will investigate this later.
+
+
+# NTP server options.
+chrony_server_options: iburst
+
+# Configure Chrony to synchronize the hardware clock
+chrony_sync_rtc: true
+
+# Chrony limits access to clients that are on certain subnets.  Adjust the
+# following subnets here to limit client access to chrony servers.
+chrony_allowed_subnets:
+  - 10.10.21.0/24
+  - 10.10.23.0/24
+
+chrony_bindaddresses:
+  - "0.0.0.0"
+
+# If set to true, chronyd will never open the server port and will operate
+# strictly in a client-only mode.
+chrony_bind_local_interfaces_only: false
+
+
+chrony_servers:
+  - ptbtime1.ptb.de
+  - ptbtime2.ptb.de
+  - ptbtime3.ptb.de
+  - time.google.com
+  - time.cloudflare.com
+

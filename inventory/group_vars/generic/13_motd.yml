@@ -1,5 +1,4 @@
 ---
-ansible_group_priority: 10
 
 motd_content: |
   .

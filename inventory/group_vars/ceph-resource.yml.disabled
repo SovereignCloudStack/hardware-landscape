@@ -2,9 +2,6 @@
 # https://docs.ceph.com/en/latest/rados/configuration/bluestore-config-ref/
 # DB devices make this possible because whenever a DB device is specified but an explicit WAL device is not, i
 # the WAL will be implicitly colocated with the DB on the faster device.
-
-ansible_group_priority: 50
-
 ceph_db_devices:
   nvme0n1: # 420 GB
     num_osds: 6

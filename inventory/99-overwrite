@@ -23,3 +23,8 @@ network
 [all:children]
 generic
 
+[manager:vars]
+ansible_group_priority=50
+
+[manager-infra:vars]
+ansible_group_priority=50
