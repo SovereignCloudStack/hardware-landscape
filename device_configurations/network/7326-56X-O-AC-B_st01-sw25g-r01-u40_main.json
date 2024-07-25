@@ -673,7 +673,7 @@
       "buffer_model": "traditional",
       "default_bgp_status": "up",
       "default_pfcwd_status": "disable",
-      "hostname": "sonic",
+      "hostname": "st01-sw25g-r01-u40",
       "hwsku": "Accton-AS7326-56X",
       "mac": "d2:77:ce:4b:b1:7a",
       "platform": "x86_64-accton_as7326_56x-r0",
@@ -702,7 +702,7 @@
       "support_syslog_rate_limit": "true"
     },
     "dhcp_relay": {
-      "auto_restart": "enabled",
+      "auto_restart": "disabled",
       "check_up_status": "False",
       "delayed": "False",
       "has_global_scope": "True",
@@ -1327,8 +1327,12 @@
   },
   "MGMT_INTERFACE": {
     "eth0|10.10.23.106/24": {
-      "gwaddr": "10.10.23.1"
+      "gwaddr": "10.10.23.254"
     }
+  },
+  "NTP_SERVER": {
+    "10.10.23.253": {},
+    "10.10.23.254": {}
   },
   "PASSW_HARDENING": {
     "POLICIES": {
@@ -1354,7 +1358,7 @@
       "speed": "25000"
     },
     "Ethernet1": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE2",
       "index": "2",
       "lanes": "2",
@@ -1362,7 +1366,7 @@
       "speed": "25000"
     },
     "Ethernet10": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE11",
       "index": "11",
       "lanes": "13",
@@ -1370,7 +1374,7 @@
       "speed": "25000"
     },
     "Ethernet11": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE12",
       "index": "12",
       "lanes": "15",
@@ -1378,7 +1382,7 @@
       "speed": "25000"
     },
     "Ethernet12": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE13",
       "index": "13",
       "lanes": "23",
@@ -1386,7 +1390,7 @@
       "speed": "25000"
     },
     "Ethernet13": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE14",
       "index": "14",
       "lanes": "22",
@@ -1394,7 +1398,7 @@
       "speed": "25000"
     },
     "Ethernet14": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE15",
       "index": "15",
       "lanes": "24",
@@ -1402,7 +1406,7 @@
       "speed": "25000"
     },
     "Ethernet15": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE16",
       "index": "16",
       "lanes": "32",
@@ -1410,7 +1414,7 @@
       "speed": "25000"
     },
     "Ethernet16": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE17",
       "index": "17",
       "lanes": "31",
@@ -1418,7 +1422,7 @@
       "speed": "25000"
     },
     "Ethernet17": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE18",
       "index": "18",
       "lanes": "21",
@@ -1426,7 +1430,7 @@
       "speed": "25000"
     },
     "Ethernet18": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE19",
       "index": "19",
       "lanes": "29",
@@ -1434,7 +1438,7 @@
       "speed": "25000"
     },
     "Ethernet19": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE20",
       "index": "20",
       "lanes": "36",
@@ -1442,7 +1446,7 @@
       "speed": "25000"
     },
     "Ethernet2": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE3",
       "index": "3",
       "lanes": "4",
@@ -1450,7 +1454,7 @@
       "speed": "25000"
     },
     "Ethernet20": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE21",
       "index": "21",
       "lanes": "30",
@@ -1458,7 +1462,7 @@
       "speed": "25000"
     },
     "Ethernet21": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE22",
       "index": "22",
       "lanes": "34",
@@ -1466,7 +1470,7 @@
       "speed": "25000"
     },
     "Ethernet22": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE23",
       "index": "23",
       "lanes": "33",
@@ -1474,7 +1478,7 @@
       "speed": "25000"
     },
     "Ethernet23": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE24",
       "index": "24",
       "lanes": "35",
@@ -1482,7 +1486,7 @@
       "speed": "25000"
     },
     "Ethernet24": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE25",
       "index": "25",
       "lanes": "43",
@@ -1490,7 +1494,7 @@
       "speed": "25000"
     },
     "Ethernet25": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE26",
       "index": "26",
       "lanes": "42",
@@ -1498,7 +1502,7 @@
       "speed": "25000"
     },
     "Ethernet26": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE27",
       "index": "27",
       "lanes": "44",
@@ -1506,7 +1510,7 @@
       "speed": "25000"
     },
     "Ethernet27": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE28",
       "index": "28",
       "lanes": "52",
@@ -1514,7 +1518,7 @@
       "speed": "25000"
     },
     "Ethernet28": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE29",
       "index": "29",
       "lanes": "51",
@@ -1522,7 +1526,7 @@
       "speed": "25000"
     },
     "Ethernet29": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE30",
       "index": "30",
       "lanes": "41",
@@ -1530,7 +1534,7 @@
       "speed": "25000"
     },
     "Ethernet3": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE4",
       "index": "4",
       "lanes": "8",
@@ -1538,7 +1542,7 @@
       "speed": "25000"
     },
     "Ethernet30": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE31",
       "index": "31",
       "lanes": "49",
@@ -1546,7 +1550,7 @@
       "speed": "25000"
     },
     "Ethernet31": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE32",
       "index": "32",
       "lanes": "60",
@@ -1554,7 +1558,7 @@
       "speed": "25000"
     },
     "Ethernet32": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE33",
       "index": "33",
       "lanes": "50",
@@ -1562,7 +1566,7 @@
       "speed": "25000"
     },
     "Ethernet33": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE34",
       "index": "34",
       "lanes": "58",
@@ -1570,7 +1574,7 @@
       "speed": "25000"
     },
     "Ethernet34": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE35",
       "index": "35",
       "lanes": "57",
@@ -1578,7 +1582,7 @@
       "speed": "25000"
     },
     "Ethernet35": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE36",
       "index": "36",
       "lanes": "59",
@@ -1586,7 +1590,7 @@
       "speed": "25000"
     },
     "Ethernet36": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE37",
       "index": "37",
       "lanes": "62",
@@ -1594,7 +1598,7 @@
       "speed": "25000"
     },
     "Ethernet37": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE38",
       "index": "38",
       "lanes": "63",
@@ -1602,7 +1606,7 @@
       "speed": "25000"
     },
     "Ethernet38": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE39",
       "index": "39",
       "lanes": "64",
@@ -1610,7 +1614,7 @@
       "speed": "25000"
     },
     "Ethernet39": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE40",
       "index": "40",
       "lanes": "65",
@@ -1618,7 +1622,7 @@
       "speed": "25000"
     },
     "Ethernet4": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE5",
       "index": "5",
       "lanes": "7",
@@ -1626,7 +1630,7 @@
       "speed": "25000"
     },
     "Ethernet40": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE41",
       "index": "41",
       "lanes": "66",
@@ -1634,7 +1638,7 @@
       "speed": "25000"
     },
     "Ethernet41": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE42",
       "index": "42",
       "lanes": "61",
@@ -1642,7 +1646,7 @@
       "speed": "25000"
     },
     "Ethernet42": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE43",
       "index": "43",
       "lanes": "68",
@@ -1650,7 +1654,7 @@
       "speed": "25000"
     },
     "Ethernet43": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE44",
       "index": "44",
       "lanes": "69",
@@ -1658,7 +1662,7 @@
       "speed": "25000"
     },
     "Ethernet44": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE45",
       "index": "45",
       "lanes": "67",
@@ -1666,7 +1670,7 @@
       "speed": "25000"
     },
     "Ethernet45": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE46",
       "index": "46",
       "lanes": "71",
@@ -1674,7 +1678,7 @@
       "speed": "25000"
     },
     "Ethernet46": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE47",
       "index": "47",
       "lanes": "72",
@@ -1682,7 +1686,7 @@
       "speed": "25000"
     },
     "Ethernet47": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE48",
       "index": "48",
       "lanes": "70",
@@ -1690,7 +1694,7 @@
       "speed": "25000"
     },
     "Ethernet48": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE49",
       "index": "49",
       "lanes": "77,78,79,80",
@@ -1698,7 +1702,7 @@
       "speed": "100000"
     },
     "Ethernet5": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE6",
       "index": "6",
       "lanes": "1",
@@ -1706,7 +1710,7 @@
       "speed": "25000"
     },
     "Ethernet52": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE50",
       "index": "50",
       "lanes": "85,86,87,88",
@@ -1714,7 +1718,7 @@
       "speed": "100000"
     },
     "Ethernet56": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE51",
       "index": "51",
       "lanes": "93,94,95,96",
@@ -1722,7 +1726,7 @@
       "speed": "100000"
     },
     "Ethernet6": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE7",
       "index": "7",
       "lanes": "5",
@@ -1730,7 +1734,7 @@
       "speed": "25000"
     },
     "Ethernet60": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE52",
       "index": "52",
       "lanes": "97,98,99,100",
@@ -1738,7 +1742,7 @@
       "speed": "100000"
     },
     "Ethernet64": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE53",
       "index": "53",
       "lanes": "105,106,107,108",
@@ -1746,7 +1750,7 @@
       "speed": "100000"
     },
     "Ethernet68": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE54",
       "index": "54",
       "lanes": "113,114,115,116",
@@ -1754,7 +1758,7 @@
       "speed": "100000"
     },
     "Ethernet7": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE8",
       "index": "8",
       "lanes": "16",
@@ -1762,7 +1766,7 @@
       "speed": "25000"
     },
     "Ethernet72": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE55",
       "index": "55",
       "lanes": "121,122,123,124",
@@ -1770,7 +1774,7 @@
       "speed": "100000"
     },
     "Ethernet76": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE56",
       "index": "56",
       "lanes": "125,126,127,128",
@@ -1778,7 +1782,7 @@
       "speed": "100000"
     },
     "Ethernet8": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE9",
       "index": "9",
       "lanes": "6",
@@ -1786,7 +1790,7 @@
       "speed": "25000"
     },
     "Ethernet9": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "twentyfiveGigE10",
       "index": "10",
       "lanes": "14",
@@ -1885,6 +1889,9 @@
       "rate_limit_burst": "20000",
       "rate_limit_interval": "300"
     }
+  },
+  "SYSLOG_SERVER": {
+    "10.10.23.254": {}
   },
   "SYSTEM_DEFAULTS": {
     "mux_tunnel_egress_acl": {

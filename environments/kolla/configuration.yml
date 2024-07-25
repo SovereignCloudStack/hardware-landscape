@@ -98,6 +98,9 @@ keystone_logout_url: "https://{{ kolla_external_fqdn }}/"
 #########################################################
 # other
 
+# TODO
+#om_enable_rabbitmq_quorum_queues: True
+
 enable_proxysql: no
 # BEGIN: TLS
 kolla_copy_ca_into_containers: "yes"
