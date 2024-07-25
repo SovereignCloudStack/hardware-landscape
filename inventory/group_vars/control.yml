@@ -1,4 +1,4 @@
-
+---
 chrony_servers:
   - ptbtime1.ptb.de
   - ptbtime2.ptb.de

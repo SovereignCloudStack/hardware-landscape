@@ -1,4 +1,0 @@
-
-chrony_bindaddresses:
-  - "{{ internal_address }}"
-  - "{{ mgmt_address_system }}"
