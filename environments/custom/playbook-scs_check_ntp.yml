@@ -5,4 +5,4 @@
   become: yes
   tasks:
     - name: Check all ntp datasources
-      ansible.builtin.command: /usr/local/scripts/scs_check_chrony.sh 2 0.01
+      ansible.builtin.command: /usr/local/scripts/scs_check_chrony.sh 1 0.01

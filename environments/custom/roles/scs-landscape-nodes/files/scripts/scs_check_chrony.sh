@@ -2,7 +2,6 @@
 
 if [ -z "$2" ];then
   echo "$0 min_servers diff_in_sec"
-  exit 1
 fi
 
 min_servers="${1:-3}"
