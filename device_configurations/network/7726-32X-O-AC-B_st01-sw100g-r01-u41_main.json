@@ -486,7 +486,7 @@
       "support_syslog_rate_limit": "true"
     },
     "dhcp_relay": {
-      "auto_restart": "enabled",
+      "auto_restart": "disabled",
       "check_up_status": "False",
       "delayed": "False",
       "has_global_scope": "True",
@@ -1062,10 +1062,12 @@
   },
   "MGMT_INTERFACE": {
     "eth0|10.10.23.111/24": {
-      "gwaddr": "10.10.23.1"
+      "gwaddr": "10.10.23.254"
     }
   },
   "NTP_SERVER": {
+    "10.10.23.253": {},
+    "10.10.23.254": {},
     "192.53.103.103": {},
     "192.53.103.104": {},
     "192.53.103.108": {}
@@ -1094,7 +1096,7 @@
       "speed": "100000"
     },
     "Ethernet100": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE26",
       "index": "26",
       "lanes": "101,102,103,104",
@@ -1118,7 +1120,7 @@
       "speed": "100000"
     },
     "Ethernet112": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE29",
       "index": "29",
       "lanes": "113,114,115,116",
@@ -1126,7 +1128,7 @@
       "speed": "100000"
     },
     "Ethernet116": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE30",
       "index": "30",
       "lanes": "117,118,119,120",
@@ -1142,7 +1144,7 @@
       "speed": "100000"
     },
     "Ethernet120": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE31",
       "index": "31",
       "lanes": "121,122,123,124",
@@ -1150,7 +1152,7 @@
       "speed": "100000"
     },
     "Ethernet124": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE32",
       "index": "32",
       "lanes": "125,126,127,128",
@@ -1334,7 +1336,7 @@
       "speed": "100000"
     },
     "Ethernet96": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE25",
       "index": "25",
       "lanes": "97,98,99,100",
