@@ -1,4 +1,7 @@
 ---
+ansible_group_priority: 10
+
+
 os_tuning_params:
   - { name: fs.file-max, value: 26234859 }
   - { name: vm.zone_reclaim_mode, value: 0 }

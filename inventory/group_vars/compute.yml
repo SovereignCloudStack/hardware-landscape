@@ -1,2 +1,5 @@
 ---
+
+ansible_group_priority: 50
+
 nova_backend: default

@@ -1,2 +1,4 @@
 ---
+ansible_group_priority: 10
+
 logical_volumes: []

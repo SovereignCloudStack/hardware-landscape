@@ -1,5 +1,7 @@
 ---
 
+ansible_group_priority: 50
+
 resolvconf_nameserver:
   - 8.8.8.8
   - 9.9.9.9
