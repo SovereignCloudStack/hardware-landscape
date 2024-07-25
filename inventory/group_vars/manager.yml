@@ -1,4 +1,4 @@
-
+---
 
 resolvconf_nameserver:
   - 8.8.8.8
@@ -20,6 +20,9 @@ chrony_allowed_subnets:
 # If set to true, chronyd will never open the server port and will operate
 # strictly in a client-only mode.
 chrony_bind_local_interfaces_only: false
+
+chrony_bindaddresses:
+  - "0.0.0.0"
 
 chrony_servers:
   - ptbtime1.ptb.de

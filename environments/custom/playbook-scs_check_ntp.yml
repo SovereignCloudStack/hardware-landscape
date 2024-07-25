@@ -4,9 +4,5 @@
   gather_facts: no
   become: yes
   tasks:
-    - name: Set time by http request to www.google.com
-      shell: |
-        /home/dragon/scripts/check_chrony.sh 3 0.01
-      args:
-        executable: /bin/bash
-
+    - name: Check all ntp datasources
+      ansible.builtin.command: /usr/local/scripts/scs_check_chrony.sh 1 0.01

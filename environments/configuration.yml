@@ -13,8 +13,6 @@ docker_proxy_http: "http://{{ groups['manager'][0] }}:8888"
 docker_proxy_https: "http://{{ groups['manager'][0] }}:8888"
 
 docker_proxy_no_proxy_extra:
-  - localhost
-  - 127.0.0.1
   - "landscape.scs.community"
   - "10.0.0.0/8"
   - "172.16.0.0/12"
@@ -25,8 +23,6 @@ proxy_proxies:
   http: "http://{{ groups['manager'][0] }}:8888"
   https: "http://{{ groups['manager'][0] }}:8888"
 proxy_no_proxy_extra:
-  - "localhost"
-  - "127.0.0.1"
   - "landscape.scs.community"
 
 # Kubernetes ##############################################
