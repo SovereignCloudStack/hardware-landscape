@@ -32,5 +32,5 @@ if [ "$ret" != "0" ];then
 fi
 
 echo "OK"
-exit 1
+exit 0
 
