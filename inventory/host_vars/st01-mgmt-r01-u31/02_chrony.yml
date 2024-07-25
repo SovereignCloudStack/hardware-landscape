@@ -1,2 +1,10 @@
----
-chrony_bindaddresses: [ "{{ internal_address }}" ]
+
+chrony_bindaddresses:
+  - "{{ internal_address }}"
+  - "{{ mgmt_address_system }}"
+
+chrony_servers:
+  - ptbtime1.ptb.de
+  - ptbtime2.ptb.de
+  - ptbtime3.ptb.de
+  - time.google.com
