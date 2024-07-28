@@ -1,6 +1,6 @@
 ---
 - name: Assign roles to manager host
-  hosts: manager-infra
+  hosts: manager_infra
   become: true
   roles:
     - osism.services.chrony
