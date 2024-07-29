@@ -1,8 +1,0 @@
----
-- name: Check the state of all ntp daemons
-  hosts: generic
-  gather_facts: no
-  become: yes
-  tasks:
-    - name: Check all ntp datasources
-      ansible.builtin.command: /usr/local/scripts/scs_check_chrony.sh 1 0.01
