@@ -1,7 +1,0 @@
----
-- name: Create VP18 default structures
-  hosts: localhost
-  become: false
-  gather_facts: no
-  roles:
-    - scs-landscape-setup

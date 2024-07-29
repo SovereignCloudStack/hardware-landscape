@@ -2,8 +2,9 @@
 - name: Setup Flavors and Images
   include_tasks: "{{ item }}"
   loop:
-    - flavors_and_images.yml
-
+    - access.yml
+    - management.yml
+    - openstack.yml
 #- name: Include project tasks
 #  include_tasks: project.yml
 #  with_items: "{{ scs_openstack_projects }}"
