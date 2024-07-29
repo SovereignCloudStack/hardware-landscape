@@ -37,14 +37,13 @@ proxy_env:
 squid_configuration_directory: /opt/squid/configuration
 squid_docker_compose_directory: /opt/squid
 
-squid_host: 10.10.21.10
+squid_host: 0.0.0.0
 #squid_tag: 5.7-23.04_beta  # don't get fooled by "beta". this is actually production ready
 squid_tag: edge
 
 
 ##########################
 # system settings
-
 motd_show_ssh: true
 network_interface: dummy0
 

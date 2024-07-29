@@ -9,6 +9,13 @@
     state: started
     enabled: true
 
+- name: Manage isc-dhcp-server6 service
+  become: true
+  ansible.builtin.service:
+    name:  isc-dhcp-server6
+    state: stopped
+    enabled: false
+
 - name: Copy isc-dhcp-server base config file
   become: true
   ansible.builtin.template:

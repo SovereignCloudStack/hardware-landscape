@@ -25,7 +25,7 @@ def get_device_configurations_dir(device_type: str) -> str:
 
 
 def get_install_media_url(model: str):
-    return f"http://10.10.23.254:8080/{model}.iso"
+    return f"http://10.10.23.254:18080/{model}.iso"
 
 
 def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
