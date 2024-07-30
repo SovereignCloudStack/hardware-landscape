@@ -99,6 +99,7 @@ This is list is incomplete.
 | HAProxy (testbed-node-2) | http://testbed-node-2.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
 
 You can gather the passwords using the following command:
+(see also information about vault in the [System Runbook](documentation/System_Runbooks.md)
 ```
 make ansible_vault_show FILE=all|grep "<Password Key>:"
 ```
