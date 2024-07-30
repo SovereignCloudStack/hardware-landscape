@@ -24,7 +24,7 @@
 
 - name: "Create {{ project_item.name }} project"
   openstack.cloud.project:
-    cloud: "{{ project_item.name }}-admin"
+    cloud: admin
     state: present
     name: "{{ project_item.name }}"
     domain: "{{ project_item.name }}"
@@ -35,12 +35,12 @@
   register: file_stat
 
 - name: "Create ssh key"
-  ansible.builtin.command: "ssh-keygen -o -a 256 -t ed25519 -C 'automated creation' -f {{ project_item.ssh_key }} -P '' "
+  ansible.builtin.command: "ssh-keygen -o -a 256 -t ed25519 -C 'automated creation' -f {{ project_item.ssh_key }} -P 'auto generated' "
   when: not file_stat.stat.exists
 
 - name: "Create {{ project_item.name }} user"
   openstack.cloud.identity_user:
-    cloud: "{{ project_item.name }}-admin"
+    cloud: admin
     state: present
     name: "{{ project_item.name }}"
     password: "{{ project_item.password_user }}"
@@ -51,7 +51,7 @@
 
 - name: "Add member roles to user {{ project_item.name }}  # noqa: ignore-errors"
   openstack.cloud.role_assignment:
-    cloud: "{{ project_item.name }}-admin"
+    cloud: "admin"
     state: present
     user: "{{ project_item.name }}"
     role: "{{ item }}"
@@ -70,23 +70,25 @@
 
 - name: "Create {{ project_item.name }} network"
   openstack.cloud.network:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
     state: present
     name: "{{ project_item.name }}"
     mtu: 1342  # NOTE: necessary because VxLAN in Geneve/VxLAN
 
 - name: "Create {{ project_item.name }} subnet"
   openstack.cloud.subnet:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
     state: present
+    domain: "{{ project_item.name }}"
     name: "subnet-{{ project_item.name }}"
     network_name: "{{ project_item.name }}"
     cidr: 192.168.200.0/24
 
 - name: "Create {{ project_item.name }} router"
   openstack.cloud.router:
-    cloud: "{{ project_item.name }}"
-    state: present
+    cloud: admin
+    statete: present
+    domain: "{{ project_item.name }}"
     name: "router-{{ project_item.name }}"
     network: public
     interfaces:
@@ -94,14 +96,16 @@
 
 - name: "Create {{ project_item.name }} ssh security group"
   openstack.cloud.security_group:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
+    domain: "{{ project_item.name }}"
     state: present
     name: ssh
 
 - name: "Add {{ project_item.name }} rule to ssh security group"
   openstack.cloud.security_group_rule:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
     state: present
+    domain: "{{ project_item.name }}"
     security_group: ssh
     protocol: tcp
     port_range_min: 22
@@ -110,29 +114,33 @@
 
 - name: "Create {{ project_item.name }} icmp security group"
   openstack.cloud.security_group:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
     state: present
+    domain: "{{ project_item.name }}"
     name: icmp
 
 - name: "Add {{ project_item.name }} rule to icmp security group"
   openstack.cloud.security_group_rule:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
     state: present
+    domain: "{{ project_item.name }}"
     security_group: icmp
     protocol: icmp
     remote_ip_prefix: 0.0.0.0/0
 
 - name: "Create {{ project_item.name }} keypair"
   openstack.cloud.keypair:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
     state: present
+    domain: "{{ project_item.name }}"
     name: "{{ project_item.name }}"
     public_key_file: "{{ project_item.ssh_key }}.pub"
 
 - name: "Create {{ project_item.name }} instance"
   openstack.cloud.server:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
     state: present
+    domain: "{{ project_item.name }}"
     name: "{{ project_item.name }}"
     image: "{{ project_item.image }}"
     flavor: "{{ project_item.flavor }}"
@@ -145,22 +153,25 @@
 
 - name: "Create {{ project_item.name }} volume"
   openstack.cloud.volume:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
     state: present
+    domain: "{{ project_item.name }}"
     name: "{{ project_item.name }}"
     size: 1
 
 - name: "Attach {{ project_item.name }} volume"
   openstack.cloud.server_volume:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
     state: present
+    domain: "{{ project_item.name }}"
     server: "{{ project_item.name }}"
     volume: "{{ project_item.name }}"
 
 - name: "Create floating {{ project_item.name }} ip address"
   openstack.cloud.floating_ip:
-    cloud: "{{ project_item.name }}"
+    cloud: admin
     state: present
+    domain: "{{ project_item.name }}"
     server: "{{ project_item.name }}"
     network: public
     wait: true
