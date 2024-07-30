@@ -80,7 +80,7 @@ ceph_public_network: 10.10.21.0/22
 
 ##########################################################
 # keystone
-keystone_identity_providers: []
+#keystone_identity_providers: []
 #  - name: "keycloak"
 #    openstack_domain: "keycloak"
 #    protocol: "openid"
@@ -102,6 +102,9 @@ keystone_logout_url: "https://{{ kolla_external_fqdn }}/"
 #om_enable_rabbitmq_quorum_queues: True
 
 enable_proxysql: no
+
+horizon_keystone_multidomain: true
+
 # BEGIN: TLS
 kolla_copy_ca_into_containers: "yes"
 openstack_cacert: /etc/ssl/certs/ca-certificates.crt

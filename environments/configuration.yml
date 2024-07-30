@@ -37,20 +37,19 @@ proxy_env:
 squid_configuration_directory: /opt/squid/configuration
 squid_docker_compose_directory: /opt/squid
 
-squid_host: 10.10.21.10
+squid_host: 0.0.0.0
 #squid_tag: 5.7-23.04_beta  # don't get fooled by "beta". this is actually production ready
 squid_tag: edge
 
 
 ##########################
 # system settings
-
 motd_show_ssh: true
 network_interface: dummy0
 
 #osism_setup_gather_subset:
-# - "!network-switches"
-# - "!dhcp-static-nodes"
+# - "!network_switches"
+# - "!dhcp_static_nodes"
 
 management_domain: mgmt.landscape.scs.community
 management_gw: 10.10.23.254
@@ -86,6 +85,34 @@ k3s_interface: "dummy0"
 # docker
 
 docker_user: "{{ operator_user }}"
+
+
+##########################
+# Projects and Basic Setup
+
+# The user in  of the "openstack" project
+# (container project for flavors and images)
+
+openstack_admin_user: "openstack-admin"
+openstack_admin_email: "team@scs.community"
+
+scs_openstack_projects:
+  - name: test1
+    type: default
+    email_user: team@scs.community
+    email_admin: team@scs.community
+    ssh_key: /opt/configuration/secrets/test1
+    image: "Cirros 0.6.0"
+    flavor: "SCS-1L-1-5"
+    password_admin: "{{ generic_project_admin_password }}"
+    password_user: "{{ generic_project_user_password }}"
+  - name: clusterstacks-demo
+    type: custom
+    email_user: team@scs.community
+    email_admin: team@scs.community
+    password_admin: "{{ generic_project_admin_password }}"
+    password_user: "{{ generic_project_user_password }}"
+
 
 ##########################
 # operator
