@@ -4,9 +4,9 @@
   gather_facts: no
   become: yes
   tasks:
-    - name: Check all ntp datasources
+    - name: Check all ntp datasources - /usr/local/scripts/scs_check_chrony.sh
       ansible.builtin.command: /usr/local/scripts/scs_check_chrony.sh 2 0.01
-    - name: Check network connectivity
+    - name: Check network connectivity- /usr/local/scripts/scs_check_network_connectivity.sh
       ansible.builtin.command: /usr/local/scripts/scs_check_network_connectivity.sh
-    - name: Check servcices
+    - name: Check servcices - /usr/local/scripts/scs_check_services.sh
       ansible.builtin.command: /usr/local/scripts/scs_check_services.sh

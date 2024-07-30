@@ -2,13 +2,22 @@
 
 
 failed=""
-grep -P "st01-(stor|mgmt|comp|ctl)-r\d+-u\d+" /etc/hosts|awk '{print $(NF)}'|sort|while read node
+
+sudo vtysh -c "show ip bgp summary"
+while read interface
+do
+   failed="NEIGHBOR:$node $failed"
+done < <(sudo vtysh -c "show ip bgp summary"|awk '/^enp/{if ($10 !~/[0-9][0-9]*/){print $1;exit 1}}')
+
+
+while read node
 do
    ping -q -c ${1:-2} $node
    if [ "$?" != "0" ];then
-      failed="$node $failed"
+      failed="PING:$node $failed"
    fi
-done
+done < <(grep -P "st01-(stor|mgmt|comp|ctl)-r\d+-u\d+" /etc/hosts|awk '{print $(NF)}'|sort)
+
 
 if [ -z "$failed" ];then
    echo "OK"
