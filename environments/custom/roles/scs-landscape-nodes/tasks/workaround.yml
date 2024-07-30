@@ -1,0 +1,19 @@
+---
+# This file contains temporary workarounds which should be later part of osism
+
+- name: Create the directory /etc/systemd/system/fwupd-refresh.service.d
+  file:
+    path: /etc/systemd/system/fwupd-refresh.service.d
+    state: directory
+    mode: '0755'
+- name: Systemd Unit override for fwupd-refresh.service
+  copy:
+    dest: /etc/systemd/system/fwupd-refresh.service.d/override.conf
+    mode: 0644
+    owner: "root"
+    group: "root"
+    content: |
+      [Service]
+      EnvironmentFile=/etc/environment
+- name: "Reload systemd after fwupd-refresh.service override creation"
+  ansible.builtin.command: "systemctl daemon-reload"
