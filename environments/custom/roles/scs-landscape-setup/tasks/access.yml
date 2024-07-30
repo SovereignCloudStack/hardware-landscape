@@ -1,0 +1,20 @@
+---
+- name: Create clouds.yml
+  become: true
+  ansible.builtin.template:
+    src: clouds.yml.j2
+    dest: /opt/configuration/environments/openstack/clouds.yml
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+  delegate_to: st01-mgmt-r01-u30
+- name: Create /opt/configuration/environments/openstack/secure.yml
+  become: true
+  ansible.builtin.template:
+    src: secure.yml.j2
+    dest: /opt/configuration/environments/openstack/secure.yml
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+  delegate_to: st01-mgmt-r01-u30
+

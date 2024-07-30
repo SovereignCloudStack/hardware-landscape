@@ -1,0 +1,16 @@
+---
+clouds:
+  admin:
+    auth:
+      password: {{ keystone_admin_password }}
+  octavia:
+    auth:
+      password: {{ octavia_keystone_password | default('damn, ansible scoping') }}
+  openstack:
+    auth:
+      password: {{ keystone_admin_password }}
+{% for project_item in scs_openstack_projects | default([]) %}
+  {{ project_item.name }}:
+    auth:
+      password: {{ project_item.password_admin }}
+{% endfor %}
