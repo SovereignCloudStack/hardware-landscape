@@ -174,5 +174,16 @@ These templates could be then imported to the netbox instance from git data sour
    }
 }
 ```
+
+```json
+{
+  "mac_addr": "d2:77:ce:2b:44:c4",
+  "mgmt_interface":"eth0",
+  "mgmt_ip":"10.10.22.102",
+  "mgmt_subnet":"24",
+  "mgmt_gwaddr":"10.10.22.1",
+}
+
+```
 https://github.com/netbox-community/netbox/issues/14277
 https://github.com/wrouesnel/docker.netbox/blob/master/netbox/src/netbox/docs/administration/netbox-shell.md
