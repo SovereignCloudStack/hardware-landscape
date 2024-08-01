@@ -23,5 +23,5 @@
   become: yes
   file:
     src: /usr/local/scripts/scs_profile.sh
-    dest: /etc/skel/.profile/.bash_profile
+    dest: /etc/skel/.bash_profile
     state: link
