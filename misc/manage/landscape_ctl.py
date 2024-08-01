@@ -49,6 +49,9 @@ if args.create_domains:
         domain.create_and_get_domain()
         domain.create_and_get_projects(args.create_projects)
 
+        for project in domain.scs_projects:
+            project.get_and_create_machines(args.create_machines)
+
 if args.delete_domains:
     for domain_name in args.delete_domains:
         os = SCSLandscapeTestDomain(conn, domain_name)

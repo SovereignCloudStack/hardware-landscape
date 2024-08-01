@@ -1,4 +1,5 @@
 from openstack import connection
+from openstack.compute.v2.server import Server
 from openstack.identity.v3.domain import Domain
 from openstack.identity.v3.project import Project
 from openstack.identity.v3.user import User
@@ -9,8 +10,8 @@ from openstack.network.v2.subnet import Subnet
 class SCSLandscapeTestNetwork:
 
     def __init__(self, conn: connection.Connection, project: Project):
-        self.conn = conn
         self.project: Project = project
+        self.conn = conn
         self.network_name = f"localnet-{self.project.name}"
         self.subnet_name = f"localsubnet-{self.project.name}"
         self.obj_network: Network | None = SCSLandscapeTestNetwork._find_network(self.network_name, conn, project)
@@ -22,7 +23,6 @@ class SCSLandscapeTestNetwork:
         if len(networks) == 0:
             return None
         elif len(networks) == 1:
-            print(f"Loaded network {networks[0].name}")
             return networks[0]
         else:
             raise RuntimeError(f"More the one network with the name {name} in {project.name}")
@@ -33,7 +33,6 @@ class SCSLandscapeTestNetwork:
         if len(subnet) == 0:
             return None
         elif len(subnet) == 1:
-            print(f"Loaded subnet {subnet[0].name}")
             return subnet[0]
         else:
             raise RuntimeError(f"More the one subnet with the name {name} in {project.name}")
@@ -80,8 +79,11 @@ class SCSLandscapeTestNetwork:
 
 class SCSLandscapeTestMachine:
 
-    def __init__(self, conn: connection.Connection):
+    def __init__(self, conn: connection.Connection, project: Project, machine_name: str):
         self.conn = conn
+        self.machine_name = machine_name
+        self.project = project
+        self.obj: Server | None = None
 
     def get_image_id_by_name(self, image_name):
         for image in self.conn.image.images():
@@ -95,16 +97,16 @@ class SCSLandscapeTestMachine:
                 return flavor.id
         return None
 
-    def create_server(self, server_name: str, network, project):
-        server = self.conn.compute.create_server(
-            name=server_name,
+    def create_server(self, network: Network):
+        conn = self.conn.connect_as_project(self.project.id)
+        server = conn.compute.create_server(
+            name=self.machine_name,
             flavor_id=self.get_flavor_id_by_name("SCS-1L-1"),
             image_id=self.get_image_id_by_name("Ubuntu 24.04"),
             networks=[{"uuid": network.id}],
-            # project_id=project.id
         )
+        #server = conn.compute.wait_for_server(server)
         print(f"Created server {server.name} in project {network.project_id}")
-
 
 class SCSLandscapeTestUser:
 
@@ -156,12 +158,24 @@ class SCSLandscapeTestProject:
         self.user = user
         self.obj: Project = self.conn.identity.find_project(project_name, domain_id=self.domain.id)
         self.scs_network: SCSLandscapeTestNetwork | None = SCSLandscapeTestProject._get_network(conn, self.obj)
+        self.scs_machines: list[SCSLandscapeTestMachine] = SCSLandscapeTestProject._get_machines(conn, self.obj)
 
     @staticmethod
     def _get_network(conn: connection.Connection, obj) -> None | SCSLandscapeTestNetwork:
        if not obj:
            return None
        return SCSLandscapeTestNetwork(conn, obj)
+
+    @staticmethod
+    def _get_machines(conn: connection.Connection, obj) -> list[SCSLandscapeTestMachine]:
+        if not obj:
+            return []
+        result = []
+        for server in conn.compute.servers(all_projects=True, project_id=obj.id):
+            scs_server = SCSLandscapeTestMachine(conn, obj, server.name)
+            scs_server.obj = server
+            result.append(scs_server)
+        return result
 
     def get_role_id_by_name(self, role_name) -> str:
         for role in self.conn.identity.roles():
@@ -200,6 +214,12 @@ class SCSLandscapeTestProject:
         self.scs_network.delete_network()
         self.conn.identity.delete_project(self.obj.id)
         print(f"Deleted project {self.obj.name} in domain {self.domain.name}")
+
+    def get_and_create_machines(self, machines: list[str]):
+        for machine_name in machines:
+            machine = SCSLandscapeTestMachine(self.conn, self.obj, machine_name)
+            machine.create_server(self.scs_network.obj_network)
+            self.scs_machines.append(machine)
 
 
 class SCSLandscapeTestDomain:
@@ -264,3 +284,8 @@ class SCSLandscapeTestDomain:
         for project_name in create_projects:
             project = SCSLandscapeTestProject(self.conn, project_name, self.obj, user)
             project.create_and_get_project()
+            self.scs_projects.append(project)
+
+    def create_and_get_machines(self, machines: list[str]):
+        for project in self.scs_projects:
+            project.get_and_create_machines(machines)
