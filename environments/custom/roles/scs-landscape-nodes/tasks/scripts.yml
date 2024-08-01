@@ -18,3 +18,10 @@
     src: /usr/local/scripts/scs_profile.sh
     dest: /etc/profile.d/Z99-scs-env.sh
     state: link
+
+- name: Create symbolic link to scs profile
+  become: yes
+  file:
+    src: /usr/local/scripts/scs_profile.sh
+    dest: /etc/skel/.profile/.bash_profile
+    state: link
