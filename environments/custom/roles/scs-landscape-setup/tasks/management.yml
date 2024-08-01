@@ -1,0 +1,15 @@
+---
+- name: "Create openstack project"
+  openstack.cloud.project:
+    cloud: admin
+    state: present
+    name: "openstack"
+    domain: "default"
+
+# Put this later in the openstack project
+- name: "Add flavors"
+  ansible.builtin.command: "osism manage flavor --cloud admin"
+
+- name: "Add images"
+  ansible.builtin.command: "osism manage images --cloud admin"
+

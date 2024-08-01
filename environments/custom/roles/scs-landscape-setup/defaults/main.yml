@@ -1,12 +1,19 @@
 ---
 # defaults file for scs-landscape-setup
+operator_group: "dragon"
+operator_user: "dragon"
 
-scs_openstack_projects:
-  - name: test1
-    email_user: test-admin@testbed.osism.xyz
-    email_admin: test-admin@testbed.osism.xyz
-    ssh_key: /opt/configuration/secrets/test1
-    image: "Cirros 0.6.0"
-    flavor: "SCS-1L-1-5"
-    password_admin: "yolobanana1"
-    password_user: "yolobanana2"
+scs_openstack_projects: []
+#  - name: test1
+#    email_user: test-admin@testbed.osism.xyz
+#    email_admin: test-admin@testbed.osism.xyz
+#    ssh_key: /opt/configuration/secrets/test1
+#    image: "Cirros 0.6.0"
+#    flavor: "SCS-1L-1-5"
+#    password_admin: "yolobanana1"
+#    password_user: "yolobanana2"
+#  - name: clusterstacks-demo
+#    email_user: test-admin@testbed.osism.xyz
+#    email_admin: test-admin@testbed.osism.xyz
+#    password_admin: "yolobanana1"
+#    password_user: "yolobanana2"

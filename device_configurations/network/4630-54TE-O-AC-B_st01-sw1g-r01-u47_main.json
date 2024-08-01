@@ -641,7 +641,7 @@
       "speed": "1000"
     },
     "Ethernet11": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth12(Port12)",
       "autoneg": "on",
       "index": "12",
@@ -651,7 +651,7 @@
       "speed": "1000"
     },
     "Ethernet12": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth13(Port13)",
       "autoneg": "on",
       "index": "13",
@@ -661,7 +661,7 @@
       "speed": "1000"
     },
     "Ethernet13": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth14(Port14)",
       "autoneg": "on",
       "index": "14",
@@ -671,7 +671,7 @@
       "speed": "1000"
     },
     "Ethernet14": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth15(Port15)",
       "autoneg": "on",
       "index": "15",
@@ -681,7 +681,7 @@
       "speed": "1000"
     },
     "Ethernet15": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth16(Port16)",
       "autoneg": "on",
       "index": "16",
@@ -691,7 +691,7 @@
       "speed": "1000"
     },
     "Ethernet16": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth17(Port17)",
       "autoneg": "on",
       "index": "17",
@@ -701,7 +701,7 @@
       "speed": "1000"
     },
     "Ethernet17": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth18(Port18)",
       "autoneg": "on",
       "index": "18",
@@ -711,7 +711,7 @@
       "speed": "1000"
     },
     "Ethernet18": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth19(Port19)",
       "autoneg": "on",
       "index": "19",
@@ -721,7 +721,7 @@
       "speed": "1000"
     },
     "Ethernet19": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth20(Port20)",
       "autoneg": "on",
       "index": "20",
@@ -741,7 +741,7 @@
       "speed": "1000"
     },
     "Ethernet20": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth21(Port21)",
       "autoneg": "on",
       "index": "21",
@@ -751,7 +751,7 @@
       "speed": "1000"
     },
     "Ethernet21": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth22(Port22)",
       "autoneg": "on",
       "index": "22",
@@ -761,7 +761,7 @@
       "speed": "1000"
     },
     "Ethernet22": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth23(Port23)",
       "autoneg": "on",
       "index": "23",
@@ -771,7 +771,7 @@
       "speed": "1000"
     },
     "Ethernet23": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth24(Port24)",
       "autoneg": "on",
       "index": "24",
@@ -781,7 +781,7 @@
       "speed": "1000"
     },
     "Ethernet24": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth25(Port25)",
       "autoneg": "on",
       "index": "25",
@@ -791,7 +791,7 @@
       "speed": "1000"
     },
     "Ethernet25": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth26(Port26)",
       "autoneg": "on",
       "index": "26",
@@ -801,7 +801,7 @@
       "speed": "1000"
     },
     "Ethernet26": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth27(Port27)",
       "autoneg": "on",
       "index": "27",
@@ -811,7 +811,7 @@
       "speed": "1000"
     },
     "Ethernet27": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth28(Port28)",
       "autoneg": "on",
       "index": "28",
@@ -821,7 +821,7 @@
       "speed": "1000"
     },
     "Ethernet28": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth29(Port29)",
       "autoneg": "on",
       "index": "29",
@@ -831,7 +831,7 @@
       "speed": "1000"
     },
     "Ethernet29": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth30(Port30)",
       "autoneg": "on",
       "index": "30",
@@ -851,7 +851,7 @@
       "speed": "1000"
     },
     "Ethernet30": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth31(Port31)",
       "autoneg": "on",
       "index": "31",
@@ -861,7 +861,7 @@
       "speed": "1000"
     },
     "Ethernet31": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth32(Port32)",
       "autoneg": "on",
       "index": "32",
@@ -871,7 +871,7 @@
       "speed": "1000"
     },
     "Ethernet32": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth33(Port33)",
       "autoneg": "on",
       "index": "33",
@@ -881,7 +881,7 @@
       "speed": "1000"
     },
     "Ethernet33": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth34(Port34)",
       "autoneg": "on",
       "index": "34",
@@ -891,7 +891,7 @@
       "speed": "1000"
     },
     "Ethernet34": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth35(Port35)",
       "autoneg": "on",
       "index": "35",
@@ -901,7 +901,7 @@
       "speed": "1000"
     },
     "Ethernet35": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth36(Port36)",
       "autoneg": "on",
       "index": "36",
@@ -911,7 +911,7 @@
       "speed": "1000"
     },
     "Ethernet36": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth37(Port37)",
       "autoneg": "on",
       "index": "37",
@@ -921,7 +921,7 @@
       "speed": "1000"
     },
     "Ethernet37": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth38(Port38)",
       "autoneg": "on",
       "index": "38",
@@ -931,7 +931,7 @@
       "speed": "1000"
     },
     "Ethernet38": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth39(Port39)",
       "autoneg": "on",
       "index": "39",
@@ -941,7 +941,7 @@
       "speed": "1000"
     },
     "Ethernet39": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth40(Port40)",
       "autoneg": "on",
       "index": "40",
@@ -961,7 +961,7 @@
       "speed": "1000"
     },
     "Ethernet40": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth41(Port41)",
       "autoneg": "on",
       "description": "Production_st01-sw1g-r01-u32",
@@ -972,7 +972,7 @@
       "speed": "1000"
     },
     "Ethernet41": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth42(Port42)",
       "autoneg": "on",
       "description": "Production_st01-sw1g-r01-u33",
@@ -983,7 +983,7 @@
       "speed": "1000"
     },
     "Ethernet42": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth43(Port43)",
       "autoneg": "on",
       "description": "Lab_st01-sw1g-r01-u42",
@@ -994,7 +994,7 @@
       "speed": "1000"
     },
     "Ethernet43": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth44(Port44)",
       "autoneg": "on",
       "description": "-",
@@ -1005,7 +1005,7 @@
       "speed": "1000"
     },
     "Ethernet44": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth45(Port45)",
       "autoneg": "on",
       "index": "45",
@@ -1015,7 +1015,7 @@
       "speed": "1000"
     },
     "Ethernet45": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth46(Port46)",
       "autoneg": "on",
       "index": "46",
@@ -1045,7 +1045,7 @@
       "speed": "1000"
     },
     "Ethernet48": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth49(Port49)",
       "autoneg": "off",
       "index": "49",
@@ -1055,7 +1055,7 @@
       "speed": "25000"
     },
     "Ethernet49": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth50(Port50)",
       "autoneg": "off",
       "index": "50",
@@ -1075,7 +1075,7 @@
       "speed": "1000"
     },
     "Ethernet50": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth51(Port51)",
       "autoneg": "off",
       "index": "51",
@@ -1085,7 +1085,7 @@
       "speed": "25000"
     },
     "Ethernet51": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth52(Port52)",
       "autoneg": "off",
       "index": "52",
@@ -1095,7 +1095,7 @@
       "speed": "25000"
     },
     "Ethernet52": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth53(Port53)",
       "autoneg": "off",
       "index": "53",
@@ -1105,7 +1105,7 @@
       "speed": "100000"
     },
     "Ethernet56": {
-      "admin_status": "down",
+      "admin_status": "up",
       "alias": "Eth54(Port54)",
       "autoneg": "off",
       "index": "54",

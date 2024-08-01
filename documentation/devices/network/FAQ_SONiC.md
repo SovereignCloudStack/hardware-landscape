@@ -254,6 +254,11 @@ sonic-installer set-default SONiC-OS-Edgecore-SONiC_20230420_055428_ec202111_370
   for INTERFACE in $INTERFACES; do sudo config interface ipv6 enable use-link-local-only $INTERFACE; done
   ```
 
+
+* Interface status
+  show interfaces counters
+  show interfaces transceiver error-status
+
 ## VLANs
 
 ```
@@ -280,7 +285,7 @@ config vlan member del 26 Ethernet124
 config vlan member del 26 Ethernet120
 config portchannel member add PortChannel01 Ethernet120
 config portchannel member add PortChannel01 Ethernet124
-config vlan member add 25 PortChannel01
+config vlan member add 25 PortChannel01(
 config vlan member add 26 PortChannel01
 show interfaces status PortChannel01
 ```

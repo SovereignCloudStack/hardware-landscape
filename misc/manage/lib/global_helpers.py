@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 from datetime import datetime, timezone
 from typing import Tuple
 
@@ -25,7 +26,7 @@ def get_device_configurations_dir(device_type: str) -> str:
 
 
 def get_install_media_url(model: str):
-    return f"http://10.10.23.254:8080/{model}.iso"
+    return f"http://10.10.23.254:18080/{model}.iso"
 
 
 def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
@@ -61,3 +62,15 @@ def ask_for_confirmation(prompt="Are you sure?"):
             return False
         else:
             print("Please respond with 'yes' or 'no'.")
+
+
+def generate_strings(expression: str):
+    match = re.match(r'([^\{]*)\{(\d+)\.\.(\d+)\}([^\{]*)', expression)
+    results = []
+    if match:
+        prefix, start, end, suffix = match.groups()
+        start, end = int(start), int(end)
+        results = [f"{prefix}{num}{suffix}" for num in range(start, end + 1)]
+    else:
+        results.append(expression)
+    return results

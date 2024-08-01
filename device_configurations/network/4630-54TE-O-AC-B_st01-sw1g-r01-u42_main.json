@@ -344,13 +344,13 @@
       "state": "always_enabled"
     },
     "dhcp_relay": {
-      "auto_restart": "enabled",
+      "auto_restart": "disabled",
       "has_global_scope": "True",
       "has_per_asic_scope": "False",
       "has_timer": "False",
       "high_mem_alert": "disabled",
       "set_owner": "local",
-      "state": "enabled"
+      "state": "disabled"
     },
     "iccpd": {
       "auto_restart": "enabled",
@@ -549,7 +549,7 @@
   },
   "MGMT_INTERFACE": {
     "eth0|10.10.23.103/24": {
-      "gwaddr": "10.10.23.1"
+      "gwaddr": "10.10.23.254"
     }
   },
   "MGMT_PORT": {
@@ -565,6 +565,8 @@
     }
   },
   "NTP_SERVER": {
+    "10.10.23.253": {},
+    "10.10.23.254": {},
     "192.53.103.103": {},
     "192.53.103.104": {},
     "192.53.103.108": {}
@@ -1051,7 +1053,7 @@
       "speed": "25000"
     },
     "Ethernet52": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "Eth53(Port53)",
       "autoneg": "off",
       "index": "53",
@@ -1061,7 +1063,7 @@
       "speed": "100000"
     },
     "Ethernet56": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "Eth54(Port54)",
       "autoneg": "off",
       "index": "54",
@@ -1113,7 +1115,7 @@
   },
   "PORTCHANNEL": {
     "PortChannel02": {
-      "admin_status": "up",
+      "admin_status": "down",
       "fast_rate": "false",
       "lacp_key": "auto",
       "min_links": "1",
@@ -1147,7 +1149,8 @@
     }
   },
   "SYSLOG_SERVER": {
-    "10.10.23.1": {}
+    "10.10.23.1": {},
+    "10.10.23.254": {}
   },
   "VERSIONS": {
     "DATABASE": {

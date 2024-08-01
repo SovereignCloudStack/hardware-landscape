@@ -14,20 +14,5 @@ motd_content: |
    \___/ \__,_|_| |_| |_| .__/|_| |_|\___/|___/\__|
                         |_|
 
-  * Attach to a running screen session which provides access to the ttypS0..ttyS3 interfaces
-    or create automatically a new one
-    scs_serial_access
-    - 'CTLR + y, "'
-       select your terminal
-    - 'CTLR + y, :quit'
-       terminate screen entirely
-    - 'CTLR + y, :break'
-       send a break signal
-  * Restart all sessions
-    sudo kill -KILL $(pgrep -u root screen)
-    scs_serial_access
-  * Review console output
-    see /var/log/screen
-
   You can distribute OS Images using the folder /srv/www (make directory/file world readable).
   You can download files from http://{{ mgmt_address_system }}:18080/.

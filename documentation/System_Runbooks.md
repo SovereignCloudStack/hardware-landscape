@@ -2,7 +2,7 @@
 
 # How to get access
 
-# Manage SSH Access and Adminstrative Permissions
+## Manage SSH Access and Adminstrative Permissions
 
 1. Clone repository and create PR
 2. User: Edit [environments/configuration.yml](../environments/configuration.yml)
@@ -15,7 +15,7 @@
    osism apply operator
    ```
 
-# Manage VPN Access
+## Manage VPN Access
 
 1. User: Clone repository and create PR
 2. User: Generate a keypair localally and add the public key
@@ -51,3 +51,19 @@
    sudo wg-quick down "${VPN_KEYDIR?}/wg2.conf"
    ```
 
+## Have the Ansible Vault Secret on your system
+
+```
+cd hardware-landscape
+ssh scs-manager docker exec osism-ansible /ansible-vault.py > secrets/vaultpass
+```
+
+# Finding problems
+
+## Checking the status of the system landscape
+
+This ansible play executes basic diagnostic checks to simply problem detection:
+```
+ssh scs-manager
+osism apply scs_check_landscape
+```

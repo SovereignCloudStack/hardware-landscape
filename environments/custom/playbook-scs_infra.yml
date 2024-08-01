@@ -6,13 +6,14 @@
     - scs-mgr-dhcpd
 
 - name: Assign roles to infrastructure hosts
-  hosts: manager-infra
+  hosts: manager_infra
   become: true
   roles:
     - osism.services.wireguard
     - scs-landscape-nodes
     - osism.commons.motd
     - osism.services.squid
+    - osism.services.chrony
     - scs-dnscrypt
     - scs-mgr-httpd
     - scs-mgr-samba
