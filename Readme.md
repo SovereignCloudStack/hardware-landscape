@@ -93,7 +93,6 @@ This is list is incomplete.
 | phpMyAdmin               | https://phpmyadmin.zone1.landscape.scs.community           | root         |                                |                 |
 | Webserver                | http://files.zone1.landscape.scs.community:18080/          | n/a          | n/a                            | Install Files   |
 | DNS                      | https://portal.cnds.io                                     | <personal>   |                                |                 |
-
 | HAProxy (testbed-node-0) | http://testbed-node-0.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
 | HAProxy (testbed-node-1) | http://testbed-node-1.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
 | HAProxy (testbed-node-2) | http://testbed-node-2.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
