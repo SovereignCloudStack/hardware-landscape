@@ -12,7 +12,7 @@ devices:
     rack:
       name: "r01"
     config_template:
-      name: "test"
+      name: "4630-54TE-O-AC-B_config"
     serial: "463054TE2315114"
     position: 42
     face: "rear"
@@ -64,7 +64,7 @@ scripts:
     data:
       port_config_ini_url: "https://raw.githubusercontent.com/sonic-net/sonic-buildimage/master/device/accton/x86_64-accton_as4630_54te-r0/Accton-AS4630-54TE/port_config.ini"
       device: "st01-sw1g-r01-u42"
-      disable_ports: false
+      disable_ports: true
 interfaces:
   - name: "eth0"
     type: "1000base-t"
