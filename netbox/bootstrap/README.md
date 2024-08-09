@@ -53,16 +53,15 @@ If you are running netbox-docker then mount scripts defined in this repository o
  ```
 Adjust accordingly, based on your directory structure and location of the Netbox docker-compose.yml file.
 
-Alternatively, custom scripts could be uploaded to NetBox, via the UI. Navigate to Customization – Scripts
-and from here you can click the link to add a new script.
-
-You can upload the file from your local machine, or from a remote data source like a Git repo or S3 bucket.
+Alternatively, custom scripts could be uploaded to NetBox from a remote data source like a Git repo or S3 bucket. 
 To add `SovereignCloudStack/hardware-landscape` Git data source, use the `netbox_init.py` script as follows:
 
 ```bash
 ./netbox_init.py --api-url <netbox-url> --api-token <netbox-token> --sync-datasources --data-file landscape/03_data_sources.yml
 ```
 
+Navigate to `Customization/Scripts` and from here you can click the link to add `update_sonic_interfaces.py` script from
+remote data source `scs-hardware-landscape`.
 Refer to [this blog post](https://netboxlabs.com/blog/getting-started-with-netbox-custom-scripts/) for further details. 
 
 ## Import SCS Landscape
