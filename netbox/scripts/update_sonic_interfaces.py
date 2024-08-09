@@ -1,7 +1,10 @@
 import requests
 
-from extras.scripts import Script, StringVar, ObjectVar, AbortScript
+from extras.scripts import Script, StringVar, ObjectVar, AbortScript, BooleanVar
 from dcim.models import Device, Interface
+
+
+BREAKOUT_MODE_MAP = {"1000": "1x1G", "25000": "1x25G[10G,1G]", "100000": "1x100G[40G]"}
 
 
 class UpdateSonicInterfacesFromINI(Script):
@@ -12,7 +15,9 @@ class UpdateSonicInterfacesFromINI(Script):
         commit_default = True
         description = """Fetch and update interface configurations based on the SONiC config_port.ini file available
         at SONiC Build Image Repository, https://github.com/sonic-net/sonic-buildimage. This ensures that SONiC-specific
-        interface attributes like lanes, alias, index, and autoneg are populated.
+        interface attributes like lanes, alias, index, brkout_mode, and autoneg are populated.
+        
+        Optionally, you can disable all ports by using the Disable ports script option.
         
         Example port_config.ini URL:
         https://raw.githubusercontent.com/sonic-net/sonic-buildimage/master/device/accton/x86_64-accton_as4630_54te-r0/Accton-AS4630-54TE/port_config.ini 
@@ -31,15 +36,23 @@ class UpdateSonicInterfacesFromINI(Script):
           - name: "index"
             type: "text"
             object_types: ["dcim.interface"]
+          - name: "brkout_mode"
+            type: "text"
+            object_types: [ "dcim.interface" ]
         """
 
     port_config_ini_url = StringVar(
-        description="URL to fetch the SONiC port config file"
+        description="URL to fetch the SONiC port config file", label="Port config URL"
     )
 
     device = ObjectVar(
-        description="Device to update interfaces for",
-        model=Device
+        description="Device to update interfaces for", label="Device", model=Device
+    )
+
+    disable_ports = BooleanVar(
+        description="Disable every port listed in the port configuration file",
+        label="Disable ports",
+        default=False,
     )
 
     def get_sonic_port_config(self, url: str) -> dict:
@@ -67,6 +80,8 @@ class UpdateSonicInterfacesFromINI(Script):
             name, lanes, alias, index, speed, autoneg = parts[:6]
 
             sonic_port_config[name] = {
+                "speed": speed,
+                "brkout_mode": BREAKOUT_MODE_MAP[speed],
                 "lanes": lanes,
                 "alias": alias,
                 "index": index,
@@ -75,12 +90,24 @@ class UpdateSonicInterfacesFromINI(Script):
         self.log_info(f"SONiC port configuration fetched successfully")
         return sonic_port_config
 
-    def update_interfaces(self, device, interfaces_config: dict):
+    def update_interfaces(
+        self, device, interfaces_config: dict, disable_ports: bool = False
+    ):
         interfaces = Interface.objects.filter(device=device)
         for interface in interfaces:
             port_config = interfaces_config.get(interface.name)
             if port_config:
                 try:
+                    if disable_ports:
+                        interface.enabled = False
+
+                    speed = port_config.pop(
+                        "speed"
+                    )  # speed is regular interface field, not a custom one
+                    interface.speed = (
+                        int(speed) * 1000
+                    )  # port config contains speed in Mbps, netbox expects bps
+
                     interface.custom_field_data = port_config
 
                     interface.full_clean()
@@ -94,10 +121,7 @@ class UpdateSonicInterfacesFromINI(Script):
             self.log_info(f"{interface.name} does not have a SONiC port configuration")
 
     def run(self, data, commit):
-        port_config_url = data['port_config_ini_url']
-        port_config = self.get_sonic_port_config(port_config_url)
-
-        device = data['device']
-        self.update_interfaces(device, port_config)
+        port_config = self.get_sonic_port_config(data["port_config_ini_url"])
+        self.update_interfaces(data["device"], port_config, data["disable_ports"])
 
         self.log_success("All interfaces updated successfully.")

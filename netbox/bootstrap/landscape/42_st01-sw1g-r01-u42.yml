@@ -1,0 +1,134 @@
+#config-templates:
+#  - name: "test"
+#    data_source:
+#      name: "scs-hardware-landscape"
+#    data_file:
+#      path: "netbox/config_templates/4630-54TE-O-AC-B.json.j2"
+#    template_code: "{}"
+#    tags:
+#      - slug: scs
+#      - slug: landscape
+devices:
+  - name: "st01-sw1g-r01-u42"
+    status: "active"
+    device_type:
+      slug: "edgecore-4630-54te-o-ac-b"
+    role:
+      slug: "leaf-router"
+    site:
+      slug: "st01"
+    platform:
+      slug: "sonic"
+    rack:
+      name: "r01"
+    config_template:
+      name: "test"
+    serial: "463054TE2315114"
+    position: 42
+    face: "rear"
+    description: "Management lab router"
+    local_context_data:
+      dhcp_snoop_enabled: false
+      dot1x_enabled: false
+      mcast_enabled: false
+      mgmt_vrf_config:
+        vrf_global:
+          mgmt_vrf_enabled: "false"
+      mac_addr: "d2:77:ce:2b:59:c4"
+      # FIXME: Add gateway IP to the Jinja template.
+      #  Netbox does not support concept of gateways, see https://github.com/netbox-community/netbox/issues/1610
+      #  The gateway should be introduced as a custom_field or tag on IP address resource.
+      mgmt_gwaddr: "10.10.23.1"
+      ntp_servers:
+        - "192.53.103.103"
+        - "192.53.103.104"
+        - "192.53.103.108"
+      snmp:
+        location: "public"
+        communities:
+          - name: "Eevaid7xoh4m"
+            type: "RO"
+          - name: "lohz3kaG5ted"
+            type: "RW"
+          - name: "public"
+            type: "RO"
+      syslog_servers:
+        - "10.10.23.1"
+      # FIXME: Create appropriate custom custom fields for LAG interfaces and
+      #  insert the following params as a LAG interface attributes
+      port_channels_params:
+        PortChannel02:
+          fast_rate: "false"
+          lacp_key: "auto"
+          min_links: "1"
+          mix_speed: "false"
+    tags:
+      - slug: scs
+      - slug: landscape
+      - slug: lab
+# Note: The `scripts` is custom resource field introduced to manage the script execution.
+# Scripts are executed only when the optional argument `--execute-script` is applied.
+scripts:
+  - name: "UpdateSonicInterfacesFromINI"
+    commit: true
+    data:
+      port_config_ini_url: "https://raw.githubusercontent.com/sonic-net/sonic-buildimage/master/device/accton/x86_64-accton_as4630_54te-r0/Accton-AS4630-54TE/port_config.ini"
+      device: "st01-sw1g-r01-u42"
+      disable_ports: false
+interfaces:
+  - name: "eth0"
+    type: "1000base-t"
+    enabled: true
+    device:
+      name: "st01-sw1g-r01-u42"
+    description: "Management Port"
+  - name: "Vlan23"
+    type: "virtual"
+    enabled: true
+    device:
+      name: "st01-sw1g-r01-u42"
+  - name: "PortChannel02"
+    type: "lag"
+    enabled: true
+    mtu: "9100"
+    device:
+      name: "st01-sw1g-r01-u42"
+    mode: "tagged"
+    tagged_vlans:
+      - vid: "24"
+  - name: "Ethernet0"
+    type: "1000base-t"
+    enabled: true
+    device:
+      name: "st01-sw1g-r01-u42"
+    mode: "tagged"
+    tagged_vlans:
+      - vid: "23"
+      - vid: "24"
+  - name: "Ethernet52"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw1g-r01-u42"
+    lag:
+      name: "PortChannel02"
+  - name: "Ethernet56"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw1g-r01-u42"
+    lag:
+      name: "PortChannel02"
+# Assign IP addresses to device's interface
+ip-addresses:
+  - address: "10.10.23.103/24"
+    status: "active"
+    description: "Management"
+    # FIXME: Api requires `assigned_object_type` and `assigned_object_id`
+    # to assign ip address to the resource, e.g. device.
+    # This workaround facilitates the import based on device name and interface name.
+    # The same approach is used in the UI import form.
+    # The above needs a "special" handling in the code and would be nice to introduce a
+    # general approach.
+    device: "st01-sw1g-r01-u42"
+    interface: "eth0"
