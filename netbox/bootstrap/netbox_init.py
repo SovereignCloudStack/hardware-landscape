@@ -3,10 +3,7 @@
 NetBox init script
 
 This script is used to bootstrap a NetBox instance by creating or updating various netbox
-resources, see NB_API_MODEL_MAP.
-
-Disclaimer: Script has not been tested with all Netbox objects defined NB_API_MODEL_MAP, hence some mey not work,
-and the script needs to be fixed accordingly.
+resources, see META.
 
 Basic Usage:
 1. Ensure you have the necessary dependencies installed:
@@ -19,41 +16,36 @@ Basic Usage:
 
 Example data file (data.yml):
 ----------------------------------------
+regions:
+  - name: Europe
+    slug: europe
+  - name: Germany
+    slug: germany
+    parent:
+      slug: europe
 sites:
   - name: "ST01"
     slug: "st01"
     status: "active"
+    facility: "st01"
     physical_address: "1234 Street, City, Country, Earth"
     description: "ST01 site"
-
-racks:
-  - site:
-      name: "ST01"
-      slug: "st01"
-    name: "Landscape"
-    status: "active"
-    u_height: 47
-    type: "2-post-frame"
-    width: "19"
-    desc_units: false
-    outer_width: 600
-    outer_depth: 800
-    outer_unit: "mm"
-
-platforms:
-  - name: "SONiC"
-    slug: "sonic"
+    region:
+      slug: germany
 ----------------------------------------
 """
-from typing import List
-
 import pynetbox
 import logging
 import sys
 import os
 import argparse
 import yaml
+import requests
+import time
+import glob
 
+from collections.abc import Mapping
+from typing import List
 from dataclasses import dataclass
 from enum import Enum
 
@@ -68,6 +60,7 @@ class NetboxApp(Enum):
     DCIM = "dcim"
     EXTRAS = "extras"
     IPAM = "ipam"
+    CORE = "core"
 
 
 @dataclass
@@ -78,9 +71,16 @@ class Meta:
 
 
 META = {
+    "data-sources": Meta(
+        app=NetboxApp.CORE, required=["name", "type", "source_url"], filer=["name"]
+    ),
     "tags": Meta(
         app=NetboxApp.EXTRAS, required=["name", "slug", "color"], filer=["slug"]
     ),
+    "custom-fields": Meta(
+        app=NetboxApp.EXTRAS, required=["name", "type", "object_types"], filer=["name"]
+    ),
+    "config-templates": Meta(app=NetboxApp.EXTRAS, required=["name"], filer=["name"]),
     "regions": Meta(app=NetboxApp.DCIM, required=["name", "slug"], filer=["slug"]),
     "sites": Meta(
         app=NetboxApp.DCIM, required=["name", "slug", "status"], filer=["slug"]
@@ -103,26 +103,41 @@ META = {
     "device-roles": Meta(
         app=NetboxApp.DCIM, required=["name", "slug", "color"], filer=["slug"]
     ),
-    "custom-fields": Meta(
-        app=NetboxApp.EXTRAS, required=["name", "type", "object_types"], filer=["name"]
-    ),
-    "config-templates": Meta(
-        app=NetboxApp.EXTRAS, required=["name", "template_code"], filer=["name"]
-    ),
     "devices": Meta(
         app=NetboxApp.DCIM,
         required=["role", "device_type", "status", "site", "name"],
         filer=["name"],
     ),
+    "interfaces": Meta(
+        app=NetboxApp.DCIM,
+        required=["device", "name", "type"],
+        filer=["name", "device"],
+    ),
     "ip-addresses": Meta(
-        app=NetboxApp.IPAM, required=["address", "status"], filer=["address", "device"]
+        app=NetboxApp.IPAM, required=["address", "status"], filer=["address"]
+    ),
+    "ip-ranges": Meta(
+        app=NetboxApp.IPAM,
+        required=["start_address", "end_address", "status"],
+        filer=["start_address", "end_address"],
+    ),
+    "vlans": Meta(
+        app=NetboxApp.IPAM, required=["name", "status", "vid"], filer=["vid"]
+    ),
+    "prefixes": Meta(
+        app=NetboxApp.IPAM, required=["prefix", "status"], filer=["prefix"]
     ),
 }
 
 
 def load_data(file_path):
-    with open(file_path, "r") as file:
-        return yaml.safe_load(file)
+    try:
+        with open(file_path, "r") as file:
+            return yaml.safe_load(file)
+
+    except FileNotFoundError as e:
+        logger.error(f"Failed to find {file_path}: {e}")
+        sys.exit(1)
 
 
 def get_model_id(nb: pynetbox.api, nb_model: str, params: dict):
@@ -133,7 +148,6 @@ def get_model_id(nb: pynetbox.api, nb_model: str, params: dict):
         sys.exit(1)
 
     nb_filter = {key: params[key] for key in nb_meta.filer}
-
     try:
         app_obj = getattr(nb, nb_meta.app.value)
         model_obj = getattr(app_obj, nb_model)
@@ -145,9 +159,28 @@ def get_model_id(nb: pynetbox.api, nb_model: str, params: dict):
         logger.error(f"{nb_model.capitalize()} with {nb_filter} not found.")
         sys.exit(1)
 
-    except pynetbox.RequestError as e:
+    except (pynetbox.RequestError, requests.exceptions.RequestException) as e:
         logger.error(f"Failed to get {nb_model.capitalize()}: {e}")
         sys.exit(1)
+
+
+def mangle_secret(nb: pynetbox.api, params: dict):
+
+    if "device" in params["data"]:
+        device = params["data"].pop("device")
+        params["data"].update(
+            {
+                "device": get_model_id(
+                    nb,
+                    "devices",
+                    {"name": device},
+                ),
+            }
+        )
+        return
+
+    logger.error(f"Unsupported secret values")
+    sys.exit(1)
 
 
 def mangle_ip_addresses(nb: pynetbox.api, params: dict):
@@ -157,13 +190,29 @@ def mangle_ip_addresses(nb: pynetbox.api, params: dict):
             {
                 "assigned_object_type": "dcim.interface",
                 "assigned_object_id": get_model_id(
-                    nb, "devices", {"name": params["device"]}
+                    nb,
+                    "interfaces",
+                    {"device": params["device"], "name": params["interface"]},
                 ),
             }
         )
         return
 
     logger.error(f"Unsupported ip-address values")
+    sys.exit(1)
+
+
+def mangle_interfaces(nb: pynetbox.api, params: dict):
+
+    if "tagged_vlans" in params:
+        tagged_vlans = params["tagged_vlans"]
+        ids = []
+        for tagged_vlan in tagged_vlans:
+            ids.append(get_model_id(nb, "vlans", tagged_vlan))
+        params.update({"tagged_vlans": ids})
+        return
+
+    logger.error(f"Unsupported vlan values")
     sys.exit(1)
 
 
@@ -188,14 +237,20 @@ def create_or_update(nb: pynetbox.api, nb_model: str, params: dict):
             logger.error(f"{nb_model.capitalize()} missing filer parameter")
             sys.exit(1)
 
-        if isinstance(nb_filter_value, str) or isinstance(nb_filter_value, bool):
-            nb_filter.update({key: nb_filter_value})
-        else:
+        if isinstance(nb_filter_value, Mapping):
             # FIXME: improve this naive implementation
-            nb_filter.update({key: nb_filter_value["slug"]})
+            nested_key = "slug"
+            if "name" in nb_filter_value:
+                nested_key = "name"
+            nb_filter.update({key: nb_filter_value[nested_key]})
+        else:
+            nb_filter.update({key: nb_filter_value})
 
     if nb_model == "ip-addresses" and "device" in params:
         mangle_ip_addresses(nb, params)
+
+    if nb_model == "interfaces" and "tagged_vlans" in params:
+        mangle_interfaces(nb, params)
 
     try:
         app_obj = getattr(nb, nb_meta.app.value)
@@ -214,15 +269,121 @@ def create_or_update(nb: pynetbox.api, nb_model: str, params: dict):
         logger.info(f"{nb_model.capitalize()} created successfully: {nb_filter}")
         return new_resource
 
-    except pynetbox.RequestError as e:
+    except (pynetbox.RequestError, requests.exceptions.RequestException) as e:
         logger.error(f"{nb_model.capitalize()} creation or update failed: {e}")
         sys.exit(1)
+
+
+def sync_data_source(nb: pynetbox.api, params: dict, wait_for_sync: int = 60):
+    try:
+        data_source = nb.core.data_sources.get(name=params["name"])
+
+        response = requests.post(
+            f"{nb.base_url}/core/data-sources/{data_source.id}/sync/",
+            headers={
+                "Authorization": f"Token {nb.token}",
+                "Content-Type": "application/json",
+            },
+        )
+        response.raise_for_status()
+        logger.info(f"Data source {data_source.name}: sync requested")
+
+        # Wait for sync to complete, checking `wait_for_sync` times at 1-second intervals
+        for _ in range(wait_for_sync):
+            time.sleep(1)
+            status_response = requests.get(
+                f"{nb.base_url}/core/data-sources/{data_source.id}/",
+                headers={
+                    "Authorization": f"Token {nb.token}",
+                    "Content-Type": "application/json",
+                },
+            )
+            status_response.raise_for_status()
+            status_data = status_response.json()
+
+            if status_data.get("status", {}).get("value") == "completed":
+                logger.info(f"Data source {data_source.name}: synced successfully")
+                break
+            logger.info(f"Data source {data_source.name}: waiting for sync")
+
+        else:
+            logger.error(
+                f"Data source {data_source.name} sync did not complete within the timeout period"
+            )
+    except requests.exceptions.RequestException as err:
+        logger.error(f"Failed to sync data source {params['name']}: {err}")
+
+
+def execute_script(nb: pynetbox.api, params: dict, wait_for_execute: int = 60):
+    mangle_secret(nb, params)
+    try:
+        response = requests.get(
+            f"{nb.base_url}/extras/scripts/",
+            headers={
+                "Authorization": f"Token {nb.token}",
+                "Content-Type": "application/json",
+            },
+            params={"name": params["name"]},
+        )
+        response.raise_for_status()
+        script_id = response.json()["results"][0]["id"]
+
+        response = requests.post(
+            f"{nb.base_url}/extras/scripts/{script_id}/",
+            headers={
+                "Authorization": f"Token {nb.token}",
+                "Content-Type": "application/json",
+            },
+            json={"data": params.get("data"), "commit": True},
+        )
+        response.raise_for_status()
+        logger.info(f"Script {params['name']}: execute requested")
+
+        # Wait for sync to complete, checking `wait_for_execute` times at 1-second intervals
+        for _ in range(wait_for_execute):
+            time.sleep(1)
+            status_response = requests.get(
+                f"{nb.base_url}/extras/scripts/{script_id}/",
+                headers={
+                    "Authorization": f"Token {nb.token}",
+                    "Content-Type": "application/json",
+                },
+            )
+            status_response.raise_for_status()
+            status_data = status_response.json()
+
+            if (
+                status_data.get("result", {}).get("status", {}).get("value")
+                == "completed"
+            ):
+                logger.info(f"Script {params['name']}: executed successfully")
+                break
+            logger.info(f"Script {params['name']}: waiting for execute")
+
+        else:
+            logger.error(
+                f"Script {params['name']} did not execute within the timeout period"
+            )
+    except requests.exceptions.RequestException as err:
+        logger.error(f"Failed to execute script {params['name']}: {err}")
 
 
 def environ_or_required(key):
     return (
         {"default": os.environ.get(key)} if os.environ.get(key) else {"required": True}
     )
+
+
+def get_yaml_paths(directory):
+    patterns = [os.path.join(directory, "*.yml"), os.path.join(directory, "*.yaml")]
+    file_paths = []
+
+    for pattern in patterns:
+        file_paths.extend(glob.glob(pattern))
+
+    file_paths.sort()
+
+    return file_paths
 
 
 parser = argparse.ArgumentParser(description="Bootstrap NetBox.")
@@ -233,11 +394,27 @@ parser.add_argument(
     "--api-token", "-t", **environ_or_required("NETBOX_TOKEN"), help="NetBox API token"
 )
 parser.add_argument(
-    "--data-file",
+    "--data-dir",
     "-d",
+    help="Path to the netbox data directory. All YAML files will be processed in alphanumerical order.",
+)
+parser.add_argument(
+    "--data-file",
+    "-f",
     action="append",
-    required=True,
-    help="Path to the netbox data file",
+    help="Path to the netbox data file. It could be used multiple times.",
+)
+parser.add_argument(
+    "--sync-datasources",
+    "-s",
+    action="store_true",
+    help="Sync NetBox data sources after its creation or update.",
+)
+parser.add_argument(
+    "--execute-scripts",
+    "-e",
+    action="store_true",
+    help="Execute Netbox custom scripts",
 )
 
 
@@ -245,8 +422,26 @@ if __name__ == "__main__":
     args = parser.parse_args()
     nb = pynetbox.api(args.api_url, token=args.api_token)
 
-    for data_file in args.data_file:
-        data = load_data(data_file)
+    file_paths = []
+    if args.data_dir:
+        file_paths.extend(get_yaml_paths(args.data_dir))
+
+    if args.data_file:
+        file_paths.extend([file for file in args.data_file])
+
+    for file_path in file_paths:
+        data = load_data(file_path)
         for nb_model, items in data.items():
+
             for params in items:
+                # Note: The `scripts` is custom resource field introduced to manage the scripts execution
+                # Scripts are executed only when the optional argument `--execute-scripts` is applied.
+                if nb_model == "scripts":
+                    if args.execute_scripts:
+                        execute_script(nb, params)
+                    continue
+
                 create_or_update(nb, nb_model, params)
+
+                if nb_model == "data-sources" and args.sync_datasources:
+                    sync_data_source(nb, params)
