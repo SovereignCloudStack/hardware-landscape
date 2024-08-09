@@ -1,13 +1,3 @@
-#config-templates:
-#  - name: "test"
-#    data_source:
-#      name: "scs-hardware-landscape"
-#    data_file:
-#      path: "netbox/config_templates/4630-54TE-O-AC-B.json.j2"
-#    template_code: "{}"
-#    tags:
-#      - slug: scs
-#      - slug: landscape
 devices:
   - name: "st01-sw1g-r01-u47"
     status: "active"

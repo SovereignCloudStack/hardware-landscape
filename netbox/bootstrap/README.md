@@ -40,7 +40,30 @@ docker run --rm --network host \
 ```
 
 ## Import Netbox custom scripts
-TODO
+
+Custom scripting provides a way for users to execute custom logic from within the NetBox, see [docs](https://netbox.uemasul.edu.br/static/docs/customization/custom-scripts/).
+
+To add custom scripts to your NetBox installation, scripts should be saved to `/opt/netbox/netbox/scripts`.
+If you are running netbox-docker then mount scripts defined in this repository on path 
+`/hardware-landscape/netbox/scripts` into the desired netbox directory e.g. as follows:
+```yaml
+  netbox:
+    volumes:
+    - ./hardware-landscape/netbox/scripts:/etc/netbox/scripts:z,ro
+ ```
+Adjust accordingly, based on your directory structure and location of the Netbox docker-compose.yml file.
+
+Alternatively, custom scripts could be uploaded to NetBox, via the UI. Navigate to Customization – Scripts
+and from here you can click the link to add a new script.
+
+You can upload the file from your local machine, or from a remote data source like a Git repo or S3 bucket.
+To add `SovereignCloudStack/hardware-landscape` Git data source, use the `netbox_init.py` script as follows:
+
+```bash
+./netbox_init.py --api-url <netbox-url> --api-token <netbox-token> --sync-datasources --data-file landscape/03_data_sources.yml
+```
+
+Refer to [this blog post](https://netboxlabs.com/blog/getting-started-with-netbox-custom-scripts/) for further details. 
 
 ## Import SCS Landscape
 
