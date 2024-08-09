@@ -1,3 +1,9 @@
+{%- set filtered_interfaces = [] %}
+{%- for interface in device.interfaces.all() %}
+  {%- if not interface.mgmt_only and not interface.is_virtual %}
+    {%- set _ = filtered_interfaces.append(interface) %}
+  {%- endif %}
+{%- endfor %}
 {
   "AUTO_TECHSUPPORT": {
     "GLOBAL": {
@@ -21,14 +27,16 @@
       "rate_limit_interval": "600",
       "state": "enabled"
     },
+    {%- if dhcp_snoop_enabled | default(true) %}
     "dhcp_snoop": {
       "rate_limit_interval": "600",
       "state": "enabled"
-    },
+    },{%- endif %}
+    {%- if dot1x_enabled | default(true) %}
     "dot1x": {
       "rate_limit_interval": "600",
       "state": "enabled"
-    },
+    },{%- endif %}
     "iccpd": {
       "rate_limit_interval": "600",
       "state": "enabled"
@@ -41,10 +49,11 @@
       "rate_limit_interval": "600",
       "state": "enabled"
     },
+    {%- if mcast_enabled | default(true) %}
     "mcast": {
       "rate_limit_interval": "600",
       "state": "enabled"
-    },
+    },{%- endif %}
     "mgmt-framework": {
       "rate_limit_interval": "600",
       "state": "enabled"
@@ -99,168 +108,12 @@
     }
   },
   "BREAKOUT_CFG": {
-    "Ethernet0": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet1": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet10": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet11": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet12": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet13": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet14": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet15": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet16": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet17": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet18": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet19": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet2": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet20": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet21": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet22": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet23": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet24": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet25": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet26": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet27": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet28": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet29": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet3": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet30": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet31": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet32": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet33": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet34": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet35": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet36": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet37": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet38": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet39": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet4": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet40": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet41": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet42": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet43": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet44": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet45": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet46": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet47": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet48": {
-      "brkout_mode": "1x25G[10G,1G]"
-    },
-    "Ethernet49": {
-      "brkout_mode": "1x25G[10G,1G]"
-    },
-    "Ethernet5": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet50": {
-      "brkout_mode": "1x25G[10G,1G]"
-    },
-    "Ethernet51": {
-      "brkout_mode": "1x25G[10G,1G]"
-    },
-    "Ethernet52": {
-      "brkout_mode": "1x100G[40G]"
-    },
-    "Ethernet56": {
-      "brkout_mode": "1x100G[40G]"
-    },
-    "Ethernet6": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet7": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet8": {
-      "brkout_mode": "1x1G"
-    },
-    "Ethernet9": {
-      "brkout_mode": "1x1G"
+  {%- for interface in filtered_interfaces | sort(attribute='name') %}
+    "{{ interface.name }}": {
+      "brkout_mode": "{{ interface.custom_field_data['brkout_mode'] | default('') }}"
     }
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
   },
   "CRM": {
     "Config": {
@@ -336,11 +189,12 @@
       "type": "{{ device.role.name }}"
     }
   },
+  {%- if dot1x_enabled|default(true) %}
   "DOT1X_INITIAL": {
     "GLOBAL": {
-      "ports": "Ethernet0,Ethernet1,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet2,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet3,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet4,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet5,Ethernet50,Ethernet51,Ethernet52,Ethernet56,Ethernet6,Ethernet7,Ethernet8,Ethernet9"
+      "ports": "{{ filtered_interfaces | sort(attribute='name') | join(',') }}"
     }
-  },
+  },{%- endif %}
   "FEATURE": {
     "bgp": {
       "auto_restart": "enabled",
@@ -369,6 +223,7 @@
       "set_owner": "local",
       "state": "enabled"
     },
+    {%- if dhcp_snoop_enabled | default(true) %}
     "dhcp_snoop": {
       "auto_restart": "enabled",
       "has_global_scope": "True",
@@ -377,7 +232,8 @@
       "high_mem_alert": "disabled",
       "set_owner": "local",
       "state": "disabled"
-    },
+    },{%- endif %}
+    {%- if dot1x_enabled | default(true) %}
     "dot1x": {
       "auto_restart": "enabled",
       "has_global_scope": "True",
@@ -386,7 +242,7 @@
       "high_mem_alert": "disabled",
       "set_owner": "local",
       "state": "enabled"
-    },
+    },{%- endif %}
     "iccpd": {
       "auto_restart": "enabled",
       "has_global_scope": "True",
@@ -414,6 +270,7 @@
       "set_owner": "local",
       "state": "disabled"
     },
+    {%- if mcast_enabled | default(true) %}
     "mcast": {
       "auto_restart": "enabled",
       "has_global_scope": "True",
@@ -422,7 +279,7 @@
       "high_mem_alert": "disabled",
       "set_owner": "local",
       "state": "enabled"
-    },
+    },{%- endif %}
     "mgmt-framework": {
       "auto_restart": "enabled",
       "has_global_scope": "True",
@@ -592,100 +449,167 @@
     }
   },
   "MGMT_INTERFACE": {
-    "{{ mgmt_interface }}|{{ mgmt_ip }}/{{ mgmt_subnet }}": {
+  {%- for interface in device.interfaces.all() if interface.mgmt_only == true %}
+    "{{ interface.name }}|{{ interface.ip_addresses.first().address }}": {
       "gwaddr": "{{ mgmt_gwaddr }}"
     }
-  }
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },
   "MGMT_PORT": {
-    "{{ mgmt_interface }}": {
-      "admin_status": "up",
-      "alias": "{{ mgmt_interface }}",
-      "description": "Management Port"
+  {%- for interface in device.interfaces.all() if interface.mgmt_only == true %}
+    "{{ interface.name }}": {
+      "admin_status": "{% if interface.enabled %}up{% else %}down{% endif %}",
+      "alias": "{{ interface.name }}",
+      "description": "{{ interface.description }}"
     }
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
   },
+  {%- if mgmt_vrf_config %}
+  "MGMT_VRF_CONFIG": {
+    "vrf_global": {
+      "mgmtVrfEnabled": "{{ mgmt_vrf_config.vrf_global.mgmt_vrf_enabled | default('false') }}"
+    }
+  },{%- endif %}
+  {%- if ntp_servers %}
   "NTP_SERVER": {
-    {% for server in ntp_servers %}
-    "{{ server }}": {}{% if not loop.last %},{% endif %}
-    {% endfor %}
-  }
+  {%- for server in ntp_servers %}
+    "{{ server }}": {}{%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },{%- endif %}
   "PORT": {
-    {% for port, config in ports.items() %}
-    "{{ port }}": {
-      "admin_status": "{{ config.admin_status }}",
-      "alias": "{{ config.alias }}",
-      "autoneg": "{{ config.autoneg }}",
-      "description": "{{ config.description }}",
-      "index": "{{ config.index }}",
-      "lanes": "{{ config.lanes }}",
-      "mtu": "{{ config.mtu }}",
-      "parent_port": "{{ config.parent_port }}",
-      "speed": "{{ config.speed }}"
-    }{% if not loop.last %},{% endif %}
-    {% endfor %}
+  {%- for interface in filtered_interfaces | sort(attribute='name') %}
+    "{{ interface.name }}": {
+      "admin_status": "{% if interface.enabled %}up{% else %}down{% endif %}",
+      "alias": "{{ interface.custom_field_data['alias'] | default('') }}",
+      "autoneg": "{{ interface.custom_field_data['autoneg'] | default('on') }}",
+      {%- if interface.description %}
+      "description": "{{ interface.description }}",
+      {%- endif %}
+      "index": "{{ interface.custom_field_data['index'] | default('') }}",
+      "lanes": "{{ interface.custom_field_data['lanes'] | default('') }}",
+      "mtu": "{{ interface.mtu if interface.mtu else 9100 }}",
+      "parent_port": "{{ interface.parent_port | default(interface.name) }}",
+      "speed": "{{ (interface.speed if interface.speed else 0) | int // 1000 }}"
+    }
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
   },
+  {%- set filtered_port_channel_interfaces = [] %}
+  {%- for interface in device.interfaces.all() %}
+    {%- if interface.is_lag and 'portchannel' in interface.name | lower %}
+      {%- set _ = filtered_port_channel_interfaces.append(interface) %}
+    {%- endif %}
+  {%- endfor %}
+  {%- if port_channels_params and filtered_port_channel_interfaces %}
+  "PORTCHANNEL": {
+  {%- for lag_interface in filtered_port_channel_interfaces | sort(attribute='name') %}
+    "{{ lag_interface.name }}": {
+      "admin_status": "{% if lag_interface.enabled %}up{% else %}down{% endif %}",
+      "fast_rate": "{{ port_channels_params[lag_interface.name].fast_rate }}",
+      "lacp_key": "{{ port_channels_params[lag_interface.name].lacp_key }}",
+      "min_links": "{{ port_channels_params[lag_interface.name].min_links }}",
+      "mix_speed": "{{ port_channels_params[lag_interface.name].mix_speed }}",
+      "mtu": "{{ lag_interface.mtu if lag_interface.mtu else 9100 }}"
+    }
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },
+  "PORTCHANNEL_MEMBER": {
+  {%- for lag_interface in filtered_port_channel_interfaces | sort(attribute='name') %}
+    {%- for interface in lag_interface.member_interfaces.all() | sort(attribute='name') %}
+    "{{ lag_interface.name }}|{{ interface.name }}": {}
+    {%- if not loop.last %},{%- endif %}
+    {%- endfor %}
+  {%- endfor %}
+  },{%- endif %}
   "REST_SERVER": {
     "default": {
       "client_auth": "user"
     }
   },
+  {%- if snmp %}
   "SNMP": {
     "LOCATION": {
-      "Location": "public"
+      "Location": "{{ snmp.location }}"
     }
   },
   "SNMP_COMMUNITY": {
-    {% for community, config in snmp_communities.items() %}
-    "{{ community }}": {
-        "TYPE": "{{ config.type | upper }}",
+  {%- for community in snmp.communities %}
+    "{{ community['name'] }}": {
+      "TYPE": "{{ community['type'] | upper }}"
     }{% if not loop.last %},{% endif %}
-    {% endfor %}
-  },
+  {%- endfor %}
+  },{% endif %}
+  {%- if static_routes %}
   "STATIC_ROUTE": {
-    {% for route, config in static_routes.items() %}
-    "{{ route }}": {
-      "blackhole": "{{ config.blackhole }}",
-      "distance": "{{ config.distance }}",
-      "ifname": "{{ config.ifname }}",
-      "nexthop": "{{ config.nexthop }}",
-      "nexthop-vrf": "{{ config.nexthop_vrf }}"
+  {%- for static_route in static_routes %}
+    "{{ static_route['route'] }}": {
+      "blackhole": "{{ static_route['blackhole'] }}",
+      "distance": "{{ static_route['distance'] }}",
+      "ifname": "{{ static_route['ifname'] }}",
+      "nexthop": "{{ static_route['nexthop'] }}",
+      "nexthop-vrf": "{{ static_route['nexthop-vrf'] }}"
     }{% if not loop.last %},{% endif %}
-    {% endfor %}
-  },
+  {%- endfor %}
+  },{%- endif %}
+  {%- if syslog_servers %}
   "SYSLOG_SERVER": {
-    {% for server in syslog_servers %}
-    "{{ server }}": {}
-    {% if not loop.last %},{% endif %}
-    {% endfor %}
-  },
+  {%- for syslog_server in syslog_servers %}
+    "{{ syslog_server }}": {}
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },{%- endif %}
   "VERSIONS": {
     "DATABASE": {
       "VERSION": "version_2_0_4"
     }
   },
+  {%- set vlans = [] %}
+  {%- set vlan_members = {} %}
+  {%- for interface in device.interfaces.all() %}
+    {%- for vlan in interface.tagged_vlans.all() %}
+      {%- set key = vlan.name + '|' + interface.name %}
+      {%- set _ = vlans.append(vlan) %}
+      {%- set _ = vlan_members.update({key: {'tagging_mode': 'tagged'}}) %}
+    {%- endfor %}
+    {%- if interface.untagged_vlan %}
+      {%- set key = interface.untagged_vlan.name + '|' + interface.name %}
+      {%- set _ = vlans.append(interface.untagged_vlan) %}
+      {%- set _ = vlan_members.update({key: {'tagging_mode': 'untagged'}}) %}
+    {%- endif %}
+  {%- endfor %}
+  {%- set filtered_vlan_virt_interfaces = [] %}
+  {%- for interface in device.interfaces.all() %}
+    {%- if interface.is_virtual and 'vlan' in interface.name | lower %}
+      {%- set _ = filtered_vlan_virt_interfaces.append(interface) %}
+    {%- endif %}
+  {%- endfor %}
+  {%- if vlans %}
   "VLAN": {
-    {% for vlan_name, vlan_info in vlans.items() %}
-    "{{ vlan_name }}": {
-      "vlanid": "{{ vlan_info.vlanid }}"
+  {%- for vlan in vlans | unique(attribute='vid') | sort(attribute='vid') %}
+    "{{ vlan.name }}": {
+      "vlanid": "{{ vlan.vid }}"
     }{% if not loop.last %},{% endif %}
-    {% endfor %}
+  {%- endfor %}
   },
   "VLAN_INTERFACE": {
-    {% for vlan, ip in vlan_interfaces.items() %}
-    "{{ vlan }}": {}
-    {% if ip %}
-    "{{ vlan }}|{{ ip }}": {}
-    {% endif %}
-    {% if not loop.last %},{% endif %}
-    {% endfor %}
+  {%- for interface in filtered_vlan_virt_interfaces | sort(attribute='name') %}
+    "{{ interface.name }}": {}{%- if interface.ip_addresses.first() %},
+    "{{ interface.name }}|{{ interface.ip_addresses.first().address }}": {}
+    {%- endif %}
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
   },
   "VLAN_MEMBER": {
-    {% for key, value in vlan_members.items() %}
+  {%- for key, value in vlan_members.items() | sort(attribute='0') %}
     "{{ key }}": {
       "tagging_mode": "{{ value.tagging_mode }}"
     }
-    {% if not loop.last %},{% endif %}
-    {% endfor %}
-  },
+    {%- if not loop.last %},{% endif %}
+  {%- endfor %}
+  },{%- endif %}
   "XCVRD_LOG": {
     "Y_CABLE": {
       "log_verbosity": "notice"
