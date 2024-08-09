@@ -102,10 +102,3 @@ custom-fields:
   - name: "brkout_mode"
     type: "text"
     object_types: [ "dcim.interface" ]
-data-sources:
-  - name: "scs-hardware-landscape"
-    type: "git"
-    source_url: "https://github.com/sovereignCloudStack/hardware-landscape"
-    ignore_rules: "*.txt\r\n*.json\r\n*.yaml\r\n*.yml\r\n*.md\r\n*.conf\r\n*.svg\r\n*.cfg\r\n*.rst\r\n*.JPG\r\n*.sh\r\n*.xml"
-    parameters:
-      branch: "netbox"
