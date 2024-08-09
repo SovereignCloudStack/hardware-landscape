@@ -12,7 +12,7 @@ devices:
     rack:
       name: "r01"
     config_template:
-      name: "test"
+      name: "4630-54TE-O-AC-B_config"
     serial: "463054TE2315093"
     position: 47
     face: "rear"
