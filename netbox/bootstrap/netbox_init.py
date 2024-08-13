@@ -274,10 +274,29 @@ def create_or_update(nb: pynetbox.api, nb_model: str, params: dict):
         sys.exit(1)
 
 
+def sync_config_templates(nb: pynetbox.api, params: dict):
+    try:
+        config_template = nb.extras.config_templates.get(name=params["name"])
+        # Note: It seems that pynetbox does not support the bellow call
+        response = requests.post(
+            f"{nb.base_url}/extras/config-templates/{config_template.id}/sync/",
+            headers={
+                "Authorization": f"Token {nb.token}",
+                "Content-Type": "application/json",
+            },
+        )
+        response.raise_for_status()
+        # Note: It seems that netbox does not report successful sync on config templates
+        logger.info(f"Config template {config_template.name}: sync requested")
+
+    except (pynetbox.RequestError, requests.exceptions.RequestException) as err:
+        logger.error(f"Failed to sync config template {params['name']}: {err}")
+
+
 def sync_data_source(nb: pynetbox.api, params: dict, wait_for_sync: int = 60):
     try:
         data_source = nb.core.data_sources.get(name=params["name"])
-
+        # Note: It seems that pynetbox does not support the bellow call
         response = requests.post(
             f"{nb.base_url}/core/data-sources/{data_source.id}/sync/",
             headers={
@@ -291,31 +310,25 @@ def sync_data_source(nb: pynetbox.api, params: dict, wait_for_sync: int = 60):
         # Wait for sync to complete, checking `wait_for_sync` times at 1-second intervals
         for _ in range(wait_for_sync):
             time.sleep(1)
-            status_response = requests.get(
-                f"{nb.base_url}/core/data-sources/{data_source.id}/",
-                headers={
-                    "Authorization": f"Token {nb.token}",
-                    "Content-Type": "application/json",
-                },
-            )
-            status_response.raise_for_status()
-            status_data = status_response.json()
+            data_source = nb.core.data_sources.get(id=data_source.id)
 
-            if status_data.get("status", {}).get("value") == "completed":
+            if data_source.status.value == "completed":
                 logger.info(f"Data source {data_source.name}: synced successfully")
                 break
+
             logger.info(f"Data source {data_source.name}: waiting for sync")
 
         else:
             logger.error(
                 f"Data source {data_source.name} sync did not complete within the timeout period"
             )
-    except requests.exceptions.RequestException as err:
+    except (pynetbox.RequestError, requests.exceptions.RequestException) as err:
         logger.error(f"Failed to sync data source {params['name']}: {err}")
 
 
 def execute_script(nb: pynetbox.api, params: dict, wait_for_execute: int = 60):
     mangle_secret(nb, params)
+    # Note: It seems that pynetbox does not support the bellow calls
     try:
         response = requests.get(
             f"{nb.base_url}/extras/scripts/",
@@ -337,6 +350,7 @@ def execute_script(nb: pynetbox.api, params: dict, wait_for_execute: int = 60):
             json={"data": params.get("data"), "commit": True},
         )
         response.raise_for_status()
+
         logger.info(f"Script {params['name']}: execute requested")
 
         # Wait for sync to complete, checking `wait_for_execute` times at 1-second intervals
@@ -411,6 +425,12 @@ parser.add_argument(
     help="Sync NetBox data sources after its creation or update.",
 )
 parser.add_argument(
+    "--sync-config-templates",
+    "-sc",
+    action="store_true",
+    help="Sync NetBox config templates after its creation or update.",
+)
+parser.add_argument(
     "--execute-scripts",
     "-e",
     action="store_true",
@@ -445,3 +465,6 @@ if __name__ == "__main__":
 
                 if nb_model == "data-sources" and args.sync_datasources:
                     sync_data_source(nb, params)
+
+                if nb_model == "config-templates" and args.sync_config_templates:
+                    sync_config_templates(nb, params)
