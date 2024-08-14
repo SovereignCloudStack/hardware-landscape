@@ -182,9 +182,9 @@
       "docker_routing_config_mode": "split",
       "frr_mgmt_framework_config": "true",
       "hostname": "{{ device.name }}",
-      "hwsku": "Accton-AS4630-54TE",
+      "hwsku": "{{ hwsku }}",
       "mac": "{{ mac_addr }}",
-      "platform": "x86_64-accton_as4630_54te-r0",
+      "platform": "{{ platform }}",
       "synchronous_mode": "enable",
       "type": "{{ device.role.name }}"
     }
@@ -483,7 +483,9 @@
     "{{ interface.name }}": {
       "admin_status": "{% if interface.enabled %}up{% else %}down{% endif %}",
       "alias": "{{ interface.custom_field_data['alias'] | default('') }}",
-      "autoneg": "{{ interface.custom_field_data['autoneg'] | default('on') }}",
+      {%- if interface.custom_field_data['autoneg'] %}
+      "autoneg": "{{ interface.custom_field_data['autoneg'] }}",
+      {%- endif %}
       {%- if interface.description %}
       "description": "{{ interface.description }}",
       {%- endif %}
