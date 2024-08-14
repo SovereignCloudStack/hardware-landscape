@@ -12,15 +12,14 @@ devices:
     rack:
       name: "r01"
     config_template:
-      name: "4630-54TE-O-AC-B_config"
+      name: "sonic"
     serial: "463054TE2315114"
     position: 42
     face: "rear"
     description: "Management lab router"
     local_context_data:
-      dhcp_snoop_enabled: false
-      dot1x_enabled: false
-      mcast_enabled: false
+      hwsku: "Accton-AS7326-56X"
+      platform: "x86_64-accton_as4630_54te-r0"
       mgmt_vrf_config:
         vrf_global:
           mgmt_vrf_enabled: "false"
@@ -29,6 +28,9 @@ devices:
       #  Netbox does not support concept of gateways, see https://github.com/netbox-community/netbox/issues/1610
       #  The gateway should be introduced as a custom_field or tag on IP address resource.
       mgmt_gwaddr: "10.10.23.1"
+      dhcp_snoop_enabled: false
+      dot1x_enabled: false
+      mcast_enabled: false
       ntp_servers:
         - "192.53.103.103"
         - "192.53.103.104"

@@ -9,5 +9,5 @@ These templates could be then imported to the netbox instance from git data sour
 For deeper understanding of how configuration rendering works in Netbox refer to the [docs](https://netboxlabs.com/docs/netbox/en/stable/features/configuration-rendering/).
 Configuration templates use Netbox state of the resources (e.g. devices) and defined [context-data](https://netboxlabs.com/docs/netbox/en/stable/features/context-data/)
 to render complete configuration files for each device on network.
-Explore `*.json.j2` configuration templates in this directory and devices `local_context_data` definitions in 
-`bootstrap/landscape` directory (e.g. explore 47_st01-sw1g-r01-u47.yml device).
+Explore `*.j2` configuration templates in this directory and devices `local_context_data` definitions in 
+`bootstrap/landscape` directory.
