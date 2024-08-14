@@ -24,3 +24,15 @@ devices:
       address: "10.10.23.103/24"
     oob_ip:
       address: "10.10.23.103/24"
+  - name: "st01-sw25g-r01-u40"
+    status: "active"
+    device_type:
+      slug: "edgecore-7326-56x-o-ac-b"
+    role:
+      slug: "leaf-router"
+    site:
+      slug: "st01"
+    primary_ip4:
+      address: "10.10.23.106/24"
+    oob_ip:
+      address: "10.10.23.106/24"
