@@ -73,11 +73,13 @@ class UpdateSonicInterfacesFromINI(Script):
 
             # Split the line into components and skip lines that don't have enough parts
             parts = line.split()
-            if len(parts) < 6:
+            if len(parts) < 5:
                 continue
 
-            # Extract port details
-            name, lanes, alias, index, speed, autoneg = parts[:6]
+            # Note:
+            #  - Accton-AS4630-54TE contains autoneg column (6th column)
+            #  - Accton-AS7326-56X does not contain autoneg column
+            name, lanes, alias, index, speed = parts[:5]
 
             sonic_port_config[name] = {
                 "speed": speed,
@@ -85,8 +87,12 @@ class UpdateSonicInterfacesFromINI(Script):
                 "lanes": lanes,
                 "alias": alias,
                 "index": index,
-                "autoneg": autoneg,
             }
+            if len(parts) > 5:
+                autoneg = parts[5]
+                sonic_port_config[name].update({"autoneg": autoneg})
+
+
         self.log_info(f"SONiC port configuration fetched successfully")
         return sonic_port_config
 

@@ -12,12 +12,14 @@ devices:
     rack:
       name: "r01"
     config_template:
-      name: "4630-54TE-O-AC-B_config"
+      name: "sonic"
     serial: "463054TE2315093"
     position: 47
     face: "rear"
     description: "Management leaf router"
     local_context_data:
+      hwsku: "Accton-AS7326-56X"
+      platform: "x86_64-accton_as4630_54te-r0"
       mac_addr: "d2:77:ce:2b:44:c4"
       # FIXME: Add gateway IP to the Jinja template.
       #  Netbox does not support concept of gateways, see https://github.com/netbox-community/netbox/issues/1610
