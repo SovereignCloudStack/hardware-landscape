@@ -18,7 +18,7 @@ devices:
     face: "rear"
     description: "Management lab router"
     local_context_data:
-      hwsku: "Accton-AS7326-56X"
+      hwsku: "Accton-AS4630-54TE"
       platform: "x86_64-accton_as4630_54te-r0"
       mgmt_vrf_config:
         vrf_global:
