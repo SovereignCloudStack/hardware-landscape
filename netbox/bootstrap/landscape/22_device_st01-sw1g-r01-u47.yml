@@ -18,7 +18,7 @@ devices:
     face: "rear"
     description: "Management leaf router"
     local_context_data:
-      hwsku: "Accton-AS7326-56X"
+      hwsku: "Accton-AS4630-54TE"
       platform: "x86_64-accton_as4630_54te-r0"
       mac_addr: "d2:77:ce:2b:44:c4"
       # FIXME: Add gateway IP to the Jinja template.

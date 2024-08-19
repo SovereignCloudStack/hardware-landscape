@@ -1,9 +1,9 @@
-config_db.json: |
+config_db.json: |-
 {%- filter indent(width=2) %}
 {% include 'netbox/config_templates/sonic_config_db.json.j2' %}
 {%- endfilter %}
 
-frr.conf: |
+frr.conf: |-
 {%- filter indent(width=2) %}
 {% include 'netbox/config_templates/frr.conf.j2' %}
 {%- endfilter %}

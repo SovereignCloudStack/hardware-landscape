@@ -1,9 +1,3 @@
-{%- set filtered_interfaces = [] %}
-{%- for interface in device.interfaces.all() %}
-  {%- if not interface.mgmt_only and not interface.is_virtual %}
-    {%- set _ = filtered_interfaces.append(interface) %}
-  {%- endif %}
-{%- endfor %}
 {
   "AUTO_TECHSUPPORT": {
     "GLOBAL": {
@@ -107,14 +101,25 @@
       "state": "enabled"
     }
   },
-  "BREAKOUT_CFG": {
-  {%- for interface in filtered_interfaces | sort(attribute='name') %}
-    "{{ interface.name }}": {
-      "brkout_mode": "{{ interface.custom_field_data['brkout_mode'] | default('') }}"
-    }
-    {%- if not loop.last %},{%- endif %}
+  {%- set filtered_interfaces = [] %}
+  {%- for interface in device.interfaces.all() %}
+    {%- if not interface.mgmt_only and not interface.is_virtual %}
+      {%- set _ = filtered_interfaces.append(interface) %}
+    {%- endif %}
   {%- endfor %}
-  },
+  "BGP_GLOBALS": {
+        "default": {
+            "local_asn": "65000",
+            "router_id": "10.0.1.2"
+        }
+    },
+     "BGP_PEER_GROUP": {
+        "default|LEAF": {
+            "admin_status": "true",
+	    "asn": "65501",
+            "peer_type": "external"
+        }
+   },
   "CRM": {
     "Config": {
       "acl_counter_high_threshold": "85",
@@ -179,7 +184,7 @@
       "buffer_model": "traditional",
       "default_bgp_status": "up",
       "default_pfcwd_status": "disable",
-      "docker_routing_config_mode": "split",
+      "docker_routing_config_mode": "unified",
       "frr_mgmt_framework_config": "true",
       "hostname": "{{ device.name }}",
       "hwsku": "{{ hwsku }}",

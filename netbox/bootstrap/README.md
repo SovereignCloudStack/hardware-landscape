@@ -76,5 +76,5 @@ Note that the script is not limited to SCS Landscape. The reader could create ow
 of required initialization in Netbox.
 
 ```bash
-./netbox_init.py --api-url <netbox-url> --api-token <netbox-token> --sync-datasources --execute-scripts --data-dir landscape
+./netbox_init.py --api-url <netbox-url> --api-token <netbox-token> --sync-datasources --execute-scripts --sync-config-templates --data-dir landscape
 ```
