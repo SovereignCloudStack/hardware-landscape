@@ -96,24 +96,6 @@ docker_user: "{{ operator_user }}"
 openstack_admin_user: "openstack-admin"
 openstack_admin_email: "team@scs.community"
 
-scs_openstack_projects:
-  - name: test1
-    type: default
-    email_user: team@scs.community
-    email_admin: team@scs.community
-    ssh_key: /opt/configuration/secrets/test1
-    image: "Cirros 0.6.0"
-    flavor: "SCS-1L-1-5"
-    password_admin: "{{ generic_project_admin_password }}"
-    password_user: "{{ generic_project_user_password }}"
-  - name: clusterstacks-demo
-    type: custom
-    email_user: team@scs.community
-    email_admin: team@scs.community
-    password_admin: "{{ generic_project_admin_password }}"
-    password_user: "{{ generic_project_user_password }}"
-
-
 ##########################
 # operator
 
@@ -161,7 +143,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45004
-    #state: absent
+    state: absent
     groups:
       - docker
       - dialout
@@ -169,7 +151,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45005
-    #state: absent
+    state: absent
     groups:
       - docker
       - dialout
