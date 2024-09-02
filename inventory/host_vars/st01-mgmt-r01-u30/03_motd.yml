@@ -14,6 +14,8 @@ motd_content: |
    \___/ \__,_|_| |_| |_| .__/|_| |_|\___/|___/\__|
                         |_|
 
+  Configured Manager Version: {{ manager_version }}
+
   * Attach to a running screen session which provides access to the ttypS0..ttyS3 interfaces
     or create automatically a new one
     scs_serial_access
