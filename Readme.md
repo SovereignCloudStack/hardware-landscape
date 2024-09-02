@@ -63,6 +63,11 @@ The main goals of this environment are:
         * [Supermicro ARS-110M-NR](documentation/devices/servers/Supermicro_ARS-110M-NR.md)
         * [Supermicro A2SDV-4C-LN8F](documentation/devices/servers/Supermicro_A2SDV-4C-LN8F.md)
         * [Supermicro A2SDV-8C-LN8F](documentation/devices/servers/Supermicro_A2SDV-8C-LN8F.md)
+* Other documentation
+  * SONiC
+    * [FAQ for SONiC](documentation/sonic/FAQ_SONiC.md)
+    * [SONiC Testing Environment](documentation/sonic/SONiC_Testing.md)
+
 
 ## Environment Links
 
