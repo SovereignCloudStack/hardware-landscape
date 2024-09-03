@@ -4,10 +4,11 @@
 # In this file any own inventory groups can be defined,
 # which do not exist yet.
 
-[bastion]
+[manager_infra]
+st01-mgmt-r01-u30
 st01-mgmt-r01-u31
 
-[network-switches]
+[network_switches]
 st01-sw100g-r01-u36
 st01-sw100g-r01-u37
 st01-sw100g-r01-u41
@@ -21,7 +22,7 @@ st01-sw25g-r01-u34
 st01-sw25g-r01-u35
 st01-sw25g-r01-u40
 
-[dhcp-static-nodes]
+[dhcp_static_nodes]
 st01-sw100g-r01-u36
 st01-sw100g-r01-u37
 st01-sw100g-r01-u41

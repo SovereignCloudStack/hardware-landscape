@@ -3,48 +3,51 @@
 The following section describes how to include config snippets in the ssh configuration
 of your local system to simplify access to systems of the vp18 hardware landscape.
 
-* Clone the repository
-  ```
-  cd <your-sourcecode-dir>
-  git clone git@github.com:SovereignCloudStack/hardware-landscape.git
-  cd hardware-landscape
-  SCS_ENV_DIR="$(pwd)"
-  GITHUB_ID="scoopex"
-  ```
-* Add this snippet to your SSH configuration:
-  ```
-  cat >> ~/.ssh/config <<EOF
-  Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_servers
-  Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_switches
-  Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_general
+1. User: Clone the repository
+   ```
+   cd <your-sourcecode-dir>
+   git clone git@github.com:SovereignCloudStack/hardware-landscape.git
+   cd hardware-landscape
+   SCS_ENV_DIR="$(pwd)"
+   GITHUB_ID="scoopex"
+   ```
+2. User: Add this snippet to your SSH configuration:
+   ```
+   cat >> ~/.ssh/config <<EOF
+   Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_servers
+   Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_switches
+   Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_general
 
-  Host scs-node-*
+   Host scs-* !scs-manager !scs-manager1 !scs-manager2
       ProxyJump scs-manager
-      # User "osism" is only needed while bootstrapping
-      # User osism
-
-  Host scs-*
-      # Your github id
+      # Your github id, use "osism" or "dragon" when your are in the
+      # installation process
       User ${GITHUB_ID:?}
-  EOF
 
-  ```
-* Update the SSH configuration
-  (this fetches host information from the documentation in [documentation/devices](./devices) and creates new ssh config snippets)
-  ```
-  cd ${SCS_ENV_DIR:?}
-  git pull
-  ./switch_ctl -c all
-  ./server_ctl -c all
-  ```
-* Login to manager
-  ```
-  ssh scs-manager
-  ```
-* Login to systems
-  ```
-  ssh scs-<TAB><TAB>
-  ```
+   Host scs-manager scs-manager1 scs-manager2
+      # Your github id, use "osism" or "dragon" when your are in the
+      # installation process
+      User ${GITHUB_ID:?}
+
+   EOF
+
+   ```
+3. **Optional**, Admin: Update the SSH configuration
+   (this fetches host information from the documentation in [documentation/devices](./devices) and creates new ssh config snippets)
+   ```
+   cd ${SCS_ENV_DIR:?}
+   git pull
+   ./switch_ctl -c all
+   ./server_ctl -c all
+   ```
+4. User: Login to manager
+   ```
+   ssh scs-manager
+   ```
+5. User: Login to systems directly from your workstation
+   ```
+   ssh scs-<TAB><TAB>
+   ```
 
 # Update ansible inventory data
 

@@ -10,14 +10,18 @@
 
 - name: Set permisssions for /usr/local/scripts and /opt/configuration
   become: yes
-  shell: |
-    /bin/bash /usr/local/scripts/scs_fix_permissions.sh
-  args:
-    executable: /bin/bash
+  ansible.builtin.command: "/bin/bash /usr/local/scripts/scs_fix_permissions.sh"
 
 - name: Create symbolic link to scs profile
   become: yes
   file:
     src: /usr/local/scripts/scs_profile.sh
     dest: /etc/profile.d/Z99-scs-env.sh
+    state: link
+
+- name: Create symbolic link to scs bash profile
+  become: yes
+  file:
+    src: /usr/local/scripts/scs_profile.sh
+    dest: /etc/skel/.bash_profile
     state: link

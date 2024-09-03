@@ -1,7 +1,7 @@
 ---
 - name: Assign roles to manager host
-  hosts: manager
-  become: false
+  hosts: manager_infra
+  become: true
   roles:
-    - scs-landscape-nodes
+    - osism.services.chrony
 

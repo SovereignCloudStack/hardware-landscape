@@ -1,8 +1,12 @@
 
-Host scs-jumphost
+Host scs-manager2
    Hostname 153.92.93.119
    Port 41115
 
-Host scs-manager
+Host scs-manager scs-manager1
    Hostname 188.244.101.28
 
+Host scs-manager-screen
+   Hostname 188.244.101.28
+   RemoteCommand screen -x ssh-persistent-remote || screen -S ssh-persistent-remote
+   RequestTTY yes
