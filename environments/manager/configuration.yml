@@ -50,7 +50,7 @@ osism_api_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface
 ##########################
 # configuration
 
-enable_osism_kubernete: no
+enable_osism_kubernetes: no
 
 configuration_directory: /opt/configuration
 configuration_git_private_key_file: ~/.ssh/id_rsa.configuration
