@@ -4,22 +4,30 @@
 
 ## Manage SSH Access and Adminstrative Permissions
 
-1. Clone repository and create PR
+1. User: Clone repository and create PR
+   ```
+   git clone git@github.com:SovereignCloudStack/hardware-landscape.git
+   cd hardware-landscape
+   ```
 2. User: Edit [environments/configuration.yml](../environments/configuration.yml)
+  * Create branch
   * Add new users in `user_list` section
   * Actively remove users by adding them in the `user_delete
+  * Create pull request to `main` branch
 3. Admin: Rollout changes
    ```
    ssh scs-manager
    osism apply user
    osism apply operator
    ```
+4. User: [Configure and use SSH Access](./System_Usage.md)
 
 ## Manage VPN Access
 
 1. User: Clone repository and create PR
    ```
    git clone git@github.com:SovereignCloudStack/hardware-landscape.git
+   cd hardware-landscape
    ```
 2. User: Generate a keypair localally and add the public key
    ```
@@ -30,9 +38,11 @@
    cat ${VPN_KEYDIR?}/wireguard_public.key
    ```
 3. User: Edit [../inventory/group_vars/manager-infra.yml](../inventory/group_vars/manager-infra.yml) in section ``wireguard_users``
+  * Create branch
   * Add username (same as github handle)
   * Add public key to user entry
   * Remove outdated users
+  * Create pull request to `main` branch
 4. Admin: Rollout changes
    ```
    ssh scs-manager
@@ -53,7 +63,6 @@
    sudo wg-quick up "${VPN_KEYDIR?}/wg2.conf"
    sudo wg-quick down "${VPN_KEYDIR?}/wg2.conf"
    ```
-7. User: [Configure SSH Access](./System_Usage.md)
 
 ## Have the Ansible Vault Secret on your system
 
