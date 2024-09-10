@@ -1,5 +1,7 @@
 # How to work with environment
 
+## Configure SSH Access
+
 The following section describes how to include config snippets in the ssh configuration
 of your local system to simplify access to systems of the vp18 hardware landscape.
 
@@ -49,34 +51,12 @@ of your local system to simplify access to systems of the vp18 hardware landscap
    ssh scs-<TAB><TAB>
    ```
 
-# Update ansible inventory data
-
-The following section describes how to regenerate  inventory files 
-based on the documentation in [documentation/devices](./devices).
-
-* Enter configuration directory and verify that there are no open changes
-  ```
-  cd <your-sourcecode-dir>/hardware-landscape
-  git stash
-  git checkout -b "update-inventory-files"
-  ```
-* Regenerate inventory files
-  ```
-  ./server_ctl --ansible all
-  ./switch_ctl --ansible all
-  ```
-* Check changes
-  ```
-  git diff
-  ```
-* Merge changes
-  ```
-  git commit ...
-  git push
-  ...
-  ```
 ## Serial Switch Console Access
 
+* Login to first manager
+  ```
+  ssh scs-ömanager
+  ```
 * Attach to a running screen session which provides access to the ttypS0..ttySX interfaces
   or create automatically a new one
   ```
@@ -110,7 +90,38 @@ based on the documentation in [documentation/devices](./devices).
       - Hit the sysrq char "b" multiple times
       - Watch the hardware booting :-)
 
-# Simple connection to the datacenter
+
+# Miscellanious Procedures
+
+## Update ansible inventory data
+
+The following section describes how to regenerate  inventory files 
+based on the documentation in [documentation/devices](./devices).
+
+* Enter configuration directory and verify that there are no open changes
+  ```
+  cd <your-sourcecode-dir>/hardware-landscape
+  git stash
+  git checkout -b "update-inventory-files"
+  ```
+* Regenerate inventory files
+  ```
+  ./server_ctl --ansible all
+  ./switch_ctl --ansible all
+  ```
+* Check changes
+  ```
+  git diff
+  ```
+* Merge changes
+  ```
+  git commit ...
+  git push
+  ...
+  ```
+
+
+## Simple connection to the datacenter
 
 Execute the following command to have access to lab networks:
 ```
