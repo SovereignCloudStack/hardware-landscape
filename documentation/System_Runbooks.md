@@ -18,6 +18,9 @@
 ## Manage VPN Access
 
 1. User: Clone repository and create PR
+   ```
+   git clone git@github.com:SovereignCloudStack/hardware-landscape.git
+   ```
 2. User: Generate a keypair localally and add the public key
    ```
    VPN_KEYDIR="${HOME}/.vpn/scs_hardware_landscape"
@@ -50,11 +53,15 @@
    sudo wg-quick up "${VPN_KEYDIR?}/wg2.conf"
    sudo wg-quick down "${VPN_KEYDIR?}/wg2.conf"
    ```
+7. User: [Configure SSH Access](./System_Usage.md)
 
 ## Have the Ansible Vault Secret on your system
 
+Get the Ansible vault secret:
+
 ```
 cd hardware-landscape
+ssh scs-manager docker exec osism-ansible /ansible-vault.py
 ssh scs-manager docker exec osism-ansible /ansible-vault.py > secrets/vaultpass
 ```
 
