@@ -87,8 +87,171 @@ Here's an example configuration in DEVICE_METADATA:
 }
 ```
 
+## Integrated FRR configuration - Examples
 
-## Which FRR configuration model should I use in SONiC?
+There are few working examples available on the internet, see:
+- https://kamelnetworks.github.io/sonic/evpn.html
+- https://www.sonicnos.net/content/tutorials/bgp-evpn_lab
+- https://github.com/dsaucez/SLICES/blob/main/SONiC/EMC/Leaf-1/etc/sonic/config_db.json
+
+A working example for the SCS landscape switch st01-sw25g-r01-u34:
+
+- frr.conf
+```text
+!
+frr version 8.1
+frr defaults traditional
+hostname st01-sw25g-r01-u34
+service integrated-vtysh-config
+!
+router bgp 65404
+ bgp router-id 10.10.21.4
+ bgp log-neighbor-changes
+ bgp always-compare-med
+ no bgp ebgp-requires-policy
+ neighbor core peer-group
+ neighbor core remote-as 65501
+ neighbor server peer-group
+ neighbor server remote-as external
+ neighbor Ethernet72 interface peer-group core
+ neighbor Ethernet76 interface peer-group core
+ neighbor Ethernet0 interface peer-group server
+ neighbor Ethernet1 interface peer-group server
+ neighbor Ethernet2 interface peer-group server
+ neighbor Ethernet4 interface peer-group server
+ neighbor Ethernet5 interface peer-group server
+ neighbor Ethernet38 interface peer-group server
+ neighbor Ethernet39 interface peer-group server
+ neighbor Ethernet40 interface peer-group server
+ neighbor Ethernet41 interface peer-group server
+ neighbor Ethernet42 interface peer-group server
+ neighbor Ethernet43 interface peer-group server
+ neighbor Ethernet44 interface peer-group server
+ neighbor Ethernet45 interface peer-group server
+ neighbor Ethernet46 interface peer-group server
+ neighbor Ethernet47 interface peer-group server
+ !
+ address-family ipv4 unicast
+  network 10.10.21.4/32
+ exit-address-family
+ !
+ address-family ipv6 unicast
+  network fd0c:cc24:75a0:1:10:10:21:4/128
+  neighbor core activate
+  neighbor server activate
+ exit-address-family
+exit
+!
+route-map RM_SET_SRC6 permit 10
+ set src fd0c:cc24:75a0:1:10:10:21:4
+exit
+!
+route-map RM_SET_SRC permit 10
+ set src 10.10.21.4
+exit
+!
+ip protocol bgp route-map RM_SET_SRC
+!
+ipv6 protocol bgp route-map RM_SET_SRC6
+!
+end
+```
+
+- Integrated FRR configuration. Note that `route-map` configuration is missing, see why [here](#which-frr-configuration-options-are-not-supported-in-the-integrated-mode-with-sonic-frr-mgmt-framework-frrcfgd)
+```json
+{
+  "BGP_GLOBALS": {
+    "default": {
+      "local_asn": "65404",
+      "router_id": "10.10.21.4",
+      "log_nbr_state_changes": "true",
+      "always_compare_med": "true",
+      "ebgp_requires_policy": "false"
+    }
+  },
+    "BGP_PEER_GROUP": {
+      "default|core": {
+        "peer_group_name": "core",
+        "asn": "65501",
+        "peer_type": "internal"
+      },
+      "default|server": {
+        "peer_group_name": "server",
+        "asn": "external",
+        "peer_type": "external"
+      }
+   },
+   "BGP_NEIGHBOR": {
+    "default|Ethernet72": {
+      "peer_group_name": "core"
+    },
+    "default|Ethernet76": {
+      "peer_group_name": "core"
+    },
+    "default|Ethernet0": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet1": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet2": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet4": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet5": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet38": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet39": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet40": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet41": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet42": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet43": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet44": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet45": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet46": {
+      "peer_group_name": "server"
+    },
+    "default|Ethernet47": {
+      "peer_group_name": "server"
+    }
+   },
+  "BGP_NEIGHBOR_AF": {
+    "default|core|ipv6_unicast": {
+      "admin_status": "true"
+    },
+    "default|server|ipv6_unicast": {
+      "admin_status": "true"
+    }
+  },
+  "BGP_GLOBALS_AF_NETWORK": {
+    "default|ipv4_unicast|10.10.21.4/32": {},
+    "default|ipv6_unicast|fd0c:cc24:75a0:1:10:10:21:4/128": {}
+  }
+}
+```
+
+## FAQ
+
+### Which FRR configuration model should I use in SONiC?
 
 When choosing a configuration model in SONiC, it’s important to match your needs with the available protocol and parameter support:
 
@@ -109,7 +272,7 @@ When choosing a configuration model in SONiC, it’s important to match your nee
    - Supports additional protocols like OSPF, VRFs, L2 EVPN, PIM, and IGMP
    - Less documentation is available, so reviewing the source code (particularly frrcfgd.py) may be required
 
-## Which FRR configuration options are not supported in the integrated mode with sonic-frr-mgmt-framework (frrcfgd)?
+### Which FRR configuration options are not supported in the integrated mode with sonic-frr-mgmt-framework (frrcfgd)?
 
 Before opting for the integrated mode with the SONiC-FRR management framework (frrcfgd), be aware that not all FRR
 configuration options are supported.
@@ -122,7 +285,7 @@ See the related documentation [here](https://github.com/sonic-net/SONiC/blob/mas
 To verify further, review the corresponding section in the frrcfgd.py file [here](https://github.com/sonic-net/sonic-buildimage/blob/master/src/sonic-frr-mgmt-framework/frrcfgd/frrcfgd.py#L1862).
 
 
-## What about enterprise Edge-core SONiC?
+### What about enterprise Edge-core SONiC?
 
 Edgecore officially provides builds of enterprise Edge-core SONiC images for the following branches:
 - SONiC.202211
