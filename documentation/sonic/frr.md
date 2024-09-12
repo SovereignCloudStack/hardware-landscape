@@ -108,3 +108,51 @@ When choosing a configuration model in SONiC, it’s important to match your nee
    - Suitable for more advanced configurations
    - Supports additional protocols like OSPF, VRFs, L2 EVPN, PIM, and IGMP
    - Less documentation is available, so reviewing the source code (particularly frrcfgd.py) may be required
+
+## Which FRR configuration options are not supported in the integrated mode with sonic-frr-mgmt-framework (frrcfgd)?
+
+Before opting for the integrated mode with the SONiC-FRR management framework (frrcfgd), be aware that not all FRR
+configuration options are supported.
+As previously mentioned, the documentation for the sonic-frr-mgmt-framework is incomplete, and reviewing the frrcfgd.py
+code is necessary to determine which FRR options are supported and which are not.
+
+For example, the FRR route map option [set src ADDRESS](https://docs.frrouting.org/en/stable-7.1/zebra.html#clicmd-setsrcADDRESS)
+can be configured using FRR's vtysh but appears to be missing in the unified FRR management interface.
+See the related documentation [here](https://github.com/sonic-net/SONiC/blob/master/doc/mgmt/SONiC_Design_Doc_Unified_FRR_Mgmt_Interface.md#321101-route_map).
+To verify further, review the corresponding section in the frrcfgd.py file [here](https://github.com/sonic-net/sonic-buildimage/blob/master/src/sonic-frr-mgmt-framework/frrcfgd/frrcfgd.py#L1862).
+
+
+## What about enterprise Edge-core SONiC?
+
+Edgecore officially provides builds of enterprise Edge-core SONiC images for the following branches:
+- SONiC.202211
+- SONiC.202111
+- SONiC.202012
+- SONiC.202006
+- SONiC.201911
+
+TL;DR: Avoid using the integrated mode with the SONiC-FRR management framework (frrcfgd) on these versions!
+
+These builds do not include a [bug fix](https://github.com/edge-core/sonic-buildimage/commit/fabb30f2e98db967064daed757aeb221bee0c323)
+for frrcfgd, which is required for the unified FRR configuration to function properly.
+This fix is only available in the following Edgecore SONiC branches: 202305, 202311, 202311.0, 202311.X, master, and pre_202305.
+
+Without this fix, the FRR management framework does not behave as expected. Specifically, frrcfgd fails to interpret the
+Config DB BGP entries correctly, leading to errors such as:
+
+```text
+Sep 11 09:53:08.188862 st01-sw1g-r01-u42 INFO bgp#frrcfgd: value for table BGP_PEER_GROUP prefix default key LEAF changed to {'admin_status': (true, ADD), 'asn': (65501, ADD), 'peer_type': (external, ADD)}
+Sep 11 09:53:08.190100 st01-sw1g-r01-u42 DEBUG bgp#frrcfgd: execute command vtysh -c 'configure terminal' -c 'router bgp 65000 vrf default' -c 'neighbor LEAF remote-as 65501' for table BGP_PEER_GROUP.
+Sep 11 09:53:08.190100 st01-sw1g-r01-u42 DEBUG bgp#frrcfgd: VTYSH CMD: configure terminal daemons: ['bgpd']
+Sep 11 09:53:08.190100 st01-sw1g-r01-u42 DEBUG bgp#frrcfgd: VTYSH CMD: router bgp 65000 vrf default daemons: ['bgpd']
+Sep 11 09:53:08.190100 st01-sw1g-r01-u42 DEBUG bgp#frrcfgd: VTYSH CMD: neighbor LEAF remote-as 65501 daemons: ['bgpd']
+Sep 11 09:53:08.190132 st01-sw1g-r01-u42 DEBUG bgp#frrcfgd: [bgpd] command return code: 13
+Sep 11 09:53:08.190132 st01-sw1g-r01-u42 DEBUG bgp#frrcfgd: % Create the peer-group or interface first
+Sep 11 09:53:08.190147 st01-sw1g-r01-u42 DEBUG bgp#frrcfgd: VTYSH CMD: end daemons: ['bgpd']
+Sep 11 09:53:08.190174 st01-sw1g-r01-u42 ERR bgp#frrcfgd: command execution failure. Command: "vtysh -c 'configure terminal' -c 'router bgp 65000 vrf default' -c 'neighbor LEAF remote-as 65501'"
+Sep 11 09:53:08.190174 st01-sw1g-r01-u42 ERR bgp#frrcfgd: failed running FRR command: neighbor LEAF remote-as 65501
+```
+In this case, frrcfgd recognizes the BGP_PEER_GROUP, but it fails to translate it into proper FRR-BGP CLI commands.
+
+After manually applying the fix to the SONiC.202211 build, the FRR management framework functioned as expected, enabling
+the unified FRR configuration to work properly.
