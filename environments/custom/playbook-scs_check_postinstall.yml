@@ -1,5 +1,5 @@
 ---
-- name: Check the state of all nodes
+- name: Check the state of all nodes after installation
   hosts: generic
   gather_facts: no
   become: yes
@@ -8,5 +8,5 @@
       ansible.builtin.command: /usr/local/scripts/scs_check_chrony.sh 2 0.01
     - name: Check network connectivity - /usr/local/scripts/scs_check_network_connectivity.sh
       ansible.builtin.command: /usr/local/scripts/scs_check_network_connectivity.sh
-    - name: Check servcices - /usr/local/scripts/scs_check_services.sh
+    - name: Check services - /usr/local/scripts/scs_check_services.sh
       ansible.builtin.command: /usr/local/scripts/scs_check_services.sh
