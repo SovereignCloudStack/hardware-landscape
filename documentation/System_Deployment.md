@@ -28,13 +28,15 @@
    * Align configuration
      (replace external with internal ip address in `ansible_host`)
      ```
-     vim -d environments/manager/host_vars/st01-mgmt-r01-u30.yml ./inventory/host_vars/st01-mgmt-r01-u30.yml
+     vim -d environments/manager/host_vars/st01-mgmt-r01-u30.yml ./inventory/host_vars/st01-mgmt-r01-u30/01_base.yml
      ```
    * Run Ansible on manager
      ```
      ssh st01-mgmt-r01-u30
      sudo -u dragon -i
      osism apply configuration
+     osism reconciler sync
+     osism apply facts
      ```
 3. Install Manager Infrastructure from manager
    ```
@@ -116,7 +118,7 @@ Please just add issues to this project with hints or directly [contact me](https
   ```
 * Install the installation infrastructure
   ```
-  osism apply scs_infra -l 'all:!manager'
+  osism apply scs_infra 
   ```
 * Execute the [bootstrap procedure](https://osism.tech/de/docs/guides/deploy-guide/bootstrap)
 * Run Basic customizations
@@ -124,11 +126,12 @@ Please just add issues to this project with hints or directly [contact me](https
   osism apply scs_all_nodes -l 'all:!manager'
   ```
 * Check if the ntp time setup is correct
+  (checks pre installation conditions like proper time sync and network connectivity)
   ```
-  osism apply scs_check_ntp
+  osism apply scs_check_preinstall
   ```
 
-## Deploy the infratructure servcies
+## Deploy the infratructure services
 
 Deployment order
 
