@@ -96,7 +96,7 @@ This is list is incomplete.
 | OpenSearch Dashboards    | https://api.zone1.landscape.scs.community:5601             | opensearch   | opensearch_dashboards_password |                 |
 | Prometheus               | https://api-internal.zone1.landscape.scs.community:9091    | admin        |                                |                 |
 | RabbitMQ                 | https://api-internal.zone1.landscape.scs.community:15672   | openstack    | rabbitmq_password              |                 |
-| phpMyAdmin               | https://phpmyadmin.zone1.landscape.scs.community           | root         |                                |                 |
+| phpMyAdmin               | https://phpmyadmin.zone1.landscape.scs.community           | root         | database_password              |                 |
 | Webserver                | http://files.zone1.landscape.scs.community:18080/          | n/a          | n/a                            | Install Files   |
 | DNS                      | https://portal.cnds.io                                     | <personal>   |                                |                 |
 | HAProxy (testbed-node-0) | http://testbed-node-0.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
