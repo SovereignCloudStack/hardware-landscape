@@ -12,7 +12,7 @@ done < <(sudo vtysh -c "show ip bgp summary"|awk '/^enp/{if ($10 !~/[0-9][0-9]*/
 
 while read node
 do
-   ping -q -c ${1:-2} $node
+   ping -M do -c ${1:-2} -s $((9100 - 28)) $node
    if [ "$?" != "0" ];then
       failed="PING:$node $failed"
    fi
