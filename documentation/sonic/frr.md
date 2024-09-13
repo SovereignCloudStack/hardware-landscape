@@ -272,18 +272,19 @@ When choosing a configuration model in SONiC, it’s important to match your nee
    - Supports additional protocols like OSPF, VRFs, L2 EVPN, PIM, and IGMP
    - Less documentation is available, so reviewing the source code (particularly frrcfgd.py) may be required
 
-### Which FRR configuration options are not supported in the integrated mode with sonic-frr-mgmt-framework (frrcfgd)?
+### Which FRR configuration options are not supported in the integrated mode with sonic-frr-mgmt-framework (frrcfgd), and does this affect SCS landscape configuration?
 
 Before opting for the integrated mode with the SONiC-FRR management framework (frrcfgd), be aware that not all FRR
 configuration options are supported.
 As previously mentioned, the documentation for the sonic-frr-mgmt-framework is incomplete, and reviewing the frrcfgd.py
 code is necessary to determine which FRR options are supported and which are not.
 
-For example, the FRR route map option [set src ADDRESS](https://docs.frrouting.org/en/stable-7.1/zebra.html#clicmd-setsrcADDRESS)
-can be configured using FRR's vtysh but appears to be missing in the unified FRR management interface.
-See the related documentation [here](https://github.com/sonic-net/SONiC/blob/master/doc/mgmt/SONiC_Design_Doc_Unified_FRR_Mgmt_Interface.md#321101-route_map).
-To verify further, review the corresponding section in the frrcfgd.py file [here](https://github.com/sonic-net/sonic-buildimage/blob/master/src/sonic-frr-mgmt-framework/frrcfgd/frrcfgd.py#L1862).
-
+Known issues:
+1. The FRR route map option [set src ADDRESS](https://docs.frrouting.org/en/stable-7.1/zebra.html#clicmd-setsrcADDRESS) can be configured using FRR's vtysh but appears to be missing in the unified FRR management interface.
+See the related documentation [here](https://github.com/sonic-net/SONiC/blob/master/doc/mgmt/SONiC_Design_Doc_Unified_FRR_Mgmt_Interface.md#321101-route_map). To verify further, review the corresponding section in the frrcfgd.py file [here](https://github.com/sonic-net/sonic-buildimage/blob/master/src/sonic-frr-mgmt-framework/frrcfgd/frrcfgd.py#L1862).
+BGP routing works without route-map set src option, but the router is not able to reach remote addresses due to missing source IP address in local routes (more than suboptimal). See details [here](./frr_issue_01.md).
+2. `show ip interface` and `show ipv6 interface` commands do not work, because of mandatory local_addr in SONiC config DB.
+But this local address is not mandatory by BGP neighbor config, and also it is not used in the SCS landscape FRR configs. See details [here](https://github.com/sonic-net/sonic-buildimage/issues/19930).
 
 ### What about enterprise Edge-core SONiC?
 
