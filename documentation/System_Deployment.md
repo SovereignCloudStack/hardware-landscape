@@ -34,8 +34,8 @@
      ```
      ssh st01-mgmt-r01-u30
      sudo -u dragon -i
-     osism apply configuration
-     osism reconciler sync
+     osism sync configuration
+     osism sync inventory
      osism apply facts
      ```
 3. Install Manager Infrastructure from manager
