@@ -125,10 +125,11 @@ Please just add issues to this project with hints or directly [contact me](https
   ```
   osism apply scs_all_nodes -l 'all:!manager'
   ```
-* Check if the ntp time setup is correct
+* Check if the ntp time and the network setup is correct
   (checks pre installation conditions like proper time sync and network connectivity)
   ```
   osism apply scs_check_preinstall
+  osism validate ceph-connectivity
   ```
 
 ## Deploy the infratructure services
