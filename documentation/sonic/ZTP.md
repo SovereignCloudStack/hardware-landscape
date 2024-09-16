@@ -78,3 +78,15 @@ options refer to the [docs](https://github.com/sonic-net/SONiC/blob/master/doc/z
   }
 }
 ```
+
+### ZTP in community version
+
+Zero Touch Provisioning is not enabled by default in SONiC community images. Run the following command:
+```bash
+$ show ztp status 
+ZTP feature unavailable in this image version
+```
+
+To enable ZTP, you'll need to build your own image with the `ENABLE_ZTP = y` option, which adds ZTP support.
+
+Note that the SONiC Edge-core enterprise image comes with ZTP enabled by default.
