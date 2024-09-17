@@ -45,7 +45,8 @@ squid_tag: edge
 ##########################
 # system settings
 motd_show_ssh: true
-network_interface: dummy0
+network_interface: "dummy0"
+
 
 #osism_setup_gather_subset:
 # - "!network_switches"
@@ -73,6 +74,7 @@ cluster_cidr: "10.52.0.0/16"
 cilium_mode: "native"
 
 k3s_interface: "dummy0"
+
 #kube_vip_iface: "dummy0"
 #calico_iface: "dummy0"
 #flannel_iface: "dummy0"
@@ -242,6 +244,11 @@ hosts_additional_entries:
 
 ##########################
 # ceph
+
+# TODO: can be removed when the follwing PR is released: 
+monitor_interface: "dummy0"
+radosgw_interface: "dummy0"
+rgw_multisite: false
 
 ceph_cluster_fsid: 44bc2d19-fd83-4b92-a6c4-eed358e35672
 # BEGIN: TLS
