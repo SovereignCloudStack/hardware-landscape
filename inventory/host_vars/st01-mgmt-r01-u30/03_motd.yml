@@ -32,4 +32,4 @@ motd_content: |
     see /var/log/screen
 
   You can distribute OS Images using the folder /srv/www (make directory/file world readable).
-  You can download files from http://{{ mgmt_address_system }}:18080/.
+  You can download files from http://{{ mgmt_address_system }}:28080/.
