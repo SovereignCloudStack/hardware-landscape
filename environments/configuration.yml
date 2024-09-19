@@ -47,7 +47,7 @@ squid_tag: edge
 # system settings
 motd_show_ssh: true
 network_interface: "dummy0"
-
+kernel_version_expected: 6.8
 
 #osism_setup_gather_subset:
 # - "!network_switches"
