@@ -118,7 +118,7 @@ Please just add issues to this project with hints or directly [contact me](https
   ```
 * Install the installation infrastructure
   ```
-  osism apply scs_infra 
+  osism apply scs_infra
   ```
 * Execute the [bootstrap procedure](https://osism.tech/de/docs/guides/deploy-guide/bootstrap)
 * Run Basic customizations
@@ -130,6 +130,11 @@ Please just add issues to this project with hints or directly [contact me](https
   ```
   osism apply scs_check_preinstall
   osism validate ceph-connectivity
+  ```
+* Reboot all hosts
+  ```
+  osism apply reboot -l 'all:manager' -e ireallymeanit=yes -e reboot_wait=true
+  osism apply reboot -l 'all:!manager' -e ireallymeanit=yes -e reboot_wait=true
   ```
 
 ## Deploy the infratructure services
