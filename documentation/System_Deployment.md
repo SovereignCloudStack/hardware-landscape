@@ -168,3 +168,14 @@ For the steps described in the osd configurtion there are the following exceptio
    git push
    ```
 
+### Step 5: Validate the Installation
+
+* Run the Postinstallation validation
+  ```
+  osism apply scs_check_postinstall
+  ```
+* Run the OSISM validations
+  ```
+  /opt/configuration/misc/run_validations.sh
+  ```
+

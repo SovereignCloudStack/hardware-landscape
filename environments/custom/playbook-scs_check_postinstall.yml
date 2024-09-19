@@ -14,5 +14,6 @@
 - name: Check the state of all openstack after installation
   hosts: manager
   gather_facts: no
+  tasks:
     - name: Check openstack - /usr/local/scripts/scs_check_openstack.sh
       ansible.builtin.command: /usr/local/scripts/scs_check_openstack.sh
