@@ -4,20 +4,20 @@ This guide provides step-by-step instructions to build a SONiC image, particular
 
 ## Prerequisites
 
-### Hardware Requirements
+### Hardware requirements
 
 - **CPU**: Minimum 8 cores (more cores for faster builds)
 - **RAM**: Minimum 8 GB, recommended 32 GB
 - **Storage**: At least 300 GB of free disk space
 - **KVM Virtualization Support**: Required for build of VS (virtual switch) platform
 
-### Software Requirements
+### Software requirements
 
 - **Operating System**: Ubuntu 20.04 LTS is recommended
 - **Python 3**: Install via package manager
 - **Docker**: SONiC builds run in Docker containers
 
-### Set Up Environment
+### Set up environment
 
 - Install Required Packages
    ```bash
