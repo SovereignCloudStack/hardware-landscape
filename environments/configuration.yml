@@ -75,14 +75,17 @@ cluster_cidr: "10.52.0.0/16"
 cilium_mode: "native"
 
 k3s_interface: "dummy0"
+kube_vip_iface: "dummy0"
+calico_iface: "dummy0"
 
-#kube_vip_iface: "dummy0"
-#calico_iface: "dummy0"
-#flannel_iface: "dummy0"
-#cilium_iface: "dummy0"
+# Because the FRR instance on the node itself is responsible for propagate routes
+# to the metallb endpoints, there is no need to have a extra BGP routing instance in K3s.
+kube_vip_bgp: false
 
-#metal_lb_type: "frr"
-#metal_lb_mode: "bgp"
+# ARP Broadcasts are not available in Layer3 Underlay Networks, therefore we disabled it
+# to make leader election functional.
+kube_vip_arp: false
+
 
 ##########################
 # docker
