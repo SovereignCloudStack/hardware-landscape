@@ -71,8 +71,6 @@ Please just add issues to this project with hints or directly [contact me](https
   cd /opt/configuration/misc/node-images
   make all
   ```
-* Configure  "local shell on your local system
-  * Add the passwords file for BMC password data (TODO, add this later to ansible secrets) : ``secrets/server.passwords``
 
 ### Step 3: Provision / Install the node images
 
@@ -137,19 +135,19 @@ Please just add issues to this project with hints or directly [contact me](https
   osism apply reboot -l 'all:!manager' -e ireallymeanit=yes -e reboot_wait=true
   ```
 
-## Deploy the infratructure services
+## Deploy the infrastructure services
 
-Deployment order
+### Step 1:
 
-1. [Infrastructure](https://osism.tech/de/docs/guides/deploy-guide/services/infrastructure.md)
-2. [Network](https://osism.tech/de/docs/guides/deploy-guide/services/network.md)
-3. [Logging & Monitoring](https://osism.tech/de/docs/guides/deploy-guide/services/logging-monitoring.md)
-4. [Ceph](https://osism.tech/de/docs/guides/deploy-guide/services/ceph.mdx)
-5. [OpenStack](https://osism.tech/de/docs/guides/deploy-guide/services/openstack.md)
+[Infrastructure](https://osism.tech/de/docs/guides/deploy-guide/services/infrastructure)
+[Logging & Monitoring](https://osism.tech/de/docs/guides/deploy-guide/services/logging-monitoring)
 
 ### Step 2: Network
 
 The OVN database is deployed to the first 3 compute nodes because the ATOM CPUs do not not support the suitable AVX instructions.
+
+[Network](https://osism.tech/de/docs/guides/deploy-guide/services/network)
+
 
 ### Step 3: Logging & Monitoring
 
@@ -176,6 +174,22 @@ For the steps described in the osd configurtion there are the following exceptio
    git commit -m "osd-generation" -a -s
    git push
    ```
+2. [Ceph](https://osism.tech/de/docs/guides/deploy-guide/services/ceph)
+
+
+### Step 5: Openstack
+
+1. Install all steps from [OpenStack](https://osism.tech/de/docs/guides/deploy-guide/services/openstack)
+   except `osism apply octavia`
+2. Execute the environment setup
+   (There is currently a bug: #61)
+   ```
+   osism apply scs_landscape_setup
+   ```
+3. Execute Octavia Installation
+   ```
+   osism apply octavia
+   ```
 
 ### Step 5: Validate the Installation
 
@@ -187,4 +201,58 @@ For the steps described in the osd configurtion there are the following exceptio
   ```
   /opt/configuration/misc/run_validations.sh
   ```
+* Use the small scenario of the next step
 
+## Step 6: Create Test Workload
+
+This generates test enviromments with the following charateristics:
+
+* 9 domains with
+  * one admin user
+    * each with 9 projects
+    * assigned roles
+    * which then each contain 9 servers
+          * block storage volume
+          * first server has a floating ip
+    * one public SSH key
+    * a network
+    * a subnet
+    * a router
+    * a security group for ssh ingress access
+    * a security group for egress access
+
+To specify configuration details create a new configuration from the [default file](misc/manage/test-default.yaml) and specify
+it with `--config <fully qualified path>`.
+
+The tooling creates the resouces in a serial process and trys to be reentrant if you specify a compatible set of domain,
+project and machine name parameters.
+
+### Create a small amount of domains, projects and virtual machines
+
+* Create a domain with a project which contains two virtual machines
+  ```
+  ./landscape_ctl --config smoketest.yml --create_domains smoketest1 --create_projects smoketest-project1 --create_machines smoketest-testvm{1..2}
+  ```
+* Verify the result
+  ```
+  openstack domain list
+  openstack project list --long
+  openstack server list --all-projects --long
+  openstack server list --all-projects -f json|\
+    jq -r '
+    .[]
+    | select(.Name | test("^smoketest-"))
+    | select(.Networks
+        | to_entries[]
+        | select(.value[] | test("^10\\.80\\.")))
+    | "\(.Name) \(.Networks
+        | to_entries[]
+        | select(.value[] | test("^10\\.80\\."))
+        | .value[]
+        | select(test("^10\\.80\\.")))"'
+  ssh ubuntu@10.80.x.x
+  ```
+* Cleanup smoketest
+  ```
+  ./landscape_ctl --delete_domains smoketest1
+  ```

@@ -1,6 +1,7 @@
 # Test whether the FRR route map option [set src ADDRESS](https://docs.frrouting.org/en/stable-7.1/zebra.html#clicmd-setsrcADDRESS) is mandatory for BGP configuration
 
 TL;DR: BGP routing works without route-map set src option, but the router is not able to reach remote addresses due to missing source IP address in local routes.
+       This issue does not occur when BGP unnumbered is used with IPv6 link-local addresses. 
 
 If the set src ADDRESS option is removed from the working BGP config:
 ```bash

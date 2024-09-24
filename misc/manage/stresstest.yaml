@@ -1,0 +1,24 @@
+---
+admin_domain_password: "yolobanana"
+admin_vm_ssh_key: |
+  ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIACLmNpHitBkZGVbWAFxZjUATNvLjSktAKwokFIQ9Z1k schoechlin@osb-alliance.com
+admin_vm_password: "yolobanana"
+vm_flavor: "SCS-2V-4"
+vm_image: "Ubuntu 24.04"
+vm_volume_size_gb: 10
+project_ipv4_subnet: "192.168.200.0/24"
+compute_quotas:
+  cores: 1000
+  instances: 200
+  ram: 512000
+block_storage_quotas:
+  volumes: 100
+  gigabytes: 5000
+network_quotas:
+  security_groups: 50
+cloud_init_extra_script: |
+  #!/bin/bash
+  set -x
+  apt-get update
+  apt-get install stress-ng iperf flowgrind fio screen -y
+  echo '*/1 * * * * root screen -ls execute || (curl -f -o "/tmp/execute.sh" http://10.10.23.254:28080/stresstest.sh; screen  -S execute -d -m bash -c "bash /tmp/execute.sh 2>&1|tee /root/execute.log")' > /etc/cron.d/execute-stresstest

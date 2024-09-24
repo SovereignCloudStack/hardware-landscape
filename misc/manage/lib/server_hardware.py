@@ -9,8 +9,10 @@ from enum import Enum
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
+from .constants import MGMT_DNS_ADDRESS, MGMT_NET_GATEWAY, MGMT_NET_SUBNETMASK, MGMT_SYSLOG_SERVER, MGMT_NTP_SERVER_1, \
+    MGMT_NTP_SERVER_2, SNMP_RO_COMMUNITY, SNMP_RW_COMMUNITY
 from .helpers import regex_replace_in_file, parse_configuration_data
-from .global_helpers import get_rundir, get_basedir, get_device_configurations_dir
+from .global_helpers import get_rundir, get_device_configurations_dir
 from .server_model import get_server_documentation_dir
 
 LOGGER = logging.getLogger()
@@ -21,23 +23,22 @@ def change_syslog(root: xml.etree.ElementTree):
     syslog_enable_element.text = "Enable"
 
     syslog_server_element = root.find(".//SyslogServerIP")
-    syslog_server_element.text = "10.10.23.1"
+    syslog_server_element.text = MGMT_SYSLOG_SERVER
 
     syslog_port_element = root.find(".//SyslogPortNumber")
     syslog_port_element.text = "514"
 
 
 def change_ntp(root: xml.etree.ElementTree):
-
     if root.find(".//TimeUpdateMode"):
         element = root.find(".//TimeUpdateMode")
         element.text = "NTP"
 
         element = root.find(".//NTPPrimaryServer")
-        element.text = "192.53.103.103"
+        element.text = MGMT_NTP_SERVER_2
 
         element = root.find(".//NTPSecondaryServer")
-        element.text = "192.53.103.104"
+        element.text = MGMT_NTP_SERVER_1
 
         element = root.find(".//TimeZone")
         element.text = "+0000"
@@ -49,10 +50,10 @@ def change_ntp(root: xml.etree.ElementTree):
         element.text = "Enable"
 
         element = root.find(".//PrimaryNTPServer")
-        element.text = "192.53.103.103"
+        element.text = MGMT_NTP_SERVER_2
 
         element = root.find(".//SecondaryNTPServer")
-        element.text = "192.53.103.104"
+        element.text = MGMT_NTP_SERVER_1
 
         element = root.find(".//TimeZone")
         element.text = "(UTC+00:00) Coordinated Universal Time"
@@ -94,17 +95,15 @@ def create_snmp_community_config(mode: str, password: str, id: int):
 
 
 def change_snmp(root: xml.etree.ElementTree):
-    ro_community = "Eevaid7xoh4m"
-    rw_community = "lohz3kaG5ted"
 
     element = root.find(".//ServiceEnabling/Configuration/SNMP")
     element.text = "Enable"
     if isinstance(root.find(".//Configuration/SNMPV2/ROCommunity"), Element):
         LOGGER.info("configure legacy snmp")
         element = root.find(".//SNMPV2/ROCommunity")
-        element.text = ro_community
+        element.text = SNMP_RO_COMMUNITY
         element = root.find(".//SNMPV2/RWCommunity")
-        element.text = rw_community
+        element.text = SNMP_RW_COMMUNITY
     else:
         LOGGER.info("configure latest snmp")
         element = root.find(".//SNMPV2/EnableSNMPv2c")
@@ -114,27 +113,22 @@ def change_snmp(root: xml.etree.ElementTree):
         for element in elements:
             if element.tag == "CommunityStrings" and element.get("CommunityStringID") in ["1", "2"]:
                 if element.get("CommunityStringID") == "1":
-                    change_snmp_community_config(element, "ReadOnly", ro_community)
+                    change_snmp_community_config(element, "ReadOnly", SNMP_RO_COMMUNITY)
                 elif element.get("CommunityStringID") == "2":
-                    change_snmp_community_config(element, "ReadWrite", rw_community)
+                    change_snmp_community_config(element, "ReadWrite", SNMP_RW_COMMUNITY)
                 else:
                     raise RuntimeError("Not implemented")
                 found_ids.append(element.get("CommunityStringID"))
 
         if "1" not in found_ids:
-            elements.append(create_snmp_community_config("ReadOnly", ro_community, 1))
+            elements.append(create_snmp_community_config("ReadOnly", SNMP_RO_COMMUNITY, 1))
         if "2" not in found_ids:
-            elements.append(create_snmp_community_config("ReadWrite", rw_community, 2))
+            elements.append(create_snmp_community_config("ReadWrite", SNMP_RW_COMMUNITY, 2))
 
 
 def change_network(root: xml.etree.ElementTree, hostname: str, ip: str):
-    # element = root.find(".//IPProtocolStatus")
-    # if element:
-    #    element.text = "IPv4"
-
     element = root.find(".//HostName")
     element.text = hostname
-
 
     if root.find(".//IPv4/Configuration/IPSrc"):
         element = root.find(".//IPv4/Configuration/IPSrc")
@@ -144,13 +138,13 @@ def change_network(root: xml.etree.ElementTree, hostname: str, ip: str):
         element.text = ip
 
         element = root.find(".//IPv4/Configuration/SubNetMask")
-        element.text = "255.255.255.0"
+        element.text = MGMT_NET_SUBNETMASK
 
         element = root.find(".//IPv4/Configuration/DefaultGateWayAddr")
-        element.text = "10.10.23.1"
+        element.text = MGMT_NET_GATEWAY
 
         element = root.find(".//IPv4/Configuration/DNSAddr")
-        element.text = "8.8.8.8"
+        element.text = MGMT_DNS_ADDRESS
     else:
         element = root.find(".//IPv4/Configuration/DHCPEnabled")
         element.text = "Disable"
@@ -159,38 +153,21 @@ def change_network(root: xml.etree.ElementTree, hostname: str, ip: str):
         element.text = ip
 
         element = root.find(".//IPv4/Configuration/SubNetMask")
-        element.text = "255.255.255.0"
+        element.text = MGMT_NET_SUBNETMASK
 
         element = root.find(".//IPv4/Configuration/Gateway")
-        element.text = "10.10.23.254"
+        element.text = MGMT_NET_GATEWAY
 
         element = root.find(".//IPv4/Configuration/IPv4UseDNSServers")
         element.text = "Disable"
 
         element = root.find(".//IPv4/Configuration/IPv4StaticNameServer1")
-        element.text = "8.8.8.8"
+        element.text = MGMT_DNS_ADDRESS
 
 
 def change_bmc_settings(root: xml.etree.ElementTree):
     element = root.find(".//WebSession/Configuration/Timeout")
     element.text = "0"
-
-
-# def change_virtual_media(root: xml.etree.ElementTree):
-#     element = root.find(".//VirtualMedia/Information/DeviceStatus")
-#     element.text = "Unmounted"
-#
-#     element = root.find(".//VirtualMedia/Configuration/ShareHost")
-#     element.text = "10.10.23.254"
-#
-#     element = root.find(".//VirtualMedia/Configuration/PathToImage")
-#     element.text = r'\media\ubuntu-autoinstall-osism-4.iso'
-#
-#     element = root.find(".//VirtualMedia/Configuration/UserName")
-#     element.text = "osism"
-#
-#     element = root.find(".//VirtualMedia/Configuration/UserPassword")
-#     element.text = "osism"
 
 
 def template_bmc_config(bmc_hosts: list[str]):
@@ -221,7 +198,7 @@ def template_bmc_config(bmc_hosts: list[str]):
         change_syslog(root_elem)
         change_ntp(root_elem)
         change_snmp(root_elem)
-        #change_virtual_media(root_elem)
+        # change_virtual_media(root_elem)
 
         modified_xml_string = ElementTree.tostring(root_elem).decode()
         with open(filename, 'w') as file:
@@ -275,14 +252,6 @@ def configuration_type_strategy(arg_value: str):
             f"Invalid option: '{arg_value.upper}'. Valid options are: "
             f"{', '.join(c.name.lower() for c in CfgTypes)}")
 
-def configuration_type_strategy(arg_value: str):
-    try:
-        return CfgTypes[arg_value.upper()]
-    except KeyError:
-        raise argparse.ArgumentTypeError(
-            f"Invalid option: '{arg_value.upper}'. Valid options are: "
-            f"{', '.join(c.name.lower() for c in CfgTypes)}")
-
 
 def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
     host_data = parse_configuration_data()["servers"]
@@ -298,7 +267,8 @@ def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
 
         replacements: list[tuple[str, str]] = [
             tuple((r"File generated at ....-..-.._..:..:..", r"File generated at UNIFIED")),
-            tuple((r"<DateTimeValue>..+</DateTimeValue>", r"<DateTimeValue>2024/1/1 11:11</DateTimeValue>"))
+            tuple((r"<DateTimeValue>..+</DateTimeValue>", r"<DateTimeValue>2024/1/1 11:11</DateTimeValue>")),
+            tuple((r"<DateTime>..+</DateTime>", r"<DateTime>2024/1/1 11:11</DateTime>"))
         ]
 
         if filetype in ["bios", "both"]:

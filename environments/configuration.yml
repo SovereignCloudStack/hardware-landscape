@@ -59,9 +59,6 @@ management_gw: 10.10.23.254
 ##########################
 # dnscrypt
 
-# DNS Crypt acts as a DNS proxy, but is currently not really needed.
-# It was a experiment.
-# TODO: decide if we remove or keep it
 dnscrypt_cloaks:
   - "api-internal.zone1.landscape.scs.community      10.10.21.200"
   - "api.zone1.landscape.scs.community          10.10.21.201"
@@ -69,7 +66,7 @@ dnscrypt_cloaks:
 ############################
 # kubernetes - K3s configuration
 apiserver_endpoint: "10.10.21.202"
-metal_lb_ip_range: "10.10.21.220-10.10.21.239"
+metal_lb_ip_range: "10.10.21.203-10.10.21.220"
 
 cluster_cidr: "10.52.0.0/16"
 cilium_mode: "native"
@@ -214,6 +211,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45013
+    state: absent
     groups:
       - docker
       - dialout
@@ -249,7 +247,7 @@ hosts_additional_entries:
 ##########################
 # ceph
 
-# TODO: can be removed when the follwing PR is released: 
+# TODO: can be removed when the follwing PR is released: https://github.com/osism/defaults/pull/225
 monitor_interface: "dummy0"
 radosgw_interface: "dummy0"
 rgw_multisite: false

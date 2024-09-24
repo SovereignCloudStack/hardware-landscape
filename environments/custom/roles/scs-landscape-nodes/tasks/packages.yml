@@ -9,6 +9,7 @@
       - util-linux
       - sysstat
       - iproute2
+      - inetutils-traceroute
       - numactl
       - tcpdump
       - linux-tools-common

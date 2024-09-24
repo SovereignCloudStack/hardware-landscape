@@ -5,13 +5,15 @@ import os
 import re
 import subprocess
 import sys
+import uuid
 from enum import Enum
+from typing import Any
+
 from jinja2 import FileSystemLoader, Environment, StrictUndefined
 
 from .global_helpers import get_ansible_host_inventory_dir, get_basedir
 
 LOGGER = logging.getLogger()
-
 
 @functools.lru_cache
 def parse_configuration_data() -> dict[str, dict[str, dict[str, str]]]:
@@ -98,19 +100,18 @@ def template_ansible_config(host_list: list[str], item_type: str, strategy: Ansi
         templated_string = results_template.render(host_data[host_name])
 
         if os.path.exists(results_filename):
-            with open(results_filename, 'r') as file:
-                if strategy is AnsibleInvertoryStrategy.KEEP:
-                    LOGGER.warning(
-                        f"Not templating {host_name} inventory file {results_filename}, ansible_inventory_update_strategy=keep")
-                    continue
-                elif strategy is AnsibleInvertoryStrategy.REPLACE:
-                    LOGGER.warning(
-                        f"Updating existing {host_name} file {results_filename}, ansible_inventory_update_strategy=update")
-                    with open(results_filename, 'w') as f_out:
-                        f_out.write(templated_string)
-                else:
-                    LOGGER.error(f"ansible_inventory_update_strategy invalid {strategy}")
-                    sys.exit(1)
+            if strategy is AnsibleInvertoryStrategy.KEEP:
+                LOGGER.warning(
+                    f"Not templating {host_name} inventory file {results_filename}, ansible_inventory_update_strategy=keep")
+                continue
+            elif strategy is AnsibleInvertoryStrategy.REPLACE:
+                LOGGER.warning(
+                    f"Updating existing {host_name} file {results_filename}, ansible_inventory_update_strategy=update")
+                with open(results_filename, 'w') as f_out:
+                    f_out.write(templated_string)
+            else:
+                LOGGER.error(f"ansible_inventory_update_strategy invalid {strategy}")
+                sys.exit(1)
 
         else:
             LOGGER.warning(f"Create a new file for {host_name}")
@@ -130,17 +131,48 @@ def create_configs(host_list: list[str], config_type: str):
             LOGGER.info(f"** {host_name}")
 
             if 'bmc_ip_v4' in host_data[host_name]:
-                f_out.write(f"Host scs-{host_name}-bmc\n")
+                f_out.write(f"Host scs-{host_name}-bmc {host_name}-bmc\n")
                 f_out.write(f"   Hostname {host_data[host_name]['bmc_ip_v4']}\n")
 
                 if host_data[host_name]["device_vendor"] == "Supermicro":
                     # Workaround for crappy supermicro boxes
-                    f_out.write(f"   HostKeyAlgorithms=+ssh-rsa\n")
+                    f_out.write("   HostKeyAlgorithms=+ssh-rsa\n")
 
                 f_out.write(f"   User {host_data[host_name]['bmc_username']}\n")
-                f_out.write(f"\n")
+                f_out.write("\n")
 
             if 'node_ip_v4' in host_data[host_name]:
-                f_out.write(f"Host scs-{host_name}\n")
+                f_out.write(f"Host scs-{host_name} {host_name}\n")
                 f_out.write(f"   Hostname {host_data[host_name]['node_ip_v4']}\n")
-                f_out.write(f"\n")
+                f_out.write("\n")
+
+
+def filter_dict_keys(data: Any, allowed_keys_regex: list[str], key=None) -> dict | list | str | None:
+    if isinstance(data, dict):
+        tmp_dict = {}
+        for k,v in data.items():
+            result = filter_dict_keys(v, allowed_keys_regex, key=k)
+            if result:
+                tmp_dict[k] = result
+        return tmp_dict
+    elif isinstance(data, list):
+        filtered_list = [filter_dict_keys(item, allowed_keys_regex) for item in data]
+        return [item for item in filtered_list if item]
+    else:
+        for match_key_regex in allowed_keys_regex:
+            if re.fullmatch(match_key_regex, key) and data is not None:
+                return data
+    return None
+
+def print_all_dict_values(d: Any) -> int:
+    count=0
+    if isinstance(d, list):
+        for value in d:
+            count += print_all_dict_values(value)
+    elif isinstance(d, dict):
+        for value in d.values():
+            count += print_all_dict_values(value)
+    else:
+        print(d)
+        return 1
+    return count

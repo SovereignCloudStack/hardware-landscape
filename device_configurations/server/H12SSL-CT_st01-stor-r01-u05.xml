@@ -287,7 +287,7 @@
       <!--Configurations for BMC to tick date and time-->
       <Information>
         <!--Information for date and time-->
-        <DateTime>2024/6/13 16:52</DateTime>
+        <DateTime>2024/1/1 11:11</DateTime>
         <!--YYYY/MM/DD HH:MM-->
       </Information>
       <Configuration>
@@ -483,7 +483,7 @@
           <!--Will be skipped if this device is mounted by iKVM.-->
           <!--The device is mounted by iKVM if the field "Image" is kvm_usb/kvm_cd/kvm_floppy.-->
           <Information>
-            <MediaType>CD/DVD</MediaType>
+            <MediaType></MediaType>
             <!--CD/DVD/Floppy/USBStick-->
             <!--Will empty if the device is unmounted.-->
           </Information>
@@ -517,7 +517,7 @@
             <!--Enable/Disable-->
             <!--Accepts self-signed certificate for SSL if the fields "VerifyCert" and "AcceptSelfSigned" are both Enable.-->
             <!--Only for HTTPS protocol.-->
-            <Inserted>Enable</Inserted>
+            <Inserted>Disable</Inserted>
             <!--Enable/Disable-->
             <!--Mounts the image file if the field "Inserted" is Enable.-->
             <!--Unmounts the image file if the field "Inserted" is Disable.-->

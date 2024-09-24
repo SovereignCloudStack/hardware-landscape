@@ -1,0 +1,28 @@
+#!/bin/bash
+
+IFACE="vxlan80"
+ip link ls ${IFACE} 2>&1
+if [ "$?" != "0" ];then
+   echo "no ${IFACE} here"
+   exit 0
+fi
+
+logger -t provider-vxlan -s "START: reestablishing vxlan meshing"
+echo "Removing old fdb entries:"
+bridge fdb show brport ${IFACE}|while read LINE;
+do
+   echo "+bridge fdb delete $LINE"
+   bridge fdb delete $LINE;
+done
+
+echo "Adding new fdb entries"
+
+{% for item in groups["network"] | sort %}
+echo "{{ item }} : bridge fdb append to 00:00:00:00:00:00 dst {{ hostvars[item]['internal_address'] }} dev ${IFACE}"
+bridge fdb append to 00:00:00:00:00:00 dst {{ hostvars[item]['internal_address'] }} dev ${IFACE}
+{% endfor %}
+{% for item in groups["manager_infra"] | sort %}
+echo "{{ item }} : bridge fdb append to 00:00:00:00:00:00 dst {{ hostvars[item]['internal_address'] }} dev ${IFACE}"
+bridge fdb append to 00:00:00:00:00:00 dst {{ hostvars[item]['internal_address'] }} dev ${IFACE}
+{% endfor %}
+logger -t provider-vxlan -s "COMPLETE: reestablished vxlan meshing"

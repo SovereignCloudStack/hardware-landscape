@@ -7,3 +7,7 @@ setuptools==70.0.0
 Jinja2==3.1.4
 PyYAML==6.0.1
 openstacksdk==3.3.0
+pytest==7.4.0
+mypy==1.4.1
+flake8==6.1.0
+ansible==10.4.0

@@ -11,7 +11,7 @@ of your local system to simplify access to systems of the vp18 hardware landscap
    git clone git@github.com:SovereignCloudStack/hardware-landscape.git
    cd hardware-landscape
    SCS_ENV_DIR="$(pwd)"
-   GITHUB_ID="scoopex"
+   GITHUB_ID="scoopex" # Replace that by your own ID
    ```
 2. User: Add this snippet to your SSH configuration:
    ```
@@ -20,7 +20,7 @@ of your local system to simplify access to systems of the vp18 hardware landscap
    Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_switches
    Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_general
 
-   Host scs-* !scs-manager !scs-manager1 !scs-manager2
+   Host scs-* st01-* !scs-manager !scs-manager1 !scs-manager2
       ProxyJump scs-manager
       # Your github id, use "osism" or "dragon" when your are in the
       # installation process
@@ -51,11 +51,29 @@ of your local system to simplify access to systems of the vp18 hardware landscap
    ssh scs-<TAB><TAB>
    ```
 
+The hardware landscape setup is deployed to provide the possibility for multi user usage.
+Users login with their personal account and should be capable to perform all needed operations
+with docker, the osism and the hardware landscape tooling.
+
+In the login process on the systems the `/usr/local/scripts/scs_profile.sh` is executed, to
+provide a convenient and standardized environment.
+Please use that profile but at least use the `umask 0007`
+
+## Configure the Ansible vault password file
+
+For accessing the system from your local workstation, it is neccessary to configure the Ansible vault password locally.
+
+This is needed for reading encrypted ansible files and for getting BMC passwords.
+
+```
+ssh scs-manager "docker exec osism-ansible /ansible-vault.py" > secrets/vaultpass
+```
+
 ## Serial Switch Console Access
 
 * Login to first manager
   ```
-  ssh scs-ömanager
+  ssh scs-manager
   ```
 * Attach to a running screen session which provides access to the ttypS0..ttySX interfaces
   or create automatically a new one
@@ -92,6 +110,32 @@ of your local system to simplify access to systems of the vp18 hardware landscap
 
 
 # Miscellanious Procedures
+
+## Permission Problems
+
+The hardware landscape setup is deployed to provide the possibility for multi user usage.
+Users login with their personal account and should be capable to perform all needed operations
+with docker, the osism and the hardware landscape tooling.
+
+In the login process on the systems the `/usr/local/scripts/scs_profile.sh` is executed, to
+provide a convenient and standardized environment.
+(this also sets `umask 00007`).
+
+In some cases permission problems may appear, this can be fixed by executing.
+```
+$ scs_fix_permissions.sh
++ fix_perm /usr/local/scripts
++ sudo find /usr/local/scripts -type d -exec chmod 770 '{}' +
++ sudo find /usr/local/scripts -type f -exec chmod 660 '{}' +
++ sudo find /usr/local/scripts -type f '(' -name '*.sh' -or -name '*_ctl' -or -path '*/venv/bin/*' -or -path '*/.venv/bin/*' ')' -exec chmod 770 '{}' +
++ sudo find /usr/local/scripts -exec chown dragon:dragon '{}' +
++ fix_perm /opt/configuration
++ sudo find /opt/configuration -type d -exec chmod 770 '{}' +
++ sudo find /opt/configuration -type f -exec chmod 660 '{}' +
++ sudo find /opt/configuration -type f '(' -name '*.sh' -or -name '*_ctl' -or -path '*/venv/bin/*' -or -path '*/.venv/bin/*' ')' -exec chmod 770 '{}' +
++ sudo find /opt/configuration -exec chown dragon:dragon '{}' +
++ git config --global --add safe.directory /opt/configuration
+```
 
 ## Update ansible inventory data
 

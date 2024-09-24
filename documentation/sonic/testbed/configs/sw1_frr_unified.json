@@ -1,0 +1,70 @@
+{
+    "DEVICE_METADATA": {
+       "localhost": {
+         "docker_routing_config_mode": "unified",
+         "frr_mgmt_framework_config": "true",
+         "hostname": "sw1",
+         "mac": "0c:2e:02:80:00:01"
+       }
+    },
+    "INTERFACE": {
+        "Ethernet4": {
+          "ipv6_use_link_local_only": "enable"
+        },
+        "Ethernet8": {},
+        "Ethernet8|192.168.100.1/24": {}
+    },
+    "LOOPBACK_INTERFACE": {
+      "Loopback0": {},
+      "Loopback0|10.0.0.1/32": {},
+      "Loopback0|fd0c:cc24:75a0:1::1/128": {}
+    },
+    "BGP_GLOBALS": {
+        "default": {
+            "local_asn": "65001",
+            "log_nbr_state_changes": "true",
+            "router_id": "10.0.0.1"
+        }
+    },
+    "BGP_PEER_GROUP": {
+        "default|core": {
+          "peer_group_name": "core",
+          "admin_status": "true",
+          "asn": "external",
+          "peer_type": "external"
+        }
+     },
+    "BGP_NEIGHBOR": {
+        "default|Ethernet4": {
+            "peer_group_name": "core"
+        }
+    },
+    "BGP_NEIGHBOR_AF": {
+        "default|core|ipv4_unicast": {
+            "admin_status": "true",
+            "route_map_in": [
+                "ALLOW"
+            ],
+            "route_map_out": [
+                "ALLOW"
+            ]
+        },
+        "default|core|ipv6_unicast": {
+            "admin_status": "true",
+            "route_map_in": [
+                "ALLOW"
+            ],
+            "route_map_out": [
+                "ALLOW"
+            ]
+        }
+    },
+    "ROUTE_MAP": {
+        "ALLOW|1": {
+            "route_operation": "permit"
+        }
+    },
+    "ROUTE_REDISTRIBUTE": {
+        "default|connected|bgp|ipv4": {}
+    }
+}

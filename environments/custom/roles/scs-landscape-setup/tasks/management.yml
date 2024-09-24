@@ -9,7 +9,11 @@
 # Put this later in the openstack project
 - name: "Add flavors"
   ansible.builtin.command: "osism manage flavor --cloud admin"
+  register: flavor_result
+  failed_when: flavor_result.rc != 0
 
 - name: "Add images"
   ansible.builtin.command: "osism manage images --cloud admin"
+  register: image_result
+  failed_when: image_result.rc != 0
 
