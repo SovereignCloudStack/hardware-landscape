@@ -29,6 +29,16 @@
         owner: root
         group: root
         content: |
-          echo "Add nftables rules on system boot" | logger -s -t scs_add_nftables_rules
-          /usr/local/scripts/scs_add_nftables_rules.sh
+          [Unit]
+          Description=Add nftables rules on system boot
+          After=network.target
 
+          [Service]
+          Type=simple
+          ExecStart=/usr/local/scripts/scs_add_nftables_rules.sh
+          User=root
+
+          [Install]
+          WantedBy=default.target
+    - name: Run Systemd Reload for NFT rules
+      shell: "systemctl daemon-reload"
