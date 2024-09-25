@@ -18,3 +18,17 @@
     - scs-mgr-httpd
     - scs-mgr-samba
     - scs-mgr-tinyproxy
+
+- name: Configure network rules on system boot
+  hosts: manager_infra
+  become: true
+  tasks:
+    - ansible.builtin.copy:
+        dest: /etc/rc.local
+        mode: 0755
+        owner: root
+        group: root
+        content: |
+          echo "Add nftables rules on system boot" | logger -s -t scs_add_nftables_rules
+          /usr/local/scripts/scs_add_nftables_rules.sh
+
