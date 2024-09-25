@@ -1,6 +1,7 @@
 - name: Setup Node
   include_tasks: "{{ item }}"
   loop:
+    - sshd.yml
     - lvm.yml
     - scripts.yml
     - vim.yml
