@@ -80,7 +80,7 @@ cilium_iface: "dummy0"
 
 # Because the FRR instance on the node itself is responsible for propagate routes
 # to the metallb endpoints, there is no need to have a extra BGP routing instance in K3s.
-kube_vip_bgp: false
+kube_vip_bgp: true
 
 # ARP Broadcasts are not available in Layer3 Underlay Networks, therefore we disabled it
 # to make leader election functional.
