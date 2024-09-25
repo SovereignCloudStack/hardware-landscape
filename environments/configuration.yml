@@ -3,6 +3,7 @@
 ##########################################################
 # Global
 traefik_enable: true
+host_facts: generic
 
 ##########################################################
 # proxy/client
@@ -45,7 +46,8 @@ squid_tag: edge
 ##########################
 # system settings
 motd_show_ssh: true
-network_interface: dummy0
+network_interface: "dummy0"
+kernel_version_expected: 6.8
 
 #osism_setup_gather_subset:
 # - "!network_switches"
@@ -74,12 +76,16 @@ cilium_mode: "native"
 
 k3s_interface: "dummy0"
 #kube_vip_iface: "dummy0"
-#calico_iface: "dummy0"
-#flannel_iface: "dummy0"
-#cilium_iface: "dummy0"
+cilium_iface: "dummy0"
 
-#metal_lb_type: "frr"
-#metal_lb_mode: "bgp"
+# Because the FRR instance on the node itself is responsible for propagate routes
+# to the metallb endpoints, there is no need to have a extra BGP routing instance in K3s.
+kube_vip_bgp: true
+
+# ARP Broadcasts are not available in Layer3 Underlay Networks, therefore we disabled it
+# to make leader election functional.
+kube_vip_arp: false
+
 
 ##########################
 # docker
@@ -242,6 +248,11 @@ hosts_additional_entries:
 
 ##########################
 # ceph
+
+# TODO: can be removed when the follwing PR is released: 
+monitor_interface: "dummy0"
+radosgw_interface: "dummy0"
+rgw_multisite: false
 
 ceph_cluster_fsid: 44bc2d19-fd83-4b92-a6c4-eed358e35672
 # BEGIN: TLS

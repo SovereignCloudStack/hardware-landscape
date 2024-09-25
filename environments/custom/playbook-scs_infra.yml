@@ -18,3 +18,27 @@
     - scs-mgr-httpd
     - scs-mgr-samba
     - scs-mgr-tinyproxy
+
+- name: Configure network rules on system boot
+  hosts: manager_infra
+  become: true
+  tasks:
+    - ansible.builtin.copy:
+        dest: /etc/rc.local
+        mode: 0755
+        owner: root
+        group: root
+        content: |
+          [Unit]
+          Description=Add nftables rules on system boot
+          After=network.target
+
+          [Service]
+          Type=simple
+          ExecStart=/usr/local/scripts/scs_add_nftables_rules.sh
+          User=root
+
+          [Install]
+          WantedBy=default.target
+    - name: Run Systemd Reload for NFT rules
+      shell: "systemctl daemon-reload"

@@ -10,3 +10,10 @@
       ansible.builtin.command: /usr/local/scripts/scs_check_network_connectivity.sh
     - name: Check services - /usr/local/scripts/scs_check_services.sh
       ansible.builtin.command: /usr/local/scripts/scs_check_services.sh
+
+- name: Check the state of all openstack after installation
+  hosts: manager
+  gather_facts: no
+  tasks:
+    - name: Check openstack - /usr/local/scripts/scs_check_openstack.sh
+      ansible.builtin.command: /usr/local/scripts/scs_check_openstack.sh
