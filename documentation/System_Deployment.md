@@ -153,7 +153,11 @@ The OVN database is deployed to the first 3 compute nodes because the ATOM CPUs 
 
 ### Step 3: Logging & Monitoring
 
-TODO
+1. Follow the [Logging & Monitoring deployment](https://osism.tech/docs/guides/deploy-guide/services/logging-monitoring)
+2. Deploy Scaphandre
+   ```
+   osism apply scaphandre
+   ```
 
 ### Step 4: Ceph
 
