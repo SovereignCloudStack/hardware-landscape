@@ -12,6 +12,9 @@
       - numactl
       - tcpdump
       - linux-tools-common
+      - "linux-generic-hwe-{{ ansible_distribution_version}}"
+      - "linux-headers-generic-hwe-{{ ansible_distribution_version}}"
+      - "linux-tools-generic-hwe-{{ ansible_distribution_version}}"
       - linux-tools-{{ ansible_kernel }}
       - bpfcc-tools
       - bpftrace

@@ -74,12 +74,14 @@ outdated and refers to the depreciated SoNiC P4 Software switch image).
     ```bash
     wget https://sonic.software/download-gns3a.sh
     chmod +x download-gns3a.sh
-    ./download-gns3a.sh <release number>  # 202311
+    ./download-gns3a.sh <release number>  # master
     ```
-  * The above will download the latest image for the giver release number and create a GNS3 appliance file named e.g. `SONiC-202012-27914.gns3a`
-    * Note that the 202405 release of SONiC VS image is not working due to [#19399](https://github.com/sonic-net/sonic-buildimage/issues/19399)
-    * The release 202311 has also some bugs, like [#13317](https://github.com/sonic-net/sonic-buildimage/issues/13317) but works "better" then 202405 (if you can live without sonic-cli)
+  * The above will download the latest image for the giver release number and create a GNS3 appliance file named e.g. `SONiC-master-656617.gns3a`
+    * Note that you may observe some issues with the stable SONiC VS builds:
+      * `202405` release, e.g. [#19399](https://github.com/sonic-net/sonic-buildimage/issues/19399)
+      * `202311` release, e.g. [#13317](https://github.com/sonic-net/sonic-buildimage/issues/13317)
+      * Keep in mind that these and other issues may cause some unexpected behaviour of SONiC
 * From this point you can follow the instructions provided in https://pine-networks.com/blog/setting-up-sonic-on-gns3/.
-  * Skip the initial instructions and start with the importing of appliance file you generated above e.g. `SONiC-202012-27914.gns3a`
+  * Skip the initial instructions and start with the importing of appliance file you generated above e.g. `SONiC-master-656617.gns3a`
   * Once you import the SONiC image you can create a new project or open the existing one and start using the SONiC
     appliance in GNS3 by dragging the SONiC appliance into the main window of your GNS3 project

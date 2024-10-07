@@ -5,7 +5,7 @@ The setup includes three SONiC switches (Spine, Leaf1, Leaf2) with community ima
 
 The guide also covers a basic BGP L3 underlay configuration using FRR.
 
-![sonic-gns3-testbed.png](gns3-testbed.png)
+![GNS3_basic.png](images/GNS3_basic.png)
 
 ## SONiC GNS3 testbed portable project
 
@@ -74,7 +74,7 @@ To walk through the configuration, follow the steps outlined below.
   ```
   * Save the interfaces configuration by running `config save -y` after making changes
 * Configure FRR BGP
-  * Find the FRR config files `leaf1_frr.conf`, `leaf2_frr.conf`, `spine_frr.conf`, and apply them as follows:
+  * Find the FRR config files `configs/leaf1_frr.conf`, `configs/leaf2_frr.conf`, `configs/spine_frr.conf`, and apply them as follows:
   ```bash
   sudo cp <sonic-sw>_frr.conf /etc/sonic/frr/frr.conf
   sudo chown 300:300 /etc/sonic/frr/frr.conf

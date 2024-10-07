@@ -34,8 +34,8 @@
      ```
      ssh st01-mgmt-r01-u30
      sudo -u dragon -i
-     osism apply configuration
-     osism reconciler sync
+     osism sync configuration
+     osism sync inventory
      osism apply facts
      ```
 3. Install Manager Infrastructure from manager
@@ -118,7 +118,7 @@ Please just add issues to this project with hints or directly [contact me](https
   ```
 * Install the installation infrastructure
   ```
-  osism apply scs_infra 
+  osism apply scs_infra
   ```
 * Execute the [bootstrap procedure](https://osism.tech/de/docs/guides/deploy-guide/bootstrap)
 * Run Basic customizations
@@ -130,6 +130,11 @@ Please just add issues to this project with hints or directly [contact me](https
   ```
   osism apply scs_check_preinstall
   osism validate ceph-connectivity
+  ```
+* Reboot all hosts
+  ```
+  osism apply reboot -l 'all:manager' -e ireallymeanit=yes -e reboot_wait=true
+  osism apply reboot -l 'all:!manager' -e ireallymeanit=yes -e reboot_wait=true
   ```
 
 ## Deploy the infratructure services
@@ -148,7 +153,11 @@ The OVN database is deployed to the first 3 compute nodes because the ATOM CPUs 
 
 ### Step 3: Logging & Monitoring
 
-TODO
+1. Follow the [Logging & Monitoring deployment](https://osism.tech/docs/guides/deploy-guide/services/logging-monitoring)
+2. Deploy Scaphandre
+   ```
+   osism apply scaphandre
+   ```
 
 ### Step 4: Ceph
 
@@ -167,4 +176,15 @@ For the steps described in the osd configurtion there are the following exceptio
    git commit -m "osd-generation" -a -s
    git push
    ```
+
+### Step 5: Validate the Installation
+
+* Run the Postinstallation validation
+  ```
+  osism apply scs_check_postinstall
+  ```
+* Run the OSISM validations
+  ```
+  /opt/configuration/misc/run_validations.sh
+  ```
 
