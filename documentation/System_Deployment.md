@@ -139,7 +139,7 @@ Please just add issues to this project with hints or directly [contact me](https
 
 ## Deploy the infratructure services
 
-Deployment order
+Deployment order:
 
 1. [Infrastructure](https://osism.tech/de/docs/guides/deploy-guide/services/infrastructure)
 2. [Network](https://osism.tech/de/docs/guides/deploy-guide/services/network)
