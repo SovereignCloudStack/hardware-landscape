@@ -13,7 +13,7 @@ from sushy import auth
 from sushy.resources.manager.manager import Manager
 import urllib3
 
-from .global_helpers import get_install_media_url, get_basedir
+from .global_helpers import get_install_media_url
 
 from .helpers import parse_configuration_data
 
@@ -49,7 +49,7 @@ def control_server(url: str, http_auth: HTTPBasicAuth, mode: str):
     try:
         data = result.json()
         LOGGER.info(f"Result >>>{data}<<<")
-    except:
+    except Exception:
         pass
 
 
@@ -67,7 +67,7 @@ def tcp_test_connect(host: str, port: int, timeout: float = 5):
     try:
         sock.connect((host, port))
         return True
-    except socket.error as e:
+    except socket.error:
         return False
     finally:
         sock.close()

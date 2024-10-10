@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
 
 import argparse
+import logging
+import re
 import sys
+import os
+from pprint import pprint, pformat
+
+import yaml
 
 from lib.global_helpers import setup_logging
 from openstack import connection
 from openstack.config import loader
 
-from lib.landscape import SCSLandscapeTestDomain, SCSLandscapeTestProject
+import lib.landscape
+from lib.landscape import SCSLandscapeTestDomain
+
+LOGGER = logging.getLogger()
 
 parser = argparse.ArgumentParser(
     prog='Manage Landscape')
@@ -15,10 +24,20 @@ parser = argparse.ArgumentParser(
 parser.add_argument('--log_level', metavar='loglevel', type=str,
                     default="INFO", help='The loglevel')
 
-parser.add_argument('--os_cloud', type=str,
-                    default="vp18", help='The openstack config')
 
-parser.add_argument('--verbose', '-v', action='store_true')
+def cloud_checker(value):
+    if not re.fullmatch("[a-zA-Z0-9]+", value):
+        raise argparse.ArgumentTypeError('specify a value for os_cloud')
+    return value
+
+
+parser.add_argument('--os_cloud', type=cloud_checker,
+                    default=os.environ.get("OS_CLOUD", ""),
+                    help='The openstack config to use')
+
+parser.add_argument('--config', type=str,
+                    default=os.path.realpath(os.path.dirname(os.path.realpath(__file__))) + "/test-default.yaml",
+                    help='The config file for environment creation')
 
 exclusive_group = parser.add_mutually_exclusive_group(required=True)
 
@@ -29,11 +48,14 @@ exclusive_group.add_argument('--delete_domains', '-d', type=str, nargs="+", defa
                              help='A list of domains to be deleted')
 
 parser.add_argument('--create_projects', '-p', type=str, nargs="+", default=["test1"],
-                             help='A list of projects to be created in the created domains')
+                    help='A list of projects to be created in the created domains')
 
 parser.add_argument('--create_machines', '-m', type=str, nargs="+", default=["test1"],
-                             help='A list of vms to be created in the created domains')
+                    help='A list of vms to be created in the created domains')
 args = parser.parse_args()
+
+if args.os_cloud == "":
+    sys.exit(1)
 
 setup_logging(args.log_level)
 
@@ -41,17 +63,34 @@ config = loader.OpenStackConfig()
 cloud_config = config.get_one(args.os_cloud)
 conn = connection.Connection(config=cloud_config)
 
+try:
+    with open(args.config, 'r') as file:
+        lib.landscape.CONFIG = yaml.safe_load(file)
+        LOGGER.info("The effective configuration: >>>" + pformat(lib.landscape.CONFIG, indent=2, compact=False) + "<<<")
+except Exception as e:
+    LOGGER.error(f"Unable to read configuration: {e}")
+    sys.exit(1)
 
 if args.create_domains:
-    domains: list[SCSLandscapeTestDomain] = []
+    scs_domains: dict[str, SCSLandscapeTestDomain] = dict()
+
+    count_domains = len(args.create_domains)
+    count_projects = count_domains * len(args.create_projects)
+    count_hosts = count_projects * len(args.create_machines)
+    LOGGER.info(
+        f"Creating {count_domains} domains, with {count_projects} projects, with {count_hosts} machines in summary")
+
     for domain_name in args.create_domains:
         domain = SCSLandscapeTestDomain(conn, domain_name)
         domain.create_and_get_domain()
-        domain.create_and_get_projects(args.create_projects)
+        scs_domains[domain_name] = domain
 
-        for project in domain.scs_projects:
+    for scs_domain in scs_domains.values():
+        scs_domain.create_and_get_projects(args.create_projects)
+
+    for scs_domain in scs_domains.values():
+        for project in scs_domain.scs_projects.values():
             project.get_and_create_machines(args.create_machines)
-
 if args.delete_domains:
     for domain_name in args.delete_domains:
         os = SCSLandscapeTestDomain(conn, domain_name)
