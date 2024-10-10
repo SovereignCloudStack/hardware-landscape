@@ -105,6 +105,9 @@ enable_proxysql: no
 
 horizon_keystone_multidomain: true
 
+enable_prometheus_openstack_exporter: "yes"
+scaphandre_share_pids_with_host: true
+
 # BEGIN: TLS
 kolla_copy_ca_into_containers: "yes"
 openstack_cacert: /etc/ssl/certs/ca-certificates.crt
