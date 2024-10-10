@@ -109,12 +109,22 @@ keystone_logout_url: "https://{{ kolla_external_fqdn }}/"
 om_enable_rabbitmq_high_availability: false
 om_enable_rabbitmq_quorum_queues: true
 
+# rabbitmq (see https://review.opendev.org/c/openstack/kolla-ansible/+/900528)
+
+rabbitmq_total_memory_available_override: 5G
+rabbitmq_dimensions: "{{ default_container_dimensions }}"
+rabbitmq_vm_memory_high_watermark_relative: 0.7
+rabbitmq_net_ticktime: "10"
+
 enable_proxysql: no
 
 horizon_keystone_multidomain: true
 
 enable_prometheus_openstack_exporter: "yes"
 scaphandre_share_pids_with_host: true
+
+
+
 
 # BEGIN: TLS
 kolla_copy_ca_into_containers: "yes"
