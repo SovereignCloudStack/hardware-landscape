@@ -98,19 +98,18 @@ def template_ansible_config(host_list: list[str], item_type: str, strategy: Ansi
         templated_string = results_template.render(host_data[host_name])
 
         if os.path.exists(results_filename):
-            with open(results_filename, 'r') as file:
-                if strategy is AnsibleInvertoryStrategy.KEEP:
-                    LOGGER.warning(
-                        f"Not templating {host_name} inventory file {results_filename}, ansible_inventory_update_strategy=keep")
-                    continue
-                elif strategy is AnsibleInvertoryStrategy.REPLACE:
-                    LOGGER.warning(
-                        f"Updating existing {host_name} file {results_filename}, ansible_inventory_update_strategy=update")
-                    with open(results_filename, 'w') as f_out:
-                        f_out.write(templated_string)
-                else:
-                    LOGGER.error(f"ansible_inventory_update_strategy invalid {strategy}")
-                    sys.exit(1)
+            if strategy is AnsibleInvertoryStrategy.KEEP:
+                LOGGER.warning(
+                    f"Not templating {host_name} inventory file {results_filename}, ansible_inventory_update_strategy=keep")
+                continue
+            elif strategy is AnsibleInvertoryStrategy.REPLACE:
+                LOGGER.warning(
+                    f"Updating existing {host_name} file {results_filename}, ansible_inventory_update_strategy=update")
+                with open(results_filename, 'w') as f_out:
+                    f_out.write(templated_string)
+            else:
+                LOGGER.error(f"ansible_inventory_update_strategy invalid {strategy}")
+                sys.exit(1)
 
         else:
             LOGGER.warning(f"Create a new file for {host_name}")
@@ -135,12 +134,12 @@ def create_configs(host_list: list[str], config_type: str):
 
                 if host_data[host_name]["device_vendor"] == "Supermicro":
                     # Workaround for crappy supermicro boxes
-                    f_out.write(f"   HostKeyAlgorithms=+ssh-rsa\n")
+                    f_out.write("   HostKeyAlgorithms=+ssh-rsa\n")
 
                 f_out.write(f"   User {host_data[host_name]['bmc_username']}\n")
-                f_out.write(f"\n")
+                f_out.write("\n")
 
             if 'node_ip_v4' in host_data[host_name]:
                 f_out.write(f"Host scs-{host_name}\n")
                 f_out.write(f"   Hostname {host_data[host_name]['node_ip_v4']}\n")
-                f_out.write(f"\n")
+                f_out.write("\n")

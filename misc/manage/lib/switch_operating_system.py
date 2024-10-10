@@ -5,9 +5,9 @@ import subprocess
 import sys
 from enum import Enum
 
-from .global_helpers import get_device_configurations_dir, get_ansible_host_inventory_dir, shorten_string, \
-    get_string_with_formatted_timestamp, ask_for_confirmation, get_basedir
-from .helpers import parse_configuration_data, regex_replace_in_file
+from .global_helpers import get_device_configurations_dir, shorten_string, \
+    get_string_with_formatted_timestamp, ask_for_confirmation
+from .helpers import parse_configuration_data
 
 LOGGER = logging.getLogger()
 
@@ -55,7 +55,7 @@ def execute_switch_commands(data: dict[str, str], cmd: str, timeout=15) -> str |
                          )
                          )
             sys.exit(1)
-    except subprocess.TimeoutExpired as e:
+    except subprocess.TimeoutExpired:
         LOGGER.warning(f"Timeout of {timeout} seconds reached, skipping")
         return None
 

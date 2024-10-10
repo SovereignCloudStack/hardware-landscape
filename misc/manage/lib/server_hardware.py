@@ -10,7 +10,7 @@ from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
 from .helpers import regex_replace_in_file, parse_configuration_data
-from .global_helpers import get_rundir, get_basedir, get_device_configurations_dir
+from .global_helpers import get_rundir, get_device_configurations_dir
 from .server_model import get_server_documentation_dir
 
 LOGGER = logging.getLogger()
@@ -28,7 +28,6 @@ def change_syslog(root: xml.etree.ElementTree):
 
 
 def change_ntp(root: xml.etree.ElementTree):
-
     if root.find(".//TimeUpdateMode"):
         element = root.find(".//TimeUpdateMode")
         element.text = "NTP"
@@ -135,7 +134,6 @@ def change_network(root: xml.etree.ElementTree, hostname: str, ip: str):
     element = root.find(".//HostName")
     element.text = hostname
 
-
     if root.find(".//IPv4/Configuration/IPSrc"):
         element = root.find(".//IPv4/Configuration/IPSrc")
         element.text = "Static"
@@ -221,7 +219,7 @@ def template_bmc_config(bmc_hosts: list[str]):
         change_syslog(root_elem)
         change_ntp(root_elem)
         change_snmp(root_elem)
-        #change_virtual_media(root_elem)
+        # change_virtual_media(root_elem)
 
         modified_xml_string = ElementTree.tostring(root_elem).decode()
         with open(filename, 'w') as file:
@@ -266,14 +264,6 @@ class CfgTypes(str, Enum):
     def __str__(self):
         return self.value
 
-
-def configuration_type_strategy(arg_value: str):
-    try:
-        return CfgTypes[arg_value.upper()]
-    except KeyError:
-        raise argparse.ArgumentTypeError(
-            f"Invalid option: '{arg_value.upper}'. Valid options are: "
-            f"{', '.join(c.name.lower() for c in CfgTypes)}")
 
 def configuration_type_strategy(arg_value: str):
     try:

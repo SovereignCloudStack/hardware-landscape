@@ -12,6 +12,7 @@ LOGGER = logging.getLogger()
 CONFIG_FIELDS_SERVERS = ['name', 'serial', 'bmc_ip_v4', 'bmc_mac', 'node_ip_v4',
                          'node_ip_v6', 'bmc_password', 'bmc_username', 'interfaces']
 
+
 def get_server_documentation_dir() -> str:
     return f"{get_basedir()}/documentation/devices/servers/"
 
@@ -74,5 +75,3 @@ def parse_configuration_data_servers(data) -> dict[str, dict[str, str]]:
 
 def get_unique_servers(host_list: list[str], full: bool, filter_hosts: str | None = None) -> list[str]:
     return get_unique("servers", full, host_list, filter_hosts)
-
-

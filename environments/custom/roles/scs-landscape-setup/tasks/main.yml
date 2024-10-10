@@ -4,10 +4,4 @@
   loop:
     - access.yml
     - management.yml
-#    - openstack.yml
-#- name: Include project tasks
-#  include_tasks: project.yml
-#  with_items: "{{ scs_openstack_projects }}"
-#  loop_control:
-#    label: "{{ project_item.name }}"
-#    loop_var: "project_item"
+    - network.yml
