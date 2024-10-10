@@ -141,11 +141,11 @@ Please just add issues to this project with hints or directly [contact me](https
 
 Deployment order
 
-1. [Infrastructure](https://osism.tech/de/docs/guides/deploy-guide/services/infrastructure.md)
-2. [Network](https://osism.tech/de/docs/guides/deploy-guide/services/network.md)
-3. [Logging & Monitoring](https://osism.tech/de/docs/guides/deploy-guide/services/logging-monitoring.md)
-4. [Ceph](https://osism.tech/de/docs/guides/deploy-guide/services/ceph.mdx)
-5. [OpenStack](https://osism.tech/de/docs/guides/deploy-guide/services/openstack.md)
+1. [Infrastructure](https://osism.tech/de/docs/guides/deploy-guide/services/infrastructure)
+2. [Network](https://osism.tech/de/docs/guides/deploy-guide/services/network)
+3. [Logging & Monitoring](https://osism.tech/de/docs/guides/deploy-guide/services/logging-monitoring)
+4. [Ceph](https://osism.tech/de/docs/guides/deploy-guide/services/ceph)
+5. [OpenStack](https://osism.tech/de/docs/guides/deploy-guide/services/openstack)
 
 ### Step 2: Network
 
