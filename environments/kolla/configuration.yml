@@ -98,8 +98,10 @@ keystone_logout_url: "https://{{ kolla_external_fqdn }}/"
 #########################################################
 # other
 
-# TODO
-#om_enable_rabbitmq_quorum_queues: True
+# When quorum queues are enabled by om_enable_rabbitmq_quorum_queues,
+# om_enable_rabbitmq_high_availability needs to be disabled
+om_enable_rabbitmq_high_availability: false
+om_enable_rabbitmq_quorum_queues: true
 
 enable_proxysql: no
 
