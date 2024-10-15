@@ -65,7 +65,8 @@ configuration_git_protocol: ssh
 configuration_git_repository: SovereignCloudStack/hardware-landscape
 configuration_git_username: git
 
-configuration_git_version: 
+configuration_git_version: bmc_passwords
+
 # BEGIN: TLS
 manager_environment_extra:
   REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
