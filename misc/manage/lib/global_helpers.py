@@ -1,3 +1,4 @@
+import glob
 import logging
 import os
 import re
@@ -9,6 +10,7 @@ from typing import Tuple, Any
 import coloredlogs
 from ansible.parsing.vault import VaultSecret, VaultLib
 import yaml
+from mypy.types import names
 
 from .constants import INSTALL_MEDIA_SERVER
 
@@ -44,6 +46,21 @@ def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
 
     return logger, log_file
 
+def get_ansible_secrets() -> dict[str,Any]:
+
+    secrets = {}
+    for file_name in (
+            glob.glob(rf"{get_basedir()}/inventory/**/*.yml",recursive=True) +
+            glob.glob(rf"{get_basedir()}/environments/**/*.yml",recursive=True)
+        ):
+        file_name = os.path.realpath(file_name)
+        file_secrets = decrypt_vault_yaml_file(file_name)
+
+        for name, value in file_secrets.items():
+            secrets.setdefault(file_name, {})
+            secrets[file_name][name] = value
+
+    return secrets
 
 def shorten_string(string: str, length: int = 300):
     return (string[:length] + ' ...') if len(string) > length else string
@@ -92,15 +109,37 @@ def get_vault_pass() -> str:
             raise Exception(f"Command failed with error: {result.stderr}")
 
 
-def decrypt_vault_file(file_path: str):
+def decrypt_vault_yaml_file(file_path: str) -> dict[str, Any]:
     vault_secret = VaultSecret(get_vault_pass().encode())
     vault_lib = VaultLib(secrets=[('default', vault_secret)])
     with open(file_path, 'r') as vault_file:
-        encrypted_content = vault_file.read()
+        file_content = vault_file.read()
 
-    decrypted_content = vault_lib.decrypt(encrypted_content)
-    return decrypted_content.decode()
+    if '$ANSIBLE_VAULT' not in file_content:
+        return {}
 
-def decrypt_vault_yaml_file(file_path: str) -> dict[str,Any]:
-    decrypted_content = decrypt_vault_file(file_path)
-    return yaml.safe_load(decrypted_content)
+    if '!vault' not in file_content:
+        decrypted_content = vault_lib.decrypt(file_content)
+        return yaml.safe_load(decrypted_content.decode())
+
+    def vault_constructor(loader, node):
+        value = loader.construct_scalar(node)
+        return "vault: " + vault_lib.decrypt(value).decode()
+
+    def filter_non_vault(data: dict[str, Any]) -> Any:
+        if isinstance(data, dict):
+            filtered_dict = {k: filter_non_vault(v) for k, v in data.items()}
+            return {k: v for k, v in filtered_dict.items() if v}
+        elif isinstance(data, list):
+            filtered_list = [filter_non_vault(item) for item in data]
+            return [item for item in filtered_list if item]
+        elif isinstance(data, str):
+            if data.startswith("vault: "):
+                return data.removeprefix("vault: ")
+        return None  # Return None for anything that doesn't match
+
+
+    yaml.add_constructor('!vault', vault_constructor)
+    decrypted_data = yaml.load(file_content, Loader=yaml.FullLoader)
+    decrypted_data = filter_non_vault(decrypted_data)
+    return decrypted_data

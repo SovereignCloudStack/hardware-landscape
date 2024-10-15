@@ -11,4 +11,3 @@ fi
 cd "$rundir" || exit 1
 source venv/bin/activate
 exec python3 ./landscape_ctl.py "$@"
-

@@ -107,5 +107,7 @@ This is list is incomplete.
 You can gather the passwords using the following command:
 (see also information about vault in the [System Runbook](documentation/System_Runbooks.md)
 ```
-make ansible_vault_show FILE=all|grep "<Password Key>:"
+./landscape_ctl -o -s <key>
+./landscape_ctl -o -s keystone_admin_password
+
 ```
