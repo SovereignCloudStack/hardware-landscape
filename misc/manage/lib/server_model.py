@@ -21,7 +21,7 @@ def get_bmc_login_data(name: str) -> tuple[str,str]:
     bmc_login_data_secret_file = f"{get_basedir()}/inventory/host_vars/{name}/99_bmc_secret.yml"
 
     if not os.path.isfile(bmc_login_data_secret_file):
-        LOGGER.error(f"Unable to open the server passwords file {bmc_login_data_secret_file}")
+        LOGGER.error(f"Unable to open the bmc server secrets file {bmc_login_data_secret_file}")
         sys.exit(1)
 
     data = decrypt_vault_yaml_file(bmc_login_data_secret_file)

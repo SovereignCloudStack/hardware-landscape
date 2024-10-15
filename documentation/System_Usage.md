@@ -11,7 +11,7 @@ of your local system to simplify access to systems of the vp18 hardware landscap
    git clone git@github.com:SovereignCloudStack/hardware-landscape.git
    cd hardware-landscape
    SCS_ENV_DIR="$(pwd)"
-   GITHUB_ID="scoopex"
+   GITHUB_ID="scoopex" # Replace that by your own ID
    ```
 2. User: Add this snippet to your SSH configuration:
    ```
@@ -50,6 +50,16 @@ of your local system to simplify access to systems of the vp18 hardware landscap
    ```
    ssh scs-<TAB><TAB>
    ```
+
+## Configure the Ansible vault password file
+
+For accessing the system from your local workstation, it is neccessary to configure the Ansible vault password locally.
+
+This is needed for reading encrypted ansible files and for getting BMC passwords.
+
+```
+ssh scs-manager "docker exec osism-ansible /ansible-vault.py" > secrets/vaultpass
+```
 
 ## Serial Switch Console Access
 
