@@ -1,0 +1,24 @@
+---
+- name: Create public network
+  openstack.cloud.network:
+    cloud: admin
+    state: present
+    name: public
+    external: true
+    provider_network_type: flat
+    provider_physical_network: physnet1
+
+- name: Create public subnet
+  openstack.cloud.subnet:
+    cloud: admin
+    state: present
+    name: subnet-public
+    network_name: public
+    cidr: 10.10.21.0/24
+    enable_dhcp: false
+    allocation_pool_start: 10.10.21.221
+    allocation_pool_end: 10.10.21.250
+    gateway_ip: 10.10.21.11
+    dns_nameservers:
+      - 10.10.21.10
+      - 10.10.21.11

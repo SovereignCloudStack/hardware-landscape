@@ -69,7 +69,7 @@ dnscrypt_cloaks:
 ############################
 # kubernetes - K3s configuration
 apiserver_endpoint: "10.10.21.202"
-metal_lb_ip_range: "10.10.21.220-10.10.21.239"
+metal_lb_ip_range: "10.10.21.203-10.10.21.220"
 
 cluster_cidr: "10.52.0.0/16"
 cilium_mode: "native"

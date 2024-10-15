@@ -49,13 +49,13 @@ def shorten_string(string: str, length: int = 300):
 
 def get_string_with_formatted_timestamp(string: str):
     utc_dt = datetime.now(timezone.utc)
-    iso_date = utc_dt.isoformat().replace(":","-").replace(".","_").replace("+","-")
+    iso_date = utc_dt.isoformat().replace(":", "-").replace(".", "_").replace("+", "-")
     return string % iso_date
 
 
 def ask_for_confirmation(prompt="Are you sure?"):
     while True:
-        response = input(prompt+" (y-es/n-o)").strip().lower()
+        response = input(prompt + " (y-es/n-o)").strip().lower()
         if response in ['yes', 'y']:
             return True
         elif response in ['no', 'n']:

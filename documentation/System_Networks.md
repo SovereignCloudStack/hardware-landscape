@@ -2,7 +2,7 @@
 
 ## General
 
-Domain naming scheme: <net>.landscape.scs.community.
+Domain naming scheme: `<hostname>.<net>.landscape.scs.community`.
 
 ## Defined networks
 
@@ -21,10 +21,11 @@ The containing ips are not statically assigned to a particular host.
 
 | Networkname   | From                | To               | Description                                               |
 |---------------|---------------------|------------------|-----------------------------------------------------------|
+| mgmt          | 10.10.23.5          | 10.10.23.9       | DHCP range for hardware deployments                       |
 | prod1         | 10.10.21.200        | 10.10.21.201     | Openstack API Endpoints                                   |
-| prod1         | 10.10.21.202        | 10.10.21.202     | Loadbalancer URLs, Kubernetes, Static                     |
-| prod1         | 10.10.21.220        | 10.10.21.239     | Loadbalancer URLs, Kubernetes, Dynamic                    |
-| mgmt          | 10.10.21.240        | 10.10.21.250     | DHCP range for deployments                                |
+| prod1         | 10.10.21.202        |                  | Controller Kubernetes, Static                             |
+| prod1         | 10.10.21.203        | 10.10.21.220     | Kubernetes Loadbalancer IPs, Dynamic                      |
+| prod1         | 10.10.21.221        | 10.10.21.250     | Loadbalancer URLs for Openstack, Dynamic                  |
 
 
 ## Port Forwarding Access

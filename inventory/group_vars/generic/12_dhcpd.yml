@@ -3,7 +3,7 @@ isc_dhcp_server_subnet_definition:
   - description: "Managment Network"
     config: |
       subnet 10.10.23.0 netmask 255.255.255.0 {
-       range 10.10.23.240 10.10.23.250;
+       range 10.10.23.5 10.10.23.9;
        option routers {{ management_gw }};
        option broadcast-address 10.10.23.255;
        option domain-name-servers {{ management_gw }};
