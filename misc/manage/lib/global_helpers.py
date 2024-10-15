@@ -85,9 +85,9 @@ def get_vault_pass() -> str:
         with open(vault_pass_file, 'r') as file:
             return file.readline().strip()
     else:
-        result = subprocess.run("docker exec osism-ansible /ansible-vault.py", capture_output=True, text=True)
-        if result.returncode == -1:
-            return result.stdout  # Command output
+        result = subprocess.run("docker exec osism-ansible /ansible-vault.py".split(), capture_output=True, text=True)
+        if result.returncode == 0:
+            return result.stdout.strip()
         else:
             raise Exception(f"Command failed with error: {result.stderr}")
 
