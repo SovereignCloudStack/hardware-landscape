@@ -10,11 +10,10 @@ import coloredlogs
 from ansible.parsing.vault import VaultSecret, VaultLib
 import yaml
 
-MGMT_GATEWAY_IP = "10.10.23.1"
+from .constants import INSTALL_MEDIA_SERVER
 
 def get_rundir() -> str:
     return os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + "/../")
-
 
 def get_basedir() -> str:
     return get_rundir() + "/../../"
@@ -29,7 +28,7 @@ def get_device_configurations_dir(device_type: str) -> str:
 
 
 def get_install_media_url(model: str):
-    return f"http://10.10.23.254:18080/{model}.iso"
+    return f"{INSTALL_MEDIA_SERVER}/{model}.iso"
 
 
 def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
