@@ -65,7 +65,7 @@ configuration_git_protocol: ssh
 configuration_git_repository: SovereignCloudStack/hardware-landscape
 configuration_git_username: git
 
-configuration_git_version: bmc_passwords
+configuration_git_version: 
 
 # BEGIN: TLS
 manager_environment_extra:
