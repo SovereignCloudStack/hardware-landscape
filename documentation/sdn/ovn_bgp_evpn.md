@@ -1,5 +1,5 @@
 # Using OVN BGP Agent with Evpn driver in Openstack Kolla
->Note: This document is a draft 
+>Note: This document is a draft
 
 This article covers the basics of BGP and EVPN and their applications. It focuses on the advantages of using OVN with the OVN-BGP agent compared to plain OVN. Additionally, it provides a demo setup of the OVN-BGP agent with EVPN in Kolla Ansible.
 
@@ -20,10 +20,44 @@ BGP provides intelligent path selection, allowing optimized routing of traffic b
 - **Enhanced Security** - BGP routing policies can be used to apply access controls, such as filtering routes or controlling which networks can be advertised and accepted. This allows for more granular control of how traffic flows between the virtualized environment and external networks. Without OVN BGP Agent, security policies would need to be applied manually or through static firewall and NAT configurations, which may not be as flexible or scalable as BGP-based route filtering and access control mechanisms.
 
 The OVN BGP Agent can be used by cloud providers or large enterprises to allow external access to VMs and containers without relying on NAT.
-## EVPN
-Technology used for extending Layer 2 networks over Layer 3 networks, typically in data center and WAN environments. EVPN allows multiple sites, such as data centers or remote locations, to appear as if they are part of the same Layer 2 network, even though they are connected over a Layer 3 IP network.
 
-TODO write more about EVPN
+
+## EVPN
+
+Technology used for extending Layer 2 (L2) networks over Layer 3 (L3) networks,
+typically in data center and WAN environments. EVPN allows multiple sites, such
+as data centers or remote locations, to appear as if they are part of the same
+L2 network, even though they are connected over a L3 IP network.
+
+It is a standardized extension of BGP, more precisely of Multiprotocol BGP
+(MP-BGP), which is used to advertise MAC addresses (L2) and IP prefixes (L3)
+together with additional VPN information. This removes the need of flooding as
+a method for MAC discovery and leads to more efficient L2 networking. Using BGP
+as a single protocol for both L2 and L3 advertisements results in simplified
+management with only one control plane.
+
+Additionally, EVPN supports anycast gateways, allowing multiple routers to
+provide L3 services with the same IP address, improving redundancy and
+failover. It also enables seamless VM live migration across geographically
+distributed environments, preserving the state of L2 and L3 connectivity.
+
+VXLAN or MLSP are used as data plane, to deliver the L2 frames over the L3
+underlay. Each tenant’s traffic is encapsulated in VXLAN tunnels between
+endpoints (known as VTEPs—VXLAN Tunnel Endpoints), and BGP advertises the VXLAN
+VNI (Virtual Network Identifier) mappings along with MAC/IP addresses. As an
+alternative MPLS (Multi Protocol Label Switching) is well-suited for situations
+where low-latency and highly predictable paths are required, or where MPLS
+infrastructure already exists.
+
+When integrated with the BGP agent, the agent advertises EVPN routes (Route Type
+2 for MAC/IP and Route Type 5 for IP prefixes) over the BGP protocol. OVN
+logical switches and routers handle local routing and switching, and when a new
+MAC or IP address is learned on a virtual network, the BGP agent advertises
+this information using EVPN routes to other BGP peers. This allows the external
+networks or other data centers to be aware of the internal OpenStack networks,
+facilitating dynamic routing updates across sites. The BGP agent also processes
+incoming EVPN routes, updating OVN’s logical network state as needed.
+
 
 ### EVPN driver for OVN BGP Agent
 
