@@ -1,13 +1,16 @@
 import logging
 import os
 import re
+import subprocess
 from datetime import datetime, timezone
-from typing import Tuple
+from functools import cache
+from typing import Tuple, Any
 
 import coloredlogs
+from ansible.parsing.vault import VaultSecret, VaultLib
+import yaml
 
 MGMT_GATEWAY_IP = "10.10.23.1"
-
 
 def get_rundir() -> str:
     return os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + "/../")
@@ -74,3 +77,31 @@ def generate_strings(expression: str):
     else:
         results.append(expression)
     return results
+
+
+@cache
+def get_vault_pass() -> str:
+    vault_pass_file = f"{get_basedir()}/secrets/vaultpass"
+    if os.path.isfile(vault_pass_file):
+        with open(vault_pass_file, 'r') as file:
+            return file.readline().strip()
+    else:
+        result = subprocess.run("docker exec osism-ansible /ansible-vault.py", capture_output=True, text=True)
+        if result.returncode == -1:
+            return result.stdout  # Command output
+        else:
+            raise Exception(f"Command failed with error: {result.stderr}")
+
+
+def decrypt_vault_file(file_path: str):
+    vault_secret = VaultSecret(get_vault_pass().encode())
+    vault_lib = VaultLib(secrets=[('default', vault_secret)])
+    with open(file_path, 'r') as vault_file:
+        encrypted_content = vault_file.read()
+
+    decrypted_content = vault_lib.decrypt(encrypted_content)
+    return decrypted_content.decode()
+
+def decrypt_vault_yaml_file(file_path: str) -> dict[str,Any]:
+    decrypted_content = decrypt_vault_file(file_path)
+    return yaml.safe_load(decrypted_content)

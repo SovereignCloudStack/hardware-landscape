@@ -4,7 +4,7 @@ import os
 import re
 import sys
 
-from .global_helpers import get_basedir
+from .global_helpers import get_basedir, decrypt_vault_yaml_file
 from .helpers import get_unique
 
 LOGGER = logging.getLogger()
@@ -17,20 +17,23 @@ def get_server_documentation_dir() -> str:
     return f"{get_basedir()}/documentation/devices/servers/"
 
 
+def get_bmc_login_data(name: str) -> tuple[str,str]:
+    bmc_login_data_secret_file = f"{get_basedir()}/inventory/host_vars/{name}/99_bmc_secret.yml"
+
+    if not os.path.isfile(bmc_login_data_secret_file):
+        LOGGER.error(f"Unable to open the server passwords file {bmc_login_data_secret_file}")
+        sys.exit(1)
+
+    data = decrypt_vault_yaml_file(bmc_login_data_secret_file)
+    bmc_user=data["bmc_username"]
+    bmc_password=data["bmc_password"]
+
+    return bmc_user, bmc_password
+
+
 def parse_configuration_data_servers(data) -> dict[str, dict[str, str]]:
     data = {}
-    password_dict = {}
-    server_passwords_file = f"{get_basedir()}/secrets/server.passwords"
-    if not os.path.isfile(server_passwords_file):
-        LOGGER.error(f"Unable to open the server passwords file {server_passwords_file}")
-        sys.exit(1)
-    with open(server_passwords_file, 'r') as file:
-        LOGGER.debug("Reading ")
-        for line in file.readlines():
-            m = re.fullmatch(r"(?P<username>[a-z0-9A-Z]+)\s+(?P<mac>[a-f0-9:]+)\s+(?P<password>[A-Z-a-z0-9]+)",
-                             line.strip())
-            if m:
-                password_dict[m.group("mac")] = {"username": m.group("username"), "password": m.group("password")}
+
     for docu_file_name in glob.glob(f"{get_server_documentation_dir()}/Supermicro_*.md"):
         m = re.match(r".*/(.+)_(..+).md", docu_file_name)
         if not m:
@@ -61,8 +64,8 @@ def parse_configuration_data_servers(data) -> dict[str, dict[str, str]]:
                     line.strip())
                 if m:
                     data[m.group("name")] = m.groupdict()
-                    data[m.group("name")]["bmc_password"] = password_dict[m.group("bmc_mac")]["password"]
-                    data[m.group("name")]["bmc_username"] = password_dict[m.group("bmc_mac")]["username"]
+                    data[m.group("name")]["bmc_password"], data[m.group("name")]["bmc_username"] = \
+                        get_bmc_login_data(m.group("name"))
                     data[m.group("name")]["device_model"] = machine_type
                     data[m.group("name")]["device_vendor"] = machine_vendor
                     data[m.group("name")]["interfaces"] = sorted(interfaces)
