@@ -80,28 +80,29 @@ This is list is incomplete.
 
 :::
 
-| Name                     | URL                                                        | Username     | Password Key                   | Note            |
-|:-------------------------|:-----------------------------------------------------------|:-------------|:------------------------------ |:----------------|
-| Horizon (via Keystone)   | https://api.zone1.landscape.scs.community                  | admin        | keystone_admin_password        | domain: default |
-| Horizon (via Keystone)   | https://api-internal.zone1.landscape.scs.community         | admin        | keystone_admin_password        | domain: default |
-| ARA                      | https://ara.zone1.landscape.scs.community:8120             | ara          | ara_password                   |                 |
-| Ceph                     | https://api-internal.zone1.landscape.scs.community:8140    | admin        |                                |                 |
-| Flower                   | https://flower.zone1.landscape.scs.community               |              |                                |                 |
-| Grafana                  | https://api-internal.zone1.landscape.scs.community:3000    | admin        | grafana_admin_password         |                 |
-| Homer                    | https://homer.zone1.landscape.scs.community                |              |                                |                 |
-| Keycloak                 | https://keycloak.zone1.landscape.scs.community/auth        | admin        |                                |                 |
-| Netbox                   | https://netbox.zone1.landscape.scs.community               | admin        | password                       |                 |
-| Netdata                  | http://testbed-manager.zone1.landscape.scs.community:19999 |              |                                |                 |
-| Nexus                    | https://nexus.zone1.landscape.scs.community                | admin        |                                |                 |
-| OpenSearch Dashboards    | https://api.zone1.landscape.scs.community:5601             | opensearch   | opensearch_dashboards_password |                 |
-| Prometheus               | https://api-internal.zone1.landscape.scs.community:9091    | admin        |                                |                 |
-| RabbitMQ                 | https://api-internal.zone1.landscape.scs.community:15672   | openstack    | rabbitmq_password              |                 |
-| phpMyAdmin               | https://phpmyadmin.zone1.landscape.scs.community           | root         | database_password              |                 |
-| Webserver                | http://files.zone1.landscape.scs.community:18080/          | n/a          | n/a                            | Install Files   |
-| DNS                      | https://portal.cnds.io                                     | <personal>   |                                |                 |
-| HAProxy (testbed-node-0) | http://testbed-node-0.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
-| HAProxy (testbed-node-1) | http://testbed-node-1.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
-| HAProxy (testbed-node-2) | http://testbed-node-2.zone1.landscape.scs.community:1984   | openstack    |                                |                 |
+| Name                     | URL                                                                | Username     | Password Key                   | Note            |
+|:-------------------------|:-------------------------------------------------------------------|:-------------|:------------------------------ |:----------------|
+| DNS Management           | https://portal.cnds.io                                             | <personal>   |                                |                 |
+| Horizon (via Keystone)   | https://api.zone1.landscape.scs.community                          | admin        | keystone_admin_password        | domain: default |
+| Horizon (via Keystone)   | https://api-internal.zone1.landscape.scs.community                 | admin        | keystone_admin_password        | domain: default |
+| ARA                      | https://ara.zone1.landscape.scs.community:8120                     | ara          | ara_password                   |                 |
+| Ceph                     | https://api-internal.zone1.landscape.scs.community:8140            | admin        |                                |                 |
+| Flower                   | https://flower.zone1.landscape.scs.community                       |              |                                |                 |
+| Grafana                  | https://grafana.zone1.landscape.scs.community:3000                 | admin        | grafana_admin_password         |                 |
+| Homer                    | https://homer.zone1.landscape.scs.community                        |              |                                |                 |
+| Keycloak                 | https://keycloak.zone1.landscape.scs.community/auth                | admin        |                                |                 |
+| Netbox                   | https://netbox.zone1.landscape.scs.community                       | admin        | password                       |                 |
+| Netdata                  | http://testbed-manager.zone1.landscape.scs.community:19999         |              |                                |                 |
+| Nexus                    | https://nexus.zone1.landscape.scs.community                        | admin        |                                |                 |
+| OpenSearch Dashboards    | https://opensearch.zone1.landscape.scs.community:5601              | opensearch   | opensearch_dashboards_password |                 |
+| Prometheus               | https://prometheus.zone1.landscape.scs.community:9091              | admin        |                                |                 |
+| Prometheus Alertmanager  | https://prometheus-alertmanager.zone1.landscape.scs.community:9091 | admin        |                                |                 |
+| RabbitMQ                 | https://rabbitmq.zone1.landscape.scs.community:15672               | openstack    | rabbitmq_password              |                 |
+| phpMyAdmin               | https://phpmyadmin.zone1.landscape.scs.community                   | root         | database_password              |                 |
+| Webserver                | http://files.zone1.landscape.scs.community:18080/                  | n/a          | n/a                            | Install Files   |
+| HAProxy (testbed-node-0) | http://st01-ctl-r01-u27.zone1.landscape.scs.community:1984         | openstack    |                                |                 |
+| HAProxy (testbed-node-1) | http://st01-ctl-r01-u28.zone1.landscape.scs.community:1984         | openstack    |                                |                 |
+| HAProxy (testbed-node-2) | http://st01-ctl-r01-u29.zone1.landscape.scs.community:1984         | openstack    |                                |                 |
 
 You can gather the passwords using the following command:
 (see also information about vault in the [System Runbook](documentation/System_Runbooks.md)

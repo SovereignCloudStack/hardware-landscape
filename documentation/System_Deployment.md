@@ -137,19 +137,19 @@ Please just add issues to this project with hints or directly [contact me](https
   osism apply reboot -l 'all:!manager' -e ireallymeanit=yes -e reboot_wait=true
   ```
 
-## Deploy the infratructure services
+## Deploy the infrastructure services
 
-Deployment order
+### Step 1:
 
-1. [Infrastructure](https://osism.tech/de/docs/guides/deploy-guide/services/infrastructure.md)
-2. [Network](https://osism.tech/de/docs/guides/deploy-guide/services/network.md)
-3. [Logging & Monitoring](https://osism.tech/de/docs/guides/deploy-guide/services/logging-monitoring.md)
-4. [Ceph](https://osism.tech/de/docs/guides/deploy-guide/services/ceph.mdx)
-5. [OpenStack](https://osism.tech/de/docs/guides/deploy-guide/services/openstack.md)
+[Infrastructure](https://osism.tech/de/docs/guides/deploy-guide/services/infrastructure)
+[Logging & Monitoring](https://osism.tech/de/docs/guides/deploy-guide/services/logging-monitoring)
 
 ### Step 2: Network
 
 The OVN database is deployed to the first 3 compute nodes because the ATOM CPUs do not not support the suitable AVX instructions.
+
+[Network](https://osism.tech/de/docs/guides/deploy-guide/services/network)
+
 
 ### Step 3: Logging & Monitoring
 
@@ -176,6 +176,21 @@ For the steps described in the osd configurtion there are the following exceptio
    git commit -m "osd-generation" -a -s
    git push
    ```
+2. [Ceph](https://osism.tech/de/docs/guides/deploy-guide/services/ceph)
+
+
+### Step 5: Openstack
+
+1. Install all steps from [OpenStack](https://osism.tech/de/docs/guides/deploy-guide/services/openstack)
+   except `osism apply octavia`
+2. Execute the environment setup
+   ```
+   osism apply scs_landscape_setup
+   ```
+3. Execute Octavia Installation
+   ```
+   osism apply octavia
+   ```
 
 ### Step 5: Validate the Installation
 
@@ -187,6 +202,8 @@ For the steps described in the osd configurtion there are the following exceptio
   ```
   /opt/configuration/misc/run_validations.sh
   ```
+* Use the small scenario of the next step
+
 ## Step 6: Create Test Workload
 
 This generates test enviromments with the following charateristics:
