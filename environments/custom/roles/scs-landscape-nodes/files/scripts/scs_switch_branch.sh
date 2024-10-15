@@ -18,7 +18,7 @@ sed -i "~s,^configuration_git_version:.*\$,configuration_git_version: ${BRANCH},
 git diff || true
 read -p CONTINUE
 git diff 
-git commit -s environments/manager/configuration.yml
+git commit -s environments/manager/configuration.yml || git push
 sudo -u dragon osism sync configuration
 sudo -u dragon osism sync inventory
 sudo -u dragon osism apply facts
