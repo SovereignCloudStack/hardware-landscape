@@ -147,20 +147,21 @@ def create_configs(host_list: list[str], config_type: str):
                 f_out.write("\n")
 
 
-def filter_dict_keys(data: Any, allowed_keys: list[str], key=None) -> dict|list|str|None:
+def filter_dict_keys(data: Any, allowed_keys_regex: list[str], key=None) -> dict | list | str | None:
     if isinstance(data, dict):
         tmp_dict = {}
         for k,v in data.items():
-            result = filter_dict_keys(v, allowed_keys, key=k)
+            result = filter_dict_keys(v, allowed_keys_regex, key=k)
             if result:
                 tmp_dict[k] = result
         return tmp_dict
     elif isinstance(data, list):
-        filtered_list = [filter_dict_keys(item, allowed_keys) for item in data]
+        filtered_list = [filter_dict_keys(item, allowed_keys_regex) for item in data]
         return [item for item in filtered_list if item]
     else:
-        if (key in allowed_keys or "all" in allowed_keys) and data is not None:
-            return data
+        for match_key_regex in allowed_keys_regex:
+            if re.fullmatch(match_key_regex, key) and data is not None:
+                return data
     return None
 
 def print_all_dict_values(d: Any) -> int:

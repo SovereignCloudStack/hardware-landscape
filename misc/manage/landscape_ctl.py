@@ -81,6 +81,8 @@ def show_effective_config():
         sys.exit(1)
 
 if args.show_secrets:
+    if "all" in args.show_secrets:
+        args.show_secrets = [".*"]
     secret_data = filter_dict_keys(get_ansible_secrets(), args.show_secrets)
     if args.only_values:
         if print_all_dict_values(secret_data) > 1:

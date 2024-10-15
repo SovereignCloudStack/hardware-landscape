@@ -17,8 +17,13 @@ cluster_network: 10.10.21.0/22
 #       set to false. It must only be set to true again when new pools or keys are added.
 openstack_config: false
 
+
 ##########################
 # custom
+
+ceph_dashboard_addr: 0.0.0.0
+ceph_dashboard_port: 7000
+ceph_dashboard_username: admin
 
 ceph_conf_overrides:
   global:
