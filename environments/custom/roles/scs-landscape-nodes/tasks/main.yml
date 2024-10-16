@@ -1,3 +1,7 @@
+- name: Activate rsyslog remote logging
+  include_tasks: rsyslogd.yml
+  when: rsyslogd_remote_logging == true
+
 - name: Setup Node
   include_tasks: "{{ item }}"
   loop:
@@ -9,6 +13,4 @@
     - workaround.yml
   tags: manage_lvm
 
-- name: Activate rsyslog remote logging
-  include_tasks: rsyslogd.yml
-  when: rsyslogd_remote_logging == true
+
