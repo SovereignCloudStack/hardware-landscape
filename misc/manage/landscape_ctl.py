@@ -67,9 +67,12 @@ if args.os_cloud == "":
 
 setup_logging(args.log_level)
 
-config = loader.OpenStackConfig()
-cloud_config = config.get_one(args.os_cloud)
-conn = connection.Connection(config=cloud_config)
+def establish_connection():
+    config = loader.OpenStackConfig()
+    cloud_config = config.get_one(args.os_cloud)
+    conn = connection.Connection(config=cloud_config)
+    return conn
+
 
 def show_effective_config():
     try:
@@ -93,6 +96,7 @@ if args.show_secrets:
     sys.exit(0)
 
 if args.create_domains:
+    conn = establish_connection()
     show_effective_config()
     scs_domains: dict[str, SCSLandscapeTestDomain] = dict()
 
@@ -114,6 +118,7 @@ if args.create_domains:
         for project in scs_domain.scs_projects.values():
             project.get_and_create_machines(args.create_machines)
 if args.delete_domains:
+    conn = establish_connection()
     show_effective_config()
     for domain_name in args.delete_domains:
         os = SCSLandscapeTestDomain(conn, domain_name)
