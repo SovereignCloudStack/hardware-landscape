@@ -1,0 +1,27 @@
+
+
+# provides UDP syslog reception
+module(load="imudp")
+input(type="imudp" port="514")
+
+# provides TCP syslog reception
+module(load="imtcp")
+input(type="imtcp" port="514")
+
+
+template(name="HardwareSwitchLogTemplate" type="string"
+         string="/var/log/switches-%$YEAR%-%$MONTH%-%$DAY%.log")
+
+if $hostname startswith "st01-sw" then {
+	action(type="omfile" dynaFile="HardwareSwitchLogTemplate" fileOwner="root" fileGroup="dragon" fileCreateMode="0640")
+	stop
+}
+
+template(name="HardwareSeverLogTemplate" type="string"
+         string="/var/log/switches-%$YEAR%-%$MONTH%-%$DAY%.log")
+
+if $hostname startswith "st01-ctl" or $hostname startswith "st01-stor" or $hostname startswith "st01-comp" then {
+	action(type="omfile" dynaFile="HardwareServerLogTemplate" fileOwner="root" fileGroup="dragon" fileCreateMode="0640")
+	stop
+}
+
