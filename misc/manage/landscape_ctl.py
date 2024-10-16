@@ -34,7 +34,7 @@ def cloud_checker(value):
 
 
 parser.add_argument('--os_cloud', type=cloud_checker,
-                    default=os.environ.get("OS_CLOUD", ""),
+                    default=os.environ.get("OS_CLOUD", "admin"),
                     help='The openstack config to use')
 
 parser.add_argument('--only_values', '-o', action="store_true",
