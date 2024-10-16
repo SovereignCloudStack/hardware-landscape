@@ -14,6 +14,7 @@ template(name="HardwareSwitchLogTemplate" type="string"
 
 if $hostname startswith "st01-sw" then {
 	action(type="omfile" dynaFile="HardwareSwitchLogTemplate" fileOwner="root" fileGroup="dragon" fileCreateMode="0640")
+   action(type="omfwd" target="{{ internal_address }}" port="5140" protocol="udp" action.resumeRetryCount="100" queue.type="linkedList" queue.size="1000")
 	stop
 }
 
@@ -22,6 +23,7 @@ template(name="HardwareSeverLogTemplate" type="string"
 
 if $hostname startswith "st01-ctl" or $hostname startswith "st01-stor" or $hostname startswith "st01-comp" then {
 	action(type="omfile" dynaFile="HardwareServerLogTemplate" fileOwner="root" fileGroup="dragon" fileCreateMode="0640")
+   action(type="omfwd" target="{{ internal_address }}" port="5140" protocol="udp" action.resumeRetryCount="100" queue.type="linkedList" queue.size="1000")
 	stop
 }
 
