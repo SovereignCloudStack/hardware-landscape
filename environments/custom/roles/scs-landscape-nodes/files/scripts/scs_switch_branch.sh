@@ -19,7 +19,9 @@ git diff || true
 read -p CONTINUE
 git diff 
 git commit -s environments/manager/configuration.yml || git push
+rm -f inventory/host_vars/*/99_bmc_secret.yml
 sudo -u dragon osism sync configuration
 sudo -u dragon osism sync inventory
 sudo -u dragon osism apply facts
+git checkout .
 logger -t scs -s "Switching to branch $BRANCH completed"
