@@ -17,6 +17,8 @@ cluster_network: 10.10.21.0/22
 #       set to false. It must only be set to true again when new pools or keys are added.
 openstack_config: false
 
+# We have 4 nodes and a replication of 3, so i.e. restarts of 2 nodes in Parallel should not be not optimal
+ceph_handler_osds_restart_throttle: 1
 
 ##########################
 # custom
