@@ -1,5 +1,7 @@
 
 
+$PreserveFQDN on
+
 # provides UDP syslog reception
 module(load="imudp")
 input(type="imudp" port="514")
@@ -18,8 +20,8 @@ if $hostname startswith "st01-sw" then {
 	stop
 }
 
-template(name="HardwareSeverLogTemplate" type="string"
-         string="/var/log/switches-%$YEAR%-%$MONTH%-%$DAY%.log")
+template(name="HardwareServerLogTemplate" type="string"
+         string="/var/log/servers-%$YEAR%-%$MONTH%-%$DAY%.log")
 
 if $hostname startswith "st01-ctl" or $hostname startswith "st01-stor" or $hostname startswith "st01-comp" then {
 	action(type="omfile" dynaFile="HardwareServerLogTemplate" fileOwner="root" fileGroup="dragon" fileCreateMode="0640")
