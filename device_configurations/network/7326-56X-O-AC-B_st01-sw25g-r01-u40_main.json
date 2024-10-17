@@ -1432,6 +1432,9 @@
       "rate_limit_interval": "300"
     }
   },
+  "SYSLOG_SERVER": {
+    "10.10.23.254": {}
+  },
   "SYSTEM_DEFAULTS": {
     "mux_tunnel_egress_acl": {
       "status": "disabled"
