@@ -1,16 +1,10 @@
 ---
-- name: Assign roles to manager hosts
-  hosts: manager
-  become: true
-  roles:
-    - scs-mgr-dhcpd
-
 - name: Assign roles to infrastructure hosts
   hosts: manager_infra
   become: true
   roles:
-    - osism.services.wireguard
     - scs-landscape-nodes
+    - osism.services.wireguard
     - osism.commons.motd
     - osism.services.squid
     - osism.services.chrony
@@ -42,3 +36,11 @@
           WantedBy=default.target
     - name: Run Systemd Reload for NFT rules
       shell: "systemctl daemon-reload"
+
+- name: Assign roles to manager hosts
+  hosts: manager
+  become: true
+  roles:
+    - scs-mgr-dhcpd
+
+
