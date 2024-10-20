@@ -71,8 +71,6 @@ Please just add issues to this project with hints or directly [contact me](https
   cd /opt/configuration/misc/node-images
   make all
   ```
-* Configure  "local shell on your local system
-  * Add the passwords file for BMC password data (TODO, add this later to ansible secrets) : ``secrets/server.passwords``
 
 ### Step 3: Provision / Install the node images
 

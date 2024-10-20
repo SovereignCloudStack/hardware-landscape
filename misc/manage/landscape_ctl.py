@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import json
 import logging
 import re
 import sys
@@ -9,12 +10,13 @@ from pprint import pprint, pformat
 
 import yaml
 
-from lib.global_helpers import setup_logging
+from lib.global_helpers import setup_logging, get_ansible_secrets
 from openstack import connection
 from openstack.config import loader
 
 import lib.landscape
 from lib.landscape import SCSLandscapeTestDomain
+from lib.helpers import filter_dict_keys, print_all_dict_values
 
 LOGGER = logging.getLogger()
 
@@ -32,8 +34,11 @@ def cloud_checker(value):
 
 
 parser.add_argument('--os_cloud', type=cloud_checker,
-                    default=os.environ.get("OS_CLOUD", ""),
+                    default=os.environ.get("OS_CLOUD", "admin"),
                     help='The openstack config to use')
+
+parser.add_argument('--only_values', '-o', action="store_true",
+                             help="Show only the values")
 
 parser.add_argument('--config', type=str,
                     default=os.path.realpath(os.path.dirname(os.path.realpath(__file__))) + "/test-default.yaml",
@@ -41,11 +46,14 @@ parser.add_argument('--config', type=str,
 
 exclusive_group = parser.add_mutually_exclusive_group(required=True)
 
-exclusive_group.add_argument('--create_domains', '-c', type=str, nargs="+", default=None,
+exclusive_group.add_argument('--create_domains', type=str, nargs="+", default=None,
                              help='A list of domains to be created')
 
-exclusive_group.add_argument('--delete_domains', '-d', type=str, nargs="+", default=None,
+exclusive_group.add_argument('--delete_domains',  type=str, nargs="+", default=None,
                              help='A list of domains to be deleted')
+
+exclusive_group.add_argument('--show_secrets', '-s', type=str, nargs="+", default=None,
+                             help='Show all or a number of secrets')
 
 parser.add_argument('--create_projects', '-p', type=str, nargs="+", default=["test1"],
                     help='A list of projects to be created in the created domains')
@@ -59,19 +67,37 @@ if args.os_cloud == "":
 
 setup_logging(args.log_level)
 
-config = loader.OpenStackConfig()
-cloud_config = config.get_one(args.os_cloud)
-conn = connection.Connection(config=cloud_config)
+def establish_connection():
+    config = loader.OpenStackConfig()
+    cloud_config = config.get_one(args.os_cloud)
+    conn = connection.Connection(config=cloud_config)
+    return conn
 
-try:
-    with open(args.config, 'r') as file:
-        lib.landscape.CONFIG = yaml.safe_load(file)
-        LOGGER.info("The effective configuration: >>>" + pformat(lib.landscape.CONFIG, indent=2, compact=False) + "<<<")
-except Exception as e:
-    LOGGER.error(f"Unable to read configuration: {e}")
-    sys.exit(1)
+
+def show_effective_config():
+    try:
+        with open(args.config, 'r') as file:
+            lib.landscape.CONFIG = yaml.safe_load(file)
+            LOGGER.info("The effective configuration: >>>" + pformat(lib.landscape.CONFIG, indent=2, compact=False) + "<<<")
+    except Exception as e:
+        LOGGER.error(f"Unable to read configuration: {e}")
+        sys.exit(1)
+
+if args.show_secrets:
+    if "all" in args.show_secrets:
+        args.show_secrets = [".*"]
+    secret_data = filter_dict_keys(get_ansible_secrets(), args.show_secrets)
+    if args.only_values:
+        if print_all_dict_values(secret_data) > 1:
+            LOGGER.warning("More than one result discovered")
+            sys.exit(1)
+    else:
+        print(json.dumps(secret_data, indent=2))
+    sys.exit(0)
 
 if args.create_domains:
+    conn = establish_connection()
+    show_effective_config()
     scs_domains: dict[str, SCSLandscapeTestDomain] = dict()
 
     count_domains = len(args.create_domains)
@@ -92,6 +118,8 @@ if args.create_domains:
         for project in scs_domain.scs_projects.values():
             project.get_and_create_machines(args.create_machines)
 if args.delete_domains:
+    conn = establish_connection()
+    show_effective_config()
     for domain_name in args.delete_domains:
         os = SCSLandscapeTestDomain(conn, domain_name)
         os.delete_domain()

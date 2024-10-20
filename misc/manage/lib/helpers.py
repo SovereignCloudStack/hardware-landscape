@@ -6,6 +6,8 @@ import re
 import subprocess
 import sys
 from enum import Enum
+from typing import Any
+
 from jinja2 import FileSystemLoader, Environment, StrictUndefined
 
 from .global_helpers import get_ansible_host_inventory_dir, get_basedir
@@ -143,3 +145,34 @@ def create_configs(host_list: list[str], config_type: str):
                 f_out.write(f"Host scs-{host_name}\n")
                 f_out.write(f"   Hostname {host_data[host_name]['node_ip_v4']}\n")
                 f_out.write("\n")
+
+
+def filter_dict_keys(data: Any, allowed_keys_regex: list[str], key=None) -> dict | list | str | None:
+    if isinstance(data, dict):
+        tmp_dict = {}
+        for k,v in data.items():
+            result = filter_dict_keys(v, allowed_keys_regex, key=k)
+            if result:
+                tmp_dict[k] = result
+        return tmp_dict
+    elif isinstance(data, list):
+        filtered_list = [filter_dict_keys(item, allowed_keys_regex) for item in data]
+        return [item for item in filtered_list if item]
+    else:
+        for match_key_regex in allowed_keys_regex:
+            if re.fullmatch(match_key_regex, key) and data is not None:
+                return data
+    return None
+
+def print_all_dict_values(d: Any) -> int:
+    count=0
+    if isinstance(d, list):
+        for value in d:
+            count += print_all_dict_values(value)
+    elif isinstance(d, dict):
+        for value in d.values():
+            count += print_all_dict_values(value)
+    else:
+        print(d)
+        return 1
+    return count
