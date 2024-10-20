@@ -123,8 +123,10 @@ horizon_keystone_multidomain: true
 enable_prometheus_openstack_exporter: "yes"
 scaphandre_share_pids_with_host: true
 
-
-
+opensearch_apply_log_retention_policy: true
+opensearch_soft_retention_period_days: 7
+opensearch_hard_retention_period_days: 14
+opensearch_heap_size: "2g"
 
 # BEGIN: TLS
 kolla_copy_ca_into_containers: "yes"
