@@ -211,6 +211,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45013
+    state: absent
     groups:
       - docker
       - dialout
