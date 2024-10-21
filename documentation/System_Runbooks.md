@@ -37,7 +37,7 @@
    echo "${VPN_KEYDIR?}"
    cat ${VPN_KEYDIR?}/wireguard_public.key
    ```
-3. User: Edit [../inventory/group_vars/manager-infra.yml](../inventory/group_vars/manager-infra.yml) in section ``wireguard_users``
+3. User: Edit [../inventory/group_vars/manager_infra/00_main.yml](../inventory/group_vars/manager_infra/00_main.yml) in section ``wireguard_users``
   * Create branch
   * Add username (same as github handle)
   * Add public key to user entry
