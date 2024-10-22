@@ -246,3 +246,17 @@ project and machine name parameters.
   ./landscape_ctl --delete_domains workload{1..5}
   ```
 
+
+### Clusterstacks Bootstrap VM
+
+  ```
+  ./landscape_ctl --config k8s-clusterstacks.yaml \
+    --create_domains k8s-clusterstacks --create_projects managment --create_machines bootstrap1
+  openstack domain list
+  openstack project list --long
+  openstack server list --all-projects --long
+  ./landscape_ctl --config k8s-clusterstacks.yaml \
+    --delete_domains k8s-clusterstacks
+  ```
+
+
