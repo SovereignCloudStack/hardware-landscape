@@ -1,3 +1,4 @@
 ---
 # defaults file for scs-landscape
 logical_volumes: []
+rsyslogd_remote_logging: false
