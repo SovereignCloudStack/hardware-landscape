@@ -1,225 +1,225 @@
-devices:
-  - name: "st01-sw1g-r01-u47"
-    status: "active"
-    device_type:
-      slug: "edgecore-4630-54te-o-ac-b"
-    role:
-      slug: "leaf-router"
-    site:
-      slug: "st01"
-    platform:
-      slug: "sonic"
-    rack:
-      name: "r01"
-    config_template:
-      name: "sonic"
-    serial: "463054TE2315093"
-    position: 47
-    face: "rear"
-    description: "Management leaf router"
-    local_context_data:
-      hwsku: "Accton-AS4630-54TE"
-      platform: "x86_64-accton_as4630_54te-r0"
-      mac_addr: "d2:77:ce:2b:44:c4"
-      # FIXME: Add gateway IP to the Jinja template.
-      #  Netbox does not support concept of gateways, see https://github.com/netbox-community/netbox/issues/1610
-      #  The gateway should be introduced as a custom_field or tag on IP address resource.
-      mgmt_gwaddr: "10.10.22.1"
-      ntp_servers:
-        - "192.53.103.103"
-        - "192.53.103.104"
-        - "192.53.103.108"
-      snmp:
-        location: "public"
-        communities:
-          - name: "Eevaid7xoh4m"
-            type: "RO"
-          - name: "lohz3kaG5ted"
-            type: "RW"
-          - name: "public"
-            type: "RO"
-      static_routes:
-        - route: "0.0.0.0/0"
-          blackhole: "false,false,false"
-          distance: "0,0,0"
-          ifname: ",,"
-          nexthop: "10.10.23.1"
-          nexthop-vrf: ",,"
-      syslog_servers:
-        - "10.10.23.1"
-    tags:
-      - slug: scs
-      - slug: landscape
-      - slug: prod
-# Note: The `scripts` is custom resource field introduced to manage the script execution.
-# Scripts are executed only when the optional argument `--execute-script` is applied.
-scripts:
-  - name: "UpdateSonicInterfacesFromINI"
-    commit: true
-    data:
-      port_config_ini_url: "https://raw.githubusercontent.com/sonic-net/sonic-buildimage/master/device/accton/x86_64-accton_as4630_54te-r0/Accton-AS4630-54TE/port_config.ini"
-      device: "st01-sw1g-r01-u47"
-      disable_ports: true
-interfaces:
-  - name: "eth0"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    description: "Management Port"
-  - name: "Vlan23"
-    type: "virtual"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-  - name: "Ethernet0"
-    type: "1000base-t"
-    enabled: true
-    description: "Uplink"
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    tagged_vlans:
-      - vid: "23"
-      - vid: "24"
-      - vid: "25"
-      - vid: "26"
-  - name: "Ethernet1"
-    enabled: true
-    type: "1000base-t"
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    untagged_vlan:
-      vid: "23"
-  - name: "Ethernet10"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    untagged_vlan:
-      vid: "23"
-  - name: "Ethernet2"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    untagged_vlan:
-      vid: "23"
-  - name: "Ethernet3"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    tagged_vlans:
-      - vid: "23"
-      - vid: "25"
-      - vid: "26"
-  - name: "Ethernet4"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    untagged_vlan:
-      vid: "23"
-  - name: "Ethernet46"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    untagged_vlan:
-      vid: "23"
-  - name: "Ethernet47"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    untagged_vlan:
-      vid: "23"
-  - name: "Ethernet5"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    tagged_vlans:
-      - vid: "23"
-      - vid: "25"
-      - vid: "26"
-  - name: "Ethernet6"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    untagged_vlan:
-      vid: "23"
-  - name: "Ethernet7"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    untagged_vlan:
-      vid: "23"
-  - name: "Ethernet8"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    untagged_vlan:
-      vid: "23"
-    tagged_vlans:
-      - vid: "24"
-  - name: "Ethernet9"
-    type: "1000base-t"
-    enabled: true
-    device:
-      name: "st01-sw1g-r01-u47"
-    mode: "tagged"
-    untagged_vlan:
-      vid: "23"
-  - name: "Ethernet40"
-    type: "1000base-t"
-    device:
-      name: "st01-sw1g-r01-u47"
-    description: "Production_st01-sw1g-r01-u32"
-  - name: "Ethernet41"
-    type: "1000base-t"
-    device:
-      name: "st01-sw1g-r01-u47"
-    description: "Production_st01-sw1g-r01-u33"
-  - name: "Ethernet42"
-    type: "1000base-t"
-    device:
-      name: "st01-sw1g-r01-u47"
-    description: "Lab_st01-sw1g-r01-u42"
-  - name: "Ethernet43"
-    type: "1000base-t"
-    device:
-      name: "st01-sw1g-r01-u47"
-    description: "-"
-# Assign IP addresses to device's interface
-ip-addresses:
-  - address: "10.10.22.102/24"
-    status: "active"
-    description: "Management"
-    # FIXME: Api requires `assigned_object_type` and `assigned_object_id`
-    # to assign ip address to the resource, e.g. device.
-    # This workaround facilitates the import based on device name and interface name.
-    # The same approach is used in the UI import form.
-    # The above needs a "special" handling in the code and would be nice to introduce a
-    # general approach.
-    device: "st01-sw1g-r01-u47"
-    interface: "eth0"
-  - address: "10.10.23.102/24"
-    status: "active"
-    device: "st01-sw1g-r01-u47"
-    interface: "Vlan23"
+#devices:
+#  - name: "st01-sw1g-r01-u47"
+#    status: "active"
+#    device_type:
+#      slug: "edgecore-4630-54te-o-ac-b"
+#    role:
+#      slug: "leaf-router"
+#    site:
+#      slug: "st01"
+#    platform:
+#      slug: "sonic"
+#    rack:
+#      name: "r01"
+#    config_template:
+#      name: "sonic"
+#    serial: "463054TE2315093"
+#    position: 47
+#    face: "rear"
+#    description: "Management leaf router"
+#    local_context_data:
+#      hwsku: "Accton-AS4630-54TE"
+#      platform: "x86_64-accton_as4630_54te-r0"
+#      mac_addr: "d2:77:ce:2b:44:c4"
+#      # FIXME: Add gateway IP to the Jinja template.
+#      #  Netbox does not support concept of gateways, see https://github.com/netbox-community/netbox/issues/1610
+#      #  The gateway should be introduced as a custom_field or tag on IP address resource.
+#      mgmt_gwaddr: "10.10.22.1"
+#      ntp_servers:
+#        - "192.53.103.103"
+#        - "192.53.103.104"
+#        - "192.53.103.108"
+#      snmp:
+#        location: "public"
+#        communities:
+#          - name: "Eevaid7xoh4m"
+#            type: "RO"
+#          - name: "lohz3kaG5ted"
+#            type: "RW"
+#          - name: "public"
+#            type: "RO"
+#      static_routes:
+#        - route: "0.0.0.0/0"
+#          blackhole: "false,false,false"
+#          distance: "0,0,0"
+#          ifname: ",,"
+#          nexthop: "10.10.23.1"
+#          nexthop-vrf: ",,"
+#      syslog_servers:
+#        - "10.10.23.1"
+#    tags:
+#      - slug: scs
+#      - slug: landscape
+#      - slug: prod
+## Note: The `scripts` is custom resource field introduced to manage the script execution.
+## Scripts are executed only when the optional argument `--execute-script` is applied.
+#scripts:
+#  - name: "UpdateSonicInterfacesFromINI"
+#    commit: true
+#    data:
+#      port_config_ini_url: "https://raw.githubusercontent.com/sonic-net/sonic-buildimage/master/device/accton/x86_64-accton_as4630_54te-r0/Accton-AS4630-54TE/port_config.ini"
+#      device: "st01-sw1g-r01-u47"
+#      disable_ports: true
+#interfaces:
+#  - name: "eth0"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    description: "Management Port"
+#  - name: "Vlan23"
+#    type: "virtual"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#  - name: "Ethernet0"
+#    type: "1000base-t"
+#    enabled: true
+#    description: "Uplink"
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    tagged_vlans:
+#      - vid: "23"
+#      - vid: "24"
+#      - vid: "25"
+#      - vid: "26"
+#  - name: "Ethernet1"
+#    enabled: true
+#    type: "1000base-t"
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    untagged_vlan:
+#      vid: "23"
+#  - name: "Ethernet10"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    untagged_vlan:
+#      vid: "23"
+#  - name: "Ethernet2"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    untagged_vlan:
+#      vid: "23"
+#  - name: "Ethernet3"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    tagged_vlans:
+#      - vid: "23"
+#      - vid: "25"
+#      - vid: "26"
+#  - name: "Ethernet4"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    untagged_vlan:
+#      vid: "23"
+#  - name: "Ethernet46"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    untagged_vlan:
+#      vid: "23"
+#  - name: "Ethernet47"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    untagged_vlan:
+#      vid: "23"
+#  - name: "Ethernet5"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    tagged_vlans:
+#      - vid: "23"
+#      - vid: "25"
+#      - vid: "26"
+#  - name: "Ethernet6"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    untagged_vlan:
+#      vid: "23"
+#  - name: "Ethernet7"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    untagged_vlan:
+#      vid: "23"
+#  - name: "Ethernet8"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    untagged_vlan:
+#      vid: "23"
+#    tagged_vlans:
+#      - vid: "24"
+#  - name: "Ethernet9"
+#    type: "1000base-t"
+#    enabled: true
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    mode: "tagged"
+#    untagged_vlan:
+#      vid: "23"
+#  - name: "Ethernet40"
+#    type: "1000base-t"
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    description: "Production_st01-sw1g-r01-u32"
+#  - name: "Ethernet41"
+#    type: "1000base-t"
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    description: "Production_st01-sw1g-r01-u33"
+#  - name: "Ethernet42"
+#    type: "1000base-t"
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    description: "Lab_st01-sw1g-r01-u42"
+#  - name: "Ethernet43"
+#    type: "1000base-t"
+#    device:
+#      name: "st01-sw1g-r01-u47"
+#    description: "-"
+## Assign IP addresses to device's interface
+#ip-addresses:
+#  - address: "10.10.22.102/24"
+#    status: "active"
+#    description: "Management"
+#    # FIXME: Api requires `assigned_object_type` and `assigned_object_id`
+#    # to assign ip address to the resource, e.g. device.
+#    # This workaround facilitates the import based on device name and interface name.
+#    # The same approach is used in the UI import form.
+#    # The above needs a "special" handling in the code and would be nice to introduce a
+#    # general approach.
+#    device: "st01-sw1g-r01-u47"
+#    interface: "eth0"
+#  - address: "10.10.23.102/24"
+#    status: "active"
+#    device: "st01-sw1g-r01-u47"
+#    interface: "Vlan23"
