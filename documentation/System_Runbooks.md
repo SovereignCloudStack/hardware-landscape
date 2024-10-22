@@ -55,11 +55,16 @@
    scp scs-manager2:wg0-*.conf ${VPN_KEYDIR?}/wg2.conf
    sed -i "~s,CHANGEME.*,$(cat ${VPN_KEYDIR?}/wireguard_private.key)," "${VPN_KEYDIR?}/wg.conf" "${VPN_KEYDIR?}/wg2.conf"
    ```
-6. User: Test access - start/stop connection
+6. User: Test access - start/stop first connection
    ```
    sudo apt-get install wireguard wireguard-tools # or something compareable for your system
    sudo wg-quick up "${VPN_KEYDIR?}/wg.conf"
    sudo wg-quick down "${VPN_KEYDIR?}/wg.conf"
+   ```
+
+7. User: Test access - start/stop second connection
+   (You should only use one connection, the second connection is just a fallback if the first manager is not reachable)
+   ```
    sudo wg-quick up "${VPN_KEYDIR?}/wg2.conf"
    sudo wg-quick down "${VPN_KEYDIR?}/wg2.conf"
    ```
@@ -71,6 +76,7 @@ Get the Ansible vault secret:
 ```
 cd hardware-landscape
 ssh scs-manager docker exec osism-ansible /ansible-vault.py
+mkdir -p secrets
 ssh scs-manager docker exec osism-ansible /ansible-vault.py > secrets/vaultpass
 ```
 
