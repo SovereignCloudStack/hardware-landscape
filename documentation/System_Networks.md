@@ -6,13 +6,14 @@ Domain naming scheme: `<hostname>.<net>.landscape.scs.community`.
 
 ## Defined networks
 
-| Networkname   | Network             | Router           | VLan    | Description                                     |
-|---------------|---------------------|------------------|---------|-------------------------------------------------|
-| vpn1          | 10.10.1.0/24        | 10.10.2.1        | -       | VPN transfer/client network                     |
-| zone1         | 10.10.21.0/24       | 10.10.21.1       | -       | Production Node Network                         |
-| mgmt-p2p      | 10.10.22.0/24       | 10.10.22.1       | -       | Out of band for rack level                      |
-| mgmt          | 10.10.23.0/24       | 10.10.23.1       | 23      | Out of band access for switches and servers     |
-| lab           | 10.10.24.0/24       | 10.10.24.1       | 24      | Lab Node Network                                |
+| Networkname   | Network             | Router           | V(x)Lan   | Description                                     |
+|---------------|---------------------|------------------|-----------|-------------------------------------------------|
+| vpn1          | 10.10.1.0/24        | 10.10.2.1        | -         | VPN transfer/client network                     |
+| zone1-public  | 10.80.0.0/20        | 10.80.0.1        | VXLAN 1   | Provider LAN                                    |
+| zone1         | 10.10.21.0/24       | 10.10.21.1       | -         | Production Node Network                         |
+| mgmt-p2p      | 10.10.22.0/24       | 10.10.22.1       | -         | Out of band for rack level                      |
+| mgmt          | 10.10.23.0/24       | 10.10.23.1       | VLAN 23   | Out of band access for switches and servers     |
+| lab           | 10.10.24.0/24       | 10.10.24.1       | VLAN 24   | Lab Node Network                                |
 
 ## Reserved Adress Ranges
 
