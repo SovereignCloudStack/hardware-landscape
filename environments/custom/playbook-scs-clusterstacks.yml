@@ -1,0 +1,6 @@
+---
+- name: Deploy cluster stacks
+  hosts: manager
+  become: true
+  roles:
+    - scs-clusterstacks
