@@ -25,30 +25,18 @@ devices:
       #  Netbox does not support concept of gateways, see https://github.com/netbox-community/netbox/issues/1610
       #  The gateway should be introduced as a custom_field or tag on IP address resource.
       mgmt_gwaddr: "10.10.23.1"
-      dhcp_snoop_enabled: false
-      dot1x_enabled: false
-      mcast_enabled: false
-      mgmt_vrf_config:
-        vrf_global:
-          mgmt_vrf_enabled: "true"
-      snmp:
-        location: "public"
-        communities:
-          - name: "public"
-            type: "RO"
+      loopback_interfaces:
+        - name: "Loopback0"
+          ip_address: "10.10.21.40/32"
+      ntp_servers:
+        - "10.10.23.254"
+        - "10.10.23.253"
+      syslog_servers:
+        - "10.10.23.254"
     tags:
       - slug: scs
       - slug: landscape
       - slug: lab
-# Note: The `scripts` is custom resource field introduced to manage the script execution.
-# Scripts are executed only when the optional argument `--execute-script` is applied.
-scripts:
-  - name: "UpdateSonicInterfacesFromINI"
-    commit: true
-    data:
-      port_config_ini_url: "https://raw.githubusercontent.com/sonic-net/sonic-buildimage/master/device/accton/x86_64-accton_as7326_56x-r0/Accton-AS7326-56X/port_config.ini"
-      device: "st01-sw25g-r01-u40"
-      disable_ports: false
 # Assign IP addresses to device's interface
 ip-addresses:
   - address: "10.10.23.106/24"

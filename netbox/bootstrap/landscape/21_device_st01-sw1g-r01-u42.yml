@@ -20,32 +20,19 @@ devices:
     local_context_data:
       hwsku: "Accton-AS4630-54TE"
       platform: "x86_64-accton_as4630_54te-r0"
-      mgmt_vrf_config:
-        vrf_global:
-          mgmt_vrf_enabled: "false"
       mac_addr: "d2:77:ce:2b:59:c4"
       # FIXME: Add gateway IP to the Jinja template.
       #  Netbox does not support concept of gateways, see https://github.com/netbox-community/netbox/issues/1610
       #  The gateway should be introduced as a custom_field or tag on IP address resource.
       mgmt_gwaddr: "10.10.23.1"
-      dhcp_snoop_enabled: false
-      dot1x_enabled: false
-      mcast_enabled: false
+      loopback_interfaces:
+        - name: "Loopback0"
+          ip_address: "10.10.21.42/32"
       ntp_servers:
-        - "192.53.103.103"
-        - "192.53.103.104"
-        - "192.53.103.108"
-      snmp:
-        location: "public"
-        communities:
-          - name: "Eevaid7xoh4m"
-            type: "RO"
-          - name: "lohz3kaG5ted"
-            type: "RW"
-          - name: "public"
-            type: "RO"
+        - "10.10.23.254"
+        - "10.10.23.253"
       syslog_servers:
-        - "10.10.23.1"
+        - "10.10.23.254"
       # FIXME: Create appropriate custom custom fields for LAG interfaces and
       #  insert the following params as a LAG interface attributes
       port_channels_params:
@@ -58,15 +45,6 @@ devices:
       - slug: scs
       - slug: landscape
       - slug: lab
-# Note: The `scripts` is custom resource field introduced to manage the script execution.
-# Scripts are executed only when the optional argument `--execute-script` is applied.
-scripts:
-  - name: "UpdateSonicInterfacesFromINI"
-    commit: true
-    data:
-      port_config_ini_url: "https://raw.githubusercontent.com/sonic-net/sonic-buildimage/master/device/accton/x86_64-accton_as4630_54te-r0/Accton-AS4630-54TE/port_config.ini"
-      device: "st01-sw1g-r01-u42"
-      disable_ports: true
 interfaces:
   - name: "eth0"
     type: "1000base-t"
