@@ -19,13 +19,20 @@ LOGGER = logging.getLogger()
 
 CONFIG: dict[str,str] = dict()
 
-def get_config(key: str, regex: str = ".+") -> str:
+def get_config(key: str, regex: str = ".+", multi_line=False) -> str:
     if key not in CONFIG:
         LOGGER.error(f"key '{key}' is not defined in config")
         sys.exit(1)
-    if not re.fullmatch(regex, str(CONFIG[key])):
-        LOGGER.error(f"{key}='{CONFIG[key]}' does not match to regex >>>{regex}<<<")
+
+    lines = CONFIG[key].splitlines()
+    if len(lines) != 1:
+        LOGGER.error(f"{key}='{CONFIG[key]}' contains multiple lines")
         sys.exit(1)
+
+    for line in lines:
+        if not re.fullmatch(regex, str(line)):
+            LOGGER.error(f"{key}='{CONFIG[key]}' does not match to regex >>>{regex}<<<")
+            sys.exit(1)
     return CONFIG[key]
 
 class SCSLandscapeTestUser:
@@ -538,7 +545,7 @@ class SCSLandscapeTestProject:
                         f"domain {self.domain.name}")
             self.ssh_key = self.project_conn.compute.create_keypair(
                 name=KEYPAIR_NAME,
-                public_key=get_config("admin_vm_ssh_key", r"ssh-\S+\s\S+\s\S+"),
+                public_key=get_config("admin_vm_ssh_key", r"ssh-\S+\s\S+\s\S+", multi_line=True),
             )
 
 
