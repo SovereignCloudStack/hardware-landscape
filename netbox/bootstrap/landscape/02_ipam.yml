@@ -8,15 +8,6 @@ vlans:
     tags:
       - slug: scs
       - slug: landscape
-  - name: "Vlan24"
-    vid: 24
-    status: "active"
-    description: "Lab environment"
-    site:
-      slug: "st01"
-    tags:
-      - slug: scs
-      - slug: landscape
   - name: "Vlan25"
     vid: 25
     status: "active"
@@ -34,6 +25,26 @@ vlans:
       slug: "st01"
     tags:
       - slug: scs
+      - slug: landscape
+  - name: "Vlan35"
+    vid: 35
+    status: "active"
+    description: "Lab environment"
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: lab
+      - slug: landscape
+  - name: "Vlan36"
+    vid: 36
+    status: "active"
+    description: "Lab environment"
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: lab
       - slug: landscape
 prefixes:
   - prefix: 10.10.1.0/24
@@ -65,16 +76,6 @@ prefixes:
     description: "mgmt - Out of band access for switches and servers"
     vlan:
       vid: 23
-    site:
-      slug: "st01"
-    tags:
-      - slug: scs
-      - slug: landscape
-  - prefix: 10.10.24.0/24
-    status: "active"
-    description: "lab - Lab Node Network"
-    vlan:
-      vid: 24
     site:
       slug: "st01"
     tags:
