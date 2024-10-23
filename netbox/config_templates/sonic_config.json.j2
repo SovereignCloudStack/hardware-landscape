@@ -1,40 +1,25 @@
 {
-  "DEVICE_METADATA": {
-    "localhost": {
-      "docker_routing_config_mode": "unified",
-      "frr_mgmt_framework_config": "true",
-      "hostname": "{{ device.name }}",
-      "mac": "{{ mac_addr }}",
-      "type": "{{ device.role.name }}",
-      "timezone": "UTC"
-    }
-  },
-  "MGMT_INTERFACE": {
-  {%- for interface in device.interfaces.all() if interface.mgmt_only == true %}
-    "{{ interface.name }}|{{ interface.ip_addresses.first().address }}": {
-      "gwaddr": "{{ mgmt_gwaddr }}"
-    }
-    {%- if not loop.last %},{%- endif %}
-  {%- endfor %}
-  },
   {%- if loopback_interfaces %}
   "LOOPBACK_INTERFACE": {
   {%- for interface in loopback_interfaces %}
     "{{ interface.name }}|{{ interface.ip_address }}": {}{%- if not loop.last %},{%- endif %}
   {%- endfor %}
   },{%- endif %}
+
   {%- if ntp_servers %}
   "NTP_SERVER": {
   {%- for server in ntp_servers %}
     "{{ server }}": {}{%- if not loop.last %},{%- endif %}
   {%- endfor %}
   },{%- endif %}
+
   {%- if syslog_servers %}
   "SYSLOG_SERVER": {
   {%- for syslog_server in syslog_servers %}
     "{{ syslog_server }}": {}{%- if not loop.last %},{%- endif %}
   {%- endfor %}
   },{%- endif %}
+
   {%- set vlans = [] %}
   {%- set vlan_members = {} %}
   {%- for interface in device.interfaces.all() %}
@@ -79,6 +64,7 @@
     {%- if not loop.last %},{% endif %}
   {%- endfor %}
   },{%- endif %}
+
   {%- set filtered_port_channel_interfaces = [] %}
   {%- for interface in device.interfaces.all() %}
     {%- if interface.is_lag and 'portchannel' in interface.name | lower %}
@@ -107,6 +93,7 @@
     {%- endfor %}
   {%- endfor %}
   },{%- endif %}
+
   {%- if static_routes %}
   "STATIC_ROUTE": {
   {%- for static_route in static_routes %}
@@ -119,18 +106,105 @@
     }{% if not loop.last %},{% endif %}
   {%- endfor %}
   },{%- endif %}
-  "BGP_GLOBALS": {
-        "default": {
-            "local_asn": "65000",
-            "router_id": "10.0.1.2"
-        }
-    },
-     "BGP_PEER_GROUP": {
-        "default|LEAF": {
-            "admin_status": "true",
-	    "asn": "65501",
-            "peer_type": "external"
-        }
-   },
 
+  {%- if bgp %}
+  "BGP_GLOBALS": {
+    "default": {
+      "local_asn": "{{ bgp.local_asn }}",
+      "log_nbr_state_changes": "true",
+      "router_id": "{{ bgp.router_id }}"
+    }
+  },
+  "BGP_PEER_GROUP": {
+    {% for peer_group in bgp.peer_groups %}
+    "default|{{ peer_group.name }}": {
+      "peer_group_name": "{{ peer_group.name }}",
+      "admin_status": "true",
+      "asn": "{{ peer_group.asn }}"{% if peer_group.peer_type %},
+      "peer_type": "{{ peer_group.peer_type }}"{% endif %}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  },
+  "BGP_NEIGHBOR": {
+    {% for neighbor in bgp.neighbors %}
+    "default|{{ neighbor.port }}": {
+      {% if neighbor.peer_group_name %}
+      "peer_group_name": "{{ neighbor.peer_group_name }}"{% endif %}
+      {% if neighbor.asn %}
+      "asn": "{{ neighbor.asn }}"{% if neighbor.description %},{% endif %}{% endif %}
+      {% if neighbor.description %}
+      "name": "{{ neighbor.description }}"{% endif %}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  },
+  "BGP_NEIGHBOR_AF": {
+    {% for neighbor in bgp.neighbors %}
+    "default|{{ neighbor.port }}|ipv4_unicast": {
+      "admin_status": "true",
+      "route_map_in": [
+        "ALLOW"
+      ],
+      "route_map_out": [
+        "ALLOW"
+      ]
+    },
+    "default|{{ neighbor.port }}|ipv6_unicast": {
+      "admin_status": "true",
+      "route_map_in": [
+        "ALLOW"
+      ],
+      "route_map_out": [
+        "ALLOW"
+      ]
+    }{% if not loop.last or (loop.last and bgp.peer_groups) %},{% endif %}
+    {% endfor %}
+    {% for peer_group in bgp.peer_groups %}
+    "default|{{ peer_group.name }}|ipv4_unicast": {
+      "admin_status": "true",
+      "route_map_in": [
+        "ALLOW"
+      ],
+      "route_map_out": [
+        "ALLOW"
+      ]
+    },
+    "default|{{ peer_group.name }}|ipv6_unicast": {
+      "admin_status": "true",
+      "route_map_in": [
+        "ALLOW"
+      ],
+      "route_map_out": [
+        "ALLOW"
+      ]
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  },
+  "ROUTE_MAP": {
+    "ALLOW|1": {
+      "route_operation": "permit"
+    }
+  },
+  "ROUTE_REDISTRIBUTE": {
+    "default|connected|bgp|ipv4": {}
+  },{%- endif %}
+
+  "DEVICE_METADATA": {
+    "localhost": {
+      "docker_routing_config_mode": "unified",
+      "frr_mgmt_framework_config": "true",
+      "hostname": "{{ device.name }}",
+      "mac": "{{ mac_addr }}",
+      "type": "{{ device.role.name }}",
+      "timezone": "UTC"
+    }
+  },
+
+  "MGMT_INTERFACE": {
+  {%- for interface in device.interfaces.all() if interface.mgmt_only == true %}
+    "{{ interface.name }}|{{ interface.ip_addresses.first().address }}": {
+      "gwaddr": "{{ mgmt_gwaddr }}"
+    }
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  }
 }
