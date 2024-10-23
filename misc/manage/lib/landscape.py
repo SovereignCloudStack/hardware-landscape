@@ -24,7 +24,7 @@ def get_config(key: str, regex: str = ".+", multi_line=False) -> str:
         LOGGER.error(f"key '{key}' is not defined in config")
         sys.exit(1)
 
-    lines = CONFIG[key].splitlines()
+    lines = str(CONFIG[key]).splitlines()
     if len(lines) > 1 and multi_line is False:
         LOGGER.error(f"{key}='{CONFIG[key]}' contains multiple lines")
         sys.exit(1)
