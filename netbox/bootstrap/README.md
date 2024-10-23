@@ -39,31 +39,6 @@ docker run --rm --network host \
   ghcr.io/minitriga/netbox-device-type-library-import
 ```
 
-## Import Netbox custom scripts
-
-Custom scripting provides a way for users to execute custom logic from within the NetBox, see [docs](https://netbox.uemasul.edu.br/static/docs/customization/custom-scripts/).
-
-To add custom scripts to your NetBox installation, scripts should be saved to `/opt/netbox/netbox/scripts`.
-If you are running netbox-docker then mount scripts defined in this repository on path 
-`/hardware-landscape/netbox/scripts` into the desired netbox directory e.g. as follows:
-```yaml
-  netbox:
-    volumes:
-    - ./hardware-landscape/netbox/scripts:/etc/netbox/scripts:z,ro
- ```
-Adjust accordingly, based on your directory structure and location of the Netbox docker-compose.yml file.
-
-Alternatively, custom scripts could be uploaded to NetBox from a remote data source like a Git repo or S3 bucket. 
-To add `SovereignCloudStack/hardware-landscape` Git data source, use the `netbox_init.py` script as follows:
-
-```bash
-./netbox_init.py --api-url <netbox-url> --api-token <netbox-token> --sync-datasources --data-file landscape/03_data_sources.yml
-```
-
-Navigate to `Customization/Scripts` and from here you can click the link to add `update_sonic_interfaces.py` script from
-remote data source `scs-hardware-landscape`.
-Refer to [this blog post](https://netboxlabs.com/blog/getting-started-with-netbox-custom-scripts/) for further details. 
-
 ## Import SCS Landscape
 
 The script `netbox_init.py` is custom-designed and initializes the Landscape DCIM/IPAM 
@@ -76,5 +51,5 @@ Note that the script is not limited to SCS Landscape. The reader could create ow
 of required initialization in Netbox.
 
 ```bash
-./netbox_init.py --api-url <netbox-url> --api-token <netbox-token> --sync-datasources --execute-scripts --sync-config-templates --data-dir landscape
+./netbox_init.py --api-url <netbox-url> --api-token <netbox-token> --sync-datasources --sync-config-templates --data-dir landscape
 ```

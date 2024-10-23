@@ -12,7 +12,7 @@ devices:
     rack:
       name: "r01"
     config_template:
-      name: "sonic"
+      name: "sonic_config"
     serial: "732656X2317026"
     position: 40
     face: "rear"
@@ -33,6 +33,16 @@ devices:
         - "10.10.23.253"
       syslog_servers:
         - "10.10.23.254"
+      # FIXME: It appears that NetBox and NetBox-BGP plugin are not currently suitable for templating BGP configurations for cloud underlay networks, see https://github.com/SovereignCloudStack/issues/issues/721
+      #  Therefore, as alternative solution BGP is defined under local_context_data
+      bgp:
+        local_asn: "65040"
+        router_id: "10.10.21.40"
+        peer_groups: []
+        neighbors:
+          - port: "PortChannel1"
+            asn: "65041"
+            description: "to_u40"
     tags:
       - slug: scs
       - slug: landscape

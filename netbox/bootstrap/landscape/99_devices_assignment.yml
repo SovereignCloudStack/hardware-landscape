@@ -1,17 +1,17 @@
 # Update devices and assign primary_ip4 and oob_ip
 devices:
-  - name: "st01-sw1g-r01-u47"
-    status: "active"
-    device_type:
-      slug: "edgecore-4630-54te-o-ac-b"
-    role:
-      slug: "leaf-router"
-    site:
-      slug: "st01"
-    primary_ip4:
-      address: "10.10.22.102/24"
-    oob_ip:
-      address: "10.10.22.102/24"
+#  - name: "st01-sw1g-r01-u47"
+#    status: "active"
+#    device_type:
+#      slug: "edgecore-4630-54te-o-ac-b"
+#    role:
+#      slug: "leaf-router"
+#    site:
+#      slug: "st01"
+#    primary_ip4:
+#      address: "10.10.22.102/24"
+#    oob_ip:
+#      address: "10.10.22.102/24"
   - name: "st01-sw1g-r01-u42"
     status: "active"
     device_type:
