@@ -1,0 +1,136 @@
+devices:
+  - name: "st01-sw100g-r01-u41"
+    status: "active"
+    device_type:
+      slug: "edgecore-7726-32x-o"
+    role:
+      slug: "leaf-router"
+    site:
+      slug: "st01"
+    platform:
+      slug: "sonic"
+    rack:
+      name: "r01"
+    config_template:
+      name: "sonic_config"
+    serial: "772632X2333077"
+    position: 41
+    face: "rear"
+    description: "Lab router"
+    local_context_data:
+      hwsku: "Accton-AS7726-32X"
+      platform: "x86_64-accton_as7726_32x-r0"
+      mac_addr: "92:2d:77:58:28:50"
+      # FIXME: Add gateway IP to the Jinja template.
+      #  Netbox does not support concept of gateways, see https://github.com/netbox-community/netbox/issues/1610
+      #  The gateway should be introduced as a custom_field or tag on IP address resource.
+      mgmt_gwaddr: "10.10.23.254"
+      loopback_interfaces:
+        - name: "Loopback0"
+          ip_address: "10.10.21.41/32"
+      ntp_servers:
+        - "10.10.23.254"
+        - "10.10.23.253"
+      syslog_servers:
+        - "10.10.23.254"
+      # FIXME: Create appropriate custom custom fields for LAG interfaces and
+      #  insert the following params as a LAG interface attributes
+      port_channels_params:
+        PortChannel01:
+          fast_rate: "false"
+          lacp_key: "auto"
+          min_links: "1"
+          fallback: "true"
+      # FIXME: It appears that NetBox and NetBox-BGP plugin are not currently suitable for templating BGP configurations for cloud underlay networks, see https://github.com/SovereignCloudStack/issues/issues/721
+      #  Therefore, as alternative solution BGP is defined under local_context_data
+      bgp:
+        local_asn: "65041"
+        router_id: "10.10.21.41"
+        peer_groups:
+          - name: "spine"
+            asn: "65030"
+            peer_type: ""
+          - name: "server"
+            asn: "external"
+            peer_type: "external"
+        neighbors:
+          - port: "PortChannel01"
+            peer_group_name: "server"
+          - port: "Ethernet116"
+            peer_group_name: "spine"
+          - port: "Ethernet120"
+            peer_group_name: "spine"
+    tags:
+      - slug: scs
+      - slug: landscape
+      - slug: lab
+interfaces:
+  - name: "eth0"
+    type: "1000base-t"
+    enabled: true
+    device:
+      name: "st01-sw100g-r01-u41"
+    description: "Management Port"
+  - name: "PortChannel01"
+    type: "lag"
+    enabled: true
+    mtu: "9100"
+    device:
+      name: "st01-sw100g-r01-u41"
+  - name: "Ethernet104"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw100g-r01-u41"
+    lag:
+      name: "PortChannel01"
+  - name: "Ethernet108"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw100g-r01-u41"
+    lag:
+      name: "PortChannel01"
+  - name: "Ethernet96"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw100g-r01-u41"
+    description: "to_u42_100g_vlan35"
+    mode: "tagged"
+    tagged_vlans:
+      - vid: "35"
+  - name: "Ethernet100"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw100g-r01-u41"
+    description: "to_u42_100g_vlan36"
+    mode: "tagged"
+    tagged_vlans:
+      - vid: "36"
+  - name: "Ethernet116"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw100g-r01-u41"
+    description: "to_u39_100g"
+  - name: "Ethernet120"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw100g-r01-u41"
+    description: "to_u38_100g"
+# Assign IP addresses to device's interface
+ip-addresses:
+  - address: "10.10.23.111/24"
+    status: "active"
+    description: "Management"
+    # FIXME: Api requires `assigned_object_type` and `assigned_object_id`
+    # to assign ip address to the resource, e.g. device.
+    # This workaround facilitates the import based on device name and interface name.
+    # The same approach is used in the UI import form.
+    # The above needs a "special" handling in the code and would be nice to introduce a
+    # general approach.
+    device: "st01-sw100g-r01-u41"
+    interface: "eth0"

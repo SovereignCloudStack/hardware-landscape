@@ -79,8 +79,16 @@
       "fast_rate": "{{ port_channels_params[lag_interface.name].fast_rate }}",
       "lacp_key": "{{ port_channels_params[lag_interface.name].lacp_key }}",
       "min_links": "{{ port_channels_params[lag_interface.name].min_links }}",
-      "mix_speed": "{{ port_channels_params[lag_interface.name].mix_speed }}",
+      "fallback": "{{ port_channels_params[lag_interface.name].fallback }}",
       "mtu": "{{ lag_interface.mtu if lag_interface.mtu else 9100 }}"
+    }
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },
+  "PORTCHANNEL_INTERFACE": {
+  {%- for lag_interface in filtered_port_channel_interfaces | sort(attribute='name') %}
+    "{{ lag_interface.name }}": {
+      "ipv6_use_link_local_only": "enable"
     }
     {%- if not loop.last %},{%- endif %}
   {%- endfor %}
@@ -116,29 +124,29 @@
     }
   },
   "BGP_PEER_GROUP": {
-    {% for peer_group in bgp.peer_groups %}
+    {%- for peer_group in bgp.peer_groups %}
     "default|{{ peer_group.name }}": {
       "peer_group_name": "{{ peer_group.name }}",
       "admin_status": "true",
       "asn": "{{ peer_group.asn }}"{% if peer_group.peer_type %},
       "peer_type": "{{ peer_group.peer_type }}"{% endif %}
     }{% if not loop.last %},{% endif %}
-    {% endfor %}
+    {%- endfor %}
   },
   "BGP_NEIGHBOR": {
-    {% for neighbor in bgp.neighbors %}
+    {%- for neighbor in bgp.neighbors %}
     "default|{{ neighbor.port }}": {
-      {% if neighbor.peer_group_name %}
-      "peer_group_name": "{{ neighbor.peer_group_name }}"{% endif %}
-      {% if neighbor.asn %}
-      "asn": "{{ neighbor.asn }}"{% if neighbor.description %},{% endif %}{% endif %}
-      {% if neighbor.description %}
-      "name": "{{ neighbor.description }}"{% endif %}
+      {%- if neighbor.peer_group_name %}
+      "peer_group_name": "{{ neighbor.peer_group_name }}"{%- endif %}
+      {%- if neighbor.asn %}
+      "asn": "{{ neighbor.asn }}"{% if neighbor.description %},{% endif %}{%- endif %}
+      {%- if neighbor.description %}
+      "name": "{{ neighbor.description }}"{%- endif %}
     }{% if not loop.last %},{% endif %}
-    {% endfor %}
+    {%- endfor %}
   },
   "BGP_NEIGHBOR_AF": {
-    {% for neighbor in bgp.neighbors %}
+    {%- for neighbor in bgp.neighbors if not neighbor.peer_group_name %}
     "default|{{ neighbor.port }}|ipv4_unicast": {
       "admin_status": "true",
       "route_map_in": [
@@ -157,8 +165,8 @@
         "ALLOW"
       ]
     }{% if not loop.last or (loop.last and bgp.peer_groups) %},{% endif %}
-    {% endfor %}
-    {% for peer_group in bgp.peer_groups %}
+    {%- endfor %}
+    {%- for peer_group in bgp.peer_groups %}
     "default|{{ peer_group.name }}|ipv4_unicast": {
       "admin_status": "true",
       "route_map_in": [
@@ -177,7 +185,7 @@
         "ALLOW"
       ]
     }{% if not loop.last %},{% endif %}
-    {% endfor %}
+    {%- endfor %}
   },
   "ROUTE_MAP": {
     "ALLOW|1": {
@@ -187,7 +195,6 @@
   "ROUTE_REDISTRIBUTE": {
     "default|connected|bgp|ipv4": {}
   },{%- endif %}
-
   "DEVICE_METADATA": {
     "localhost": {
       "docker_routing_config_mode": "unified",
@@ -198,9 +205,8 @@
       "timezone": "UTC"
     }
   },
-
   "MGMT_INTERFACE": {
-  {%- for interface in device.interfaces.all() if interface.mgmt_only == true %}
+  {%- for interface in device.interfaces.all() if interface.mgmt_only == true and interface.ip_addresses.first() %}
     "{{ interface.name }}|{{ interface.ip_addresses.first().address }}": {
       "gwaddr": "{{ mgmt_gwaddr }}"
     }

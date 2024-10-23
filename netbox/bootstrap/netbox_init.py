@@ -210,10 +210,14 @@ def mangle_interfaces(nb: pynetbox.api, params: dict):
         for tagged_vlan in tagged_vlans:
             ids.append(get_model_id(nb, "vlans", tagged_vlan))
         params.update({"tagged_vlans": ids})
-        return
 
-    logger.error(f"Unsupported vlan values")
-    sys.exit(1)
+    if "lag" in params:
+        lag_id = get_model_id(
+            nb,
+            "interfaces",
+            {"device": params["device"]["name"], "name": params["lag"]["name"]},
+        )
+        params.update({"lag": lag_id})
 
 
 def create_or_update(nb: pynetbox.api, nb_model: str, params: dict):
@@ -249,7 +253,7 @@ def create_or_update(nb: pynetbox.api, nb_model: str, params: dict):
     if nb_model == "ip-addresses" and "device" in params:
         mangle_ip_addresses(nb, params)
 
-    if nb_model == "interfaces" and "tagged_vlans" in params:
+    if nb_model == "interfaces" and ("tagged_vlans" in params or "lag" in params):
         mangle_interfaces(nb, params)
 
     try:
