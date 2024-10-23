@@ -325,7 +325,7 @@ class SCSLandscapeTestMachine:
                 "source_type": "volume",
                 "destination_type": "volume",
                 "volume_size": int(get_config("vm_volume_size_gb",r"\d+")),
-                "delete_on_termination": True
+                "delete_on_termination": False
             }],
             key_name=KEYPAIR_NAME,
         )
