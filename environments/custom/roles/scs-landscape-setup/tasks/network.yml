@@ -5,9 +5,8 @@
     state: present
     name: public
     external: true
-    provider_network_type: vxlan
-    provider_segmentation_id: 1
-    #provider_physical_network: physnet1
+    provider_network_type: flat
+    provider_physical_network: physnet1
 
 - name: Create public subnet
   openstack.cloud.subnet:
