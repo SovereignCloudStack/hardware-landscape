@@ -117,6 +117,18 @@ osism apply scs_check_landscape
   ceph osd set nodown
   ceph osd set pause
 
+  ssh st01-ctl-r01-u27 sudo systemctl stop ceph-mgr\*.service
+  ssh st01-ctl-r01-u28 sudo systemctl stop ceph-mgr\*.service
+  ssh st01-ctl-r01-u29 sudo systemctl stop ceph-mgr\*.service
+
+  ssh st01-stor-r01-u01 sudo systemctl stop ceph.target
+  ssh st01-stor-r01-u03 sudo systemctl stop ceph.target
+  ssh st01-stor-r01-u05 sudo systemctl stop ceph.target
+  ssh st01-stor-r01-u07 sudo systemctl stop ceph.target
+
+  ssh st01-ctl-r01-u27 sudo systemctl stop ceph.target
+  ssh st01-ctl-r01-u28 sudo systemctl stop ceph.target
+  ssh st01-ctl-r01-u29 sudo systemctl stop ceph.target
   ```
 * Shutdown Ceph OSDs
   ```
@@ -127,20 +139,21 @@ osism apply scs_check_landscape
   ```
 * Shutdown Controllers (Ceph and Openstack)
   ```
-  NODES=""
+  NODES="$(./server_ctl -s all 2>/dev/null|grep -- "st01-ctl")"
   ./server_ctl --power_action GracefulShutdown $NODES
   ./server_ctl --power_check $NODES
   ./server_ctl --power_action ForceOff $NODES
   ```
 * Shutdown Switches
   ```
-
+  ./switch_ctl -s all 2>/dev/null |while read host; do echo "** $host";ssh $host "sudo halt"; done
   ```
 * Shutdown Managers
   ```
-  NODES=""
-  ./server_ctl --power_action GracefulShutdown $NODES
-  ./server_ctl --power_check $NODES
-  ./server_ctl --power_action ForceOff $NODES
+  ./server_ctl --power_action GracefulShutdown  st01-mgmt-r01-u31
+  ./server_ctl --power_check $NODES st01-mgmt-r01-u31
+  ./server_ctl --power_action ForceOff $NODES st01-mgmt-r01-u31
+
+  sudo halt
   ```
 
