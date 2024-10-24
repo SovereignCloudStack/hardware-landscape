@@ -1,0 +1,97 @@
+devices:
+  - name: "st01-sw25g-r01-u40"
+    status: "active"
+    device_type:
+      slug: "edgecore-7326-56x-o-ac-b"
+    role:
+      slug: "leaf-router"
+    site:
+      slug: "st01"
+    platform:
+      slug: "sonic"
+    rack:
+      name: "r01"
+    config_template:
+      name: "sonic_config"
+    serial: "732656X2317026"
+    position: 40
+    face: "rear"
+    description: "Lab router"
+    local_context_data:
+      hwsku: "Accton-AS7326-56X"
+      platform: "x86_64-accton_as7326_56x-r0"
+      mac_addr: "d0:77:ce:4b:b1:7a"
+      # FIXME: Add gateway IP to the Jinja template.
+      #  Netbox does not support concept of gateways, see https://github.com/netbox-community/netbox/issues/1610
+      #  The gateway should be introduced as a custom_field or tag on IP address resource.
+      mgmt_gwaddr: "10.10.23.254"
+      loopback_interfaces:
+        - name: "Loopback0"
+          ip_address: "10.10.21.40/32"
+      ntp_servers:
+        - "10.10.23.254"
+        - "10.10.23.253"
+      syslog_servers:
+        - "10.10.23.254"
+      # FIXME: Create appropriate custom custom fields for LAG interfaces and
+      #  insert the following params as a LAG interface attributes
+      port_channels_params:
+        PortChannel01:
+          fast_rate: "false"
+          lacp_key: "auto"
+          min_links: "1"
+          fallback: "true"
+      # FIXME: It appears that NetBox and NetBox-BGP plugin are not currently suitable for templating BGP configurations for cloud underlay networks, see https://github.com/SovereignCloudStack/issues/issues/721
+      #  Therefore, as alternative solution BGP is defined under local_context_data
+      bgp:
+        local_asn: "65040"
+        router_id: "10.10.21.40"
+        peer_groups: []
+        neighbors:
+          - port: "PortChannel01"
+            asn: "65041"
+            description: "to_u40"
+    tags:
+      - slug: scs
+      - slug: landscape
+      - slug: lab
+interfaces:
+  - name: "eth0"
+    type: "1000base-t"
+    enabled: true
+    device:
+      name: "st01-sw25g-r01-u40"
+    description: "Management Port"
+  - name: "PortChannel01"
+    type: "lag"
+    enabled: true
+    mtu: "9100"
+    device:
+      name: "st01-sw25g-r01-u40"
+  - name: "Ethernet72"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw25g-r01-u40"
+    lag:
+      name: "PortChannel01"
+  - name: "Ethernet76"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw25g-r01-u40"
+    lag:
+      name: "PortChannel01"
+# Assign IP addresses to device's interface
+ip-addresses:
+  - address: "10.10.23.106/24"
+    status: "active"
+    description: "Management"
+    # FIXME: Api requires `assigned_object_type` and `assigned_object_id`
+    # to assign ip address to the resource, e.g. device.
+    # This workaround facilitates the import based on device name and interface name.
+    # The same approach is used in the UI import form.
+    # The above needs a "special" handling in the code and would be nice to introduce a
+    # general approach.
+    device: "st01-sw25g-r01-u40"
+    interface: "eth0"

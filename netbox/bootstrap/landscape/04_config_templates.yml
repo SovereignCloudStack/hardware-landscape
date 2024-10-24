@@ -1,0 +1,12 @@
+config-templates:
+  - name: "sonic_config"
+    description: "Config DB json configuration template for SONiC"
+    data_source:
+      name: "scs-hardware-landscape"
+    data_file:
+      path: "netbox/config_templates/sonic_config.json.j2"
+    template_code: "{}"
+    tags:
+      - slug: scs
+      - slug: landscape
+
