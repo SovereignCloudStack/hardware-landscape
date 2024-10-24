@@ -484,8 +484,26 @@ class SCSLandscapeTestProject:
             user=user_id, project=self.obj.id, role=self.get_role_id_by_name(role_name))
         LOGGER.info(f"Assigned global admin {role_name} to {user_id} for project {self.obj.id}")
 
+    def adapt_quota(self):
+        return
+        quota =  self._admin_conn.compute.get_quota_set(self.obj.id)
+        new_quota = {}
+        if "quotas" in CONFIG:
+            for key_name in CONFIG["quotas"].keys():
+                current_value = getattr(quota, key_name)
+                new_value = int(get_config(key_name, r"\d+", parent_key="quotas", default=str(getattr(quota, key_name))))
+                if current_value != new_value:
+                    LOGGER.info(f"New compute quota for project: {self.obj.id} in domain {self.domain.name} : {key_name} : {current_value} -> {new_value}")
+                    new_quota[key_name] = new_value
+        if len(new_quota):
+            self._admin_conn.compute.set_quota(self.obj.id, **new_quota)
+            LOGGER.info(f"Configured quotas for project: {self.obj.id} in domain {self.domain.name}")
+        else:
+            LOGGER.info(f"Configured quotas for project {self.obj.id} in domain {self.domain.name} not changed")
+
     def create_and_get_project(self) -> Project:
         if self.obj:
+            self.adapt_quota()
             self.scs_network = SCSLandscapeTestNetwork(self._admin_conn, self.obj, self.security_group_name_ingress, self.security_group_name_egress)
             self.scs_network.create_and_get_network_setup()
             return self.obj
@@ -497,14 +515,7 @@ class SCSLandscapeTestProject:
             enabled=True
         )
         LOGGER.info(f"Created project: {self.obj.id} in domain {self.domain.name}")
-
-        # new_quota =  self._admin_conn.compute.get_quota(self.obj.id)
-        # for key_name in new_quota.keys():
-        #     if "quotas" in CONFIG and key_name in CONFIG["quotas"]:
-        #         new_quota[key_name] = (
-        #             int(get_config(key_name, r"\d+", parent_key="quotas", default=str(new_quota[key_name]))))
-        # self._admin_conn.compute.get_quota_set(self.obj.id, **new_quota)
-        # LOGGER.info(f"Configured quotas for project: {self.obj.id} in domain {self.domain.name} : {pformat(new_quota)}")
+        self.adapt_quota()
 
         self.assign_role_to_user_for_project("manager")
         self.assign_role_to_user_for_project("load-balancer_member")
