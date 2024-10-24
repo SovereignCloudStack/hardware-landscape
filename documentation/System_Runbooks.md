@@ -89,3 +89,58 @@ This ansible play executes basic diagnostic checks to simply problem detection:
 ssh scs-manager
 osism apply scs_check_landscape
 ```
+
+# Shutdown the entire environment
+
+* Shutdown Compute Nodes
+  ```
+  NODES="st01-comp-r01-u15 st01-comp-r01-u17 st01-comp-r01-u19"
+  ./server_ctl --power_action GracefulShutdown $NODES
+  ./server_ctl --power_check $NODES
+  ./server_ctl --power_action ForceOff $NODES
+  ```
+* Shutdown Compute Nodes with Neutron Nodes
+  ```
+  NODES="st01-comp-r01-u09 st01-comp-r01-u11 st01-comp-r01-u13"
+  ./server_ctl --power_action GracefulShutdown $NODES
+  ./server_ctl --power_check $NODES
+  ./server_ctl --power_action ForceOff $NODES
+  ```
+* Prepare Ceph for shutdown
+  see http://docs-old.osism.tech/services/ceph.html#cluster-start-and-stop
+  ```
+  ssh scs-manager
+  ceph osd set noout
+  ceph osd set nobackfill
+  ceph osd set norecover
+  ceph osd set norebalance
+  ceph osd set nodown
+  ceph osd set pause
+
+  ```
+* Shutdown Ceph OSDs
+  ```
+  NODES="$(./server_ctl -s all 2>/dev/null|grep -- "st01-stor")"
+  ./server_ctl --power_action GracefulShutdown $NODES
+  ./server_ctl --power_check $NODES
+  ./server_ctl --power_action ForceOff $NODES
+  ```
+* Shutdown Controllers (Ceph and Openstack)
+  ```
+  NODES=""
+  ./server_ctl --power_action GracefulShutdown $NODES
+  ./server_ctl --power_check $NODES
+  ./server_ctl --power_action ForceOff $NODES
+  ```
+* Shutdown Switches
+  ```
+
+  ```
+* Shutdown Managers
+  ```
+  NODES=""
+  ./server_ctl --power_action GracefulShutdown $NODES
+  ./server_ctl --power_check $NODES
+  ./server_ctl --power_action ForceOff $NODES
+  ```
+
