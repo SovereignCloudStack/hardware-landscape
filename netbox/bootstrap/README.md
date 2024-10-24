@@ -4,10 +4,16 @@ NetBox starts with no data following its initial deployment.
 To effectively add and configure network devices, some setup is necessary.
 
 This tutorial provides scripts and instructions to bootstrap NetBox with
-prerequisites, enabling you to add SCS Landscape network devices and manage their configurations.
+prerequisites, enabling you to add SCS Landscape **LAB** network devices and manage their configurations.
 
 Note that the tutorial is not limited to SCS Landscape. The reader could create own YAML definitions
 of required initialization in Netbox.
+
+The development of the netbox_init.py script was influenced by the [netbox-initializers](https://github.com/tobiasge/netbox-initializers)
+plugin, although their use cases differ slightly. `netbox_init.py` serves as a versatile tool to facilitate development
+with NetBox, enabling the import of objects using the NetBox API. It can be used with any NetBox instance without
+requiring the plugin to be installed. Additionally, the script supports synchronization with remote data sources
+and allows custom scripts execution through the NetBox API.
 
 ## Prerequisites 
 

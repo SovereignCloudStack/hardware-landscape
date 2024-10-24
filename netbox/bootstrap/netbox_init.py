@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-NetBox init script
+Netbox init script
 
-This script is used to bootstrap a NetBox instance by creating or updating various netbox
-resources, see META.
+This script is used to bootstrap a NetBox instance by creating or updating various Netbox
+resources via the Netbox API, see `META` for list of supported resources.
 
 Basic Usage:
 1. Ensure you have the necessary dependencies installed:
-    pip install pynetbox pyyaml
+    pip install -r requirements.txt
 
 2. Prepare a configuration files (e.g., data.yml, data2.yml) with the desired resources.
 
