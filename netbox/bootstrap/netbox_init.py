@@ -127,6 +127,11 @@ META = {
     "prefixes": Meta(
         app=NetboxApp.IPAM, required=["prefix", "status"], filer=["prefix"]
     ),
+    "cables": Meta(
+        app=NetboxApp.DCIM,
+        required=["a_terminations", "b_terminations"],
+        filer=["termination_a_id", "termination_b_id"],
+    ),
 }
 
 
@@ -220,6 +225,34 @@ def mangle_interfaces(nb: pynetbox.api, params: dict):
         params.update({"lag": lag_id})
 
 
+def mangle_cables(nb: pynetbox.api, params: dict):
+    id_a = get_model_id(
+        nb,
+        "interfaces",
+        {
+            "device": params["a_terminations"]["device"],
+            "name": params["a_terminations"]["interface"],
+        },
+    )
+    id_b = get_model_id(
+        nb,
+        "interfaces",
+        {
+            "device": params["b_terminations"]["device"],
+            "name": params["b_terminations"]["interface"],
+        },
+    )
+    params.update(
+        {
+            "a_terminations": [{"object_type": "dcim.interface", "object_id": id_a}],
+            "b_terminations": [{"object_type": "dcim.interface", "object_id": id_b}],
+            # Note: filter params
+            "termination_a_id": id_a,
+            "termination_b_id": id_b,
+        }
+    )
+
+
 def create_or_update(nb: pynetbox.api, nb_model: str, params: dict):
     try:
         nb_meta = META[nb_model]
@@ -233,6 +266,15 @@ def create_or_update(nb: pynetbox.api, nb_model: str, params: dict):
         logger.error(f"{nb_model.capitalize()} missing required parameter")
         sys.exit(1)
 
+    if nb_model == "cables":
+        mangle_cables(nb, params)
+
+    if nb_model == "ip-addresses" and "device" in params:
+        mangle_ip_addresses(nb, params)
+
+    if nb_model == "interfaces" and ("tagged_vlans" in params or "lag" in params):
+        mangle_interfaces(nb, params)
+
     nb_filter = {}
     for key in nb_meta.filer:
         try:
@@ -241,8 +283,8 @@ def create_or_update(nb: pynetbox.api, nb_model: str, params: dict):
             logger.error(f"{nb_model.capitalize()} missing filer parameter")
             sys.exit(1)
 
-        if isinstance(nb_filter_value, Mapping):
-            # FIXME: improve this naive implementation
+        # FIXME: improve this naive implementation
+        if isinstance(nb_filter_value, Mapping) and nb_model != "cables":
             nested_key = "slug"
             if "name" in nb_filter_value:
                 nested_key = "name"
@@ -250,17 +292,10 @@ def create_or_update(nb: pynetbox.api, nb_model: str, params: dict):
         else:
             nb_filter.update({key: nb_filter_value})
 
-    if nb_model == "ip-addresses" and "device" in params:
-        mangle_ip_addresses(nb, params)
-
-    if nb_model == "interfaces" and ("tagged_vlans" in params or "lag" in params):
-        mangle_interfaces(nb, params)
-
     try:
         app_obj = getattr(nb, nb_meta.app.value)
         model_obj = getattr(app_obj, nb_model)
         existing_resource = model_obj.get(**nb_filter)
-
         if existing_resource:
             logger.info(
                 f"{nb_model.capitalize()} already exists: {nb_filter}, updating it."

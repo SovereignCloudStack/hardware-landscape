@@ -1,0 +1,65 @@
+cables:
+  - type: "smf"
+    description: "QSFP28/100G"
+    a_terminations:
+        device: "st01-sw1g-r01-u42"
+        interface: "Ethernet52"
+    b_terminations:
+        device: "st01-sw100g-r01-u41"
+        interface: "Ethernet96"
+  - type: "smf"
+    description: "QSFP28/100G"
+    a_terminations:
+        device: "st01-sw1g-r01-u42"
+        interface: "Ethernet56"
+    b_terminations:
+        device: "st01-sw100g-r01-u41"
+        interface: "Ethernet100"
+  - type: "smf"
+    description: "QSFP28/100G"
+    a_terminations:
+        device: "st01-sw100g-r01-u41"
+        interface: "Ethernet104"
+    b_terminations:
+        device: "st01-sw25g-r01-u40"
+        interface: "Ethernet72"
+  - type: "smf"
+    description: "QSFP28/100G"
+    a_terminations:
+        device: "st01-sw100g-r01-u41"
+        interface: "Ethernet108"
+    b_terminations:
+        device: "st01-sw25g-r01-u40"
+        interface: "Ethernet76"
+  - type: "smf"
+    description: "QSFP28/100G"
+    a_terminations:
+        device: "st01-sw100g-r01-u41"
+        interface: "Ethernet116"
+    b_terminations:
+        device: "st01-sw10g-r01-u39"
+        interface: "Ethernet60"
+  - type: "smf"
+    description: "QSFP28/100G"
+    a_terminations:
+        device: "st01-sw100g-r01-u41"
+        interface: "Ethernet120"
+    b_terminations:
+        device: "st01-sw10g-r01-u38"
+        interface: "Ethernet60"
+  - type: "smf"
+    description: "QSFP28/100G"
+    a_terminations:
+        device: "st01-sw10g-r01-u39"
+        interface: "Ethernet64"
+    b_terminations:
+        device: "st01-sw10g-r01-u38"
+        interface: "Ethernet64"
+  - type: "smf"
+    description: "QSFP28/100G"
+    a_terminations:
+        device: "st01-sw10g-r01-u39"
+        interface: "Ethernet68"
+    b_terminations:
+        device: "st01-sw10g-r01-u38"
+        interface: "Ethernet68"
