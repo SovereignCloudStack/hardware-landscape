@@ -14,11 +14,11 @@
     state: present
     name: subnet-public
     network_name: public
-    cidr: 10.10.21.0/24
+    cidr: 10.80.0.0/20
     enable_dhcp: false
-    allocation_pool_start: 10.10.21.221
-    allocation_pool_end: 10.10.21.250
-    gateway_ip: 10.10.21.11
+    allocation_pool_start: 10.80.0.10
+    allocation_pool_end: 10.80.15.254
+    gateway_ip: 10.80.0.1
     dns_nameservers:
       - 10.10.21.10
       - 10.10.21.11

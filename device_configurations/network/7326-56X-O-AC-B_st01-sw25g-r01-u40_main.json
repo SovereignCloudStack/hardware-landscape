@@ -112,39 +112,6 @@
       "wcmp_enabled": "false"
     }
   },
-  "BGP_GLOBALS": {
-    "default": {
-      "local_asn": "65040",
-      "log_nbr_state_changes": "true",
-      "router_id": "10.10.21.40"
-    }
-  },
-  "BGP_NEIGHBOR": {
-    "default|PortChannel1": {
-      "asn": "65041",
-      "name": "to_u40"
-    }
-  },
-  "BGP_NEIGHBOR_AF": {
-    "default|PortChannel1|ipv4_unicast": {
-      "admin_status": "true",
-      "route_map_in": [
-        "ALLOW"
-      ],
-      "route_map_out": [
-        "ALLOW"
-      ]
-    },
-    "default|PortChannel1|ipv6_unicast": {
-      "admin_status": "true",
-      "route_map_in": [
-        "ALLOW"
-      ],
-      "route_map_out": [
-        "ALLOW"
-      ]
-    }
-  },
   "CRM": {
     "Config": {
       "acl_counter_high_threshold": "85",
@@ -209,14 +176,12 @@
       "buffer_model": "traditional",
       "default_bgp_status": "up",
       "default_pfcwd_status": "disable",
-      "docker_router_config_mode": "unified",
-      "frr_mgmt_framework_config": "true",
-      "hostname": "st01-sw25g-r01-u40",
+      "hostname": "sonic",
       "hwsku": "Accton-AS7326-56X",
       "mac": "d0:77:ce:4b:b1:7a",
       "platform": "x86_64-accton_as7326_56x-r0",
       "timezone": "UTC",
-      "type": "LeafRouter"
+      "type": "not-provisioned"
     }
   },
   "FEATURE": {
@@ -247,7 +212,7 @@
       "has_per_asic_scope": "False",
       "high_mem_alert": "disabled",
       "set_owner": "local",
-      "state": "enabled",
+      "state": "disabled",
       "support_syslog_rate_limit": "True"
     },
     "eventd": {
@@ -384,103 +349,36 @@
   "FLEX_COUNTER_TABLE": {
     "ACL": {
       "FLEX_COUNTER_DELAY_STATUS": "false",
-      "FLEX_COUNTER_STATUS": "disable",
+      "FLEX_COUNTER_STATUS": "enable",
       "POLL_INTERVAL": "10000"
     },
     "BUFFER_POOL_WATERMARK": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PFCWD": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PG_DROP": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PG_WATERMARK": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PORT": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PORT_BUFFER_DROP": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "QUEUE": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "QUEUE_WATERMARK": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "RIF": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     }
-  },
-  "INTERFACE": {
-    "Ethernet0": {},
-    "Ethernet1": {},
-    "Ethernet10": {},
-    "Ethernet11": {},
-    "Ethernet12": {},
-    "Ethernet13": {},
-    "Ethernet14": {},
-    "Ethernet15": {},
-    "Ethernet16": {},
-    "Ethernet17": {},
-    "Ethernet18": {},
-    "Ethernet19": {},
-    "Ethernet2": {},
-    "Ethernet20": {},
-    "Ethernet21": {},
-    "Ethernet22": {},
-    "Ethernet23": {},
-    "Ethernet24": {},
-    "Ethernet25": {},
-    "Ethernet26": {},
-    "Ethernet27": {},
-    "Ethernet28": {},
-    "Ethernet29": {},
-    "Ethernet3": {},
-    "Ethernet30": {},
-    "Ethernet31": {},
-    "Ethernet32": {},
-    "Ethernet33": {},
-    "Ethernet34": {},
-    "Ethernet35": {},
-    "Ethernet36": {},
-    "Ethernet37": {},
-    "Ethernet38": {},
-    "Ethernet39": {},
-    "Ethernet4": {},
-    "Ethernet40": {},
-    "Ethernet41": {},
-    "Ethernet42": {},
-    "Ethernet43": {},
-    "Ethernet44": {},
-    "Ethernet45": {},
-    "Ethernet46": {},
-    "Ethernet47": {},
-    "Ethernet48": {},
-    "Ethernet5": {},
-    "Ethernet52": {},
-    "Ethernet56": {},
-    "Ethernet6": {},
-    "Ethernet60": {},
-    "Ethernet64": {},
-    "Ethernet68": {},
-    "Ethernet7": {},
-    "Ethernet72": {},
-    "Ethernet76": {},
-    "Ethernet8": {},
-    "Ethernet9": {}
   },
   "KDUMP": {
     "config": {
@@ -831,16 +729,6 @@
       "LOGOUTPUT": "SYSLOG"
     }
   },
-  "LOOPBACK_INTERFACE": {
-    "Loopback0": {},
-    "Loopback0|10.1.0.1/32": {},
-    "Loopback0|10.10.21.40/32": {}
-  },
-  "MGMT_INTERFACE": {
-    "eth0|10.10.23.106/24": {
-      "gwaddr": "10.10.23.254"
-    }
-  },
   "NTP": {
     "global": {
       "admin_state": "enabled",
@@ -850,10 +738,6 @@
       "src_intf": "eth0",
       "vrf": "default"
     }
-  },
-  "NTP_SERVER": {
-    "10.10.23.253": {},
-    "10.10.23.254": {}
   },
   "PASSW_HARDENING": {
     "POLICIES": {
@@ -1319,33 +1203,6 @@
       "speed": "25000"
     }
   },
-  "PORTCHANNEL": {
-    "PortChannel1": {
-      "admin_status": "up",
-      "fallback": "true",
-      "fast_rate": "false",
-      "lacp_key": "auto",
-      "min_links": "1",
-      "mtu": "9100"
-    }
-  },
-  "PORTCHANNEL_INTERFACE": {
-    "PortChannel1": {
-      "ipv6_use_link_local_only": "enable"
-    }
-  },
-  "PORTCHANNEL_MEMBER": {
-    "PortChannel1|Ethernet72": {},
-    "PortChannel1|Ethernet76": {}
-  },
-  "ROUTE_MAP": {
-    "ALLOW|1": {
-      "route_operation": "permit"
-    }
-  },
-  "ROUTE_REDISTRIBUTE": {
-    "default|connected|bgp|ipv4": {}
-  },
   "SNMP": {
     "LOCATION": {
       "Location": "public"
@@ -1432,9 +1289,6 @@
       "rate_limit_interval": "300"
     }
   },
-  "SYSLOG_SERVER": {
-    "10.10.23.254": {}
-  },
   "SYSTEM_DEFAULTS": {
     "mux_tunnel_egress_acl": {
       "status": "disabled"
@@ -1443,6 +1297,17 @@
   "VERSIONS": {
     "DATABASE": {
       "VERSION": "version_202411_01"
+    }
+  },
+  "ZTP": {
+    "mode": {
+      "inband": "true",
+      "ipv4": "true",
+      "ipv6": "true",
+      "out-of-band": "true",
+      "product-name": "7326-56X-O-AC-B",
+      "profile": "active",
+      "serial-no": "732656X2317026"
     }
   }
 }
