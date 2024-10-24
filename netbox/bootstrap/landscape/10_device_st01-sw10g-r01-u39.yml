@@ -27,7 +27,7 @@ devices:
       mgmt_gwaddr: "10.10.23.254"
       loopback_interfaces:
         - name: "Loopback0"
-          ip_address: "10.10.21.38/32"
+          ip_address: "10.10.21.39/32"
       ntp_servers:
         - "10.10.23.254"
         - "10.10.23.253"

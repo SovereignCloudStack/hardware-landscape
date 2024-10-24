@@ -2,6 +2,7 @@
   {%- if loopback_interfaces %}
   "LOOPBACK_INTERFACE": {
   {%- for interface in loopback_interfaces %}
+    "{{ interface.name }}": {},
     "{{ interface.name }}|{{ interface.ip_address }}": {}{%- if not loop.last %},{%- endif %}
   {%- endfor %}
   },{%- endif %}
@@ -202,6 +203,7 @@
       "hostname": "{{ device.name }}",
       "mac": "{{ mac_addr }}",
       "type": "{{ device.role.name }}",
+      "hwsku": "{{ hwsku }}",
       "timezone": "UTC"
     }
   },
