@@ -8,3 +8,8 @@ vm_flavor: "SCS-4V-32"
 vm_image: "Ubuntu 24.04"
 vm_volume_size_gb: 10
 project_ipv4_subnet: "192.168.200.0/24"
+quotas:
+  cores: 20  # Max number of CPU cores
+  ram: 128000  # Max RAM in MB (128GB)
+  floating_ips: 5  # Max number of floating IPs
+  volumes: 10  # Max number of volumes

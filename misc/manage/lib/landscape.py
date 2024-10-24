@@ -1,6 +1,7 @@
 import logging
 import re
 import sys
+from pprint import pformat
 
 from openstack.exceptions import ResourceNotFound
 from openstack import connection
@@ -17,14 +18,22 @@ from openstack.network.v2.subnet import Subnet
 KEYPAIR_NAME = "my_ssh_public_key"
 LOGGER = logging.getLogger()
 
-CONFIG: dict[str,str] = dict()
+CONFIG: dict[str,str|dict[str, str]] = dict()
 
-def get_config(key: str, regex: str = ".+", multi_line=False) -> str:
-    if key not in CONFIG:
-        LOGGER.error(f"key '{key}' is not defined in config")
-        sys.exit(1)
+def get_config(key: str, regex: str = ".+",
+               multi_line: bool = False, parent_key: str = None, default: str | list[str] = None ) -> str | list[str]:
+    lines = default
+    try:
+        if parent_key:
+            lines = str(CONFIG[parent_key][key]).splitlines()
+        else:
+            lines = str(CONFIG[key]).splitlines()
+    except KeyError as e:
+        LOGGER.info(f"config does not contain : {parent_key} -> {key} : {pformat(CONFIG)}")
+        if lines is None:
+            sys.exit(1)
 
-    lines = str(CONFIG[key]).splitlines()
+
     if len(lines) > 1 and multi_line is False:
         LOGGER.error(f"{key}='{CONFIG[key]}' contains multiple lines")
         sys.exit(1)
@@ -33,7 +42,11 @@ def get_config(key: str, regex: str = ".+", multi_line=False) -> str:
         if not re.fullmatch(regex, str(line)):
             LOGGER.error(f"{key}='{CONFIG[key]}' does not match to regex >>>{regex}<<<")
             sys.exit(1)
-    return CONFIG[key]
+
+    if not multi_line:
+        return str(lines[0])
+    else:
+        return [str(val) for val in lines]
 
 class SCSLandscapeTestUser:
 
@@ -325,7 +338,7 @@ class SCSLandscapeTestMachine:
                 "source_type": "volume",
                 "destination_type": "volume",
                 "volume_size": int(get_config("vm_volume_size_gb",r"\d+")),
-                "delete_on_termination": False
+                "delete_on_termination": True,
             }],
             key_name=KEYPAIR_NAME,
         )
@@ -484,6 +497,15 @@ class SCSLandscapeTestProject:
             enabled=True
         )
         LOGGER.info(f"Created project: {self.obj.id} in domain {self.domain.name}")
+
+        # new_quota =  self._admin_conn.compute.get_quota(self.obj.id)
+        # for key_name in new_quota.keys():
+        #     if "quotas" in CONFIG and key_name in CONFIG["quotas"]:
+        #         new_quota[key_name] = (
+        #             int(get_config(key_name, r"\d+", parent_key="quotas", default=str(new_quota[key_name]))))
+        # self._admin_conn.compute.get_quota_set(self.obj.id, **new_quota)
+        # LOGGER.info(f"Configured quotas for project: {self.obj.id} in domain {self.domain.name} : {pformat(new_quota)}")
+
         self.assign_role_to_user_for_project("manager")
         self.assign_role_to_user_for_project("load-balancer_member")
         self.assign_role_to_user_for_project("member")
@@ -505,8 +527,8 @@ class SCSLandscapeTestProject:
 
         self.scs_network.delete_network()
 
+        LOGGER.warning(f"Cleanup of project {self.obj.name}/{self.obj.id} in domain {self.domain.name}")
         self.project_conn.project_cleanup(dry_run=False, wait_timeout=120)
-        LOGGER.warning(f"Cleanup of project {self.obj.name} in domain {self.domain.name}")
 
         ## This function should do all the steps above, but because of a bug this
         ## does not work as expected currently
@@ -517,8 +539,8 @@ class SCSLandscapeTestProject:
         ## DELETE THE PROJECT
         ## This function should also the steps beyond
         ## TODO: add bug report reference
+        LOGGER.warning(f"Deleting project {self.obj.name} in domain {self.domain.name}")
         self._admin_conn.identity.delete_project(self.obj.id)
-        LOGGER.warning(f"Deleted project {self.obj.name} in domain {self.domain.name}")
 
         # Delete the security groups after deleting the project because the "default" security
         # group not seems to be deletable when the project exists
@@ -545,7 +567,7 @@ class SCSLandscapeTestProject:
                         f"domain {self.domain.name}")
             self.ssh_key = self.project_conn.compute.create_keypair(
                 name=KEYPAIR_NAME,
-                public_key=get_config("admin_vm_ssh_key", r"ssh-\S+\s\S+\s\S+", multi_line=True),
+                public_key="\n".join(get_config("admin_vm_ssh_key", r"ssh-\S+\s\S+\s\S+", multi_line=True)),
             )
 
 
