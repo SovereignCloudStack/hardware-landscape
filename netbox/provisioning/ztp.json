@@ -2,12 +2,12 @@
  "ztp": {
     "01-prerequisites-script": {
       "plugin": {
-        "url": "http://10.10.23.254:18080/prerequisites.sh"
+        "url": "http://10.10.23.254:28080/prerequisites.sh"
       }
     },
     "02-provisioning-script": {
       "plugin": {
-        "url": "http://10.10.23.254:18080/provision.sh",
+        "url": "http://10.10.23.254:28080/provision.sh",
         "ignore-section-data": true,
         "args": "--netbox-url http://10.10.21.10:8121 --netbox-token <token>"
       }
