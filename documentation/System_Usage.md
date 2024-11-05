@@ -73,7 +73,7 @@ ssh scs-manager "docker exec osism-ansible /ansible-vault.py" > secrets/vaultpas
 
 * Login to first manager
   ```
-  ssh scs-ömanager
+  ssh scs-manager
   ```
 * Attach to a running screen session which provides access to the ttypS0..ttySX interfaces
   or create automatically a new one
