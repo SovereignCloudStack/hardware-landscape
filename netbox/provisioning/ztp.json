@@ -16,6 +16,7 @@
       "ping-hosts": [
         "10.10.23.254"
       ]
-    }
+    },
+    "reboot-on-success": true
   }
 }

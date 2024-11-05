@@ -103,6 +103,32 @@
   {%- endfor %}
   },{%- endif %}
 
+  {%- set filtered_interfaces = [] %}
+  {%- set lag_member_interfaces = [] %}
+
+  {#- Collect all members of LAG interfaces #}
+  {%- for lag_interface in filtered_port_channel_interfaces | sort(attribute='name') %}
+    {%- for interface in lag_interface.member_interfaces.all() | sort(attribute='name') %}
+        {%- set _ = lag_member_interfaces.append(interface.name) %}
+    {%- endfor %}
+  {%- endfor %}
+
+  {#- Filter out interfaces that are not management, not virtual, and not members of LAG #}
+  {%- for interface in device.interfaces.all() %}
+    {%- if interface.mgmt_only != true and not interface.ip_addresses.first() and not interface.is_virtual and interface.name not in lag_member_interfaces %}
+      {%- set _ = filtered_interfaces.append(interface) %}
+    {%- endif %}
+  {%- endfor %}
+  {%- if filtered_interfaces %}
+  "INTERFACE": {
+    {%- for interface in filtered_interfaces | sort(attribute='name') %}
+    "{{ interface.name }}": {
+      "ipv6_use_link_local_only": "enable"
+    }
+    {%- if not loop.last %},{%- endif %}
+    {%- endfor %}
+  },{%- endif %}
+
   {%- if static_routes %}
   "STATIC_ROUTE": {
   {%- for static_route in static_routes %}

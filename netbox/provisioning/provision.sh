@@ -67,12 +67,12 @@ fi
 echo "Fetching rendered configuration from NetBox for device ID: $DEVICE_ID ..."
 CONFIG_RENDERED=$(curl -X POST -s -H "Authorization: Token $AUTH_TOKEN" -H "Content-Type: application/json" "${NETBOX_API}${DEVICE_ID}/render-config/")
 
-CONFIG_JSON_FILENAME="$(date +'%Y-%m-%d_%H-%M-%S').json"
+CONFIG_JSON_FILENAME="config_db_$(date +'%Y-%m-%d_%H-%M-%S').json"
 
 # Extract and save SONiC config
 CONFIG=$(echo "$CONFIG_RENDERED" | jq -r '.content')
 if [ -n "$CONFIG" ]; then
-    echo "Writing SONiC config to temporary directory..."
+    echo "Writing SONiC config to temporary file..."
     echo "$CONFIG" > "$CONFIG_DIR/$CONFIG_JSON_FILENAME"
 else
     echo "Error: SONiC config not found in the rendered configuration."
@@ -84,16 +84,13 @@ HWSKU=$(echo "$CONFIG" | jq -r '.DEVICE_METADATA.localhost.hwsku')
 echo "Generating SONiC base configuration file for device $HWSKU..."
 sudo sonic-cfggen  -H --preset l3 -k "$HWSKU" | sudo tee  "$CONFIG_DIR/config_db.json" > /dev/null
 
-echo "Applying SONiC configuration..."
+echo "Loading SONiC configuration to the running-config..."
 sudo config load "$CONFIG_DIR/$CONFIG_JSON_FILENAME" -y
 
-echo "Saving SONiC configuration to the config_db.json..."
+echo "Saving SONiC configuration to the startup-config (config_db.json)..."
 sudo config save -y
 
-echo "Reloading the entire SONiC configuration from the config_db.json..."
+echo "Reloading the entire SONiC configuration from the startup-config (config_db.json)..."
 sudo config reload -y -f
-
-echo "Restarting BGP container..."
-docker restart bgp
 
 echo "Configuration applied successfully."
