@@ -26,3 +26,10 @@ network_ethernets_extra:
     addresses:
       - "10.10.22.1/24"
 
+network_tunnels:
+  vxlan80:
+    mode: vxlan
+    id: 80
+    local: 10.10.21.10
+    addresses: [ 10.80.0.1/20 ]
+
