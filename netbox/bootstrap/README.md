@@ -45,16 +45,22 @@ docker run --rm --network host \
   ghcr.io/minitriga/netbox-device-type-library-import
 ```
 
+Note: The above should work for a local instance of NetBox available on localhost (tested).
+We observed an issue with authentication when accessing the NetBox API via VPN. This could
+be caused by an older version of the netbox-device-type-library-import available in the container.
+If you encounter the same issue, use the latest version of the script and execute it from the source.
+See [Getting Started guide](https://github.com/netbox-community/Device-Type-Library-Import?tab=readme-ov-file#-getting-started) for more details.
+
 ## Import SCS Landscape
 
 The script `netbox_init.py` is custom-designed and initializes the Landscape DCIM/IPAM 
 infrastructure as is defined in the `landscape` directory. Explore the human readable `yaml`
-definitions of the current Landscape state.
-The script facilitates the initial bootstrapping of fresh Netbox instance, further testing and
-development of SCS Landscape.
+definitions of the current Landscape state. Currently, the `landscape` directory contains definitions
+for **LAB** part of SCS landscape only.
 
-Note that the script is not limited to SCS Landscape. The reader could create own YAML definitions
-of required initialization in Netbox.
+The script facilitates the initial bootstrapping of fresh Netbox instance, further testing and
+development of SCS Landscape. Note that the script is not limited to SCS Landscape. The reader
+could create own YAML definitions of required initialization in Netbox.
 
 ```bash
 ./netbox_init.py --api-url <netbox-url> --api-token <netbox-token> --sync-datasources --sync-config-templates --data-dir landscape
