@@ -76,15 +76,19 @@ def tcp_test_connect(host: str, port: int, timeout: float = 5):
 def check_power_servers(host_list: list[str]):
     host_data = parse_configuration_data()["servers"]
     for host_name in host_list:
-        (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
-        if check_power_off(redfish_url, http_auth):
-            LOGGER.warning(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered OFF")
-        else:
-            if tcp_test_connect(host_data[host_name]['node_ip_v4'], 22, 0.5):
-                reachable = "online (tcp 22/ssh)"
+        try:
+            (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
+            if check_power_off(redfish_url, http_auth):
+                LOGGER.warning(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered OFF")
             else:
-                reachable = "not reachable on tcp port 22/ssh"
-            LOGGER.info(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered ON, {reachable}")
+                if tcp_test_connect(host_data[host_name]['node_ip_v4'], 22, 0.5):
+                    reachable = "online (tcp 22/ssh)"
+                else:
+                    reachable = "not reachable on tcp port 22/ssh"
+                LOGGER.info(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered ON, {reachable}")
+        except NotImplementedError:
+            LOGGER.warning(f"Skipping system {host_name}, because redfish is not implemented")
+
 
 
 def wait_power_off(url: str, http_auth: HTTPBasicAuth):
@@ -117,7 +121,7 @@ def _setup_bmc_connection(host_details: dict[str, str]):
 
     if host_details["device_model"].startswith("ARS"):
         # https://github.com/openbmc/docs/blob/master/REDFISH-cheatsheet.md
-        raise RuntimeError("redfish not implemented")
+        raise NotImplementedError("redfish not implemented")
 
     redfish_url = "https://%s/redfish/v1" % host_details["bmc_ip_v4"]
 
