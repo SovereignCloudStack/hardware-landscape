@@ -267,7 +267,8 @@ def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
 
         replacements: list[tuple[str, str]] = [
             tuple((r"File generated at ....-..-.._..:..:..", r"File generated at UNIFIED")),
-            tuple((r"<DateTimeValue>..+</DateTimeValue>", r"<DateTimeValue>2024/1/1 11:11</DateTimeValue>"))
+            tuple((r"<DateTimeValue>..+</DateTimeValue>", r"<DateTimeValue>2024/1/1 11:11</DateTimeValue>")),
+            tuple((r"<DateTime>..+</DateTime>", r"<DateTime>2024/1/1 11:11</DateTime>"))
         ]
 
         if filetype in ["bios", "both"]:
