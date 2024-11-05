@@ -1,0 +1,69 @@
+---
+- name: Initialize or upgrade the CAPI management cluster
+  hosts:
+    - "{{ hosts_manager|default(groups['manager'][0])|default('localhost') }}"
+  connection: local
+  gather_facts: false
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+    capi_version: 1.8.1
+    capo_version: 0.10.4
+
+  tasks:
+    - name: Get capi-system namespace phase
+      ansible.builtin.shell: |
+        set -o pipefail
+
+        export KUBECONFIG=/share/kubeconfig
+
+        kubectl get ns capi-system -o json --ignore-not-found=true | jq .status.phase -r
+      args:
+        executable: /bin/bash
+      register: result
+      changed_when: false
+
+    - name: Set capi-system-phase fact
+      ansible.builtin.set_fact:
+        capi_system_phase: "{{ result.stdout_lines[0] | default('') }}"
+
+    - name: Initialize the CAPI management cluster
+      ansible.builtin.shell: |
+        set -o pipefail
+
+        export KUBECONFIG=/share/kubeconfig
+        export EXP_CLUSTER_RESOURCE_SET=true
+        export CLUSTER_TOPOLOGY=true
+        export GOPROXY=off
+
+        clusterctl init \
+          --core cluster-api:v{{ capi_version }} \
+          --bootstrap kubeadm:v{{ capi_version }} \
+          --control-plane kubeadm:v{{ capi_version }} \
+          --infrastructure openstack:v{{ capo_version }};
+      args:
+        executable: /bin/bash
+      register: result
+      changed_when: "'Your management cluster has been initialized successfully' in result.stdout"
+      when: capi_system_phase == ""
+
+    - name: Upgrade the CAPI management cluster
+      ansible.builtin.shell: |
+        set -o pipefail
+
+        export KUBECONFIG=/share/kubeconfig
+        export EXP_CLUSTER_RESOURCE_SET=true
+        export CLUSTER_TOPOLOGY=true
+        export GOPROXY=off
+
+        clusterctl upgrade apply \
+          --core cluster-api:v{{ capi_version }} \
+          --bootstrap kubeadm:v{{ capi_version }} \
+          --control-plane kubeadm:v{{ capi_version }} \
+          --infrastructure openstack:v{{ capo_version }};
+      args:
+        executable: /bin/bash
+      register: result
+      changed_when: "'Performing upgrade' in result.stdout"
+      when: capi_system_phase == "Active"
