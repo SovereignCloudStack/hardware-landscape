@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 import sys
+import uuid
 from enum import Enum
 from typing import Any
 
@@ -13,7 +14,6 @@ from jinja2 import FileSystemLoader, Environment, StrictUndefined
 from .global_helpers import get_ansible_host_inventory_dir, get_basedir
 
 LOGGER = logging.getLogger()
-
 
 @functools.lru_cache
 def parse_configuration_data() -> dict[str, dict[str, dict[str, str]]]:
@@ -131,7 +131,7 @@ def create_configs(host_list: list[str], config_type: str):
             LOGGER.info(f"** {host_name}")
 
             if 'bmc_ip_v4' in host_data[host_name]:
-                f_out.write(f"Host scs-{host_name}-bmc\n")
+                f_out.write(f"Host scs-{host_name}-bmc {host_name}-bmc\n")
                 f_out.write(f"   Hostname {host_data[host_name]['bmc_ip_v4']}\n")
 
                 if host_data[host_name]["device_vendor"] == "Supermicro":
@@ -142,7 +142,7 @@ def create_configs(host_list: list[str], config_type: str):
                 f_out.write("\n")
 
             if 'node_ip_v4' in host_data[host_name]:
-                f_out.write(f"Host scs-{host_name}\n")
+                f_out.write(f"Host scs-{host_name} {host_name}\n")
                 f_out.write(f"   Hostname {host_data[host_name]['node_ip_v4']}\n")
                 f_out.write("\n")
 

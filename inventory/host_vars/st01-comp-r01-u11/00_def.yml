@@ -1,0 +1,8 @@
+network_tunnels:
+  vxlan80:
+    mode: vxlan
+    id: 80
+    local: 10.10.21.26
+    addresses: [ 10.80.0.4/20 ]
+    remote: 10.10.21.10
+
