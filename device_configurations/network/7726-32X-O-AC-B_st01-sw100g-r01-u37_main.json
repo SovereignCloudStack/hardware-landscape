@@ -438,30 +438,39 @@
       "POLL_INTERVAL": "10000"
     },
     "BUFFER_POOL_WATERMARK": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PFCWD": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PG_DROP": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PG_WATERMARK": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PORT": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PORT_BUFFER_DROP": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "QUEUE": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "QUEUE_WATERMARK": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "RIF": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     }
   },
