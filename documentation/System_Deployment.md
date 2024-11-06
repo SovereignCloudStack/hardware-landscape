@@ -182,6 +182,7 @@ For the steps described in the osd configurtion there are the following exceptio
 1. Install all steps from [OpenStack](https://osism.tech/de/docs/guides/deploy-guide/services/openstack)
    except `osism apply octavia`
 2. Execute the environment setup
+   (There is currently a bug: #61)
    ```
    osism apply scs_landscape_setup
    ```
@@ -245,4 +246,6 @@ project and machine name parameters.
   openstack server list --all-projects --long
   ./landscape_ctl --delete_domains workload{1..5}
   ```
+
+
 

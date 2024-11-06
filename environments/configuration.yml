@@ -211,6 +211,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45013
+    state: absent
     groups:
       - docker
       - dialout
@@ -246,7 +247,7 @@ hosts_additional_entries:
 ##########################
 # ceph
 
-# TODO: can be removed when the follwing PR is released: 
+# TODO: can be removed when the follwing PR is released: https://github.com/osism/defaults/pull/225
 monitor_interface: "dummy0"
 radosgw_interface: "dummy0"
 rgw_multisite: false

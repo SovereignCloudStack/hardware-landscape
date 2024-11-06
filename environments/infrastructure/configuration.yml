@@ -3,7 +3,7 @@
 # netbox
 
 netbox_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}"
-netbox_tag: 'v4.0.8'
+netbox_tag: 'v4.1.4'
 netbox_userid: 'unit:root'
 netbox_plugins_defaults:
   - netbox_initializers

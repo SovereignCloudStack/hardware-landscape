@@ -41,6 +41,8 @@ enable_keepalived: no
 ##########################################################
 # openstack
 
+neutron_external_interface: vxlan80
+
 # disable services
 enable_heat: "no"
 
