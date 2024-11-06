@@ -1,10 +1,7 @@
 import json
 import difflib
-import yaml
-import re
 
 from netmiko import ConnectHandler
-from netmiko.exceptions import NetmikoBaseException
 from jinja2.exceptions import TemplateError
 from netutils.config.compliance import diff_network_config
 
@@ -19,18 +16,9 @@ from django.db.models import Q
 from dcim.models import Device
 from extras.scripts import Script, ObjectVar, AbortScript, MultiObjectVar
 
-# Custom dumper to handle multiline strings
-def str_presenter(dumper, data):
-    if '\n' in data:  # Check for multiline string
-        return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
-    return dumper.represent_scalar('tag:yaml.org,2002:str', data)
-
-# Add the custom string presenter
-yaml.add_representer(str, str_presenter)
-
 
 class ConnError(Exception):
-    """"""
+    pass
 
 class CustomChoiceVar(ScriptVariable):
     form_field = ChoiceField
@@ -39,13 +27,6 @@ class CustomChoiceVar(ScriptVariable):
         super().__init__(*args, **kwargs)
         self.field_attrs["choices"] = choices
 
-
-def parse_current_configuration(frr_config):
-    # Regular expression to match the "Current configuration:" and everything that follows
-    match = re.search(r"Current configuration:\n(.+)", frr_config, re.DOTALL)
-    if match:
-        return match.group(1).strip()
-    return None
 
 class SonicConfigDiff(Script):
     class Meta:
@@ -80,8 +61,8 @@ class SonicConfigDiff(Script):
         sonic_device = {
             "device_type": "linux",
             "host": str(device.primary_ip.address.ip),
-            "username": "admin",  # FIXME: Use Netbox secret
-            "password": "YourPaSsWoRd",  # FIXME: Use Netbox secret
+            "username": "admin",  # FIXME: Use Netbox secret to store the username
+            "password": "YourPaSsWoRd",  # FIXME: Use Netbox secret to store the password
             "port": 22,
         }
         try:
@@ -95,15 +76,6 @@ class SonicConfigDiff(Script):
             return connection.send_command("sudo show runningconfiguration all")
         except Exception as err:
             raise ConnError(f"Retrieve SONiC config failed: {err}")
-
-    @staticmethod
-    def get_sonic_frr_conf(connection):
-        try:
-            frr_config = connection.send_command("sudo show runningconfiguration bgp")
-        except Exception as err:
-            raise ConnError(f"Retrieve SONiC config failed: {err}")
-
-        return parse_current_configuration(frr_config)
 
     @staticmethod
     def get_netbox_config(device):
@@ -166,36 +138,14 @@ class SonicConfigDiff(Script):
             try:
                 with self.get_device_connection(device) as connection:
                     config_db_json = self.get_sonic_config_db(connection)
-                    frr_conf = self.get_sonic_frr_conf(connection)
             except ConnError as err:
                 device_err = err
 
-            # FIXME: We have to join config_db.json and frr config into one yaml as follows:
-            # ```yaml
-            # config_db.json: |
-            #   {
-            #     ...
-            #   }
-            # frr.conf: |
-            #   !
-            #   frr version 8.1
-            #   ...
-            # ```
-            # The reason is that current SCS Landscape SONiC switches do not utilize
-            # frr-mgmt-framework yet
-            # IMO is it a good idea to use that frr framework and simplify all the management
-            # around with one and only one SONiC config file.
-
-            # Nore: We have to use 2 spaces for indentation as the device config_db.json stored in Netbox
+            # Note: We have to use 2 spaces for indentation as the device config_db.json stored in Netbox
             # and in backups contains 2 spaces. SONiC's command `show runningconfig all` applies
             # 4 spaces. We have to adjust indentation to have a nice diff.
             if not device_err:
-                config_db = json.dumps(json.loads(config_db_json), indent=2)
-                device_config = yaml.dump({
-                    "config_db.json": config_db,
-                    "frr.conf": frr_conf
-                }, default_flow_style=False)
-
+                device_config = json.dumps(json.loads(config_db_json), indent=2)
                 netbox_config = self.get_netbox_config(device)
 
                 diff = difflib.unified_diff(
