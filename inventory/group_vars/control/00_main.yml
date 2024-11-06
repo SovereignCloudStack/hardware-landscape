@@ -37,8 +37,10 @@ logical_volumes:
     size: '20G'
     resizefs: true
     force: true
+    mountpoint: '/var/lib/mariadb'
   - lv: 'rabbitmq'
     vg: 'system'
     size: '10G'
     resizefs: true
     force: true
+    mountpoint: '/var/lib/rabbitmq'
