@@ -14,7 +14,8 @@ from dcim.models import Device, DeviceRole, Site
 from django.conf import settings
 from django.db.models import Q
 from dcim.models import Device
-from extras.scripts import Script, ObjectVar, AbortScript, MultiObjectVar
+from utilities.exceptions import AbortScript
+from extras.scripts import Script, ObjectVar, MultiObjectVar
 
 
 class ConnError(Exception):
