@@ -46,3 +46,6 @@ logical_volumes:
     resizefs: true
     force: true
     mountpoint: '/var/lib/rabbitmq'
+
+rabbitmq_datadir_volume: '/var/lib/rabbitmq'
+mariadb_datadir_volume: '/var/lib/mariadb'
