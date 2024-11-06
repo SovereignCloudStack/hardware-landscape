@@ -10,3 +10,34 @@
   loop_control:
     loop_var: lv_item
   tags: manage_lvm
+- name: Create mount points
+  ansible.builtin.file:
+    path: '{{ lv_item.mountpoint }}'
+    mode: '{{ lv_item.mode | default("0701") }}'
+    owner: '{{ lv_item.owner | default("root") }}'
+    group: '{{ lv_item.group | default("root") }}'
+    state: directory
+  loop: '{{ logical_volumes }}'
+  loop_control:
+    loop_var: lv_item
+  when: lv_item.mountpoint is defined
+- name: Format LV
+  ansible.builtin.filesystem:
+    fstype: '{{ lv_item.filesystem | default("ext4") }}'
+    dev: '/dev/mapper/{{ lv_item.vg }}-{{ lv_item.lv }}'
+  loop: '{{ logical_volumes }}'
+  loop_control:
+    loop_var: lv_item
+  when: lv_item.mountpoint is defined
+
+- name: Mount LVM logical volmes
+  ansible.builtin.mount:
+    path: '{{ lv_item.mountpoint }}'
+    src: '/dev/mapper/{{ lv_item.vg }}-{{ lv_item.lv }}'
+    fstype: '{{ lv_item.filesystem | default("ext4") }}'
+    opts: defaults,noatime,nodiratime
+    state: mounted
+  loop: '{{ logical_volumes }}'
+  loop_control:
+    loop_var: lv_item
+  when: lv_item.mountpoint is defined
