@@ -10,3 +10,13 @@
   loop_control:
     loop_var: lv_item
   tags: manage_lvm
+- name: Mount LVM logical volmes
+  ansible.builtin.mount:
+    path: '{{ lv_item.mountpoint }}'
+    src: '/dev/mapper/{{ lv_item.vg }}-{{ lv_item.lv }}'
+    fstype: ext4
+    opts: defaults,noatime,nodiratime
+    state: mounted
+  loop: '{{ logical_volumes }}'
+  loop_control:
+    loop_var: lv_item
