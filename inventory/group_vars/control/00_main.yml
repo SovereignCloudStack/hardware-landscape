@@ -32,3 +32,13 @@ logical_volumes:
     size: '100G'
     resizefs: true
     force: true
+  - lv: 'mariadb'
+    vg: 'system'
+    size: '20G'
+    resizefs: true
+    force: true
+  - lv: 'rabbitmq'
+    vg: 'system'
+    size: '10G'
+    resizefs: true
+    force: true
