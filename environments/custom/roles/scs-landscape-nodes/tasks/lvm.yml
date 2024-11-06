@@ -20,3 +20,4 @@
   loop: '{{ logical_volumes }}'
   loop_control:
     loop_var: lv_item
+  when: lv_item.mountpoint is defined
