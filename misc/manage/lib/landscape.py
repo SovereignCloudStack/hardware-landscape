@@ -25,7 +25,7 @@ PROJECT_CACHE: dict[str,dict[str,str]] = dict()
 
 def get_config(key: str, regex: str = ".+",
                multi_line: bool = False, parent_key: str = None, default: str | list[str] = None ) -> str | list[str]:
-    lines = default
+    lines = [default]
     try:
         if parent_key:
             lines = str(CONFIG[parent_key][key]).splitlines()
@@ -35,7 +35,6 @@ def get_config(key: str, regex: str = ".+",
         LOGGER.info(f"config does not contain : {parent_key} -> {key} : {pformat(CONFIG)}")
         if lines is None:
             sys.exit(1)
-
 
     if len(lines) > 1 and multi_line is False:
         LOGGER.error(f"{key}='{CONFIG[key]}' contains multiple lines")
@@ -432,7 +431,7 @@ class SCSLandscapeTestMachine:
     def wait_for_server(self):
         self.conn.compute.wait_for_server(
             self.obj,
-            wait=int(get_config("wait_for_server_timeout",regex=r"\d+", default="300"))
+            wait=int(get_config("wait_for_server_timeout", regex=r"\d+", default="300"))
         )
 
     def start_server(self):
