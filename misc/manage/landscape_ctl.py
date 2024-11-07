@@ -10,6 +10,7 @@ import time
 from pprint import pprint, pformat
 
 import yaml
+from keystoneauth1 import session
 
 from lib.global_helpers import setup_logging, get_ansible_secrets
 from openstack.connection import Connection
@@ -75,7 +76,9 @@ setup_logging(args.log_level)
 def establish_connection():
     config = loader.OpenStackConfig()
     cloud_config = config.get_one(args.os_cloud)
-    return Connection(config=cloud_config)
+    auth = cloud_config.get_auth()
+    sess = session.Session(auth=auth)
+    return Connection(config=cloud_config, session=sess)
 
 def show_effective_config():
     try:
@@ -122,7 +125,6 @@ if args.create_domains:
     for scs_domain in scs_domains.values():
         for project in scs_domain.scs_projects.values():
             project.get_and_create_machines(args.create_machines)
-            project.close_connection()
 
     duration = (time.time() - time_start) / 60
     item_rate = duration / (count_domains + count_projects + count_hosts)

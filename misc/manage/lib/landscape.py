@@ -1,6 +1,7 @@
 import logging
 import re
 import sys
+from asyncio import timeout
 from pprint import pformat
 
 from openstack.exceptions import ResourceNotFound, SDKException
@@ -266,8 +267,8 @@ class SCSLandscapeTestNetwork:
         if self.obj_ingress_security_group:
             return self.obj_ingress_security_group
 
-        LOGGER.info(f"Creating ingress security group {self.security_group_name_ingress} for "
-                    f"project {self.project.name}/{self.project.domain_id}")
+        LOGGER.info(
+            f"Creating ingress security group {self.security_group_name_ingress} for {project_ident(self.project.id)}")
         self.obj_ingress_security_group = self.conn.network.create_security_group(
             name=self.security_group_name_ingress,
             description="Security group to allow SSH access to instances"
@@ -429,7 +430,10 @@ class SCSLandscapeTestMachine:
             self.conn.compute.add_security_group_to_server(self.obj, sec_obj_egress)
 
     def wait_for_server(self):
-        self.conn.compute.wait_for_server(self.obj)
+        self.conn.compute.wait_for_server(
+            self.obj,
+            wait=int(get_config("wait_for_server_timeout",regex=r"\d+", default="300"))
+        )
 
     def start_server(self):
         if self.obj.status != 'ACTIVE':
@@ -518,8 +522,7 @@ class SCSLandscapeTestProject:
     def assign_role_to_user_for_project(self, role_name: str):
         self._admin_conn.identity.assign_project_role_to_user(
             user=self.user.obj.id, project=self.obj.id, role=self.get_role_id_by_name(role_name))
-        LOGGER.info(f"Assigned {role_name} to {self.user.obj.id} for "
-                    f"project {self.obj.id}/{self.obj.domain_id}")
+        LOGGER.info(f"Assigned {role_name} to {self.user.obj.id} for {project_ident(self.obj.id)}")
 
     def assign_role_to_global_admin_for_project(self, role_name: str):
         user_id = self._admin_conn.session.get_user_id()
@@ -539,7 +542,7 @@ class SCSLandscapeTestProject:
                     sys.exit()
                 new_value = int(get_config(key_name, r"\d+", parent_key="compute_quotas", default=str(getattr(current_quota, key_name))))
                 if current_value != new_value:
-                    LOGGER.info(f"New compute quota for {project_ident(self.obj.id)} - "
+                    LOGGER.info(f"New compute quota for {project_ident(self.obj.id)}"
                                 f": {key_name} : {current_value} -> {new_value}")
                     new_quota[key_name] = new_value
         if len(new_quota):
@@ -608,7 +611,6 @@ class SCSLandscapeTestProject:
         ##########################################################################################
 
     def get_and_create_machines(self, machines: list[str]):
-
         for nr, machine_name in enumerate(sorted(machines)):
             machine = SCSLandscapeTestMachine(self.project_conn, self.obj, machine_name, self.security_group_name_ingress, self.security_group_name_egress)
             machine.create_or_get_server(self.scs_network.obj_network)
@@ -617,6 +619,7 @@ class SCSLandscapeTestProject:
         for nr, machine in enumerate(self.scs_machines):
             if nr == 0:
                 machine.add_floating_ip()
+        self.close_connection()
 
     def get_or_create_ssh_key(self):
         self.ssh_key = self.project_conn.compute.find_keypair(KEYPAIR_NAME)
@@ -701,6 +704,7 @@ class SCSLandscapeTestDomain:
             project.create_and_get_project()
             project.get_or_create_ssh_key()
             self.scs_projects[project_name] = project
+            project.close_connection()
 
     def create_and_get_machines(self, machines: list[str]):
         for project in self.scs_projects.values():
