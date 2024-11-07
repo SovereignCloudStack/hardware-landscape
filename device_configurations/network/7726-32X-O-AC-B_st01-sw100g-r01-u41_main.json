@@ -126,7 +126,7 @@
     "default|Ethernet120": {
       "peer_group_name": "spine"
     },
-    "default|PortChannel1": {
+    "default|PortChannel01": {
       "peer_group_name": "server"
     }
   },
@@ -245,7 +245,7 @@
       "buffer_model": "traditional",
       "default_bgp_status": "up",
       "default_pfcwd_status": "disable",
-      "docker_router_config_mode": "unified",
+      "docker_routing_config_mode": "unified",
       "frr_mgmt_framework_config": "true",
       "hostname": "st01-sw100g-r01-u41",
       "hwsku": "Accton-AS7726-32X",
@@ -283,7 +283,7 @@
       "has_per_asic_scope": "False",
       "high_mem_alert": "disabled",
       "set_owner": "local",
-      "state": "enabled",
+      "state": "disabled",
       "support_syslog_rate_limit": "True"
     },
     "eventd": {
@@ -420,79 +420,128 @@
   "FLEX_COUNTER_TABLE": {
     "ACL": {
       "FLEX_COUNTER_DELAY_STATUS": "false",
-      "FLEX_COUNTER_STATUS": "disable",
+      "FLEX_COUNTER_STATUS": "enable",
       "POLL_INTERVAL": "10000"
     },
     "BUFFER_POOL_WATERMARK": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PFCWD": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PG_DROP": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PG_WATERMARK": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PORT": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PORT_BUFFER_DROP": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "QUEUE": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "QUEUE_WATERMARK": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "RIF": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     }
   },
   "INTERFACE": {
-    "Ethernet0": {},
-    "Ethernet100": {},
-    "Ethernet104": {},
-    "Ethernet108": {},
-    "Ethernet112": {},
-    "Ethernet116": {},
-    "Ethernet12": {},
-    "Ethernet120": {},
-    "Ethernet124": {},
-    "Ethernet16": {},
-    "Ethernet20": {},
-    "Ethernet24": {},
-    "Ethernet28": {},
-    "Ethernet32": {},
-    "Ethernet36": {},
-    "Ethernet4": {},
-    "Ethernet40": {},
-    "Ethernet44": {},
-    "Ethernet48": {},
-    "Ethernet52": {},
-    "Ethernet56": {},
-    "Ethernet60": {},
-    "Ethernet64": {},
-    "Ethernet68": {},
-    "Ethernet72": {},
-    "Ethernet76": {},
-    "Ethernet8": {},
-    "Ethernet80": {},
-    "Ethernet84": {},
-    "Ethernet88": {},
-    "Ethernet92": {},
-    "Ethernet96": {}
+    "Ethernet0": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet100": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet112": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet116": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet12": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet120": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet124": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet16": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet20": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet24": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet28": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet32": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet36": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet4": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet40": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet44": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet48": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet52": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet56": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet60": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet64": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet68": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet72": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet76": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet8": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet80": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet84": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet88": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet92": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet96": {
+      "ipv6_use_link_local_only": "enable"
+    }
   },
   "KDUMP": {
     "config": {
@@ -845,7 +894,6 @@
   },
   "LOOPBACK_INTERFACE": {
     "Loopback0": {},
-    "Loopback0|10.1.0.1/32": {},
     "Loopback0|10.10.21.41/32": {}
   },
   "MGMT_INTERFACE": {
@@ -1140,7 +1188,7 @@
     }
   },
   "PORTCHANNEL": {
-    "PortChannel1": {
+    "PortChannel01": {
       "admin_status": "up",
       "fallback": "true",
       "fast_rate": "false",
@@ -1150,13 +1198,13 @@
     }
   },
   "PORTCHANNEL_INTERFACE": {
-    "PortChannel1": {
+    "PortChannel01": {
       "ipv6_use_link_local_only": "enable"
     }
   },
   "PORTCHANNEL_MEMBER": {
-    "PortChannel1|Ethernet104": {},
-    "PortChannel1|Ethernet108": {}
+    "PortChannel01|Ethernet104": {},
+    "PortChannel01|Ethernet108": {}
   },
   "ROUTE_MAP": {
     "ALLOW|1": {
