@@ -47,9 +47,10 @@ docker run --rm --network host \
 
 Note: The above should work for a local instance of NetBox available on localhost (tested).
 We observed an issue with authentication when accessing the NetBox API via VPN. This could
-be caused by an older version of the netbox-device-type-library-import available in the container.
-If you encounter the same issue, use the latest version of the script and execute it from the source.
-See [Getting Started guide](https://github.com/netbox-community/Device-Type-Library-Import?tab=readme-ov-file#-getting-started) for more details.
+be caused by an older version of the netbox-device-type-library-import available in the container, however,
+the latest version of netbox-device-type-library-import does not import full spec of devices (tested).
+Currently, only manual import to netbox instance accessing via VPN works without issues.
+TODO: Investigate the root cause, alternatively extend netbox_init.py script with the device-type imports.
 
 ## Import SCS Landscape
 
