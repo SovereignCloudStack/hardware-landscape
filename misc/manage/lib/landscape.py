@@ -32,7 +32,7 @@ def get_config(key: str, regex: str = ".+",
         else:
             lines = str(CONFIG[key]).splitlines()
     except KeyError as e:
-        LOGGER.info(f"config does not contain : {parent_key} -> {key} using {default}")
+        LOGGER.info(f"config does not contain : {parent_key or 'ROOT'} -> {key}, using {default}")
         if lines is None:
             sys.exit(1)
 
@@ -617,7 +617,7 @@ class SCSLandscapeTestProject:
             machine = SCSLandscapeTestMachine(self.project_conn, self.obj, machine_name, self.security_group_name_ingress, self.security_group_name_egress)
             machine.create_or_get_server(self.scs_network.obj_network)
             self.scs_machines.append(machine)
-
+            
         for nr, machine in enumerate(self.scs_machines):
             if nr == 0:
                 machine.add_floating_ip()
