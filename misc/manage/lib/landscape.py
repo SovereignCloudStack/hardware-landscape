@@ -609,14 +609,14 @@ class SCSLandscapeTestProject:
 
     def get_and_create_machines(self, machines: list[str]):
 
-        sorted_machines = sorted(machines)
-
-        for nr, machine_name in enumerate(sorted_machines):
+        for nr, machine_name in enumerate(sorted(machines)):
             machine = SCSLandscapeTestMachine(self.project_conn, self.obj, machine_name, self.security_group_name_ingress, self.security_group_name_egress)
             machine.create_or_get_server(self.scs_network.obj_network)
+            self.scs_machines.append(machine)
+
+        for nr, machine in enumerate(self.scs_machines):
             if nr == 0:
                 machine.add_floating_ip()
-            self.scs_machines.append(machine)
 
     def get_or_create_ssh_key(self):
         self.ssh_key = self.project_conn.compute.find_keypair(KEYPAIR_NAME)
@@ -629,7 +629,8 @@ class SCSLandscapeTestProject:
 
     def close_connection(self):
         LOGGER.info(f"Closing connection for {project_ident(self.obj.id)}")
-        self.project_conn.close()
+        self._project_conn.close()
+        self._project_conn = None
 
 class SCSLandscapeTestDomain:
 

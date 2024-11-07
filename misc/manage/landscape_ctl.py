@@ -6,6 +6,7 @@ import logging
 import re
 import sys
 import os
+import time
 from pprint import pprint, pformat
 
 import yaml
@@ -97,6 +98,8 @@ if args.show_secrets:
         print(json.dumps(secret_data, indent=2))
     sys.exit(0)
 
+time_start = time.time()
+
 if args.create_domains:
     conn = establish_connection()
     show_effective_config()
@@ -120,6 +123,10 @@ if args.create_domains:
         for project in scs_domain.scs_projects.values():
             project.get_and_create_machines(args.create_machines)
             project.close_connection()
+
+    duration = (time.time() - time_start) / 60
+    item_rate = duration / (count_domains + count_projects + count_hosts)
+    LOGGER.info(f"Execution finished after {int(duration)} minutes, item rate {item_rate}/item")
 
 if args.delete_domains:
     conn = establish_connection()
