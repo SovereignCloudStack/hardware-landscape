@@ -115,7 +115,7 @@
 
   {#- Filter out interfaces that are not management, not virtual, and not members of LAG #}
   {%- for interface in device.interfaces.all() %}
-    {%- if interface.mgmt_only != true and not interface.ip_addresses.first() and not interface.is_virtual and interface.name not in lag_member_interfaces %}
+    {%- if interface.enabled and interface.mgmt_only != true and not interface.ip_addresses.first() and not interface.is_virtual and interface.name not in lag_member_interfaces %}
       {%- set _ = filtered_interfaces.append(interface) %}
     {%- endif %}
   {%- endfor %}
