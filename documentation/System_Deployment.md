@@ -246,11 +246,7 @@ Test scenario:
 
 * Create the scenario
   ```
-  ./landscape_ctl \
-    --config smoketest.yaml \
-    --create_domains workload{1..9} \
-    --create_projects project{1..11} \
-    --create_machines testvm{1..6}
+  ./landscape_ctl --config smoketest.yaml --create_domains workload{1..9} --create_projects project{1..11} --create_machines testvm{1..6}
   openstack domain list
   openstack project list --long
   openstack server list --all-projects --long

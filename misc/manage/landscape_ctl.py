@@ -6,12 +6,14 @@ import logging
 import re
 import sys
 import os
+import time
 from pprint import pprint, pformat
 
 import yaml
+from keystoneauth1 import session
 
 from lib.global_helpers import setup_logging, get_ansible_secrets
-from openstack import connection
+from openstack.connection import Connection
 from openstack.config import loader
 
 import lib.landscape
@@ -27,11 +29,15 @@ parser.add_argument('--log_level', metavar='loglevel', type=str,
                     default="INFO", help='The loglevel')
 
 
-def cloud_checker(value):
+def cloud_checker(value: str) -> str:
     if not re.fullmatch("[a-zA-Z0-9]+", value):
         raise argparse.ArgumentTypeError('specify a value for os_cloud')
     return value
 
+def item_checker(value: str) -> str:
+    if not re.fullmatch(r"[a-zA-Z0-9]+[a-zA-Z0-9\-]*[a-zA-Z0-9]+", value):
+        raise argparse.ArgumentTypeError('specify a valid name for an item')
+    return value
 
 parser.add_argument('--os_cloud', type=cloud_checker,
                     default=os.environ.get("OS_CLOUD", "admin"),
@@ -46,19 +52,19 @@ parser.add_argument('--config', type=str,
 
 exclusive_group = parser.add_mutually_exclusive_group(required=True)
 
-exclusive_group.add_argument('--create_domains', type=str, nargs="+", default=None,
+exclusive_group.add_argument('--create_domains', type=item_checker, nargs="+", default=None,
                              help='A list of domains to be created')
 
-exclusive_group.add_argument('--delete_domains',  type=str, nargs="+", default=None,
+exclusive_group.add_argument('--delete_domains',  type=item_checker, nargs="+", default=None,
                              help='A list of domains to be deleted')
 
 exclusive_group.add_argument('--show_secrets', '-s', type=str, nargs="+", default=None,
                              help='Show all or a number of secrets')
 
-parser.add_argument('--create_projects', '-p', type=str, nargs="+", default=["test1"],
+parser.add_argument('--create_projects', '-p', type=item_checker, nargs="+", default=["test1"],
                     help='A list of projects to be created in the created domains')
 
-parser.add_argument('--create_machines', '-m', type=str, nargs="+", default=["test1"],
+parser.add_argument('--create_machines', '-m', type=item_checker, nargs="+", default=["test1"],
                     help='A list of vms to be created in the created domains')
 args = parser.parse_args()
 
@@ -70,9 +76,9 @@ setup_logging(args.log_level)
 def establish_connection():
     config = loader.OpenStackConfig()
     cloud_config = config.get_one(args.os_cloud)
-    conn = connection.Connection(config=cloud_config)
-    return conn
-
+    auth = cloud_config.get_auth()
+    sess = session.Session(auth=auth)
+    return Connection(config=cloud_config, session=sess)
 
 def show_effective_config():
     try:
@@ -94,6 +100,8 @@ if args.show_secrets:
     else:
         print(json.dumps(secret_data, indent=2))
     sys.exit(0)
+
+time_start = time.time()
 
 if args.create_domains:
     conn = establish_connection()
@@ -117,6 +125,11 @@ if args.create_domains:
     for scs_domain in scs_domains.values():
         for project in scs_domain.scs_projects.values():
             project.get_and_create_machines(args.create_machines)
+
+    duration = (time.time() - time_start) / 60
+    item_rate = duration / (count_domains + count_projects + count_hosts)
+    LOGGER.info(f"Execution finished after {int(duration)} minutes, item rate {item_rate}/item")
+
 if args.delete_domains:
     conn = establish_connection()
     show_effective_config()
