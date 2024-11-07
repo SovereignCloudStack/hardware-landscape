@@ -239,13 +239,20 @@ project and machine name parameters.
 
 ### Create a larger amount of domains, projects and virtual machines
 
+Test scenario:
+  * 9 domains, with 11 projects, with 594 machines in summary
+  * 4GB RAM per machine, 2.3TB RAM in total
+  * 10GB Disk per machine, 5.9TB DISK in total
+
+* Create the scenario
   ```
-  ./landscape_ctl --create_domains workload{1..9} --create_projects project{1..9} --create_machines testvm{1..9}
+  ./landscape_ctl --config smoketest.yaml --create_domains workload{1..9} --create_projects project{1..11} --create_machines testvm{1..6}
   openstack domain list
   openstack project list --long
   openstack server list --all-projects --long
-  ./landscape_ctl --delete_domains workload{1..5}
   ```
 
-
-
+* Purge the scenario
+  ```
+  ./landscape_ctl --delete_domains workload{1..9}
+  ```
