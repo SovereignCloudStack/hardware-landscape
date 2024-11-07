@@ -19,6 +19,8 @@ KEYPAIR_NAME = "my_ssh_public_key"
 LOGGER = logging.getLogger()
 
 CONFIG: dict[str,str|dict[str, str]] = dict()
+DOMAIN_CACHE: dict[str,str] = dict()
+PROJECT_CACHE: dict[str,dict[str,str]] = dict()
 
 def get_config(key: str, regex: str = ".+",
                multi_line: bool = False, parent_key: str = None, default: str | list[str] = None ) -> str | list[str]:
@@ -48,6 +50,17 @@ def get_config(key: str, regex: str = ".+",
     else:
         return [str(val) for val in lines]
 
+def domain_ident(domain_id: str) -> str:
+    if domain_id not in DOMAIN_CACHE:
+        raise RuntimeError(f"There is no domain with id {domain_id}")
+    return f"domain '{DOMAIN_CACHE[domain_id]}/{domain_id}'"
+
+def project_ident(project_id: str) -> str:
+    if project_id not in PROJECT_CACHE:
+        raise RuntimeError(f"There is no project with id {project_id}")
+    return f"project '{PROJECT_CACHE[project_id]["name"]}/{project_id}' in {domain_ident(PROJECT_CACHE[project_id]["domain_id"])}"
+
+
 class SCSLandscapeTestUser:
 
     def __init__(self, conn: Connection, user_name: str, domain: Domain):
@@ -59,12 +72,12 @@ class SCSLandscapeTestUser:
 
     def assign_role_to_user(self, role_name: str):
         self.conn.identity.assign_project_role_to_user(self.obj.id, self.domain.id, self.get_role_id_by_name(role_name))
-        LOGGER.info(f"Assigned role '{role_name}' to user '{self.obj.name}' in domain '{self.domain.name}'")
+        LOGGER.info(f"Assigned role '{role_name}' to user '{self.obj.name}' in {domain_ident(self.domain.id)}")
 
     def create_and_get_user(self) -> User:
 
         if self.obj:
-            LOGGER.info(f"User {self.user_name} already exists in {self.domain.name}")
+            LOGGER.info(f"User {self.user_name} already exists in {domain_ident(self.domain.id)}")
             return self.obj
 
         self.obj = self.conn.identity.create_user(
@@ -75,7 +88,7 @@ class SCSLandscapeTestUser:
         )
         self.assign_role_to_user("manager")
         LOGGER.info(
-            f"Created user {self.obj.name} / {self.obj.id} with password {self.obj.password} in {self.domain.name}")
+            f"Created user {self.obj.name} / {self.obj.id} with password {self.obj.password} in {domain_ident(self.domain.id)}")
         return self.obj
 
     def delete_user(self):
@@ -115,7 +128,7 @@ class SCSLandscapeTestNetwork:
     def _find_security_group(name, conn: Connection, project: Project) -> SecurityGroup | None:
         security_groups = [group for group in conn.network.security_groups(name=name, project_id=project.id, domain_id=project.domain_id)]
         if len(security_groups) > 1:
-            raise RuntimeError(f"Error fetching security group for project {project.name}/{project.domain_id} - {e}")
+            raise RuntimeError(f"Error fetching security group for project {project.name}/{project.domain_id}")
         elif len(security_groups) == 1:
             return security_groups[0]
         return None
@@ -226,21 +239,28 @@ class SCSLandscapeTestNetwork:
             self.conn.delete_router(self.obj_router)
             LOGGER.warning(f"Deleted router {self.obj_router.id}/{self.obj_router.name}")
 
-        if not self.obj_network:
-            return
+        if self.obj_network:
+            for subnet_id in self.obj_network.subnet_ids:
+                try:
+                    subnet_obj = self.conn.get_subnet_by_id(subnet_id)
+                    if subnet_obj:
+                        for port in self.conn.network.ports():
+                            #port_subnet_ids = [x["subnet_id"] for x in port.fixed_ips if port.status == "DOWN"]
+                            port_subnet_ids = [x["subnet_id"] for x in port.fixed_ips]
+                            if subnet_obj.id in port_subnet_ids:
+                                LOGGER.warning(f"Delete port {port}")
+                                if port.device_owner == "network:router_interface":
+                                    self.conn.network.remove_interface_from_router(port.device_id, port_id=port.id)
+                                    self.conn.network.delete_router(port.device_id)
+                                else:
+                                    self.conn.network.delete_port(port.id)
+                        LOGGER.warning(f"Delete subnet {subnet_obj.name} of {project_ident(self.obj_subnet.project_id)}")
+                        self.conn.network.delete_subnet(subnet_obj, ignore_missing=False)
+                except ResourceNotFound:
+                    LOGGER.warning(f"Already deleted subnet {subnet_id}")
 
-        self.conn.network.delete_network(self.obj_network, ignore_missing=False)
-
-        for subnet_id in self.obj_network.subnet_ids:
-            try:
-                subnet_obj = self.conn.get_subnet_by_id(subnet_id)
-                if subnet_obj:
-                    LOGGER.warning(f"Delete subnet {subnet_obj.name}")
-                    self.conn.network.delete_subnet(subnet_obj, ignore_missing=False)
-            except ResourceNotFound:
-                LOGGER.warning(f"Already deleted subnet {subnet_id}")
-
-        LOGGER.warning(f"Deleted network {self.obj_network.name} / {self.obj_network.id}")
+            self.conn.network.delete_network(self.obj_network, ignore_missing=False)
+            LOGGER.warning(f"Deleted network {self.obj_network.name} / {self.obj_network.id}")
 
     def create_and_get_ingress_security_group(self) -> SecurityGroup:
         if self.obj_ingress_security_group:
@@ -314,6 +334,12 @@ class SCSLandscapeTestMachine:
         self.project = project
         self.obj: Server | None = conn.compute.find_server(self.machine_name)
 
+    @property
+    def server_ident(self) -> str:
+        if self.obj is None:
+            return "DOES NOT EXIST"
+        return f"server {self.obj.name}/{self.obj.name}"
+
     def get_image_id_by_name(self, image_name):
         for image in self.conn.image.images():
             if image.name == image_name:
@@ -327,7 +353,7 @@ class SCSLandscapeTestMachine:
         return None
 
     def delete_machine(self):
-        LOGGER.warning(f"Deleting machine {self.machine_name} in project {self.project.name}/{self.project.domain_id}")
+        LOGGER.warning(f"Deleting machine {self.machine_name} in {project_ident(self.project.id)}")
         self.conn.delete_server(self.obj.id)
 
     def wait_for_delete(self):
@@ -337,7 +363,7 @@ class SCSLandscapeTestMachine:
     def create_or_get_server(self, network: Network):
 
         if self.obj:
-            LOGGER.info(f"Server {self.obj.name}/{self.obj.id} in domain {self.project.domain_id} already exists")
+            LOGGER.info(f"Server {self.obj.name}/{self.obj.id} in {project_ident(self.obj.project_id)} already exists")
             return
 
         self.obj = self.conn.compute.create_server(
@@ -356,7 +382,7 @@ class SCSLandscapeTestMachine:
            }],
             key_name=KEYPAIR_NAME,
         )
-        LOGGER.info(f"Created server {self.obj.name}/{self.obj.id} in project {network.project_id}/{network}")
+        LOGGER.info(f"Created server {self.obj.name}/{self.obj.id} in {project_ident(network.project_id)}")
 
     def add_floating_ip(self):
         public_network = self.conn.network.find_network('public')
@@ -372,7 +398,7 @@ class SCSLandscapeTestMachine:
                         floating_ips.append(address['addr'])
 
         if len(floating_ips) == 0:
-            LOGGER.info(f"Add floating ip {self.obj.name}/{self.obj.id} in domain {self.project.domain_id}")
+            LOGGER.info(f"Add floating ip {self.obj.name}/{self.obj.id} in {project_ident(self.project.id)}")
             self.wait_for_server()
             floating_ip = self.conn.network.create_ip(floating_network_id=public_network.id)
             server_port = list(self.conn.network.ports(device_id=self.obj.id))[0]
@@ -389,17 +415,17 @@ class SCSLandscapeTestMachine:
         for sg in self.obj.security_groups:
             if sg["name"] == self.security_group_name_ingress:
                 sec_group_add_ingress = False
-                LOGGER.info(f"Security group is already added {self.security_group_name_ingress} to server")
+                LOGGER.info(f"Security group is already added {self.security_group_name_ingress} to {self.server_ident}")
             if sg["name"] == self.security_group_name_egress:
                 sec_group_add_egress = False
-                LOGGER.info(f"Security group is already added {self.security_group_name_egress} to server")
+                LOGGER.info(f"Security group is already added {self.security_group_name_egress} to {self.server_ident}")
 
         if sec_group_add_ingress:
-            LOGGER.info(f"Adding security group {self.security_group_name_ingress} to server")
+            LOGGER.info(f"Adding security group {self.security_group_name_ingress} to {self.server_ident}")
             self.conn.compute.add_security_group_to_server(self.obj, sec_obj_ingress)
 
         if sec_group_add_egress:
-            LOGGER.info(f"Adding security group {self.security_group_name_egress} to server")
+            LOGGER.info(f"Adding security group {self.security_group_name_egress} to {self.server_ident}")
             self.conn.compute.add_security_group_to_server(self.obj, sec_obj_egress)
 
     def wait_for_server(self):
@@ -432,6 +458,8 @@ class SCSLandscapeTestProject:
         self.domain = domain
         self.user = user
         self.obj: Project = self._admin_conn.identity.find_project(project_name, domain_id=self.domain.id)
+        if self.obj:
+            PROJECT_CACHE[self.obj.id] = {"name": self.obj.name, "domain_id": self.domain.id}
         self.scs_network: SCSLandscapeTestNetwork | None = \
             SCSLandscapeTestProject._get_network(admin_conn, self.obj,
                                                  self.security_group_name_ingress,
@@ -449,7 +477,7 @@ class SCSLandscapeTestProject:
         if self._project_conn:
             return self._project_conn
 
-        LOGGER.info(f"Establishing a connection for project {self.obj.name}/{self.obj.domain_id}")
+        LOGGER.info(f"Establishing a connection for {project_ident(self.obj.id)}")
         self._project_conn = self._admin_conn.connect_as(
             domain_id=self.obj.domain_id,
             project_id=self.obj.id,
@@ -497,7 +525,7 @@ class SCSLandscapeTestProject:
         user_id = self._admin_conn.session.get_user_id()
         self._admin_conn.identity.assign_project_role_to_user(
             user=user_id, project=self.obj.id, role=self.get_role_id_by_name(role_name))
-        LOGGER.info(f"Assigned global admin {role_name} to {user_id} for project {self.obj.id}{self.obj.domain_id}")
+        LOGGER.info(f"Assigned global admin {role_name} to {user_id} for {project_ident(self.obj.id)}")
 
     def adapt_quota(self):
         current_quota =  self._admin_conn.compute.get_quota_set(self.obj.id)
@@ -511,14 +539,14 @@ class SCSLandscapeTestProject:
                     sys.exit()
                 new_value = int(get_config(key_name, r"\d+", parent_key="compute_quotas", default=str(getattr(current_quota, key_name))))
                 if current_value != new_value:
-                    LOGGER.info(f"New compute quota for project: {self.obj.id} in domain {self.domain.name}/{self.domain.id} "
+                    LOGGER.info(f"New compute quota for {project_ident(self.obj.id)} - "
                                 f": {key_name} : {current_value} -> {new_value}")
                     new_quota[key_name] = new_value
         if len(new_quota):
             self._admin_conn.set_compute_quotas(self.obj.id, **new_quota)
-            LOGGER.info(f"Configured compute quotas for project: {self.obj.id} in domain {self.domain.name}")
+            LOGGER.info(f"Configured compute quotas for {project_ident(self.obj.id)}")
         else:
-            LOGGER.info(f"Configured compute quotas for project {self.obj.id} in domain {self.domain.name} not changed")
+            LOGGER.info(f"Compute quotas for {project_ident(self.obj.id)} not changed")
 
     def create_and_get_project(self) -> Project:
         if self.obj:
@@ -533,7 +561,8 @@ class SCSLandscapeTestProject:
             description="Auto generated",
             enabled=True
         )
-        LOGGER.info(f"Created project: {self.obj.id} in domain {self.domain.name}/{self.domain.id}")
+        PROJECT_CACHE[self.obj.id] = {"name": self.obj.name, "domain_id": self.obj.domain_id}
+        LOGGER.info(f"Created {project_ident(self.obj.id)}")
         self.adapt_quota()
 
         self.assign_role_to_user_for_project("manager")
@@ -557,14 +586,14 @@ class SCSLandscapeTestProject:
 
         self.scs_network.delete_network()
 
-        LOGGER.warning(f"Cleanup of project {self.obj.name}/{self.obj.id} in domain {self.domain.name}{self.domain.id}")
+        LOGGER.warning(f"Cleanup of {project_ident(self.obj.id)}")
         self.project_conn.project_cleanup(dry_run=False, wait_timeout=300)
         ## This function before this line should do all the steps above, but because of a bug this
         ## does not work as expected currently
         ## TODO: add bug report reference
         ##########################################################################################
 
-        LOGGER.warning(f"Deleting project {self.obj.name} in domain {self.domain.name}/{self.domain.id}")
+        LOGGER.warning(f"Deleting {project_ident(self.obj.id)}")
         ##########################################################################################
         ## DELETE THE PROJECT
         ## The following function should also the steps beyond
@@ -592,13 +621,15 @@ class SCSLandscapeTestProject:
     def get_or_create_ssh_key(self):
         self.ssh_key = self.project_conn.compute.find_keypair(KEYPAIR_NAME)
         if not self.ssh_key:
-            LOGGER.info(f"Create SSH keypair '{KEYPAIR_NAME} in project {self.obj.name} in "
-                        f"domain {self.domain.name}")
+            LOGGER.info(f"Create SSH keypair '{KEYPAIR_NAME} in {project_ident(self.obj.id)}")
             self.ssh_key = self.project_conn.compute.create_keypair(
                 name=KEYPAIR_NAME,
                 public_key="\n".join(get_config("admin_vm_ssh_key", r"ssh-\S+\s\S+\s\S+", multi_line=True)),
             )
 
+    def close_connection(self):
+        LOGGER.info(f"Closing connection for {project_ident(self.obj.id)}")
+        self.project_conn.close()
 
 class SCSLandscapeTestDomain:
 
@@ -606,6 +637,8 @@ class SCSLandscapeTestDomain:
         self.conn = conn
         self.domain_name = domain_name
         self.obj: Domain = self.conn.identity.find_domain(domain_name)
+        if self.obj:
+            DOMAIN_CACHE[self.obj.id] = self.obj.name
         self.scs_user = SCSLandscapeTestDomain._get_user(conn, domain_name, self.obj)
         self.scs_projects: dict[str, SCSLandscapeTestProject] = SCSLandscapeTestDomain._get_projects(
             conn, self.obj, self.scs_user)
@@ -635,7 +668,9 @@ class SCSLandscapeTestDomain:
             description="Automated creation",
             enabled=True
         )
-        LOGGER.info(f"Created domain {self.obj.name} / {self.obj.id}")
+        DOMAIN_CACHE[self.obj.id] = self.obj.name
+        LOGGER.info(f"Created {domain_ident(self.obj.id)}")
+
         self.scs_user = SCSLandscapeTestDomain._get_user(self.conn, self.domain_name, self.obj)
         return self.obj
 
@@ -653,7 +688,7 @@ class SCSLandscapeTestDomain:
         self.scs_user.delete_user()
         self.disable_domain()
         domain = self.conn.identity.delete_domain(self.obj.id)
-        LOGGER.warning(f"Deleted domain: {self.obj.id}, Name: {self.obj.name}")
+        LOGGER.warning(f"Deleted {domain_ident(self.obj.id)}")
         self.obj = None
         return domain
 
