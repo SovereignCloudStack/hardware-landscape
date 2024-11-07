@@ -32,7 +32,7 @@ def get_config(key: str, regex: str = ".+",
         else:
             lines = str(CONFIG[key]).splitlines()
     except KeyError as e:
-        LOGGER.info(f"config does not contain : {parent_key} -> {key} : {pformat(CONFIG)}")
+        LOGGER.info(f"config does not contain : {parent_key} -> {key} using {default}")
         if lines is None:
             sys.exit(1)
 
@@ -126,7 +126,9 @@ class SCSLandscapeTestNetwork:
 
     @staticmethod
     def _find_security_group(name, conn: Connection, project: Project) -> SecurityGroup | None:
-        security_groups = [group for group in conn.network.security_groups(name=name, project_id=project.id, domain_id=project.domain_id)]
+        security_groups = [group for group in conn.network.security_groups(name=name,
+                                                                           project_id=project.id,
+                                                                           domain_id=project.domain_id)]
         if len(security_groups) > 1:
             raise RuntimeError(f"Error fetching security group for project {project.name}/{project.domain_id}")
         elif len(security_groups) == 1:
@@ -338,7 +340,7 @@ class SCSLandscapeTestMachine:
     def server_ident(self) -> str:
         if self.obj is None:
             return "DOES NOT EXIST"
-        return f"server {self.obj.name}/{self.obj.name}"
+        return f"server {self.obj.name}/{self.obj.id}"
 
     def get_image_id_by_name(self, image_name):
         for image in self.conn.image.images():
@@ -407,8 +409,9 @@ class SCSLandscapeTestMachine:
             LOGGER.info(
                 f"Floating ip is already added to {self.obj.name}/{self.obj.id} in domain {self.project.domain_id}")
 
-        sec_obj_ingress = self.conn.get_security_group(self.security_group_name_ingress)
-        sec_obj_egress = self.conn.get_security_group(self.security_group_name_egress)
+        project_filter = {"project_id": self.project.id }
+        sec_obj_ingress = self.conn.get_security_group(self.security_group_name_ingress, filters=project_filter)
+        sec_obj_egress = self.conn.get_security_group(self.security_group_name_egress, filters=project_filter)
 
         sec_group_add_ingress = True
         sec_group_add_egress = True
@@ -421,12 +424,12 @@ class SCSLandscapeTestMachine:
                 LOGGER.info(f"Security group is already added {self.security_group_name_egress} to {self.server_ident}")
 
         if sec_group_add_ingress:
-            LOGGER.info(f"Adding security group {self.security_group_name_ingress} to {self.server_ident}")
-            self.conn.compute.add_security_group_to_server(self.obj, sec_obj_ingress)
+            LOGGER.info(f"Adding security group {sec_obj_ingress.name}/{sec_obj_ingress.id} to {self.server_ident}")
+            self.conn.compute.add_security_group_to_server(self.obj, sec_obj_ingress.id)
 
         if sec_group_add_egress:
-            LOGGER.info(f"Adding security group {self.security_group_name_egress} to {self.server_ident}")
-            self.conn.compute.add_security_group_to_server(self.obj, sec_obj_egress)
+            LOGGER.info(f"Adding security group {sec_obj_egress.name}/{sec_obj_egress.id} to {self.server_ident}")
+            self.conn.compute.add_security_group_to_server(self.obj, sec_obj_egress.id)
 
     def wait_for_server(self):
         self.conn.compute.wait_for_server(
