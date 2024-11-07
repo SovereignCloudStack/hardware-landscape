@@ -3,8 +3,8 @@ import re
 import sys
 from pprint import pformat
 
-from openstack.exceptions import ResourceNotFound
-from openstack import connection
+from openstack.exceptions import ResourceNotFound, SDKException
+from openstack.connection import Connection
 from openstack.compute.v2.keypair import Keypair
 from openstack.compute.v2.server import Server
 from openstack.identity.v3.domain import Domain
@@ -50,7 +50,7 @@ def get_config(key: str, regex: str = ".+",
 
 class SCSLandscapeTestUser:
 
-    def __init__(self, conn: connection.Connection, user_name: str, domain: Domain):
+    def __init__(self, conn: Connection, user_name: str, domain: Domain):
         self.conn = conn
         self.user_name = user_name
         self.user_password = get_config("admin_domain_password")
@@ -94,7 +94,7 @@ class SCSLandscapeTestUser:
 
 class SCSLandscapeTestNetwork:
 
-    def __init__(self, conn: connection.Connection, project: Project,
+    def __init__(self, conn: Connection, project: Project,
                  security_group_name_ingress: str, security_group_name_egress: str):
         self.project: Project = project
         self.conn = conn
@@ -107,17 +107,21 @@ class SCSLandscapeTestNetwork:
         self.obj_subnet: Subnet | None = SCSLandscapeTestNetwork._find_subnet(self.network_name, conn, project)
         self.obj_router: Router | None = SCSLandscapeTestNetwork._find_router(self.router_name, conn, project)
         self.obj_ingress_security_group: SecurityGroup | None = SCSLandscapeTestNetwork._find_security_group(
-            self.security_group_name_ingress, conn)
+            self.security_group_name_ingress, conn, project)
         self.obj_egress_security_group: SecurityGroup | None = SCSLandscapeTestNetwork._find_security_group(
-            self.security_group_name_egress, conn)
+            self.security_group_name_egress, conn, project)
 
     @staticmethod
-    def _find_security_group(name, conn) -> SecurityGroup | None:
-        security_group = conn.get_security_group(name)
-        return security_group
+    def _find_security_group(name, conn: Connection, project: Project) -> SecurityGroup | None:
+        security_groups = [group for group in conn.network.security_groups(name=name, project_id=project.id, domain_id=project.domain_id)]
+        if len(security_groups) > 1:
+            raise RuntimeError(f"Error fetching security group for project {project.name}/{project.domain_id} - {e}")
+        elif len(security_groups) == 1:
+            return security_groups[0]
+        return None
 
     @staticmethod
-    def _find_router(name, conn, project) -> Network | None:
+    def _find_router(name, conn: Connection, project: Project) -> Network | None:
         routers = [router for router in conn.network.routers(name=name, project_id=project.id)]
         if len(routers) == 0:
             return None
@@ -127,7 +131,7 @@ class SCSLandscapeTestNetwork:
             raise RuntimeError(f"More than one router with the name {name} in {project.name}")
 
     @staticmethod
-    def _find_network(name, conn, project) -> Network | None:
+    def _find_network(name, conn: Connection, project: Project) -> Network | None:
         networks = [network for network in conn.network.networks(name=name, project_id=project.id)]
         if len(networks) == 0:
             return None
@@ -242,7 +246,8 @@ class SCSLandscapeTestNetwork:
         if self.obj_ingress_security_group:
             return self.obj_ingress_security_group
 
-        LOGGER.info(f"Creating ingress security group {self.security_group_name_ingress} for project {self.project.name}")
+        LOGGER.info(f"Creating ingress security group {self.security_group_name_ingress} for "
+                    f"project {self.project.name}/{self.project.domain_id}")
         self.obj_ingress_security_group = self.conn.network.create_security_group(
             name=self.security_group_name_ingress,
             description="Security group to allow SSH access to instances"
@@ -270,7 +275,8 @@ class SCSLandscapeTestNetwork:
         if self.obj_egress_security_group:
             return self.obj_egress_security_group
 
-        LOGGER.info(f"Creating egress security group {self.security_group_name_egress} for project {self.project.name}")
+        LOGGER.info(f"Creating egress security group {self.security_group_name_egress} for "
+                    f"project {self.project.name}/{self.project.domain_id}")
         self.obj_egress_security_group = self.conn.network.create_security_group(
             name=self.security_group_name_egress,
             description="Security group to allow outgoing access"
@@ -296,7 +302,7 @@ class SCSLandscapeTestNetwork:
 
 class SCSLandscapeTestMachine:
 
-    def __init__(self, conn: connection.Connection, project: Project, machine_name: str,
+    def __init__(self, conn: Connection, project: Project, machine_name: str,
                  security_group_name_ingress: str,
                  security_group_name_egress: str
                  ):
@@ -416,10 +422,10 @@ class SCSLandscapeTestMachine:
 
 class SCSLandscapeTestProject:
 
-    def __init__(self, admin_conn: connection.Connection, project_name: str, domain: Domain,
+    def __init__(self, admin_conn: Connection, project_name: str, domain: Domain,
                  user: SCSLandscapeTestUser):
         self._admin_conn = admin_conn
-        self._project_conn: connection.Connection | None = None
+        self._project_conn: Connection | None = None
         self.project_name = project_name
         self.security_group_name_ingress = f"ingress-ssh-{project_name}"
         self.security_group_name_egress = f"egress-any-{project_name}"
@@ -439,11 +445,11 @@ class SCSLandscapeTestProject:
         self.ssh_key: Keypair | None = None
 
     @property
-    def project_conn(self) -> connection.Connection:
+    def project_conn(self) -> Connection:
         if self._project_conn:
             return self._project_conn
 
-        LOGGER.info(f"Establishing a connection for project {self.obj.name}")
+        LOGGER.info(f"Establishing a connection for project {self.obj.name}/{self.obj.domain_id}")
         self._project_conn = self._admin_conn.connect_as(
             domain_id=self.obj.domain_id,
             project_id=self.obj.id,
@@ -453,7 +459,7 @@ class SCSLandscapeTestProject:
         return self._project_conn
 
     @staticmethod
-    def _get_network(conn: connection.Connection, obj: Project,
+    def _get_network(conn: Connection, obj: Project,
                      security_group_name_ingress: str,
                      security_group_name_egress: str,
                      ) -> None | SCSLandscapeTestNetwork:
@@ -462,7 +468,7 @@ class SCSLandscapeTestProject:
         return SCSLandscapeTestNetwork(conn, obj, security_group_name_ingress,security_group_name_egress)
 
     @staticmethod
-    def _get_machines(conn: connection.Connection, obj,
+    def _get_machines(conn: Connection, obj,
                       security_group_name_ingress: str,
                       security_group_name_egress: str,
                       ) -> list[SCSLandscapeTestMachine]:
@@ -484,13 +490,14 @@ class SCSLandscapeTestProject:
     def assign_role_to_user_for_project(self, role_name: str):
         self._admin_conn.identity.assign_project_role_to_user(
             user=self.user.obj.id, project=self.obj.id, role=self.get_role_id_by_name(role_name))
-        LOGGER.info(f"Assigned {role_name} to {self.user.obj.id} for project {self.obj.id}")
+        LOGGER.info(f"Assigned {role_name} to {self.user.obj.id} for "
+                    f"project {self.obj.id}/{self.obj.domain_id}")
 
     def assign_role_to_global_admin_for_project(self, role_name: str):
         user_id = self._admin_conn.session.get_user_id()
         self._admin_conn.identity.assign_project_role_to_user(
             user=user_id, project=self.obj.id, role=self.get_role_id_by_name(role_name))
-        LOGGER.info(f"Assigned global admin {role_name} to {user_id} for project {self.obj.id}")
+        LOGGER.info(f"Assigned global admin {role_name} to {user_id} for project {self.obj.id}{self.obj.domain_id}")
 
     def adapt_quota(self):
         current_quota =  self._admin_conn.compute.get_quota_set(self.obj.id)
@@ -504,7 +511,8 @@ class SCSLandscapeTestProject:
                     sys.exit()
                 new_value = int(get_config(key_name, r"\d+", parent_key="compute_quotas", default=str(getattr(current_quota, key_name))))
                 if current_value != new_value:
-                    LOGGER.info(f"New compute quota for project: {self.obj.id} in domain {self.domain.name} : {key_name} : {current_value} -> {new_value}")
+                    LOGGER.info(f"New compute quota for project: {self.obj.id} in domain {self.domain.name}/{self.domain.id} "
+                                f": {key_name} : {current_value} -> {new_value}")
                     new_quota[key_name] = new_value
         if len(new_quota):
             self._admin_conn.set_compute_quotas(self.obj.id, **new_quota)
@@ -525,7 +533,7 @@ class SCSLandscapeTestProject:
             description="Auto generated",
             enabled=True
         )
-        LOGGER.info(f"Created project: {self.obj.id} in domain {self.domain.name}")
+        LOGGER.info(f"Created project: {self.obj.id} in domain {self.domain.name}/{self.domain.id}")
         self.adapt_quota()
 
         self.assign_role_to_user_for_project("manager")
@@ -549,14 +557,14 @@ class SCSLandscapeTestProject:
 
         self.scs_network.delete_network()
 
-        LOGGER.warning(f"Cleanup of project {self.obj.name}/{self.obj.id} in domain {self.domain.name}")
-        self.project_conn.project_cleanup(dry_run=False, wait_timeout=120)
+        LOGGER.warning(f"Cleanup of project {self.obj.name}/{self.obj.id} in domain {self.domain.name}{self.domain.id}")
+        self.project_conn.project_cleanup(dry_run=False, wait_timeout=300)
         ## This function before this line should do all the steps above, but because of a bug this
         ## does not work as expected currently
         ## TODO: add bug report reference
         ##########################################################################################
 
-        LOGGER.warning(f"Deleting project {self.obj.name} in domain {self.domain.name}")
+        LOGGER.warning(f"Deleting project {self.obj.name} in domain {self.domain.name}/{self.domain.id}")
         ##########################################################################################
         ## DELETE THE PROJECT
         ## The following function should also the steps beyond
@@ -594,7 +602,7 @@ class SCSLandscapeTestProject:
 
 class SCSLandscapeTestDomain:
 
-    def __init__(self, conn: connection.Connection, domain_name: str):
+    def __init__(self, conn: Connection, domain_name: str):
         self.conn = conn
         self.domain_name = domain_name
         self.obj: Domain = self.conn.identity.find_domain(domain_name)
@@ -603,13 +611,13 @@ class SCSLandscapeTestDomain:
             conn, self.obj, self.scs_user)
 
     @staticmethod
-    def _get_user(conn: connection.Connection, domain_name: str, obj: Domain):
+    def _get_user(conn: Connection, domain_name: str, obj: Domain):
         if not obj:
             return None
         return SCSLandscapeTestUser(conn, f"{domain_name}-admin", obj)
 
     @staticmethod
-    def _get_projects(conn: connection.Connection, domain: Domain | None, user: SCSLandscapeTestUser | None) \
+    def _get_projects(conn: Connection, domain: Domain | None, user: SCSLandscapeTestUser | None) \
             -> dict[str, SCSLandscapeTestProject]:
         if not domain or not user:
             return dict()
