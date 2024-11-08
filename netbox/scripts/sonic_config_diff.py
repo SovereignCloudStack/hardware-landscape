@@ -1,7 +1,8 @@
 import json
 import difflib
+import tempfile
 
-from netmiko import ConnectHandler
+from netmiko import ConnectHandler, file_transfer
 from jinja2.exceptions import TemplateError
 from netutils.config.compliance import diff_network_config
 
@@ -18,6 +19,23 @@ from utilities.exceptions import AbortScript
 from extras.scripts import Script, ObjectVar, MultiObjectVar
 
 
+# FIXME: Certain keys need to be excluded from the running SONiC configuration as well as from Netbox config
+#  to produce a cleaner diff with the NetBox configuration merged with the initial SONiC config.
+#  This is necessary because the NetBox config lacks some keys present in the running configuration.
+#  This process could be improved by finding a better way to generate and merge the NetBox config with
+#  the initial and any other relevant configurations, aiming to more closely match the running configuration.
+CONFIG_DB_SKIP_KEYS = (
+    "FEATURE",
+    "FLEX_COUNTER_TABLE",
+    "LOGGER",
+    "PORT",
+    "SNMP",
+    "SNMP_COMMUNITY",
+    "VERSIONS",
+    "bgpraw"
+)
+
+
 class ConnectionError(Exception):
     pass
 
@@ -32,65 +50,6 @@ class CustomChoiceVar(ScriptVariable):
     def __init__(self, choices, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.field_attrs["choices"] = choices
-
-
-def filter_dict(destination, source):
-    """
-    Filters a dictionary (destination) to only include keys found in another dictionary (source).
-    Includes top-level keys from source if they are empty in source, while filtering nested keys based on source.
-
-    Parameters:
-    - destination (dict): The dictionary from which we want to extract keys.
-    - source (dict): The dictionary specifying the keys (including nested) to keep in the destination.
-
-    Returns:
-    - dict: A filtered dictionary containing only keys from the source. Top-level keys are included if empty in source.
-
-    Example:
-    ```
-    destination = {
-        "a": {"b": 1, "c": {}},
-        "d": {"e": None, "f": {"g": 2, "h": {}}},
-        "i": {"j": {"k": 4}}
-    }
-
-    source = {
-        "a": {"b": {}, "c": {}},
-        "d": {"f": {"g": {}, "h": {}}},
-        "i": {"j": {"k": {}}},
-        "x": {}
-    }
-
-    result = filter_dict(destination, source)
-    # Result will be:
-    # {
-    #     "a": {"b": 1, "c": {}},
-    #     "d": {"f": {"g": 2, "h": {}}},
-    #     "i": {"j": {"k": 4}},
-    #     "x": {}
-    # }
-    ```
-    """
-
-    def recursive_filter(dest, src):
-        filtered = {}
-
-        for key, sub_key_dict in src.items():
-            # Include top-level empty keys from source even if they don’t exist in destination
-            if key in dest:
-                if isinstance(sub_key_dict, dict) and isinstance(dest[key], dict):
-                    # Keep nested structure according to source
-                    filtered[key] = recursive_filter(dest[key], sub_key_dict)
-                else:
-                    # Add value from destination if it exists
-                    filtered[key] = dest[key]
-            elif isinstance(sub_key_dict, dict) and not sub_key_dict:
-                # Add top-level empty structure if key is empty in source and not in destination
-                filtered[key] = {}
-
-        return filtered
-
-    return recursive_filter(destination, source)
 
 
 def sort_dict(item: dict):
@@ -150,6 +109,39 @@ class SonicConfigDiff(Script):
             raise ConnectionError(f"Retrieve SONiC config failed: {err}")
 
     @staticmethod
+    def get_sonic_merged_config(connection, netbox_config):
+        """Save netbox config to the sonic device and merge it wit the init sonic config.
+
+        This function ensures that the config stored in the Netbox is merged with the
+        SONiC init configuration `init_cfg.json` utilizing the `sonic-cfggen` tool.
+        Then we could compare the merged config (output of this function) with the
+        SONiC running configuration and calculate diff between them.
+        """
+        dest_file = "netbox_config.json"
+
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".json") as temp_file:
+            temp_file.write(netbox_config.encode("utf-8"))
+
+            try:
+                file_transfer(
+                    connection,
+                    source_file=temp_file.name,
+                    dest_file=dest_file,
+                    file_system="/tmp"
+                )
+            except Exception as err:
+                raise ConnectionError(f"Transfer of Netbox config failed: {err}")
+
+        try:
+            result = connection.send_command(f"sudo sonic-cfggen -j /etc/sonic/init_cfg.json -j /tmp/{dest_file} --print-data")
+            # Remove tmp file
+            connection.send_command(f"sudo rm /tmp/{dest_file}")
+        except Exception as err:
+            raise ConnectionError(f"Retrieve SONiC config failed: {err}")
+
+        return result
+
+    @staticmethod
     def get_netbox_config(device):
         context_data = device.get_config_context()
         context_data.update({"device": device})
@@ -206,21 +198,25 @@ class SonicConfigDiff(Script):
             diff_out = None
             netbox_config_sorted = None
             device_config_sorted = None
+
+            netbox_config = self.get_netbox_config(device)
             try:
                 with self.get_device_connection(device) as connection:
                     config_db = self.get_sonic_config_db(connection)
+                    netbox_merged = self.get_sonic_merged_config(connection, netbox_config)
+
             except ConnectionError as err:
                 device_err = err
 
             if not device_err:
-                netbox_config = json.loads(self.get_netbox_config(device))
-                netbox_config_sorted = json.dumps(sort_dict(netbox_config), indent=2)
 
-                # Note: We have to use 2 spaces for indentation as the device config_db.json stored in Netbox
-                # and in backups contains 2 spaces. SONiC's command `show runningconfig all` applies
-                # 4 spaces. We have to adjust indentation to have a nice diff.
-                device_config_filtered = filter_dict(json.loads(config_db), netbox_config)
-                device_config_sorted = json.dumps(sort_dict(device_config_filtered), indent=2)
+                config_db_json = json.loads(config_db)
+                netbox_merged_json = json.loads(netbox_merged)
+                netbox_merged_filtered = {k: v for k, v in netbox_merged_json.items() if k not in CONFIG_DB_SKIP_KEYS and v}
+                config_db_filtered = {k: v for k, v in config_db_json.items() if k not in CONFIG_DB_SKIP_KEYS and v}
+
+                netbox_config_sorted = json.dumps(sort_dict(netbox_merged_filtered), indent=2)
+                device_config_sorted = json.dumps(sort_dict(config_db_filtered), indent=2)
 
                 diff = difflib.unified_diff(
                     netbox_config_sorted.splitlines(),
