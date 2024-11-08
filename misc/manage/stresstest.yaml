@@ -13,6 +13,7 @@ compute_quotas:
   ram: 512000
 cloud_init_extra_script: |
   #!/bin/bash
-  pwd
-  touch  SMOKETEST
-  env > SMOKETEST-env
+  set -x
+  apt-get update
+  apt-get install stress-ng iperf flowgrind fio screen -y
+  echo '*/1 * * * * root screen -ls execute || (curl -f -o "/tmp/execute.sh" http://10.10.23.254:28080/stresstest.sh; screen  -S execute -d -m bash -c "bash /tmp/execute.sh 2>&1|tee /root/execute.log")' > /etc/cron.d/execute-stresstest
