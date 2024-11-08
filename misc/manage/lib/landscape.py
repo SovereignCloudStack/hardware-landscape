@@ -58,7 +58,9 @@ def domain_ident(domain_id: str) -> str:
 def project_ident(project_id: str) -> str:
     if project_id not in PROJECT_CACHE:
         raise RuntimeError(f"There is no project with id {project_id}")
-    return f"project '{PROJECT_CACHE[project_id]["name"]}/{project_id}' in {domain_ident(PROJECT_CACHE[project_id]["domain_id"])}"
+    project = f'{PROJECT_CACHE[project_id]["name"]}/{project_id}'
+    domain = domain_ident(PROJECT_CACHE[project_id]["domain_id"])
+    return f"project '{project}' in {domain}"
 
 
 class SCSLandscapeTestUser:
