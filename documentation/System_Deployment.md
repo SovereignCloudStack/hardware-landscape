@@ -229,23 +229,30 @@ project and machine name parameters.
 
 ### Create a small amount of domains, projects and virtual machines
 
+* Create a domain with a project which contains two virtual machines
   ```
-  ./landscape_ctl --create_domains workload1 --create_projects project{1..2} --create_machines testvm{1..2}
+  ./landscape_ctl --config smoketest.yml --create_domains smoketest1 --create_projects smoketest-project1 --create_machines smoketest-testvm{1..2}
+  ```
+* Verify the result
+  ```
   openstack domain list
   openstack project list --long
   openstack server list --all-projects --long
-  ./landscape_ctl --delete_domains workload1
+  openstack server list --all-projects -f json|\
+    jq -r '
+    .[]
+    | select(.Name | test("^smoketest-"))
+    | select(.Networks
+        | to_entries[]
+        | select(.value[] | test("^10\\.80\\.")))
+    | "\(.Name) \(.Networks
+        | to_entries[]
+        | select(.value[] | test("^10\\.80\\."))
+        | .value[]
+        | select(test("^10\\.80\\.")))"'
+  ssh ubuntu@10.80.x.x
   ```
-
-### Create a larger amount of domains, projects and virtual machines
-
+* Cleanup smoketest
   ```
-  ./landscape_ctl --create_domains workload{1..9} --create_projects project{1..9} --create_machines testvm{1..9}
-  openstack domain list
-  openstack project list --long
-  openstack server list --all-projects --long
-  ./landscape_ctl --delete_domains workload{1..5}
+  ./landscape_ctl --delete_domains smoketest1
   ```
-
-
-
