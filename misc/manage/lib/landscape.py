@@ -1,8 +1,7 @@
+import base64
 import logging
 import re
 import sys
-from asyncio import timeout
-from pprint import pformat
 
 from openstack.exceptions import ResourceNotFound, SDKException
 from openstack.connection import Connection
@@ -32,7 +31,7 @@ def get_config(key: str, regex: str = ".+",
         else:
             lines = str(CONFIG[key]).splitlines()
     except KeyError as e:
-        LOGGER.info(f"config does not contain : {parent_key or 'ROOT'} -> {key}, using {default}")
+        LOGGER.info(f"config does not contain : {parent_key or 'ROOT'} -> {key}, using >>>{default}<<<")
         if lines is None:
             sys.exit(1)
 
@@ -41,8 +40,9 @@ def get_config(key: str, regex: str = ".+",
         sys.exit(1)
 
     for line in lines:
-        if not re.fullmatch(regex, str(line)):
-            LOGGER.error(f"{key}='{CONFIG[key]}' does not match to regex >>>{regex}<<<")
+        matcher = re.compile(regex, re.MULTILINE|re.DOTALL)
+        if not matcher.fullmatch(str(line)):
+            LOGGER.error(f"{key} : >>>{line}<<< : does not match to regex >>>{regex}<<<")
             sys.exit(1)
 
     if not multi_line:
@@ -369,7 +369,6 @@ class SCSLandscapeTestMachine:
             LOGGER.info(f"Server {self.obj.name}/{self.obj.id} in {project_ident(self.obj.project_id)} already exists")
             return
 
-        project_filter = {"project_id": self.project.id}
         # https://docs.openstack.org/openstacksdk/latest/user/resources/compute/v2/server.html#openstack.compute.v2.server.Server
         self.obj = self.conn.compute.create_server(
             name=self.machine_name,
@@ -385,6 +384,7 @@ class SCSLandscapeTestMachine:
                "volume_size": int(get_config("vm_volume_size_gb",r"\d+")),
                "delete_on_termination": True,
            }],
+            user_data=SCSLandscapeTestMachine._get_user_script(),
             security_groups=[
                 { "name": self.security_group_name_ingress },
                 { "name": self.security_group_name_egress },
@@ -392,6 +392,16 @@ class SCSLandscapeTestMachine:
             key_name=KEYPAIR_NAME,
         )
         LOGGER.info(f"Created server {self.obj.name}/{self.obj.id} in {project_ident(network.project_id)}")
+
+    @staticmethod
+    def _get_user_script() -> str:
+        cloud_init_script = """#!/bin/bash\necho "HELLO WORLD"; date > READY; whoami >> READY"""
+        cloud_init_script = "\n".join(get_config("cloud_init_extra_script",
+                                                 multi_line=True,
+                                                 regex=r".*",
+                                                 default=cloud_init_script))
+        cloud_init_script = base64.b64encode(cloud_init_script.encode('utf-8')).decode('utf-8')
+        return cloud_init_script
 
     def add_floating_ip(self):
         public_network = self.conn.network.find_network('public')

@@ -11,3 +11,8 @@ compute_quotas:
   cores: 64
   instances: 30
   ram: 512000
+cloud_init_extra_script: |
+  #!/bin/bash
+  pwd
+  touch  SMOKETEST
+  env > SMOKETEST-env

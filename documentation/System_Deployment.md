@@ -231,7 +231,7 @@ project and machine name parameters.
 
 * Create a domain with a project which contains two virtual machines
   ```
-  ./landscape_ctl --create_domains smoketest1 --create_projects smoketest-project1 --create_machines smoketest-testvm{1..2}
+  ./landscape_ctl --config smoketest.yml --create_domains smoketest1 --create_projects smoketest-project1 --create_machines smoketest-testvm{1..2}
   ```
 * Verify the result
   ```
