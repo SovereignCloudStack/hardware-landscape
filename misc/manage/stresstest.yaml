@@ -8,9 +8,10 @@ vm_image: "Ubuntu 24.04"
 vm_volume_size_gb: 10
 project_ipv4_subnet: "192.168.200.0/24"
 compute_quotas:
-  cores: 64
-  instances: 30
+  cores: 100
+  instances: 100
   ram: 512000
+  volumes: 100
 cloud_init_extra_script: |
   #!/bin/bash
   set -x
