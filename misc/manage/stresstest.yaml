@@ -11,6 +11,7 @@ compute_quotas:
   cores: 100
   instances: 100
   ram: 512000
+block_storage_quotas:
   volumes: 100
 cloud_init_extra_script: |
   #!/bin/bash
