@@ -26,6 +26,10 @@ Test scenario:
   ```
 * Activate the stresstestfile
   ```
+  cat <<EOF
+  #!/bin/bash
+  stress-ng --vm 8 --vm-bytes 80% -t 1h
+  EOF
   mv /srv/www/stresstest.sh.disabled /srv/www/stresstest.sh
   ```
 * Purge the scenario
