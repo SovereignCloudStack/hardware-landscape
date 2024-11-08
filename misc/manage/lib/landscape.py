@@ -1,8 +1,7 @@
+import base64
 import logging
 import re
 import sys
-from asyncio import timeout
-from pprint import pformat
 
 from openstack.exceptions import ResourceNotFound, SDKException
 from openstack.connection import Connection
@@ -32,7 +31,7 @@ def get_config(key: str, regex: str = ".+",
         else:
             lines = str(CONFIG[key]).splitlines()
     except KeyError as e:
-        LOGGER.info(f"config does not contain : {parent_key} -> {key} : {pformat(CONFIG)}")
+        LOGGER.info(f"config does not contain : {parent_key or 'ROOT'} -> {key}, using >>>{default}<<<")
         if lines is None:
             sys.exit(1)
 
@@ -41,8 +40,9 @@ def get_config(key: str, regex: str = ".+",
         sys.exit(1)
 
     for line in lines:
-        if not re.fullmatch(regex, str(line)):
-            LOGGER.error(f"{key}='{CONFIG[key]}' does not match to regex >>>{regex}<<<")
+        matcher = re.compile(regex, re.MULTILINE|re.DOTALL)
+        if not matcher.fullmatch(str(line)):
+            LOGGER.error(f"{key} : >>>{line}<<< : does not match to regex >>>{regex}<<<")
             sys.exit(1)
 
     if not multi_line:
@@ -126,7 +126,9 @@ class SCSLandscapeTestNetwork:
 
     @staticmethod
     def _find_security_group(name, conn: Connection, project: Project) -> SecurityGroup | None:
-        security_groups = [group for group in conn.network.security_groups(name=name, project_id=project.id, domain_id=project.domain_id)]
+        security_groups = [group for group in conn.network.security_groups(name=name,
+                                                                           project_id=project.id,
+                                                                           domain_id=project.domain_id)]
         if len(security_groups) > 1:
             raise RuntimeError(f"Error fetching security group for project {project.name}/{project.domain_id}")
         elif len(security_groups) == 1:
@@ -219,6 +221,7 @@ class SCSLandscapeTestNetwork:
             cidr=get_config("project_ipv4_subnet", r"\d+\.\d+\.\d+\.\d+/\d\d"),
             ip_version="4",
             enable_dhcp=True,
+            dns_nameservers= ["8.8.8.8", "9.9.9.9"]
         )
         LOGGER.info(
             f"Created subnet {self.obj_subnet.name}/{self.obj_subnet.id} in {self.project.name}/{self.project.id}")
@@ -338,7 +341,7 @@ class SCSLandscapeTestMachine:
     def server_ident(self) -> str:
         if self.obj is None:
             return "DOES NOT EXIST"
-        return f"server {self.obj.name}/{self.obj.name}"
+        return f"server {self.obj.name}/{self.obj.id}"
 
     def get_image_id_by_name(self, image_name):
         for image in self.conn.image.images():
@@ -366,6 +369,7 @@ class SCSLandscapeTestMachine:
             LOGGER.info(f"Server {self.obj.name}/{self.obj.id} in {project_ident(self.obj.project_id)} already exists")
             return
 
+        # https://docs.openstack.org/openstacksdk/latest/user/resources/compute/v2/server.html#openstack.compute.v2.server.Server
         self.obj = self.conn.compute.create_server(
             name=self.machine_name,
             flavor_id=self.get_flavor_id_by_name(get_config("vm_flavor")),
@@ -380,9 +384,24 @@ class SCSLandscapeTestMachine:
                "volume_size": int(get_config("vm_volume_size_gb",r"\d+")),
                "delete_on_termination": True,
            }],
+            user_data=SCSLandscapeTestMachine._get_user_script(),
+            security_groups=[
+                { "name": self.security_group_name_ingress },
+                { "name": self.security_group_name_egress },
+            ],
             key_name=KEYPAIR_NAME,
         )
         LOGGER.info(f"Created server {self.obj.name}/{self.obj.id} in {project_ident(network.project_id)}")
+
+    @staticmethod
+    def _get_user_script() -> str:
+        cloud_init_script = """#!/bin/bash\necho "HELLO WORLD"; date > READY; whoami >> READY"""
+        cloud_init_script = "\n".join(get_config("cloud_init_extra_script",
+                                                 multi_line=True,
+                                                 regex=r".*",
+                                                 default=cloud_init_script))
+        cloud_init_script = base64.b64encode(cloud_init_script.encode('utf-8')).decode('utf-8')
+        return cloud_init_script
 
     def add_floating_ip(self):
         public_network = self.conn.network.find_network('public')
@@ -406,27 +425,6 @@ class SCSLandscapeTestMachine:
         else:
             LOGGER.info(
                 f"Floating ip is already added to {self.obj.name}/{self.obj.id} in domain {self.project.domain_id}")
-
-        sec_obj_ingress = self.conn.get_security_group(self.security_group_name_ingress)
-        sec_obj_egress = self.conn.get_security_group(self.security_group_name_egress)
-
-        sec_group_add_ingress = True
-        sec_group_add_egress = True
-        for sg in self.obj.security_groups:
-            if sg["name"] == self.security_group_name_ingress:
-                sec_group_add_ingress = False
-                LOGGER.info(f"Security group is already added {self.security_group_name_ingress} to {self.server_ident}")
-            if sg["name"] == self.security_group_name_egress:
-                sec_group_add_egress = False
-                LOGGER.info(f"Security group is already added {self.security_group_name_egress} to {self.server_ident}")
-
-        if sec_group_add_ingress:
-            LOGGER.info(f"Adding security group {self.security_group_name_ingress} to {self.server_ident}")
-            self.conn.compute.add_security_group_to_server(self.obj, sec_obj_ingress)
-
-        if sec_group_add_egress:
-            LOGGER.info(f"Adding security group {self.security_group_name_egress} to {self.server_ident}")
-            self.conn.compute.add_security_group_to_server(self.obj, sec_obj_egress)
 
     def wait_for_server(self):
         self.conn.compute.wait_for_server(
@@ -614,8 +612,6 @@ class SCSLandscapeTestProject:
             machine = SCSLandscapeTestMachine(self.project_conn, self.obj, machine_name, self.security_group_name_ingress, self.security_group_name_egress)
             machine.create_or_get_server(self.scs_network.obj_network)
             self.scs_machines.append(machine)
-
-        for nr, machine in enumerate(self.scs_machines):
             if nr == 0:
                 machine.add_floating_ip()
         self.close_connection()
