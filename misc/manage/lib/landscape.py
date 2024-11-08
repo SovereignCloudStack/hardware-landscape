@@ -221,6 +221,7 @@ class SCSLandscapeTestNetwork:
             cidr=get_config("project_ipv4_subnet", r"\d+\.\d+\.\d+\.\d+/\d\d"),
             ip_version="4",
             enable_dhcp=True,
+            dns_nameservers= ["8.8.8.8", "9.9.9.9"]
         )
         LOGGER.info(
             f"Created subnet {self.obj_subnet.name}/{self.obj_subnet.id} in {self.project.name}/{self.project.id}")
@@ -368,6 +369,8 @@ class SCSLandscapeTestMachine:
             LOGGER.info(f"Server {self.obj.name}/{self.obj.id} in {project_ident(self.obj.project_id)} already exists")
             return
 
+        project_filter = {"project_id": self.project.id}
+        # https://docs.openstack.org/openstacksdk/latest/user/resources/compute/v2/server.html#openstack.compute.v2.server.Server
         self.obj = self.conn.compute.create_server(
             name=self.machine_name,
             flavor_id=self.get_flavor_id_by_name(get_config("vm_flavor")),
@@ -382,6 +385,10 @@ class SCSLandscapeTestMachine:
                "volume_size": int(get_config("vm_volume_size_gb",r"\d+")),
                "delete_on_termination": True,
            }],
+            security_groups=[
+                { "name": self.security_group_name_ingress },
+                { "name": self.security_group_name_egress },
+            ],
             key_name=KEYPAIR_NAME,
         )
         LOGGER.info(f"Created server {self.obj.name}/{self.obj.id} in {project_ident(network.project_id)}")
@@ -408,28 +415,6 @@ class SCSLandscapeTestMachine:
         else:
             LOGGER.info(
                 f"Floating ip is already added to {self.obj.name}/{self.obj.id} in domain {self.project.domain_id}")
-
-        project_filter = {"project_id": self.project.id }
-        sec_obj_ingress = self.conn.get_security_group(self.security_group_name_ingress, filters=project_filter)
-        sec_obj_egress = self.conn.get_security_group(self.security_group_name_egress, filters=project_filter)
-
-        sec_group_add_ingress = True
-        sec_group_add_egress = True
-        for sg in self.obj.security_groups:
-            if sg["name"] == self.security_group_name_ingress:
-                sec_group_add_ingress = False
-                LOGGER.info(f"Security group is already added {self.security_group_name_ingress} to {self.server_ident}")
-            if sg["name"] == self.security_group_name_egress:
-                sec_group_add_egress = False
-                LOGGER.info(f"Security group is already added {self.security_group_name_egress} to {self.server_ident}")
-
-        if sec_group_add_ingress:
-            LOGGER.info(f"Adding security group {sec_obj_ingress.name}/{sec_obj_ingress.id} to {self.server_ident}")
-            self.conn.compute.add_security_group_to_server(self.obj, sec_obj_ingress.id)
-
-        if sec_group_add_egress:
-            LOGGER.info(f"Adding security group {sec_obj_egress.name}/{sec_obj_egress.id} to {self.server_ident}")
-            self.conn.compute.add_security_group_to_server(self.obj, sec_obj_egress.id)
 
     def wait_for_server(self):
         self.conn.compute.wait_for_server(
@@ -617,8 +602,6 @@ class SCSLandscapeTestProject:
             machine = SCSLandscapeTestMachine(self.project_conn, self.obj, machine_name, self.security_group_name_ingress, self.security_group_name_egress)
             machine.create_or_get_server(self.scs_network.obj_network)
             self.scs_machines.append(machine)
-            
-        for nr, machine in enumerate(self.scs_machines):
             if nr == 0:
                 machine.add_floating_ip()
         self.close_connection()
