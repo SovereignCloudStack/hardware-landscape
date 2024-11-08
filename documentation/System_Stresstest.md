@@ -11,6 +11,7 @@ Test scenario:
   * 10GB Disk per machine, 5.5TB DISK in total
 * Remove the stresstestfile
   ```
+  ssh scs-manager1
   mv /srv/www/stresstest.sh /srv/www/stresstest.sh.disabled
   ```
 * Test the scenario
@@ -19,13 +20,14 @@ Test scenario:
   ```
 * Execute the full szenario
   ```
-  ./landscape_ctl --config stresstest.yaml --create_domains stresstest{1..9} --create_projects stresstest-project{1..2} --create_machines stresstestvm{1..6}
+  ./landscape_ctl --config stresstest.yaml --create_domains stresstest{1..9} --create_projects stresstest-project{1..5} --create_machines stresstestvm{1..12}
   openstack domain list
   openstack project list --long
   openstack server list --all-projects --long
   ```
 * Activate the stresstestfile
   ```
+  ssh scs-manager1
   cat <<EOF
   #!/bin/bash
   stress-ng --vm 8 --vm-bytes 80% -t 1h
