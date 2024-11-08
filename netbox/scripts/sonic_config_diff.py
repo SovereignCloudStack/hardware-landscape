@@ -62,7 +62,14 @@ def sort_dict(item: dict):
 class SonicConfigDiff(Script):
     class Meta:
         name = "Compare SONiC Configuration with NetBox Stored Configuration"
-        description = "Fetches the current configuration from a SONiC device(s) via SSH and compares it with the configuration stored in NetBox. It compares only keys available in the NetBox configuration."
+        description = """Fetches the current configuration from a SONiC device(s) via SSH and compares it
+        with the configuration stored in NetBox. It compares only keys available in the NetBox configuration.
+        
+        **This script is not intended for production use!**
+        
+        Certain keys need to be excluded from the running SONiC configuration as well as from Netbox config
+        to produce a cleaner diff with the NetBox configuration merged with the initial SONiC config. This will be improved.
+        """
 
     site = ObjectVar(
         model=Site,
@@ -119,7 +126,7 @@ class SonicConfigDiff(Script):
         """
         dest_file = "netbox_config.json"
 
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".json") as temp_file:
+        with tempfile.NamedTemporaryFile(suffix=".json") as temp_file:
             temp_file.write(netbox_config.encode("utf-8"))
 
             try:
@@ -127,7 +134,9 @@ class SonicConfigDiff(Script):
                     connection,
                     source_file=temp_file.name,
                     dest_file=dest_file,
-                    file_system="/tmp"
+                    file_system="/tmp",
+                    direction="put",
+                    overwrite_file=True,
                 )
             except Exception as err:
                 raise ConnectionError(f"Transfer of Netbox config failed: {err}")
