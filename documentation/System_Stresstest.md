@@ -3,7 +3,7 @@
 ### Create a larger amount of domains, projects and virtual machines
 
 Test scenario:
-  * 12 domains, with 5 projects each , with 12 machines each.
+  * 10 domains, with 6 projects each , with 9 machines each.
     * 9 domains
     * 45 projects
     * 540 virtual machines
@@ -20,7 +20,7 @@ Test scenario:
   ```
 * Execute the full szenario
   ```
-  ./landscape_ctl --config stresstest.yaml --create_domains stresstest{1..9} --create_projects stresstest-project{1..5} --create_machines stresstestvm{1..12}
+  ./landscape_ctl --config stresstest.yaml --create_domains stresstest{1..10} --create_projects stresstest-project{1..6} --create_machines stresstestvm{1..9}
   openstack domain list
   openstack project list --long
   openstack server list --all-projects --long

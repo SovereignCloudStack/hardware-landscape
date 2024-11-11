@@ -529,26 +529,60 @@ class SCSLandscapeTestProject:
             user=user_id, project=self.obj.id, role=self.get_role_id_by_name(role_name))
         LOGGER.info(f"Assigned global admin {role_name} to {user_id} for {project_ident(self.obj.id)}")
 
-    def adapt_quota(self):
-        current_quota =  self._admin_conn.compute.get_quota_set(self.obj.id)
+    def _set_quota(self, quota_type: str):
+        if quota_type == "compute_quotas":
+            api_area = "compute"
+        elif quota_type == "block_storage_quotas":
+            api_area = "volume"
+        else:
+            raise RuntimeError(f"Not implemented: {quota_type}")
+
+        service_obj = getattr(self._admin_conn, api_area)
+        current_quota = service_obj.get_quota_set(self.obj.id)
+
         new_quota = {}
-        if "compute_quotas" in CONFIG:
-            for key_name in CONFIG["compute_quotas"].keys():
+        if quota_type in CONFIG:
+            for key_name in CONFIG[quota_type].keys():
                 try:
                     current_value = getattr(current_quota, key_name)
                 except AttributeError:
-                    LOGGER.error(f"No such compute quota field {key_name}")
+                    LOGGER.error(f"No such {api_area} quota field {key_name}")
                     sys.exit()
-                new_value = int(get_config(key_name, r"\d+", parent_key="compute_quotas", default=str(getattr(current_quota, key_name))))
+                new_value = int(get_config(key_name, r"\d+", parent_key=quota_type, default=str(getattr(current_quota, key_name))))
                 if current_value != new_value:
-                    LOGGER.info(f"New compute quota for {project_ident(self.obj.id)}"
+                    LOGGER.info(f"New {api_area} quota for {project_ident(self.obj.id)}"
                                 f": {key_name} : {current_value} -> {new_value}")
                     new_quota[key_name] = new_value
         if len(new_quota):
-            self._admin_conn.set_compute_quotas(self.obj.id, **new_quota)
-            LOGGER.info(f"Configured compute quotas for {project_ident(self.obj.id)}")
+            set_quota_method = getattr(self._admin_conn, f"set_{api_area}_quotas")
+            set_quota_method(self.obj.id, **new_quota)
+            LOGGER.info(f"Configured {api_area} quotas for {project_ident(self.obj.id)}")
         else:
-            LOGGER.info(f"Compute quotas for {project_ident(self.obj.id)} not changed")
+            LOGGER.info(f"{api_area.capitalize()} quotas for {project_ident(self.obj.id)} not changed")
+
+    def adapt_quota(self):
+        self._set_quota("compute_quotas")
+        #self._set_quota("block_storage_quotas")
+
+        # current_quota =  self._admin_conn.compute.get_quota_set(self.obj.id)
+        # new_quota = {}
+        # if "compute_quotas" in CONFIG:
+        #     for key_name in CONFIG["compute_quotas"].keys():
+        #         try:
+        #             current_value = getattr(current_quota, key_name)
+        #         except AttributeError:
+        #             LOGGER.error(f"No such compute quota field {key_name}")
+        #             sys.exit()
+        #         new_value = int(get_config(key_name, r"\d+", parent_key="compute_quotas", default=str(getattr(current_quota, key_name))))
+        #         if current_value != new_value:
+        #             LOGGER.info(f"New compute quota for {project_ident(self.obj.id)}"
+        #                         f": {key_name} : {current_value} -> {new_value}")
+        #             new_quota[key_name] = new_value
+        # if len(new_quota):
+        #     self._admin_conn.set_compute_quotas(self.obj.id, **new_quota)
+        #     LOGGER.info(f"Configured compute quotas for {project_ident(self.obj.id)}")
+        # else:
+        #     LOGGER.info(f"Compute quotas for {project_ident(self.obj.id)} not changed")
 
     def create_and_get_project(self) -> Project:
         if self.obj:
@@ -610,6 +644,10 @@ class SCSLandscapeTestProject:
         ##########################################################################################
 
     def get_and_create_machines(self, machines: list[str]):
+        if "none" in machines:
+            LOGGER.warning("Not creating a virtual machine, because 'none' was in the list")
+            self.close_connection()
+            return
         for nr, machine_name in enumerate(sorted(machines)):
             machine = SCSLandscapeTestMachine(self.project_conn, self.obj, machine_name, self.security_group_name_ingress, self.security_group_name_egress)
             machine.create_or_get_server(self.scs_network.obj_network)
@@ -694,6 +732,10 @@ class SCSLandscapeTestDomain:
         return domain
 
     def create_and_get_projects(self, create_projects: list[str]):
+        if "none" in create_projects:
+            LOGGER.warning("Not creating a project, because 'none' was in the list")
+            return
+
         self.scs_user.create_and_get_user()
 
         for project_name in create_projects:
