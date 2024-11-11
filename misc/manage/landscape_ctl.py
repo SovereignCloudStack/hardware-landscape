@@ -76,15 +76,14 @@ setup_logging(args.log_level)
 def establish_connection():
     config = loader.OpenStackConfig()
     cloud_config = config.get_one(args.os_cloud)
-    auth = cloud_config.get_auth()
-    sess = session.Session(auth=auth)
-    return Connection(config=cloud_config, session=sess)
+    return Connection(config=cloud_config)
 
 def show_effective_config():
     try:
         with open(args.config, 'r') as file:
             lib.landscape.CONFIG = yaml.safe_load(file)
-            LOGGER.info("The effective configuration: >>>" + pformat(lib.landscape.CONFIG, indent=2, compact=False) + "<<<")
+            LOGGER.info("The effective configuration: \n>>>\n" + pformat(lib.landscape.CONFIG, indent=2, compact=False)
+                        + "\n<<<")
     except Exception as e:
         LOGGER.error(f"Unable to read configuration: {e}")
         sys.exit(1)
