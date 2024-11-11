@@ -45,7 +45,7 @@ def configuration_type_strategy(arg_value: str):
 
 
 def integrated_configuration(config_db: dict) -> bool:
-    docker_router_config_mode = config_db.get("DEVICE_METADATA", {}).get("localhost", {}).get("docker_router_config_mode")
+    docker_router_config_mode = config_db.get("DEVICE_METADATA", {}).get("localhost", {}).get("docker_routing_config_mode")
     if docker_router_config_mode in ("separated", "unified"):
         return True
 
@@ -85,18 +85,21 @@ def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
     host_data = parse_configuration_data()["switches"]
     for hostname in bmc_hosts:
         LOGGER.info(f"Processing switch {hostname}")
-        is_integrated_configuration = False
         data = host_data[hostname]
         base_file_name = f"{get_device_configurations_dir('network')}{data['device_model']}_{hostname}"
 
-        if filetype in ["main", "both"]:
-            frr_backup = """sudo config save config_db_backup.json -y >&2 && cat config_db_backup.json"""
-            result = execute_switch_commands(host_data[hostname], frr_backup)
-            if result is None:
-                continue
+        # Determine if the integrated configuration is in use
+        config_backup = """sudo config save config_db_backup.json -y >&2 && cat config_db_backup.json"""
+        result = execute_switch_commands(host_data[hostname], config_backup)
+        if result is None:
+            is_integrated_configuration = False
+        else:
             json_data = json.loads(result)
             is_integrated_configuration = integrated_configuration(json_data)
 
+        if filetype in ["main", "both"]:
+            if result is None:
+                continue
             results_file = f"{base_file_name}_main.json"
             print(f"writing {results_file}")
             with open(results_file, 'w') as f_out:
