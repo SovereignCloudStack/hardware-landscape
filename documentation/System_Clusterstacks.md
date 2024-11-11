@@ -7,14 +7,19 @@
   ```sh
   osism manage image clusterapi
   ```
-
-- Clusterstacks Bootstrap VM
-
+* Clusterstacks Bootstrap VM
   ```sh
   ./landscape_ctl --config k8s-clusterstacks.yaml \
     --create_domains k8s-clusterstacks --create_projects managment --create_machines bootstrap1
+
+  ```sh
+* Create a project for the controller cluster
+  ```
   ./landscape_ctl --config k8s-clusterstacks.yaml \
     --create_domains k8s-clusterstacks --create_projects controllers --create_machines none
+  ```
+* Check environment
+  ```
   openstack domain list
   openstack project list --long
   openstack server list --all-projects --long
