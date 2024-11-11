@@ -532,16 +532,18 @@ class SCSLandscapeTestProject:
     def _set_quota(self, quota_type: str):
         if quota_type == "compute_quotas":
             api_area = "compute"
+            current_quota = self._admin_conn.compute.get_quota_set(self.obj.id)
         elif quota_type == "block_storage_quotas":
             api_area = "volume"
+            current_quota = self._admin_conn.volume.get_quota_set(self.obj.id)
         elif quota_type == "network_quotas":
             api_area = "network"
+            current_quota = self._admin_conn.get_network_quotas(self.obj.id)
         else:
             raise RuntimeError(f"Not implemented: {quota_type}")
 
-        service_obj = getattr(self._admin_conn, api_area)
-        current_quota = service_obj.get_quota_set(self.obj.id)
-
+        # service_obj = getattr(self._admin_conn, api_area)
+        # current_quota = service_obj.get_quota_set(self.obj.id)
         LOGGER.debug(f"current quotas for {quota_type} : {current_quota}")
 
         new_quota = {}
@@ -550,7 +552,7 @@ class SCSLandscapeTestProject:
                 try:
                     current_value = getattr(current_quota, key_name)
                 except AttributeError:
-                    LOGGER.error(f"No such {api_area} quota field {key_name}")
+                    LOGGER.error(f"No such {api_area} quota field {key_name} in {current_quota}")
                     sys.exit()
                 new_value = int(get_config(key_name, r"\d+", parent_key=quota_type, default=str(getattr(current_quota, key_name))))
                 if current_value != new_value:
@@ -567,26 +569,7 @@ class SCSLandscapeTestProject:
     def adapt_quota(self):
         self._set_quota("compute_quotas")
         self._set_quota("block_storage_quotas")
-
-        # current_quota =  self._admin_conn.compute.get_quota_set(self.obj.id)
-        # new_quota = {}
-        # if "compute_quotas" in CONFIG:
-        #     for key_name in CONFIG["compute_quotas"].keys():
-        #         try:
-        #             current_value = getattr(current_quota, key_name)
-        #         except AttributeError:
-        #             LOGGER.error(f"No such compute quota field {key_name}")
-        #             sys.exit()
-        #         new_value = int(get_config(key_name, r"\d+", parent_key="compute_quotas", default=str(getattr(current_quota, key_name))))
-        #         if current_value != new_value:
-        #             LOGGER.info(f"New compute quota for {project_ident(self.obj.id)}"
-        #                         f": {key_name} : {current_value} -> {new_value}")
-        #             new_quota[key_name] = new_value
-        # if len(new_quota):
-        #     self._admin_conn.set_compute_quotas(self.obj.id, **new_quota)
-        #     LOGGER.info(f"Configured compute quotas for {project_ident(self.obj.id)}")
-        # else:
-        #     LOGGER.info(f"Compute quotas for {project_ident(self.obj.id)} not changed")
+        self._set_quota("network_quotas")
 
     def create_and_get_project(self) -> Project:
         if self.obj:

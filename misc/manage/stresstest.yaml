@@ -16,7 +16,6 @@ block_storage_quotas:
   gigabytes: 5000
 network_quotas:
   security_groups: 50
-  floating-ips: 100
 cloud_init_extra_script: |
   #!/bin/bash
   set -x
