@@ -534,11 +534,15 @@ class SCSLandscapeTestProject:
             api_area = "compute"
         elif quota_type == "block_storage_quotas":
             api_area = "volume"
+        elif quota_type == "network_quotas":
+            api_area = "network"
         else:
             raise RuntimeError(f"Not implemented: {quota_type}")
 
         service_obj = getattr(self._admin_conn, api_area)
         current_quota = service_obj.get_quota_set(self.obj.id)
+
+        LOGGER.debug(f"current quotas for {quota_type} : {current_quota}")
 
         new_quota = {}
         if quota_type in CONFIG:
@@ -562,7 +566,7 @@ class SCSLandscapeTestProject:
 
     def adapt_quota(self):
         self._set_quota("compute_quotas")
-        #self._set_quota("block_storage_quotas")
+        self._set_quota("block_storage_quotas")
 
         # current_quota =  self._admin_conn.compute.get_quota_set(self.obj.id)
         # new_quota = {}

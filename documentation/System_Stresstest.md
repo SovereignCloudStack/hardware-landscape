@@ -36,5 +36,5 @@ Test scenario:
   ```
 * Purge the scenario
   ```
-  ./landscape_ctl --delete_domains stresstest{1..9}
+  ./landscape_ctl --delete_domains stresstest{1..10}
   ```
