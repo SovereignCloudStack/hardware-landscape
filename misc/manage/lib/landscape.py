@@ -2,7 +2,9 @@ import base64
 import logging
 import re
 import sys
+import os
 
+import yaml
 from openstack.exceptions import ResourceNotFound, SDKException
 from openstack.connection import Connection
 from openstack.compute.v2.keypair import Keypair
@@ -14,6 +16,7 @@ from openstack.network.v2.network import Network
 from openstack.network.v2.router import Router
 from openstack.network.v2.security_group import SecurityGroup
 from openstack.network.v2.subnet import Subnet
+
 
 KEYPAIR_NAME = "my_ssh_public_key"
 LOGGER = logging.getLogger()
@@ -334,6 +337,8 @@ class SCSLandscapeTestMachine:
         self.conn = conn
         self.machine_name = machine_name
         self.root_password = get_config("admin_vm_password")
+        self.floating_ip: str | None = None
+        self.internal_ip: str | None = None
         self.security_group_name_ingress = security_group_name_ingress
         self.security_group_name_egress = security_group_name_egress
         self.project = project
@@ -405,28 +410,41 @@ class SCSLandscapeTestMachine:
         cloud_init_script = base64.b64encode(cloud_init_script.encode('utf-8')).decode('utf-8')
         return cloud_init_script
 
-    def add_floating_ip(self):
-        public_network = self.conn.network.find_network('public')
-        if not public_network:
-            LOGGER.error("There is no 'public' network")
-            return
-
-        floating_ips = []
+    def _update_ips(self):
         if self.obj.addresses:
             for network_name, addresses in self.obj.addresses.items():
                 for address in addresses:
-                    if address['OS-EXT-IPS:type'] == 'floating':  # Check if the IP is a floating IP
-                        floating_ips.append(address['addr'])
+                    if address['OS-EXT-IPS:type'] == 'floating':
+                        if self.floating_ip and self.floating_ip != address['addr']:
+                            raise RuntimeError("More than one address of type 'floating'")
+                        self.floating_ip = address['addr']
+                    elif address['OS-EXT-IPS:type'] == 'fixed':
+                        if self.internal_ip and self.internal_ip != address['addr']:
+                            raise RuntimeError("More than one address of type 'fixed'")
+                        self.internal_ip = address['addr']
+                    else:
+                        raise NotImplemented(f"{address} not implemented")
 
-        if len(floating_ips) == 0:
-            LOGGER.info(f"Add floating ip {self.obj.name}/{self.obj.id} in {project_ident(self.project.id)}")
-            self.wait_for_server()
-            floating_ip = self.conn.network.create_ip(floating_network_id=public_network.id)
-            server_port = list(self.conn.network.ports(device_id=self.obj.id))[0]
-            self.conn.network.add_ip_to_port(server_port, floating_ip)
-        else:
+    def add_floating_ip(self):
+        default_provider_network = "public"
+        public_network = self.conn.network.find_network(get_config("public_network", "[a-zA-Z][a-zA-Z0-9]*",
+                                                                   default=default_provider_network))
+        if not public_network:
+            LOGGER.error(f"There is no '{default_provider_network}' network")
+            return
+
+        self._update_ips()
+
+        if self.floating_ip:
             LOGGER.info(
                 f"Floating ip is already added to {self.obj.name}/{self.obj.id} in domain {self.project.domain_id}")
+        else:
+            LOGGER.info(f"Add floating ip {self.obj.name}/{self.obj.id} in {project_ident(self.project.id)}")
+            self.wait_for_server()
+            new_floating_ip = self.conn.network.create_ip(floating_network_id=public_network.id)
+            server_port = list(self.conn.network.ports(device_id=self.obj.id))[0]
+            self.conn.network.add_ip_to_port(server_port, new_floating_ip)
+            self.floating_ip = new_floating_ip.floating_ip_address
 
     def wait_for_server(self):
         self.conn.compute.wait_for_server(
@@ -453,13 +471,13 @@ class SCSLandscapeTestProject:
 
     def __init__(self, admin_conn: Connection, project_name: str, domain: Domain,
                  user: SCSLandscapeTestUser):
-        self._admin_conn = admin_conn
+        self._admin_conn: Connection = admin_conn
         self._project_conn: Connection | None = None
-        self.project_name = project_name
-        self.security_group_name_ingress = f"ingress-ssh-{project_name}"
-        self.security_group_name_egress = f"egress-any-{project_name}"
-        self.domain = domain
-        self.user = user
+        self.project_name: str = project_name
+        self.security_group_name_ingress: str = f"ingress-ssh-{project_name}"
+        self.security_group_name_egress: str = f"egress-any-{project_name}"
+        self.domain: Domain = domain
+        self.user: SCSLandscapeTestUser = user
         self.obj: Project = self._admin_conn.identity.find_project(project_name, domain_id=self.domain.id)
         if self.obj:
             PROJECT_CACHE[self.obj.id] = {"name": self.obj.name, "domain_id": self.domain.id}
@@ -468,7 +486,7 @@ class SCSLandscapeTestProject:
                                                  self.security_group_name_ingress,
                                                  self.security_group_name_egress
                                                  )
-        self.scs_machines: list[SCSLandscapeTestMachine] = \
+        self.scs_machines: dict[str, SCSLandscapeTestMachine] = \
             SCSLandscapeTestProject._get_machines(admin_conn, self.obj,
                                                   self.security_group_name_ingress,
                                                   self.security_group_name_egress
@@ -499,17 +517,18 @@ class SCSLandscapeTestProject:
         return SCSLandscapeTestNetwork(conn, obj, security_group_name_ingress,security_group_name_egress)
 
     @staticmethod
-    def _get_machines(conn: Connection, obj,
+    def _get_machines(conn: Connection, obj: Project,
                       security_group_name_ingress: str,
                       security_group_name_egress: str,
-                      ) -> list[SCSLandscapeTestMachine]:
+                      ) -> dict[str,SCSLandscapeTestMachine]:
+        result = dict()
         if not obj:
-            return []
-        result = []
+            return result
+
         for server in conn.compute.servers(all_projects=True, project_id=obj.id):
             scs_server = SCSLandscapeTestMachine(conn, obj, server.name, security_group_name_ingress, security_group_name_egress)
             scs_server.obj = server
-            result.append(scs_server)
+            result[scs_server.machine_name] = scs_server
         return result
 
     def get_role_id_by_name(self, role_name) -> str:
@@ -601,10 +620,10 @@ class SCSLandscapeTestProject:
 
         ##########################################################################################
         ## CLEANUP THE PROJECT
-        for scs_machine in self.scs_machines:
+        for scs_machine in self.scs_machines.values():
             scs_machine.delete_machine()
 
-        for scs_machine in self.scs_machines:
+        for scs_machine in self.scs_machines.values():
             scs_machine.wait_for_delete()
 
         self.scs_network.delete_network()
@@ -636,12 +655,32 @@ class SCSLandscapeTestProject:
             self.close_connection()
             return
         for nr, machine_name in enumerate(sorted(machines)):
-            machine = SCSLandscapeTestMachine(self.project_conn, self.obj, machine_name, self.security_group_name_ingress, self.security_group_name_egress)
-            machine.create_or_get_server(self.scs_network.obj_network)
-            self.scs_machines.append(machine)
+            if machine_name not in self.scs_machines:
+                machine = SCSLandscapeTestMachine(self.project_conn, self.obj, machine_name, self.security_group_name_ingress, self.security_group_name_egress)
+                machine.create_or_get_server(self.scs_network.obj_network)
+                self.scs_machines[machine.machine_name] = machine
             if nr == 0:
-                machine.add_floating_ip()
+                self.scs_machines[machine_name].add_floating_ip()
         self.close_connection()
+
+    def dump_inventory_hosts(self, directory_location: str):
+        for scs_machine in self.scs_machines.values():
+            data = {
+                "id": scs_machine.obj.id,
+                "status": scs_machine.obj.status,
+                "hypervisor": scs_machine.obj['OS-EXT-SRV-ATTR:hypervisor_hostname'],
+                "hostname": scs_machine.machine_name,
+                "project": scs_machine.project.name,
+                "domain": self.domain.name,
+                "ansible_host": scs_machine.floating_ip,
+                "internal_ip": scs_machine.internal_ip,
+            }
+            base_dir = f"{directory_location}/{data['hostname']}-{data['project']}-{data['domain']}"
+            filename = f'{base_dir}/data.yml'
+            os.makedirs(base_dir, exist_ok=True)
+            with open(filename, 'w') as file:
+                LOGGER.info(f"Creating ansible_inventory_file {filename} for host {data['hostname']}")
+                yaml.dump(data, file, default_flow_style=False, explicit_start=True)
 
     def get_or_create_ssh_key(self):
         self.ssh_key = self.project_conn.compute.find_keypair(KEYPAIR_NAME)
@@ -654,8 +693,9 @@ class SCSLandscapeTestProject:
 
     def close_connection(self):
         LOGGER.info(f"Closing connection for {project_ident(self.obj.id)}")
-        self._project_conn.close()
-        self._project_conn = None
+        if self._project_conn:
+            self._project_conn.close()
+            self._project_conn = None
 
 class SCSLandscapeTestDomain:
 
@@ -719,13 +759,14 @@ class SCSLandscapeTestDomain:
         return domain
 
     def create_and_get_projects(self, create_projects: list[str]):
-        if "none" in create_projects:
-            LOGGER.warning("Not creating a project, because 'none' was in the list")
-            return
-
         self.scs_user.create_and_get_user()
 
+        if "none" in create_projects:
+            LOGGER.warning("Not creating a project, because 'none' was in the list")
+
         for project_name in create_projects:
+            if project_name in self.scs_projects:
+                continue
             project = SCSLandscapeTestProject(self.conn, project_name, self.obj, self.scs_user)
             project.create_and_get_project()
             project.get_or_create_ssh_key()

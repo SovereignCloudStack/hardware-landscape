@@ -46,6 +46,9 @@ parser.add_argument('--os_cloud', type=cloud_checker,
 parser.add_argument('--only_values', '-o', action="store_true",
                              help="Show only the values")
 
+parser.add_argument('--ansible_inventory', type=str, nargs="?",
+                             help="Dump the created servers as an ansible inventory to the specified directory")
+
 parser.add_argument('--config', type=str,
                     default=os.path.realpath(os.path.dirname(os.path.realpath(__file__))) + "/test-default.yaml",
                     help='The config file for environment creation')
@@ -66,6 +69,7 @@ parser.add_argument('--create_projects', '-p', type=item_checker, nargs="+", def
 
 parser.add_argument('--create_machines', '-m', type=item_checker, nargs="+", default=["test1"],
                     help='A list of vms to be created in the created domains')
+
 args = parser.parse_args()
 
 if args.os_cloud == "":
@@ -123,7 +127,12 @@ if args.create_domains:
 
     for scs_domain in scs_domains.values():
         for project in scs_domain.scs_projects.values():
+            if project.project_name not in args.create_projects:
+                continue
             project.get_and_create_machines(args.create_machines)
+            if args.ansible_inventory:
+                project.dump_inventory_hosts(args.ansible_inventory)
+
 
     duration = (time.time() - time_start) / 60
     item_rate = duration / (count_domains + count_projects + count_hosts)
