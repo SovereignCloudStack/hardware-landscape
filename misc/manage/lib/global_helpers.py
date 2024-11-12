@@ -35,14 +35,14 @@ def get_install_media_url(model: str):
 
 def setup_logging(log_level: str) -> Tuple[logging.Logger, str]:
     log_format_string = \
-        '%(asctime)-10s - %(levelname)-7s - %(filename)s:%(lineno)d - %(name)s - %(message)s'
+        '%(asctime)-10s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s'
     logger = logging.getLogger()
     log_file = "STDOUT"
     logging.basicConfig(format=log_format_string,
                         level=log_level)
 
     coloredlogs.DEFAULT_FIELD_STYLES["levelname"] = {'bold': True, 'color': ''}
-    coloredlogs.install(fmt=log_format_string, level=log_level)
+    coloredlogs.install(fmt=log_format_string, level=log_level.upper())
 
     return logger, log_file
 

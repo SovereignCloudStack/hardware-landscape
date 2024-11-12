@@ -20,7 +20,7 @@ of your local system to simplify access to systems of the vp18 hardware landscap
    Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_switches
    Include ${SCS_ENV_DIR:?}/config-snippets/ssh_config_scs_general
 
-   Host scs-* !scs-manager !scs-manager1 !scs-manager2
+   Host scs-* st01-* !scs-manager !scs-manager1 !scs-manager2
       ProxyJump scs-manager
       # Your github id, use "osism" or "dragon" when your are in the
       # installation process

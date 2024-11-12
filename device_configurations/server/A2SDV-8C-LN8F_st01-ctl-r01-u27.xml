@@ -672,7 +672,7 @@
           <Information>
             <!--Information for dynamic IPv6 properties-->
             <TotalDynamicIPv6Group>0</TotalDynamicIPv6Group>
-            <DUID>0E 00 00 01 00 01 2D F0 52 CE 3C EC EF 5B B5 B9</DUID>
+            <DUID>0E 00 00 01 00 01 2E B2 5D AD 3C EC EF 5B B5 B9</DUID>
           </Information>
           <Configuration>
             <!--Configuration for dynamic IPv6 properties-->
