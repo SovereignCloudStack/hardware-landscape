@@ -31,7 +31,7 @@ option bootfile-name "http://<http-server>/provision.json";
 Refer to the [docs](https://github.com/sonic-net/SONiC/blob/master/doc/ztp/ztp.md) for detailed information on how to
 create ZTP boot file.
 
-See and example of `ztp.json` file (for full list of supported ZTP plugins like snmp, firmware, etc. and available
+See an example of `ztp.json` file (for full list of supported ZTP plugins like snmp, firmware, etc. and available
 options refer to the [docs](https://github.com/sonic-net/SONiC/blob/master/doc/ztp/ztp.md)):
 
 ```json
