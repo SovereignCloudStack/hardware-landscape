@@ -32,9 +32,9 @@ chrony_servers:
   - time.cloudflare.com
 
 tinyproxy_allowed_networks:
-  - 10.0.0.0/8
+  - 10.10.21.0/24
+  - 10.10.23.0/24
   - 172.16.0.0/12
-  - 192.168.0.0/16
 
 #tinyproxy_allowed_domains:
 #  - ^.*debian.*$
