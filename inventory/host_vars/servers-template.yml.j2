@@ -18,15 +18,15 @@ mgmt_address: {{ bmc_ip_v4 }}
 mgmt_mac: {{ bmc_mac }}
 
 frr_type: leaf
-frr_local_as: {{ asn }}
+frr_local_as: "{{ asn }}"
 frr_type: leaf
 frr_loopback_v4: {{ node_ip_v4 }}
 frr_loopback_v6: {{ node_ip_v6 }}
 
 frr_uplinks:
 {% for interface in interfaces -%}
-  - interface: {{ interface.name }}
-    remote_as: {{ interface.remote_as }}
+- interface: {{ interface.name }}
+  remote_as: "{{ interface.remote_as }}"
 {% endfor %}
 
 
