@@ -25,9 +25,9 @@ frr_loopback_v6: fd0c:cc24:75a0:1:10:10:21:14
 
 frr_uplinks:
 - interface: enp2s0f0np0
-    remote_as: 65405
+  remote_as: 65405
 - interface: enp2s0f1np1
-    remote_as: 65404
+  remote_as: 65404
 
 
 

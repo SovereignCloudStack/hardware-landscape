@@ -25,8 +25,8 @@ frr_loopback_v6: {{ node_ip_v6 }}
 
 frr_uplinks:
 {% for interface in interfaces -%}
-  - interface: {{ interface.name }}
-    remote_as: {{ interface.remote_as }}
+- interface: {{ interface.name }}
+  remote_as: {{ interface.remote_as }}
 {% endfor %}
 
 
