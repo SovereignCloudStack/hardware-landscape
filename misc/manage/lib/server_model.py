@@ -43,12 +43,12 @@ def parse_configuration_data_servers(data) -> dict[str, dict[str, str]]:
         machine_type = m.group(2)
 
         LOGGER.debug(f"loading data from: {docu_file_name}")
-        interfaces: list[str] = []
+        interfaces: list[dict[str,str]] = []
         with open(docu_file_name, 'r') as file:
             for line in file.readlines():
-                m = re.fullmatch(r".*\s+NIC:\s+([a-z0-9]+?)([\s].*|)", line.strip())
+                m = re.fullmatch(r".*\s+NIC:\s+([a-z0-9]+?)\s*/\s* ASN:\s*(\d+)([\s].*|)", line.strip())
                 if m:
-                    interfaces.append(m.group(1))
+                    interfaces.append( { "name": m.group(1), "remote_as": m.group(2) } )
 
                 m = re.fullmatch(
                     r"\|\s*(?P<name>[a-z0-9-]+?)\s*\|"
@@ -68,7 +68,9 @@ def parse_configuration_data_servers(data) -> dict[str, dict[str, str]]:
                         get_bmc_login_data(m.group("name"))
                     data[m.group("name")]["device_model"] = machine_type
                     data[m.group("name")]["device_vendor"] = machine_vendor
-                    data[m.group("name")]["interfaces"] = sorted(interfaces)
+                    if len(interfaces) == 0:
+                        raise RuntimeError("No interfaces found")
+                    data[m.group("name")]["interfaces"] = sorted(interfaces, key=lambda x: x['name'])
                     for field in CONFIG_FIELDS_SERVERS:
                         if field not in data[m.group("name")]:
                             LOGGER.error(f"field not in line : >>{line.strip()}<<")
