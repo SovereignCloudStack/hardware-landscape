@@ -18,15 +18,16 @@ mgmt_address: 10.10.23.13
 mgmt_mac: 3c:ec:ef:5b:b5:bf
 
 frr_type: leaf
-frr_local_as: 4210021013
+frr_local_as: "4210021013"
+frr_type: leaf
 frr_loopback_v4: 10.10.21.13
 frr_loopback_v6: fd0c:cc24:75a0:1:10:10:21:13
 
 frr_uplinks:
 - interface: enp2s0f0np0
-  remote_as: 65405
+  remote_as: "65405"
 - interface: enp2s0f1np1
-  remote_as: 65404
+  remote_as: "65404"
 
 
 
