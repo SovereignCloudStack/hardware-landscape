@@ -83,6 +83,7 @@ kube_vip_bgp: true
 # to make leader election functional.
 kube_vip_arp: false
 
+frr_automatic_restart: false
 
 ##########################
 # docker

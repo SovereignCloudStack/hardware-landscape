@@ -19,7 +19,6 @@ mgmt_mac: 7c:c2:55:86:38:80
 
 frr_type: leaf
 frr_local_as: "4210021016"
-frr_type: leaf
 frr_loopback_v4: 10.10.21.16
 frr_loopback_v6: fd0c:cc24:75a0:1:10:10:21:16
 
