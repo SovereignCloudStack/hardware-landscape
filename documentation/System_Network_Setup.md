@@ -1,4 +1,4 @@
-# The networking diagram
+# The networking setup
 
 This diagram visualizes the physical (devices, and wiring) and logical (VLANs, Routed, BGP/ASN) setup of the environment.
 
