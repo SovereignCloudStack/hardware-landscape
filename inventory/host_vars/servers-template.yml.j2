@@ -17,7 +17,17 @@ netdata_host_type: client
 mgmt_address: {{ bmc_ip_v4 }}
 mgmt_mac: {{ bmc_mac }}
 
-bgp_asn: {{ asn }}
+frr_type: leaf
+frr_local_as: "{{ asn }}"
+frr_loopback_v4: {{ node_ip_v4 }}
+frr_loopback_v6: {{ node_ip_v6 }}
+
+frr_uplinks:
+{% for interface in interfaces -%}
+- interface: {{ interface.name }}
+  remote_as: "{{ interface.remote_as }}"
+{% endfor %}
+
 
 ##########################################################
 # network
@@ -33,7 +43,7 @@ network_ethernets_generated:
       - {{ node_ip_v4 }}/32
       - {{ node_ip_v6 }}/128
 {% for interface in interfaces %}
-  {{ interface }}:
+  {{ interface.name }}:
       mtu: 9100
       dhcp4: "no"
       dhcp6: "no"
