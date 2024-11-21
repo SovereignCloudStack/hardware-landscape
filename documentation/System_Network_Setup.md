@@ -524,7 +524,143 @@ leaf switches through the output of various network commands and files.
 ### The Interface configuration
 
 ```bash
-root@st01-stor-r01-u01:/home/scoopex# cat /etc/netplan/01-osism.yaml
+admin@st01-sw25g-r01-u34:~$ show interfaces status
+  Interface            Lanes    Speed    MTU    FEC            Alias    Vlan    Oper    Admin             Type    Asym PFC    Oper Speed
+-----------  ---------------  -------  -----  -----  ---------------  ------  ------  -------  ---------------  ----------  ------------
+  Ethernet0                3      25G   9100    N/A    Eth6/3(Port1)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+  Ethernet1                2      25G   9100    N/A    Eth6/2(Port2)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+  Ethernet2                4      25G   9100    N/A    Eth6/4(Port3)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+  Ethernet3                8      25G   9100    N/A    Eth7/4(Port4)  routed    down     down              N/A         N/A           25G
+  Ethernet4                7      25G   9100    N/A    Eth7/3(Port5)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+  Ethernet5                1      25G   9100    N/A    Eth6/1(Port6)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+  Ethernet6                5      25G   9100    N/A    Eth7/1(Port7)  routed    down     down              N/A         N/A           25G
+  Ethernet7               16      25G   9100    N/A   Eth11/4(Port8)  routed    down     down              N/A         N/A           25G
+  Ethernet8                6      25G   9100    N/A    Eth7/2(Port9)  routed    down     down              N/A         N/A           25G
+  Ethernet9               14      25G   9100    N/A  Eth11/2(Port10)  routed    down     down              N/A         N/A           25G
+ Ethernet10               13      25G   9100    N/A  Eth11/1(Port11)  routed    down     down              N/A         N/A           25G
+ Ethernet11               15      25G   9100    N/A  Eth11/3(Port12)  routed    down     down              N/A         N/A           25G
+ Ethernet12               23      25G   9100    N/A  Eth18/3(Port13)  routed    down     down              N/A         N/A           25G
+ Ethernet13               22      25G   9100    N/A  Eth18/2(Port14)  routed    down     down              N/A         N/A           25G
+ Ethernet14               24      25G   9100    N/A  Eth18/4(Port15)  routed    down     down              N/A         N/A           25G
+ Ethernet15               32      25G   9100    N/A  Eth19/4(Port16)  routed    down     down              N/A         N/A           25G
+ Ethernet16               31      25G   9100    N/A  Eth19/3(Port17)  routed    down     down              N/A         N/A           25G
+ Ethernet17               21      25G   9100    N/A  Eth18/1(Port18)  routed    down     down              N/A         N/A           25G
+ Ethernet18               29      25G   9100    N/A  Eth19/1(Port19)  routed    down     down              N/A         N/A           25G
+ Ethernet19               36      25G   9100    N/A  Eth23/4(Port20)  routed    down     down              N/A         N/A           25G
+ Ethernet20               30      25G   9100    N/A  Eth19/2(Port21)  routed    down     down              N/A         N/A           25G
+ Ethernet21               34      25G   9100    N/A  Eth23/2(Port22)  routed    down     down              N/A         N/A           25G
+ Ethernet22               33      25G   9100    N/A  Eth23/1(Port23)  routed    down     down              N/A         N/A           25G
+ Ethernet23               35      25G   9100    N/A  Eth23/3(Port24)  routed    down     down              N/A         N/A           25G
+ Ethernet24               43      25G   9100    N/A  Eth30/3(Port25)  routed    down     down              N/A         N/A           25G
+ Ethernet25               42      25G   9100    N/A  Eth30/2(Port26)  routed    down     down              N/A         N/A           25G
+ Ethernet26               44      25G   9100    N/A  Eth30/4(Port27)  routed    down     down              N/A         N/A           25G
+ Ethernet27               52      25G   9100    N/A  Eth31/4(Port28)  routed    down     down              N/A         N/A           25G
+ Ethernet28               51      25G   9100    N/A  Eth31/3(Port29)  routed    down     down              N/A         N/A           25G
+ Ethernet29               41      25G   9100    N/A  Eth30/1(Port30)  routed    down     down              N/A         N/A           25G
+ Ethernet30               49      25G   9100    N/A  Eth31/1(Port31)  routed    down     down              N/A         N/A           25G
+ Ethernet31               60      25G   9100    N/A  Eth35/4(Port32)  routed    down     down              N/A         N/A           25G
+ Ethernet32               50      25G   9100    N/A  Eth31/2(Port33)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet33               58      25G   9100    N/A  Eth35/2(Port34)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet34               57      25G   9100    N/A  Eth35/1(Port35)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet35               59      25G   9100    N/A  Eth35/3(Port36)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet36               62      25G   9100    N/A  Eth42/2(Port37)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet37               63      25G   9100    N/A  Eth42/3(Port38)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet38               64      25G   9100    N/A  Eth42/4(Port39)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet39               65      25G   9100    N/A  Eth40/1(Port40)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet40               66      25G   9100    N/A  Eth40/2(Port41)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet41               61      25G   9100    N/A  Eth42/1(Port42)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet42               68      25G   9100    N/A  Eth40/4(Port43)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet43               69      25G   9100    N/A  Eth44/1(Port44)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet44               67      25G   9100    N/A  Eth40/3(Port45)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet45               71      25G   9100    N/A  Eth44/3(Port46)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet46               72      25G   9100    N/A  Eth44/4(Port47)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet47               70      25G   9100    N/A  Eth44/2(Port48)  routed      up       up   SFP/SFP+/SFP28         N/A           25G
+ Ethernet48      77,78,79,80     100G   9100    N/A    Eth49(Port49)  routed    down     down              N/A         N/A          100G
+ Ethernet52      85,86,87,88     100G   9100    N/A    Eth50(Port50)  routed    down     down              N/A         N/A          100G
+ Ethernet56      93,94,95,96     100G   9100    N/A    Eth51(Port51)  routed    down     down              N/A         N/A          100G
+ Ethernet60     97,98,99,100     100G   9100    N/A    Eth52(Port52)  routed    down     down              N/A         N/A          100G
+ Ethernet64  105,106,107,108     100G   9100    N/A    Eth53(Port53)  routed    down     down              N/A         N/A          100G
+ Ethernet68  113,114,115,116     100G   9100    N/A    Eth54(Port54)  routed    down     down              N/A         N/A          100G
+ Ethernet72  121,122,123,124     100G   9100    N/A    Eth55(Port55)  routed      up       up  QSFP28 or later         N/A          100G
+ Ethernet76  125,126,127,128     100G   9100    N/A    Eth56(Port56)  routed      up       up  QSFP28 or later         N/A          100G
+
+admin@st01-sw25g-r01-u34:~$ show ipv6 interfaces
+Interface    Master    IPv4 address/mask                        Admin/Oper    BGP Neighbor    Neighbor IP
+-----------  --------  ---------------------------------------  ------------  --------------  -------------
+Bridge                 fe80::a0f7:67ff:fee5:6b89%Bridge/64      up/down       N/A             N/A
+Ethernet0              fe80::d277:ceff:fe4b:b47a%Ethernet0/64   up/up         N/A             N/A
+Ethernet1              fe80::d277:ceff:fe4b:b47a%Ethernet1/64   up/up         N/A             N/A
+Ethernet2              fe80::d277:ceff:fe4b:b47a%Ethernet2/64   up/up         N/A             N/A
+Ethernet4              fe80::d277:ceff:fe4b:b47a%Ethernet4/64   up/up         N/A             N/A
+Ethernet5              fe80::d277:ceff:fe4b:b47a%Ethernet5/64   up/up         N/A             N/A
+Ethernet32             fe80::d277:ceff:fe4b:b47a%Ethernet32/64  up/up         N/A             N/A
+Ethernet33             fe80::d277:ceff:fe4b:b47a%Ethernet33/64  up/up         N/A             N/A
+Ethernet34             fe80::d277:ceff:fe4b:b47a%Ethernet34/64  up/up         N/A             N/A
+Ethernet35             fe80::d277:ceff:fe4b:b47a%Ethernet35/64  up/up         N/A             N/A
+Ethernet36             fe80::d277:ceff:fe4b:b47a%Ethernet36/64  up/up         N/A             N/A
+Ethernet37             fe80::d277:ceff:fe4b:b47a%Ethernet37/64  up/up         N/A             N/A
+Ethernet38             fe80::d277:ceff:fe4b:b47a%Ethernet38/64  up/up         N/A             N/A
+Ethernet39             fe80::d277:ceff:fe4b:b47a%Ethernet39/64  up/up         N/A             N/A
+Ethernet40             fe80::d277:ceff:fe4b:b47a%Ethernet40/64  up/up         N/A             N/A
+Ethernet41             fe80::d277:ceff:fe4b:b47a%Ethernet41/64  up/up         N/A             N/A
+Ethernet42             fe80::d277:ceff:fe4b:b47a%Ethernet42/64  up/up         N/A             N/A
+Ethernet43             fe80::d277:ceff:fe4b:b47a%Ethernet43/64  up/up         N/A             N/A
+Ethernet44             fe80::d277:ceff:fe4b:b47a%Ethernet44/64  up/up         N/A             N/A
+Ethernet45             fe80::d277:ceff:fe4b:b47a%Ethernet45/64  up/up         N/A             N/A
+Ethernet46             fe80::d277:ceff:fe4b:b47a%Ethernet46/64  up/up         N/A             N/A
+Ethernet47             fe80::d277:ceff:fe4b:b47a%Ethernet47/64  up/up         N/A             N/A
+Ethernet72             fe80::d277:ceff:fe4b:b47a%Ethernet72/64  up/up         N/A             N/A
+Ethernet76             fe80::d277:ceff:fe4b:b47a%Ethernet76/64  up/up         N/A             N/A
+Loopback0              fd0c:cc24:75a0:1:10:10:21:4/128          up/up         N/A             N/A
+                       fe80::4887:58ff:fe6d:3ecf%Loopback0/64                 N/A             N/A
+docker0                fd00::1/80                               up/down       N/A             N/A
+                       fe80::1%docker0/64                                     N/A             N/A
+eth0         mgmt      fe80::d277:ceff:fe4b:b47a%eth0/64        up/up         N/A             N/A
+lo                     ::1/128                                  up/up         N/A             N/A
+lo-m         mgmt      fe80::d8e2:c2ff:feae:302f%lo-m/64        up/up         N/A             N/A
+
+admin@st01-sw25g-r01-u34:~$ show ip interfaces
+Interface    Master    IPv4 address/mask    Admin/Oper    BGP Neighbor    Neighbor IP
+-----------  --------  -------------------  ------------  --------------  -------------
+Loopback0              10.10.21.4/32        up/up         N/A             N/A
+docker0                240.127.1.1/24       up/down       N/A             N/A
+eth0         mgmt      10.10.23.107/24      up/up         N/A             N/A
+lo                     127.0.0.1/16         up/up         N/A             N/A
+lo-m         mgmt      127.0.0.1/16         up/up         N/A             N/A
+
+admin@st01-sw25g-r01-u34:~$ show ip route
+Codes: K - kernel route, C - connected, S - static, R - RIP,
+       O - OSPF, I - IS-IS, B - BGP, E - EIGRP, N - NHRP,
+       T - Table, v - VNC, V - VNC-Direct, A - Babel, F - PBR,
+       f - OpenFabric,
+       > - selected route, * - FIB route, q - queued, r - rejected, b - backup
+       t - trapped, o - offload failure
+
+C>* 10.10.21.4/32 is directly connected, Loopback0, 03w2d19h
+B>* 10.10.21.5/32 [20/0] via fe80::922d:77ff:fe58:2650, Ethernet72, weight 1, 03w2d19h
+  *                      via fe80::922d:77ff:fe58:2750, Ethernet76, weight 1, 03w2d19h
+B>* 10.10.21.6/32 [20/0] via fe80::922d:77ff:fe58:2650, Ethernet72, weight 1, 03w2d19h
+  *                      via fe80::922d:77ff:fe58:2750, Ethernet76, weight 1, 03w2d19h
+B>* 10.10.21.7/32 [20/0] via fe80::922d:77ff:fe58:2650, Ethernet72, weight 1, 03w2d19h
+  *                      via fe80::922d:77ff:fe58:2750, Ethernet76, weight 1, 03w2d19h
+B>* 10.10.21.10/32 [20/0] via fe80::5e6f:69ff:feb0:49c1, Ethernet5, weight 1, 02w0d17h
+B>* 10.10.21.11/32 [20/0] via fe80::1623:f3ff:fef5:6101, Ethernet4, weight 1, 02w3d01h
+B>* 10.10.21.12/32 [20/0] via fe80::5e6f:69ff:feb0:4b61, Ethernet2, weight 1, 19:35:05
+B>* 10.10.21.13/32 [20/0] via fe80::5e6f:69ff:feb0:4b41, Ethernet1, weight 1, 02w1d23h
+B>* 10.10.21.14/32 [20/0] via fe80::5e6f:69ff:feb0:46f1, Ethernet0, weight 1, 02w3d01h
+B>* 10.10.21.21/32 [20/0] via fe80::1623:f2ff:fecb:86e1, Ethernet47, weight 1, 21:32:59
+B>* 10.10.21.22/32 [20/0] via fe80::1623:f2ff:fecb:c0b1, Ethernet46, weight 1, 02w3d01h
+B>* 10.10.21.23/32 [20/0] via fe80::1623:f2ff:fecb:cc41, Ethernet45, weight 1, 02w3d01h
+B>* 10.10.21.24/32 [20/0] via fe80::1623:f2ff:fecb:c0f1, Ethernet44, weight 1, 02w3d01h
+B>* 10.10.21.25/32 [20/0] via fe80::5e6f:69ff:feb0:bc81, Ethernet43, weight 1, 02w2d23h
+B>* 10.10.21.26/32 [20/0] via fe80::5e6f:69ff:feb0:c461, Ethernet42, weight 1, 02w6d18h
+B>* 10.10.21.27/32 [20/0] via fe80::1623:f2ff:fecb:a9a1, Ethernet41, weight 1, 02w6d18h
+B>* 10.10.21.28/32 [20/0] via fe80::5e6f:69ff:feb0:c451, Ethernet40, weight 1, 02w3d02h
+B>* 10.10.21.29/32 [20/0] via fe80::1623:f2ff:fecb:b381, Ethernet39, weight 1, 02w3d01h
+B>* 10.10.21.30/32 [20/0] via fe80::5e6f:69ff:feb0:c0f1, Ethernet38, weight 1, 02w3d01h
+B>* 10.10.21.200/32 [20/0] via fe80::5e6f:69ff:feb0:4b41, Ethernet1, weight 1, 19:38:44
+B>* 10.10.21.201/32 [20/0] via fe80::5e6f:69ff:feb0:4b41, Ethernet1, weight 1, 19:38:44
+
 ```
 
 ### The configuration of the FRRouting Daemon
