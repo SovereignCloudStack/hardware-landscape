@@ -205,29 +205,10 @@ For the steps described in the osd configurtion there are the following exceptio
 
 ## Step 6: Create Test Workload
 
-This generates test enviromments with the following charateristics:
-
-* 9 domains with
-  * one admin user
-    * each with 9 projects
-    * assigned roles
-    * which then each contain 9 servers
-          * block storage volume
-          * first server has a floating ip
-    * one public SSH key
-    * a network
-    * a subnet
-    * a router
-    * a security group for ssh ingress access
-    * a security group for egress access
-
-To specify configuration details create a new configuration from the [default file](misc/manage/test-default.yaml) and specify
-it with `--config <fully qualified path>`.
+This generates a test simple enviromment.
 
 The tooling creates the resouces in a serial process and trys to be reentrant if you specify a compatible set of domain,
 project and machine name parameters.
-
-### Create a small amount of domains, projects and virtual machines
 
 * Create a domain with a project which contains two virtual machines
   ```
