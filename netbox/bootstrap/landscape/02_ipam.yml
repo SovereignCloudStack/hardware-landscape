@@ -1,0 +1,100 @@
+vlans:
+  - name: "Vlan23"
+    vid: 23
+    status: "active"
+    description: "Management"
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: landscape
+  - name: "Vlan25"
+    vid: 25
+    status: "active"
+    description: "Production environment"
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: landscape
+  - name: "Vlan26"
+    vid: 26
+    status: "active"
+    description: "Production environment - Storage"
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: landscape
+  - name: "Vlan35"
+    vid: 35
+    status: "active"
+    description: "Lab environment"
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: lab
+      - slug: landscape
+  - name: "Vlan36"
+    vid: 36
+    status: "active"
+    description: "Lab environment"
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: lab
+      - slug: landscape
+prefixes:
+  - prefix: 10.10.1.0/24
+    status: "active"
+    description: "vpn1 - VPN transfer/client network"
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: landscape
+  - prefix: 10.10.21.0/24
+    status: "active"
+    description: "zone1 - Production Node Network"
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: landscape
+  - prefix: 10.10.22.0/24
+    status: "active"
+    description: "mgmt-p2p - Out of band for rack level"
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: landscape
+  - prefix: 10.10.23.0/24
+    status: "active"
+    description: "mgmt - Out of band access for switches and servers"
+    vlan:
+      vid: 23
+    site:
+      slug: "st01"
+    tags:
+      - slug: scs
+      - slug: landscape
+ip-ranges:
+  - start_address: 10.10.21.200
+    end_address: 10.10.21.201
+    status: "active"
+    description: "prod1 - Openstack API Endpoints"
+  - start_address: 10.10.21.202
+    end_address: 10.10.21.203  # TODO: check the documentation and fix it, doc does not mention range but IP instead
+    status: "active"
+    description: "prod1 - Loadbalancer URLs, Kubernetes, Static"
+  - start_address: 10.10.21.220
+    end_address: 10.10.21.239
+    status: "active"
+    description: "prod1 - Loadbalancer URLs, Kubernetes, Dynamic"
+  - start_address: 10.10.21.240
+    end_address: 10.10.21.250
+    status: "active"
+    description: "mgmt - DHCP range for deployments"
