@@ -66,8 +66,17 @@ The main goals of this environment are:
         * [Supermicro A2SDV-8C-LN8F](documentation/devices/servers/Supermicro_A2SDV-8C-LN8F.md)
 * Other documentation
   * SONiC
-    * [FAQ for SONiC](documentation/sonic/FAQ_SONiC.md)
-    * [SONiC Testing Environment](documentation/sonic/SONiC_Testing.md)
+      * [General FAQ](documentation/sonic/FAQ.md)
+      * [Open Network Install Environment (ONIE)](documentation/sonic/ONIE.md)
+      * [Free Range Routing, FRR](documentation/sonic/FRR.md)
+      * [Development Hints](documentation/sonic/Development.md)
+      * [Building a SONiC image](documentation/sonic/Build.md)
+      * [Zero Touch Provisioning (ZTP)](documentation/sonic/ZTP.md)
+      * [Provisioning Overview](documentation/sonic/Provisioning.md)
+      * [General information about sonic testsing](documentation/sonic/Testing.md)
+        * [GNS testbed deployment](documentation/sonic/testbed/GNS3_bgp_basic.md)
+        * [GNS testbed deployment with unified configuration](documentation/sonic/testbed/GNS3_bgp_unified.md)
+      * ["route-map set src option" issue](documentation/sonic/FRR_issue_01.md)
 
 
 ## Environment Links

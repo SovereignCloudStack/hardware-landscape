@@ -1,0 +1,63 @@
+# Update devices and assign primary_ip4 and oob_ip
+devices:
+  - name: "st01-sw10g-r01-u38"
+    status: "active"
+    device_type:
+      slug: "edgecore-5835-54x-o-ac-b"
+    role:
+      slug: "spine-router"
+    site:
+      slug: "st01"
+    primary_ip4:
+      address: "10.10.23.105/24"
+    oob_ip:
+      address: "10.10.23.105/24"
+  - name: "st01-sw10g-r01-u39"
+    status: "active"
+    device_type:
+      slug: "edgecore-5835-54x-o-ac-b"
+    role:
+      slug: "spine-router"
+    site:
+      slug: "st01"
+    primary_ip4:
+      address: "10.10.23.104/24"
+    oob_ip:
+      address: "10.10.23.104/24"
+  - name: "st01-sw25g-r01-u40"
+    status: "active"
+    device_type:
+      slug: "edgecore-7326-56x-o-ac-b"
+    role:
+      slug: "leaf-router"
+    site:
+      slug: "st01"
+    primary_ip4:
+      address: "10.10.23.106/24"
+    oob_ip:
+      address: "10.10.23.106/24"
+  - name: "st01-sw100g-r01-u41"
+    status: "active"
+    device_type:
+      slug: "edgecore-7726-32x-o"
+    role:
+      slug: "leaf-router"
+    site:
+      slug: "st01"
+    primary_ip4:
+      address: "10.10.23.111/24"
+    oob_ip:
+      address: "10.10.23.111/24"
+  - name: "st01-sw1g-r01-u42"
+    status: "active"
+    device_type:
+      slug: "edgecore-4630-54te-o-ac-b"
+    role:
+      slug: "management-router"
+    site:
+      slug: "st01"
+    primary_ip4:
+      address: "10.10.23.103/24"
+    oob_ip:
+      address: "10.10.23.103/24"
+
