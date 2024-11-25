@@ -35,6 +35,7 @@ chrony_servers:
 tinyproxy_allowed_networks:
   - 10.10.21.0/24
   - 10.10.23.0/24
+  - 172.16.0.0/12
 
 #tinyproxy_allowed_domains:
 #  - ^.*debian.*$
