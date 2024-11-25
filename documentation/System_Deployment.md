@@ -209,54 +209,21 @@ For the steps described in the osd configurtion there are the following exceptio
 
 ## Step 6: Create Test Workload
 
-This generates test enviromments with the following charateristics:
+Test the deployed platform by creating some domains, projects and virtual machines.
 
-* 9 domains with
-  * one admin user
-    * each with 9 projects
-    * assigned roles
-    * which then each contain 9 servers
-          * block storage volume
-          * first server has a floating ip
-    * one public SSH key
-    * a network
-    * a subnet
-    * a router
-    * a security group for ssh ingress access
-    * a security group for egress access
+You can use the [tiny scenario](https://github.com/SovereignCloudStack/openstack-workload-generator?tab=readme-ov-file#example-usage-a-tiny-scenario).
 
-To specify configuration details create a new configuration from the [default file](misc/manage/test-default.yaml) and specify
-it with `--config <fully qualified path>`.
+```
+cd /home/dragon
+gut clone https://github.com/SovereignCloudStack/openstack-workload-generator.git
+cd openstack-workload-generator
+cp /opt/configuration/environments/openstack/{secure.yml,clouds.yml} .
+./openstack_workload_generator \
+    --create_domains smoketest{1..2} \
+    --create_projects smoketest-project{1..2} \
+    --create_machines smoketest-testvm{1..2}
 
-The tooling creates the resouces in a serial process and trys to be reentrant if you specify a compatible set of domain,
-project and machine name parameters.
+```
+## Step 7: Run Stresstest Workload
 
-### Create a small amount of domains, projects and virtual machines
-
-* Create a domain with a project which contains two virtual machines
-  ```
-  ./landscape_ctl --config smoketest.yml --create_domains smoketest1 --create_projects smoketest-project1 --create_machines smoketest-testvm{1..2}
-  ```
-* Verify the result
-  ```
-  openstack domain list
-  openstack project list --long
-  openstack server list --all-projects --long
-  openstack server list --all-projects -f json|\
-    jq -r '
-    .[]
-    | select(.Name | test("^smoketest-"))
-    | select(.Networks
-        | to_entries[]
-        | select(.value[] | test("^10\\.80\\.")))
-    | "\(.Name) \(.Networks
-        | to_entries[]
-        | select(.value[] | test("^10\\.80\\."))
-        | .value[]
-        | select(test("^10\\.80\\.")))"'
-  ssh ubuntu@10.80.x.x
-  ```
-* Cleanup smoketest
-  ```
-  ./landscape_ctl --delete_domains smoketest1
-  ```
+Use the [huge stresstest scenario](https://github.com/SovereignCloudStack/openstack-workload-generator?tab=readme-ov-file#example-usage-a-huge-stresstest-scenario).

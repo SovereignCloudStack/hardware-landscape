@@ -12,7 +12,7 @@ netbox_plugins_extra:
   - netbox_topology_views
 netbox_plugins_config:
   netbox_config_diff:
-    USERNAME: "admin"
-    PASSWORD: "YourPaSsWoRd"
+    USERNAME: "{{ netbox_config_diff_username }}"
+    PASSWORD: "{{ netbox_config_diff_password }}"
 netbox_extra:
   SCRIPTS_ROOT: '/opt/netbox/netbox/scripts'
