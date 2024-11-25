@@ -49,7 +49,7 @@ The main goals of this environment are:
   * Documentation of the system setup
     * [The rack configuration](documentation/System_Rack_Setup.md)
     * [General Network Information](documentation/System_Networks.md)
-    * [The Networking Diagram](documentation/System_Network_Diagram.md)
+    * [The Networking Diagram](documentation/System_Network_Setup.md)
     * [Detailed Description of the Network Wireing](documentation/System_Network_Wireing.md)
     * [Detailed Description of the Power Wireing](documentation/System_Power_Wireing.md)
     * Hardware Devices
