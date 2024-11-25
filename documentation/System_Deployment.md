@@ -205,35 +205,21 @@ For the steps described in the osd configurtion there are the following exceptio
 
 ## Step 6: Create Test Workload
 
-This generates a test simple enviromment.
+Test the deployed platform by creating some domains, projects and virtual machines.
 
-The tooling creates the resouces in a serial process and trys to be reentrant if you specify a compatible set of domain,
-project and machine name parameters.
+You can use the [tiny scenario](https://github.com/SovereignCloudStack/openstack-workload-generator?tab=readme-ov-file#example-usage-a-tiny-scenario).
 
-* Create a domain with a project which contains two virtual machines
-  ```
-  ./landscape_ctl --config smoketest.yml --create_domains smoketest1 --create_projects smoketest-project1 --create_machines smoketest-testvm{1..2}
-  ```
-* Verify the result
-  ```
-  openstack domain list
-  openstack project list --long
-  openstack server list --all-projects --long
-  openstack server list --all-projects -f json|\
-    jq -r '
-    .[]
-    | select(.Name | test("^smoketest-"))
-    | select(.Networks
-        | to_entries[]
-        | select(.value[] | test("^10\\.80\\.")))
-    | "\(.Name) \(.Networks
-        | to_entries[]
-        | select(.value[] | test("^10\\.80\\."))
-        | .value[]
-        | select(test("^10\\.80\\.")))"'
-  ssh ubuntu@10.80.x.x
-  ```
-* Cleanup smoketest
-  ```
-  ./landscape_ctl --delete_domains smoketest1
-  ```
+```
+cd /home/dragon
+gut clone https://github.com/SovereignCloudStack/openstack-workload-generator.git
+cd openstack-workload-generator
+cp /opt/configuration/environments/openstack/{secure.yml,clouds.yml} .
+./openstack_workload_generator \
+    --create_domains smoketest{1..2} \
+    --create_projects smoketest-project{1..2} \
+    --create_machines smoketest-testvm{1..2}
+
+```
+## Step 7: Run Stresstest Workload
+
+Use the [huge stresstest scenario](https://github.com/SovereignCloudStack/openstack-workload-generator?tab=readme-ov-file#example-usage-a-huge-stresstest-scenario).
