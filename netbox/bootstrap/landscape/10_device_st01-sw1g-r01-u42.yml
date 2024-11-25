@@ -1,0 +1,86 @@
+devices:
+  - name: "st01-sw1g-r01-u42"
+    status: "active"
+    device_type:
+      slug: "edgecore-4630-54te-o-ac-b"
+    role:
+      slug: "management-router"
+    site:
+      slug: "st01"
+    platform:
+      slug: "sonic"
+    rack:
+      name: "r01"
+    config_template:
+      name: "sonic_config"
+    serial: "463054TE2315114"
+    position: 42
+    face: "rear"
+    description: "Management lab router"
+    local_context_data:
+      hwsku: "Accton-AS4630-54TE"
+      platform: "x86_64-accton_as4630_54te-r0"
+      mac_addr: "d2:77:ce:2b:59:c4"
+      # FIXME: Add gateway IP to the Jinja template.
+      #  Netbox does not support concept of gateways, see https://github.com/netbox-community/netbox/issues/1610
+      #  The gateway should be introduced as a custom_field or tag on IP address resource.
+      mgmt_gwaddr: "10.10.23.254"
+      loopback_interfaces:
+        - name: "Loopback0"
+          ip_address: "10.10.21.42/32"
+      ntp_servers:
+        - "10.10.23.254"
+        - "10.10.23.253"
+      syslog_servers:
+        - "10.10.23.254"
+    tags:
+      - slug: scs
+      - slug: landscape
+      - slug: lab
+interfaces:
+  - name: "eth0"
+    type: "1000base-t"
+    enabled: true
+    device:
+      name: "st01-sw1g-r01-u42"
+    description: "Management Port"
+  - name: "Ethernet0"
+    type: "1000base-t"
+    enabled: true
+    device:
+      name: "st01-sw1g-r01-u42"
+    description: "to_u47_1g_vlan23"
+    mode: "tagged"  # see https://github.com/netbox-community/netbox/issues/17249
+    untagged_vlan:
+      vid: "23"
+  - name: "Ethernet52"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw1g-r01-u42"
+    description: "to_u41_100g_vlan35"
+    mode: "tagged"
+    tagged_vlans:
+      - vid: "35"
+  - name: "Ethernet56"
+    type: "100gbase-x-qsfp28"
+    enabled: true
+    device:
+      name: "st01-sw1g-r01-u42"
+    description: "to_u41_100g_vlan36"
+    mode: "tagged"
+    tagged_vlans:
+      - vid: "36"
+# Assign IP addresses to device's interface
+ip-addresses:
+  - address: "10.10.23.103/24"
+    status: "active"
+    description: "Management"
+    # FIXME: Api requires `assigned_object_type` and `assigned_object_id`
+    # to assign ip address to the resource, e.g. device.
+    # This workaround facilitates the import based on device name and interface name.
+    # The same approach is used in the UI import form.
+    # The above needs a "special" handling in the code and would be nice to introduce a
+    # general approach.
+    device: "st01-sw1g-r01-u42"
+    interface: "eth0"

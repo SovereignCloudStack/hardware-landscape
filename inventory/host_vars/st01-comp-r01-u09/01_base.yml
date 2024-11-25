@@ -17,7 +17,18 @@ netdata_host_type: client
 mgmt_address: 10.10.23.25
 mgmt_mac: 3c:ec:ef:9f:e2:40
 
-bgp_asn: 4210021025
+frr_type: leaf
+frr_local_as: "4210021025"
+frr_loopback_v4: 10.10.21.25
+frr_loopback_v6: fd0c:cc24:75a0:1:10:10:21:25
+
+frr_uplinks:
+- interface: enp65s0f0np0
+  remote_as: "65405"
+- interface: enp65s0f1np1
+  remote_as: "65404"
+
+
 
 ##########################################################
 # network

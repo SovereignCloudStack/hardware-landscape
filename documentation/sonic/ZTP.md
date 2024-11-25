@@ -1,48 +1,28 @@
-# SONiC Zero Touch Provisioning (ZTP)
+# Zero Touch Provisioning (ZTP)
 
-## ONIE
+ZTP automates the setup of network devices like routers and switches without needing manual configuration.
+When shipped directly to a site, a device can connect to the network, download its configuration files,
+and start working automatically. This process helps reduce errors, saves time, and makes it easier to
+scale networks quickly.
 
-ONIE offers various methods for locating a Network Operating System (NOS) like the SONiC installer image.
-For a comprehensive list of supported methods, refer to the [onie user-guide](https://opencomputeproject.github.io/onie/user-guide/index.html).
+ZTP typically involves:
+- Automatic Network Connection: The device connects to the network as soon as it’s powered on
+- Configuration Download: It retrieves its configuration and, if needed, software updates from a server
+- Custom Script Execution: Additional settings or actions can be applied through scripts, making ZTP flexible for different needs
 
-One such supported method is DHCP. A DHCP server can provide specific details about the location of the installer image
-for ONIE. Basic DHCP scenarios and configuration examples can be found in [onie user-guide](https://opencomputeproject.github.io/onie/user-guide/index.html).
+ZTP is popular in large networks and data centers, where it speeds up deployments and reduces manual effort.
 
-An advanced and more realistic scenario involving DHCP is Vendor Class Identifier matching.
-When ONIE makes a DHCP request, it sets the DHCP vendor class (option 60) to a specific string.
-Based on this, the DHCP server can select and return the appropriate installer image according to the machine type.
+## Configuration
 
-See an example for [ISC DHCP server](https://github.com/opencomputeproject/onie/blob/master/contrib/isc-dhcpd/dhcpd.conf)
-where the Vendor Class Identifier is used to select installer image for accton_as7326_56x machine type.
-
-```text
-if option vendor-class-identifier = "onie_vendor:x86_64-accton_as7326_56x-r0" {
-  option default-url "http://<http-server>/<installer-image>.bin";
-}
-```
-
-Alternatively, the administrator could define matching class as follows:
-
-```text
-class "onie-vendor-accton_as7326_56x-class" {
-  match if substring(option vendor-class-identifier, 0, 27) = "onie_vendor:x86_64-accton_as7326_56x-r0";
-  option default-url "http://<http-server>/<installer-image>.bin";
-}
-```
-
-## Zero Touch Provisioning (ZTP)
-
-Zero Touch Provisioning (ZTP) in SONiC automates the initial setup of network devices without any user intervention.
-When a SONiC device boots up for the first time, the ZTP service sends a DHCP request to obtain a location of the ZTP boot file.
+ZTP in SONiC automates the initial setup of network devices without any user intervention. When a SONiC device boots up
+for the first time, the ZTP service sends a DHCP request to obtain a location of the ZTP boot file.
 The DHCP server provides the location of a boot file (utilizing DHCP option 67). This file is retrieved by the ZTP via TFTP,
 HTTP, or another protocol.
 
 The boot file contains information for ZTP to kick-start configuration steps of the device. This process bring the device
 into operational state automatically.
-ZTP service can be used by users to configure a fleet of switches using common configuration templates.
 
-[ISC DHCP server](https://github.com/opencomputeproject/onie/blob/master/contrib/isc-dhcpd/dhcpd.conf) could be configured
-to provide boot file location, e.g. as follows:
+[ISC DHCP server](https://github.com/opencomputeproject/onie/blob/master/contrib/isc-dhcpd/dhcpd.conf) could be configured to provide boot file location, e.g. as follows:
 
 ```text
 option bootfile-name "http://<http-server>/provision.json";
@@ -51,7 +31,7 @@ option bootfile-name "http://<http-server>/provision.json";
 Refer to the [docs](https://github.com/sonic-net/SONiC/blob/master/doc/ztp/ztp.md) for detailed information on how to
 create ZTP boot file.
 
-See and example of `provision.json` file (for full list of supported ZTP plugins like snmp, firmware, etc. and available
+See an example of `ztp.json` file (for full list of supported ZTP plugins like snmp, firmware, etc. and available
 options refer to the [docs](https://github.com/sonic-net/SONiC/blob/master/doc/ztp/ztp.md)):
 
 ```json
@@ -79,14 +59,14 @@ options refer to the [docs](https://github.com/sonic-net/SONiC/blob/master/doc/z
 }
 ```
 
-### ZTP in community version
+## ZTP in SONiC community version
 
-Zero Touch Provisioning is not enabled by default in SONiC community images. Run the following command:
+ZTP is not enabled by default in SONiC community images:
 ```bash
-$ show ztp status 
+$ show ztp status
 ZTP feature unavailable in this image version
 ```
 
-To enable ZTP, you'll need to build your own image with the `ENABLE_ZTP = y` option, which adds ZTP support.
-
+To enable ZTP in SONiC community, you'll need to build your own image with the `ENABLE_ZTP = y` option, which adds ZTP
+support, or enable it  once the NOS is booted via `sudo config ztp enable`.
 Note that the SONiC Edge-core enterprise image comes with ZTP enabled by default.
