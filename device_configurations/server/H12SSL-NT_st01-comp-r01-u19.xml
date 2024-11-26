@@ -294,9 +294,9 @@
         <!--Configuration for DateTime-->
         <NTPEnable>Enable</NTPEnable>
         <!--Enable/Disable-->
-        <PrimaryNTPServer>192.53.103.103</PrimaryNTPServer>
+        <PrimaryNTPServer>10.10.23.253</PrimaryNTPServer>
         <!--string value; length limit = 127 characters-->
-        <SecondaryNTPServer>192.53.103.104</SecondaryNTPServer>
+        <SecondaryNTPServer>10.10.23.254</SecondaryNTPServer>
         <!--string value; length limit = 127 characters-->
         <TimeZone>(UTC+00:00) Coordinated Universal Time</TimeZone>
         <!--Please check available TimeZone format in ExternalData/timezone -->
@@ -823,7 +823,7 @@
         <SyslogEnable>Enable</SyslogEnable>
         <!--Enable/Disable-->
         <!--Enable or disable BMC syslog-->
-        <SyslogServerIP>10.10.23.1</SyslogServerIP>
+        <SyslogServerIP>10.10.23.254</SyslogServerIP>
         <!--Syslog server address-->
         <SyslogPortNumber>514</SyslogPortNumber>
         <!--[1-65535]-->
@@ -942,14 +942,14 @@
             <!--X.X.X.X-->
             <!--Each field is an integer in [0-255].-->
             <?Note Will be skipped in multiple system usage without --individually option.?>
-            <Gateway>10.10.23.1</Gateway>
+            <Gateway>10.10.23.254</Gateway>
             <!--X.X.X.X-->
             <!--Each field is an integer in [0-255].-->
             <?Note Will be skipped in multiple system usage without --individually option.?>
             <IPv4UseDNSServers>Disable</IPv4UseDNSServers>
             <!--Enable/Disable-->
             <!--Determines whether to use DHCPv4-supplied DNS servers.-->
-            <IPv4StaticNameServer1>8.8.8.8</IPv4StaticNameServer1>
+            <IPv4StaticNameServer1>10.10.23.254</IPv4StaticNameServer1>
             <!--X.X.X.X-->
             <!--Each field is an integer in [0-255].-->
             <!--IPv4StaticNameServer1 is readonly if IPv4UseDNSServers is Enable.-->
