@@ -17,6 +17,11 @@
   ```
   ./server_ctl --restore_cfg bmc all
   ```
+* Step 4: Backup and check new config
+  ```
+  ./server_ctl --backup_cfg all
+  git diff
+  ```
 
 ## Deployment of the nodes
 
