@@ -52,6 +52,7 @@ The main goals of this environment are:
     * [The Networking Diagram](documentation/System_Network_Setup.md)
     * [Detailed Description of the Network Wireing](documentation/System_Network_Wireing.md)
     * [Detailed Description of the Power Wireing](documentation/System_Power_Wireing.md)
+    * [Custom OSISM/Ansible Infrastructure Code for the system enviromment](environments/custom)
     * Hardware Devices
       * Networking Equipment
         * [Edgecore 7326-56X-O-AC-B](documentation/devices/network/Edgecore_7326-56X-O-AC-B.md)
