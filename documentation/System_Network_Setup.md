@@ -13,7 +13,7 @@ to be set up, as subsequent adaptation can be very time-consuming.
 With the chosen ‘Layer3-Underlay-BGP-to-the-Host’, the eBGP protocol is used to efficiently (especially for larger environments)
 organise the the path-descision of packets between nodes.
 
-Unlike a layer 2 network, this provides the following advantages:
+Unlike a classic layer 2 network, this provides the following advantages:
 
 - No more Multichassis-LACP, no Spanning-Tree complexities
 - A scalable setup for larger or critical environments with a high number of nodes
