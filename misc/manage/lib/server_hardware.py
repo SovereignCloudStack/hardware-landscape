@@ -30,7 +30,7 @@ def change_syslog(root: xml.etree.ElementTree):
 
 
 def change_ntp(root: xml.etree.ElementTree):
-    if root.find(".//TimeUpdateMode"):
+    if isinstance(root.find(".//TimeUpdateMode"), Element):
         element = root.find(".//TimeUpdateMode")
         element.text = "NTP"
 
@@ -130,7 +130,7 @@ def change_network(root: xml.etree.ElementTree, hostname: str, ip: str):
     element = root.find(".//HostName")
     element.text = hostname
 
-    if root.find(".//IPv4/Configuration/IPSrc"):
+    if isinstance(root.find(".//IPv4/Configuration/IPSrc"), Element):
         element = root.find(".//IPv4/Configuration/IPSrc")
         element.text = "Static"
 
