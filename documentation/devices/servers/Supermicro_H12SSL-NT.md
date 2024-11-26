@@ -7,8 +7,8 @@
   * Single-CPU 32-Core Server
   * two 1+ Gbp
   * four 25 Gbps SFP+
-    * NIC: enp65s0f0np0 
-    * NIC: enp65s0f1np1
+    * NIC: enp65s0f0np0 / ASN: 65405
+    * NIC: enp65s0f1np1 / ASN: 65404
   * 512 GB ECC RAM
   * 3,2 TB NVMe
   * 480 GB SSD/NVMe (disks with enterprise-Version, DPWD >= 3.0)
