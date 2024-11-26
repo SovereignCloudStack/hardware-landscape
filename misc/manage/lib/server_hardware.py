@@ -99,13 +99,13 @@ def change_snmp(root: xml.etree.ElementTree):
     element = root.find(".//ServiceEnabling/Configuration/SNMP")
     element.text = "Enable"
     if isinstance(root.find(".//Configuration/SNMPV2/ROCommunity"), Element):
-        LOGGER.info("configure legacy snmp")
+        LOGGER.debug("configure legacy snmp")
         element = root.find(".//SNMPV2/ROCommunity")
         element.text = SNMP_RO_COMMUNITY
         element = root.find(".//SNMPV2/RWCommunity")
         element.text = SNMP_RW_COMMUNITY
     else:
-        LOGGER.info("configure latest snmp")
+        LOGGER.debug("configure latest snmp")
         element = root.find(".//SNMPV2/EnableSNMPv2c")
         element.text = "Enable"
         elements = root.find(".//SNMPV2")
@@ -173,8 +173,12 @@ def change_bmc_settings(root: xml.etree.ElementTree):
 def template_bmc_config(bmc_hosts: list[str]):
     host_data = parse_configuration_data()["servers"]
     for hostname in bmc_hosts:
-        print(get_server_documentation_dir())
         matching_files = glob.glob(f"{get_device_configurations_dir('server')}/*_{hostname}.xml")
+
+        LOGGER.info(f"SERVER {hostname}")
+        if host_data[hostname]["device_model"].startswith("ARS-110M-NR"):
+            LOGGER.info("Skipping server, currently not supported")
+            continue
 
         if len(matching_files) != 1:
             LOGGER.error(f"So such host {hostname}")
@@ -183,7 +187,6 @@ def template_bmc_config(bmc_hosts: list[str]):
         filename = os.path.realpath(matching_files[0])
 
         LOGGER.info(f"Processing {filename}")
-        xml_string = None
         try:
             with open(filename, 'r') as file:
                 xml_string = file.read()
@@ -259,7 +262,7 @@ def backup_config(bmc_hosts: list[str], filetype: CfgTypes):
         LOGGER.info(f"Processing server {hostname}")
         data = host_data[hostname]
 
-        if data["device_model"] == "ARS-110M-NR":
+        if data["device_model"].startswith("ARS-110M-NR"):
             LOGGER.warning("Device dos not support backup/restore using sum")
             continue
 
