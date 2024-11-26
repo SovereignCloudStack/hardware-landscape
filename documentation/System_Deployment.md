@@ -118,7 +118,11 @@ Please just add issues to this project with hints or directly [contact me](https
   ```
   osism apply scs_infra
   ```
-* Execute the [bootstrap procedure](https://osism.tech/de/docs/guides/deploy-guide/bootstrap)
+* Execute the [bootstrap procedure](https://osism.tech/de/docs/guides/deploy-guide/bootstrap) with a configured
+  layer 3 underlay before restarting the servers
+  ```
+  osism apply frr
+  ```
 * Run Basic customizations
   ```
   osism apply scs_all_nodes -l 'all:!manager'
