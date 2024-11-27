@@ -43,7 +43,7 @@
      ssh <node> sudo halt
      # In theory this should start a shutdown of the server, but it seems that Supermicro just resets the hardware
      # without a graceful shutdown
-     ./server_ctl --power_action GracefulRestart <node>
+     ./server_ctl --power_action GracefulShutdown <node>
      ```
    * Test server after startup
    * Incubate the new version at least one day for the first server(s)
