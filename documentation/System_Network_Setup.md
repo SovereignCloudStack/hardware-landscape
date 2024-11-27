@@ -13,23 +13,6 @@ to be set up, as subsequent adaptation can be very time-consuming.
 With the chosen ‘Layer3-Underlay-BGP-to-the-Host’, the eBGP protocol is used to efficiently (especially for larger environments)
 organise the the path-descision of packets between nodes.
 
-Unlike a classic layer 2 network, this provides the following advantages:
-
-- No Spanning-Tree complexities, no constant churn in MAC tables
-- No more Multichassis-LACP interoperability and design topics
-- A scalable setup for larger or critical environments with a high number of nodes
-  (layer 2 is simpler and more efficient; with a high number of nodes, layer 3 underlays cause a number of complex problems that layer 2 does not)
-- Connections can be transported and routed with fewer problems and dynamically over different network paths depending on saturation, 
-  preference and the availability of the same
-- BGP/Anycast allows the IP addresses of services to be made concurrently available at several locations.
-- Support for fast convergence of routing state across the network
-- Support for draining traffic from a node to be taken down
-- Support for filtering inbound and outbound advertisement
-- Tenant traffic is encapsulated in Geneve or VXLAN in the packets transported via the infrastructure 
-  (the configuration of the network switches can be kept very simple and there is no limitation to 4096 tenant networks like in layer2/VLAN)
-- BGP IPv6 unnumbered simplifies the ip-adressing scheme design requirements of layer3 networks significantly
-- Future: Support for establishing EVPN (tenant) connections using the eBGP
-
 As a consequence, this means that BGP routers with private ASN numbers are active on all systems involved
 (e.g. servers and switches) in the cloud setup and these exchange information with each other via the network topology.
 
@@ -41,8 +24,6 @@ Metal-Stack. Furthermore, the present design is strongly inspired by the work of
 BGP ([bgp-ebook](https://www.nvidia.com/en-us/networking/border-gateway-protocol/)) and the 
 work ‘[Cloud Native Data Centre Networking](https://www.oreilly.com/library/view/cloud-native-data/9781492045595/)’ (O'Reilly) 
 published in 2019, which provides various interesting basics.
-Openstack also provides a interesting "[Networking concepts](https://docs.openstack.org/arch-design/design-networking/design-networking-concepts.html)" 
-document which provides various details related to layer3 underlays.
 
 # The networking diagram
 
