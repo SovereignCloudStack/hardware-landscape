@@ -8,8 +8,8 @@
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
-    capi_version: 1.8.1
-    capo_version: 0.10.4
+    capi_version: 1.8.5
+    capo_version: 0.11.3
 
   tasks:
     - name: Get capi-system namespace phase
@@ -34,6 +34,7 @@
 
         export KUBECONFIG=/share/kubeconfig
         export EXP_CLUSTER_RESOURCE_SET=true
+        export EXP_RUNTIME_SDK=true
         export CLUSTER_TOPOLOGY=true
         export GOPROXY=off
 
@@ -54,6 +55,7 @@
 
         export KUBECONFIG=/share/kubeconfig
         export EXP_CLUSTER_RESOURCE_SET=true
+        export EXP_RUNTIME_SDK=true
         export CLUSTER_TOPOLOGY=true
         export GOPROXY=off
 
