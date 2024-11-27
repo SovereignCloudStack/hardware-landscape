@@ -30,6 +30,10 @@
    ```
    ./server_ctl -o all --filter "${SERVER_FILTER?SPECIFY FILTER}"
    ```
+1. Check versions
+   ```
+   ./server_ctl --firmware_check all --filter "${SERVER_FILTER?SPECIFY FILTER}"
+   ```
 1. Perform upgrades in a sequence
    * Upload BMC and perform upgrade
    * Upload BIOS (install BIOS on reboot)
@@ -49,10 +53,15 @@
    * Open remote console and reboot server
      ```
      ./server_ctl --power_action GracefulShutdown <node>
+     ./server_ctl --power_check --filter "${SERVER_FILTER?SPECIFY FILTER}" all
      ./server_ctl --power_action On <node>
      ```
    * Test server after startup
    * Incubate the new version at least one day for the first server(s)
+1. Check versions
+   ```
+   ./server_ctl --firmware_check all --filter "${SERVER_FILTER?SPECIFY FILTER}"
+   ```
 1. Backup all configurations and compare them if there are some unexpected changes
    ```
    ./server_ctl --backup_cfg both --filter "${SERVER_FILTER?SPECIFY FILTER}"
