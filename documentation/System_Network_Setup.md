@@ -19,16 +19,16 @@ Unlike a classic layer 2 network, this provides the following advantages:
 - No more Multichassis-LACP interoperability and design topics
 - A scalable setup for larger or critical environments with a high number of nodes
   (layer 2 is simpler and more efficient; with a high number of nodes, layer 3 underlays cause a number of complex problems that layer 2 does not)
-- Connections can be transported and routed with fewer problems and dynamically over different network paths depending on saturation, 
+- Connections can be transported and routed with fewer problems and dynamically over different network paths depending on saturation,
   preference and the availability of the same
 - BGP/Anycast allows the IP addresses of services to be made concurrently available at several locations.
 - Support for fast convergence of routing state across the network
 - Support for draining traffic from a node to be taken down
 - Support for filtering inbound and outbound advertisement
-- Tenant traffic is encapsulated in Geneve or VXLAN in the packets transported via the infrastructure 
+- Tenant traffic is encapsulated in Geneve or VXLAN in the packets transported via the infrastructure
   (the configuration of the network switches can be kept very simple and there is no limitation to 4096 tenant networks like in layer2/VLAN)
 - BGP IPv6 unnumbered simplifies the ip-adressing scheme design requirements of layer3 networks significantly
-- Future: Support for establishing EVPN (tenant) connections using the eBGP
+- Future: Support for establishing EVPN (tenant) connections using the Multiprotocol BGP Support (see RFC 4760)
 
 As a consequence, this means that BGP routers with private ASN numbers are active on all systems involved
 (e.g. servers and switches) in the cloud setup and these exchange information with each other via the network topology.
@@ -36,12 +36,12 @@ As a consequence, this means that BGP routers with private ASN numbers are activ
 As a result, redundant paths of a server system, for example, are no longer managed via (multi-chassis) LACP,
 but the respective server or switch has topology information that allows it to route traffic efficiently or deal with availability problems.
 
-The detailes of this concept are heavily releated to the [great network documentation](https://docs.metal-stack.io/stable/overview/networking/) of 
-Metal-Stack. Furthermore, the present design is strongly inspired by the work of Dinesh G. Dutt on 
-BGP ([bgp-ebook](https://www.nvidia.com/en-us/networking/border-gateway-protocol/)) and the 
-work ‘[Cloud Native Data Centre Networking](https://www.oreilly.com/library/view/cloud-native-data/9781492045595/)’ (O'Reilly) 
+The detailes of this concept are heavily releated to the [great network documentation](https://docs.metal-stack.io/stable/overview/networking/) of
+(see also the [Github PR](https://github.com/metal-stack/docs/pull/209/files), or the [extended networking document](https://github.com/scoopex/metal-stack-docs/blob/master/docs/src/overview/networking.md) Metal-Stack.
+Furthermore, the present design is strongly inspired by the work of Dinesh G. Dutt on BGP ([bgp-ebook](https://www.nvidia.com/en-us/networking/border-gateway-protocol/)) and the
+work ‘[Cloud Native Data Centre Networking](https://www.oreilly.com/library/view/cloud-native-data/9781492045595/)’ (O'Reilly)
 published in 2019, which provides various interesting basics.
-Openstack also provides a interesting "[Networking concepts](https://docs.openstack.org/arch-design/design-networking/design-networking-concepts.html)" 
+Openstack also provides a interesting "[Networking concepts](https://docs.openstack.org/arch-design/design-networking/design-networking-concepts.html)"
 document which provides various details related to layer3 underlays.
 
 # The networking diagram
@@ -57,7 +57,7 @@ This diagram visualizes the physical (devices, and wiring) and logical (VLANs, R
 
 # Node Networking Setup
 
-The following section provides an insight into what the ‘Layer3-Underlay-BGP-to-the-Host’ setup looks like on the cloud 
+The following section provides an insight into what the ‘Layer3-Underlay-BGP-to-the-Host’ setup looks like on the cloud
 nodes through the output of various network commands and files.
 
 
@@ -185,24 +185,24 @@ root@st01-stor-r01-u01:/home/scoopex# ip addr ls
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host 
+    inet6 ::1/128 scope host
        valid_lft forever preferred_lft forever
 2: enp66s0f0np0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc mq state UP group default qlen 1000
     link/ether 14:23:f2:cb:86:e0 brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::1623:f2ff:fecb:86e0/64 scope link 
+    inet6 fe80::1623:f2ff:fecb:86e0/64 scope link
        valid_lft forever preferred_lft forever
 3: enp66s0f1np1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc mq state UP group default qlen 1000
     link/ether 14:23:f2:cb:86:e1 brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::1623:f2ff:fecb:86e1/64 scope link 
+    inet6 fe80::1623:f2ff:fecb:86e1/64 scope link
        valid_lft forever preferred_lft forever
 ...
 7: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 9000 qdisc noqueue state UNKNOWN group default qlen 1000
     link/ether ee:33:e4:bc:b8:5b brd ff:ff:ff:ff:ff:ff
     inet 10.10.21.21/32 scope global dummy0
        valid_lft forever preferred_lft forever
-    inet6 fd0c:cc24:75a0:1:10:10:21:21/128 scope global 
+    inet6 fd0c:cc24:75a0:1:10:10:21:21/128 scope global
        valid_lft forever preferred_lft forever
-    inet6 fe80::ec33:e4ff:febc:b85b/64 scope link 
+    inet6 fe80::ec33:e4ff:febc:b85b/64 scope link
        valid_lft forever preferred_lft forever
 ...
 ```
@@ -535,7 +535,7 @@ Interface lo is up, line protocol is up
 
 # Switch Networking Setup
 
-The following section provides an insight into what the ‘Layer3-Underlay-BGP-to-the-Host’ setup looks like on the cloud 
+The following section provides an insight into what the ‘Layer3-Underlay-BGP-to-the-Host’ setup looks like on the cloud
 leaf switches through the output of various network commands and files.
 
 ## The configurations Files
@@ -687,7 +687,7 @@ B>* 10.10.21.201/32 [20/0] via fe80::5e6f:69ff:feb0:4b41, Ethernet1, weight 1, 1
 See also the [backups of the switch configuration files](../device_configurations/network).
 
 ```bash
-admin@st01-sw25g-r01-u34:~$ vtysh 
+admin@st01-sw25g-r01-u34:~$ vtysh
 
 Hello, this is FRRouting (version 8.1).
 Copyright 1996-2005 Kunihiro Ishiguro, et al.
@@ -771,7 +771,7 @@ admin@st01-sw25g-r01-u34:~$ ip link ls
     link/ether d0:77:ce:4b:b4:7b brd ff:ff:ff:ff:ff:ff
 4: eth2: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
     link/ether d0:77:ce:4b:b4:7c brd ff:ff:ff:ff:ff:ff
-5: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default 
+5: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default
     link/ether 02:42:51:42:30:22 brd ff:ff:ff:ff:ff:ff
 8: bcm0: <BROADCAST,MULTICAST> mtu 9100 qdisc noop state DOWN mode DEFAULT group default qlen 1000
     link/ether 02:10:18:de:fe:4a brd ff:ff:ff:ff:ff:ff
@@ -894,9 +894,9 @@ admin@st01-sw25g-r01-u34:~$ ip link ls
 69: Ethernet76: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
 70: pimreg@NONE: <NOARP,UP,LOWER_UP> mtu 1472 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
-    link/pimreg 
+    link/pimreg
 71: pimreg5000@NONE: <NOARP,ALLMULTI> mtu 1472 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
-    link/pimreg 
+    link/pimreg
 72: mgmt: <NOARP,MASTER,UP,LOWER_UP> mtu 65575 qdisc noqueue state UP mode DEFAULT group default qlen 1000
     link/ether aa:e0:85:9e:aa:ea brd ff:ff:ff:ff:ff:ff
 73: lo-m: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue master mgmt state UNKNOWN mode DEFAULT group default qlen 1000
@@ -908,43 +908,43 @@ admin@st01-sw25g-r01-u34:~$ ip addr ls
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/16 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host 
+    inet6 ::1/128 scope host
        valid_lft forever preferred_lft forever
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master mgmt state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
     inet 10.10.23.107/24 brd 10.10.23.255 scope global eth0
        valid_lft forever preferred_lft forever
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 3: eth1: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
     link/ether d0:77:ce:4b:b4:7b brd ff:ff:ff:ff:ff:ff
 4: eth2: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
     link/ether d0:77:ce:4b:b4:7c brd ff:ff:ff:ff:ff:ff
-5: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default 
+5: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default
     link/ether 02:42:51:42:30:22 brd ff:ff:ff:ff:ff:ff
     inet 240.127.1.1/24 brd 240.127.1.255 scope global docker0
        valid_lft forever preferred_lft forever
-    inet6 fd00::1/80 scope global 
+    inet6 fd00::1/80 scope global
        valid_lft forever preferred_lft forever
-    inet6 fe80::1/64 scope link 
+    inet6 fe80::1/64 scope link
        valid_lft forever preferred_lft forever
 8: bcm0: <BROADCAST,MULTICAST> mtu 9100 qdisc noop state DOWN group default qlen 1000
     link/ether 02:10:18:de:fe:4a brd ff:ff:ff:ff:ff:ff
 11: Ethernet5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 12: Ethernet1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 13: Ethernet0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 14: Ethernet2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 15: Ethernet6: <BROADCAST,MULTICAST> mtu 9100 qdisc noop state DOWN group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
@@ -952,7 +952,7 @@ admin@st01-sw25g-r01-u34:~$ ip addr ls
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
 17: Ethernet4: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 18: Ethernet3: <BROADCAST,MULTICAST> mtu 9100 qdisc noop state DOWN group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
@@ -1000,7 +1000,7 @@ admin@st01-sw25g-r01-u34:~$ ip addr ls
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
 40: Ethernet32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 41: Ethernet28: <BROADCAST,MULTICAST> mtu 9100 qdisc noop state DOWN group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
@@ -1008,71 +1008,71 @@ admin@st01-sw25g-r01-u34:~$ ip addr ls
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
 43: Ethernet34: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 44: Ethernet33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 45: Ethernet35: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 46: Ethernet31: <BROADCAST,MULTICAST> mtu 9100 qdisc noop state DOWN group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
 47: Ethernet41: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 48: Ethernet36: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 49: Ethernet37: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 50: Ethernet38: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 51: Ethernet39: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 52: Ethernet40: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 53: Ethernet44: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 54: Ethernet42: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 55: Ethernet43: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 56: Bridge: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 9100 qdisc noqueue state DOWN group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::a0f7:67ff:fee5:6b89/64 scope link 
+    inet6 fe80::a0f7:67ff:fee5:6b89/64 scope link
        valid_lft forever preferred_lft forever
 57: dummy: <BROADCAST,NOARP> mtu 1500 qdisc noop master Bridge state DOWN group default qlen 1000
     link/ether 9e:7b:9d:26:ff:7b brd ff:ff:ff:ff:ff:ff
 58: Ethernet47: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 59: Ethernet45: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 60: Ethernet46: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 61: Ethernet48: <BROADCAST,MULTICAST> mtu 9100 qdisc noop state DOWN group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
@@ -1082,9 +1082,9 @@ admin@st01-sw25g-r01-u34:~$ ip addr ls
     link/ether 4a:87:58:6d:3e:cf brd ff:ff:ff:ff:ff:ff
     inet 10.10.21.4/32 scope global Loopback0
        valid_lft forever preferred_lft forever
-    inet6 fd0c:cc24:75a0:1:10:10:21:4/128 scope global 
+    inet6 fd0c:cc24:75a0:1:10:10:21:4/128 scope global
        valid_lft forever preferred_lft forever
-    inet6 fe80::4887:58ff:fe6d:3ecf/64 scope link 
+    inet6 fe80::4887:58ff:fe6d:3ecf/64 scope link
        valid_lft forever preferred_lft forever
 64: Ethernet56: <BROADCAST,MULTICAST> mtu 9100 qdisc noop state DOWN group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
@@ -1096,23 +1096,23 @@ admin@st01-sw25g-r01-u34:~$ ip addr ls
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
 68: Ethernet72: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 69: Ethernet76: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9100 qdisc pfifo_fast state UP group default qlen 1000
     link/ether d0:77:ce:4b:b4:7a brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link 
+    inet6 fe80::d277:ceff:fe4b:b47a/64 scope link
        valid_lft forever preferred_lft forever
 70: pimreg@NONE: <NOARP,UP,LOWER_UP> mtu 1472 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/pimreg 
+    link/pimreg
 71: pimreg5000@NONE: <NOARP,ALLMULTI> mtu 1472 qdisc noqueue state DOWN group default qlen 1000
-    link/pimreg 
+    link/pimreg
 72: mgmt: <NOARP,MASTER,UP,LOWER_UP> mtu 65575 qdisc noqueue state UP group default qlen 1000
     link/ether aa:e0:85:9e:aa:ea brd ff:ff:ff:ff:ff:ff
 73: lo-m: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue master mgmt state UNKNOWN group default qlen 1000
     link/ether da:e2:c2:ae:30:2f brd ff:ff:ff:ff:ff:ff
     inet 127.0.0.1/16 scope host lo-m
        valid_lft forever preferred_lft forever
-    inet6 fe80::d8e2:c2ff:feae:302f/64 scope link 
+    inet6 fe80::d8e2:c2ff:feae:302f/64 scope link
        valid_lft forever preferred_lft forever
 
 ```
@@ -1122,7 +1122,7 @@ admin@st01-sw25g-r01-u34:~$ ip addr ls
 **FRRouting status**
 
 ```bash
-admin@st01-sw25g-r01-u34:~$ vtysh 
+admin@st01-sw25g-r01-u34:~$ vtysh
 
 Hello, this is FRRouting (version 8.1).
 Copyright 1996-2005 Kunihiro Ishiguro, et al.
@@ -2655,21 +2655,21 @@ BGP Connect Retry Timer in Seconds: 120
 Read thread: on  Write thread: on  FD used: 34
 
 
-st01-sw25g-r01-u34# show interface       
+st01-sw25g-r01-u34# show interface
 Interface Bridge is up, line protocol is down
 ...
 Interface Ethernet0 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:41:47.12
   Link downs:     0    last: (never)
   vrf: default
-  index 13 metric 0 mtu 9100 speed 0 
+  index 13 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2684,14 +2684,14 @@ Interface Ethernet1 is up, line protocol is up
   Link ups:       2    last: 2024/11/05 11:08:55.73
   Link downs:     1    last: 2024/11/05 11:08:55.22
   vrf: default
-  index 12 metric 0 mtu 9100 speed 0 
+  index 12 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2706,14 +2706,14 @@ Interface Ethernet2 is up, line protocol is up
   Link ups:       2    last: 2024/11/20 14:35:40.03
   Link downs:     1    last: 2024/11/20 14:34:44.58
   vrf: default
-  index 14 metric 0 mtu 9100 speed 0 
+  index 14 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2730,14 +2730,14 @@ Interface Ethernet4 is up, line protocol is up
   Link ups:       0    last: (never)
   Link downs:     0    last: (never)
   vrf: default
-  index 17 metric 0 mtu 9100 speed 0 
+  index 17 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2752,14 +2752,14 @@ Interface Ethernet5 is up, line protocol is up
   Link ups:       3    last: 2024/10/28 14:48:39.54
   Link downs:     2    last: 2024/10/28 14:47:32.57
   vrf: default
-  index 11 metric 0 mtu 9100 speed 0 
+  index 11 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2776,86 +2776,86 @@ Interface Ethernet32 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:41:28.30
   Link downs:     0    last: (never)
   vrf: default
-  index 40 metric 0 mtu 9100 speed 0 
+  index 40 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
 Interface Ethernet33 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:41:22.20
   Link downs:     0    last: (never)
   vrf: default
-  index 44 metric 0 mtu 9100 speed 0 
+  index 44 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
 Interface Ethernet34 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:41:24.23
   Link downs:     0    last: (never)
   vrf: default
-  index 43 metric 0 mtu 9100 speed 0 
+  index 43 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
 Interface Ethernet35 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:41:26.77
   Link downs:     0    last: (never)
   vrf: default
-  index 45 metric 0 mtu 9100 speed 0 
+  index 45 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
 Interface Ethernet36 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:41:34.40
   Link downs:     0    last: (never)
   vrf: default
-  index 48 metric 0 mtu 9100 speed 0 
+  index 48 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
 Interface Ethernet37 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:41:27.79
   Link downs:     0    last: (never)
   vrf: default
-  index 49 metric 0 mtu 9100 speed 0 
+  index 49 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
 Interface Ethernet38 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:40:13.78
   Link downs:     0    last: (never)
   vrf: default
-  index 50 metric 0 mtu 9100 speed 0 
+  index 50 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2870,14 +2870,14 @@ Interface Ethernet39 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:40:11.00
   Link downs:     0    last: (never)
   vrf: default
-  index 51 metric 0 mtu 9100 speed 0 
+  index 51 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2892,14 +2892,14 @@ Interface Ethernet40 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:40:18.38
   Link downs:     0    last: (never)
   vrf: default
-  index 52 metric 0 mtu 9100 speed 0 
+  index 52 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2914,14 +2914,14 @@ Interface Ethernet41 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:41:52.47
   Link downs:     0    last: (never)
   vrf: default
-  index 47 metric 0 mtu 9100 speed 0 
+  index 47 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2936,14 +2936,14 @@ Interface Ethernet42 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:41:59.38
   Link downs:     0    last: (never)
   vrf: default
-  index 54 metric 0 mtu 9100 speed 0 
+  index 54 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2958,14 +2958,14 @@ Interface Ethernet43 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:42:03.74
   Link downs:     0    last: (never)
   vrf: default
-  index 55 metric 0 mtu 9100 speed 0 
+  index 55 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -2980,14 +2980,14 @@ Interface Ethernet44 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:41:55.28
   Link downs:     0    last: (never)
   vrf: default
-  index 53 metric 0 mtu 9100 speed 0 
+  index 53 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -3002,14 +3002,14 @@ Interface Ethernet45 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:42:00.92
   Link downs:     0    last: (never)
   vrf: default
-  index 59 metric 0 mtu 9100 speed 0 
+  index 59 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -3024,14 +3024,14 @@ Interface Ethernet46 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:42:04.00
   Link downs:     0    last: (never)
   vrf: default
-  index 60 metric 0 mtu 9100 speed 0 
+  index 60 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -3046,14 +3046,14 @@ Interface Ethernet47 is up, line protocol is up
   Link ups:       2    last: 2024/11/20 12:38:24.29
   Link downs:     1    last: 2024/11/20 12:37:25.99
   vrf: default
-  index 58 metric 0 mtu 9100 speed 0 
+  index 58 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -3070,14 +3070,14 @@ Interface Ethernet72 is up, line protocol is up
   Link ups:       0    last: (never)
   Link downs:     0    last: (never)
   vrf: default
-  index 68 metric 0 mtu 9100 speed 0 
+  index 68 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -3092,14 +3092,14 @@ Interface Ethernet76 is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:40:13.02
   Link downs:     0    last: (never)
   vrf: default
-  index 69 metric 0 mtu 9100 speed 0 
+  index 69 metric 0 mtu 9100 speed 0
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
   ND advertised reachable time is 0 milliseconds
   ND advertised retransmit interval is 0 milliseconds
   ND advertised hop-count limit is 64 hops
@@ -3114,7 +3114,7 @@ Interface Loopback0 is up, line protocol is up
   Link ups:       0    last: (never)
   Link downs:     0    last: (never)
   vrf: default
-  index 63 metric 0 mtu 65536 speed 0 
+  index 63 metric 0 mtu 65536 speed 0
   flags: <UP,BROADCAST,RUNNING,NOARP>
   Type: Ethernet
   HWaddr: 4a:87:58:6d:3e:cf
@@ -3123,7 +3123,7 @@ Interface Loopback0 is up, line protocol is up
   inet6 fe80::4887:58ff:fe6d:3ecf/64
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
 Interface bcm0 is down
 ...
 Interface docker0 is up, line protocol is down
@@ -3136,29 +3136,29 @@ Interface lo is up, line protocol is up
   Link ups:       0    last: (never)
   Link downs:     0    last: (never)
   vrf: default
-  index 1 metric 0 mtu 65536 speed 0 
+  index 1 metric 0 mtu 65536 speed 0
   flags: <UP,LOOPBACK,RUNNING>
   Type: Loopback
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
 Interface pimreg is up, line protocol is up
   Link ups:       1    last: 2024/10/28 14:40:10.18
   Link downs:     0    last: (never)
   vrf: default
-  index 70 metric 0 mtu 1472 speed 0 
+  index 70 metric 0 mtu 1472 speed 0
   flags: <UP,RUNNING,NOARP>
   Type: PIMSM registration
   Interface Type Other
   Interface Slave Type None
-  protodown: off 
+  protodown: off
 Interface pimreg5000 is down
 ...
 Interface eth0 is up, line protocol is up
   Link ups:       1    last: 2023/11/29 17:20:00.02
   Link downs:     2    last: 2023/11/29 17:20:00.02
   vrf: mgmt
-  index 2 metric 0 mtu 1500 speed 1000 
+  index 2 metric 0 mtu 1500 speed 1000
   flags: <UP,BROADCAST,RUNNING,MULTICAST>
   Type: Ethernet
   HWaddr: d0:77:ce:4b:b4:7a
@@ -3166,30 +3166,30 @@ Interface eth0 is up, line protocol is up
   inet6 fe80::d277:ceff:fe4b:b47a/64
   Interface Type Other
   Interface Slave Type Vrf
-  protodown: off 
+  protodown: off
 Interface lo-m is up, line protocol is up
   Link ups:       1    last: 2023/11/29 17:20:00.05
   Link downs:     0    last: (never)
   vrf: mgmt
-  index 73 metric 0 mtu 1500 speed 0 
+  index 73 metric 0 mtu 1500 speed 0
   flags: <UP,BROADCAST,RUNNING,NOARP>
   Type: Ethernet
   HWaddr: da:e2:c2:ae:30:2f
   inet6 fe80::d8e2:c2ff:feae:302f/64
   Interface Type Other
   Interface Slave Type Vrf
-  protodown: off 
+  protodown: off
 Interface mgmt is up, line protocol is up
   Link ups:       1    last: 2023/11/29 17:19:59.94
   Link downs:     0    last: (never)
   vrf: mgmt
-  index 72 metric 0 mtu 65575 speed 0 
+  index 72 metric 0 mtu 65575 speed 0
   flags: <UP,RUNNING,NOARP>
   Type: Ethernet
   HWaddr: aa:e0:85:9e:aa:ea
   Interface Type VRF
   Interface Slave Type None
-  protodown: off 
+  protodown: off
 
 ```
 
