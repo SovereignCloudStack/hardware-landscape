@@ -38,12 +38,18 @@
      * Compute Nodes
        https://wiki.openstack.org/wiki/OpsGuide-Maintenance-Compute
      * Ceph Nodes
+       ```
+       ssh scs-manager
+       ceph osd set noout
+       ceph osd set nobackfill
+       ceph osd set norecover
+       ceph osd set norebalance
+       ceph osd set nodown
+       ```
    * Open remote console and reboot server
      ```
-     ssh <node> sudo halt
-     # In theory this should start a shutdown of the server, but it seems that Supermicro just resets the hardware
-     # without a graceful shutdown
      ./server_ctl --power_action GracefulShutdown <node>
+     ./server_ctl --power_action On <node>
      ```
    * Test server after startup
    * Incubate the new version at least one day for the first server(s)
