@@ -1,91 +1,78 @@
 ---
-- name: Initialize or upgrade the CAPI management cluster
-  hosts:
-    - "{{ hosts_manager|default(groups['manager'][0])|default('localhost') }}"
-  connection: local
-  gather_facts: false
+- name: Get capi-system namespace phase
+  ansible.builtin.shell: |
+    set -o pipefail
 
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
+    export KUBECONFIG=/root/.kube/config
 
-    capi_version: 1.8.5
-    capo_version: 0.11.3
+    kubectl get ns capi-system -o json --ignore-not-found=true | jq .status.phase -r
+  args:
+    executable: /bin/bash
+  register: result
+  changed_when: false
 
-  tasks:
-    - name: Get capi-system namespace phase
-      ansible.builtin.shell: |
-        set -o pipefail
+- name: Set capi-system-phase fact
+  ansible.builtin.set_fact:
+    capi_system_phase: "{{ result.stdout_lines[0] | default('') }}"
 
-        export KUBECONFIG=/share/kubeconfig
+- name: Initialize the CAPI management cluster
+  ansible.builtin.shell: |
+    set -o pipefail
 
-        kubectl get ns capi-system -o json --ignore-not-found=true | jq .status.phase -r
-      args:
-        executable: /bin/bash
-      register: result
-      changed_when: false
+    export KUBECONFIG=/root/.kube/config
+    export EXP_CLUSTER_RESOURCE_SET=true
+    export EXP_RUNTIME_SDK=true
+    export CLUSTER_TOPOLOGY=true
+    export GOPROXY=off
 
-    - name: Set capi-system-phase fact
-      ansible.builtin.set_fact:
-        capi_system_phase: "{{ result.stdout_lines[0] | default('') }}"
+    clusterctl init \
+      --core cluster-api:v{{ capi_version }} \
+      --bootstrap kubeadm:v{{ capi_version }} \
+      --control-plane kubeadm:v{{ capi_version }} \
+      --infrastructure openstack:v{{ capo_version }};
+  args:
+    executable: /bin/bash
+  register: result
+  changed_when: "'Your management cluster has been initialized successfully' in result.stdout"
+  when: capi_system_phase == ""
 
-    - name: Initialize the CAPI management cluster
-      ansible.builtin.shell: |
-        set -o pipefail
+- name: Upgrade the CAPI management cluster
+  ansible.builtin.shell: |
+    set -o pipefail
 
-        export KUBECONFIG=/share/kubeconfig
-        export EXP_CLUSTER_RESOURCE_SET=true
-        export EXP_RUNTIME_SDK=true
-        export CLUSTER_TOPOLOGY=true
-        export GOPROXY=off
+    export KUBECONFIG=/root/.kube/config
+    export EXP_CLUSTER_RESOURCE_SET=true
+    export EXP_RUNTIME_SDK=true
+    export CLUSTER_TOPOLOGY=true
+    export GOPROXY=off
 
-        clusterctl init \
-          --core cluster-api:v{{ capi_version }} \
-          --bootstrap kubeadm:v{{ capi_version }} \
-          --control-plane kubeadm:v{{ capi_version }} \
-          --infrastructure openstack:v{{ capo_version }};
-      args:
-        executable: /bin/bash
-      register: result
-      changed_when: "'Your management cluster has been initialized successfully' in result.stdout"
-      when: capi_system_phase == ""
+    clusterctl upgrade apply \
+      --core cluster-api:v{{ capi_version }} \
+      --bootstrap kubeadm:v{{ capi_version }} \
+      --control-plane kubeadm:v{{ capi_version }} \
+      --infrastructure openstack:v{{ capo_version }};
+  args:
+    executable: /bin/bash
+  register: result
+  changed_when: "'Performing upgrade' in result.stdout"
+  when: capi_system_phase == "Active"
 
-    - name: Upgrade the CAPI management cluster
-      ansible.builtin.shell: |
-        set -o pipefail
-
-        export KUBECONFIG=/share/kubeconfig
-        export EXP_CLUSTER_RESOURCE_SET=true
-        export EXP_RUNTIME_SDK=true
-        export CLUSTER_TOPOLOGY=true
-        export GOPROXY=off
-
-        clusterctl upgrade apply \
-          --core cluster-api:v{{ capi_version }} \
-          --bootstrap kubeadm:v{{ capi_version }} \
-          --control-plane kubeadm:v{{ capi_version }} \
-          --infrastructure openstack:v{{ capo_version }};
-      args:
-        executable: /bin/bash
-      register: result
-      changed_when: "'Performing upgrade' in result.stdout"
-      when: capi_system_phase == "Active"
-
-    - name: Install Cluster Stack Operator
-      kubernetes.core.helm:
-        name: cso
-        repo_url: "oci://registry.scs.community/cluster-stacks/cso"
-        release_namespace: cso-system
-        create_namespace: true
-        set_values:
-          - value: clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
-            value_type: string
-
-    - name: Install Cluster Stack Provider Openstack
-      kubernetes.core.helm:
-        name: cspo
-        repo_url: "oci://registry.scs.community/cluster-stacks/cspo"
-        release_namespace: cspo-system
-        create_namespace: true
-        set_values:
-          - value: clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
-            value_type: string
+#- name: Install Cluster Stack Operator
+#  kubernetes.core.helm:
+#    name: cso
+#    repo_url: "oci://registry.scs.community/cluster-stacks/cso"
+#    release_namespace: cso-system
+#    create_namespace: true
+#    set_values:
+#      - value: clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
+#        value_type: string
+#
+#- name: Install Cluster Stack Provider Openstack
+#  kubernetes.core.helm:
+#    name: cspo
+#    repo_url: "oci://registry.scs.community/cluster-stacks/cspo"
+#    release_namespace: cspo-system
+#    create_namespace: true
+#    set_values:
+#      - value: clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
+#        value_type: string
