@@ -1,0 +1,37 @@
+---
+
+- name: Install kubectl
+  shell: |
+    snap install kubectl --classic
+  when: not check_file_status_kind.stat.exists
+
+- name: Install helm
+  shell: |
+    snap install helm --classic
+
+- name: Check if Kind is installed
+  stat:
+    path: /usr/local/bin/kind
+  register: check_file_status_kind
+
+- name: Install clusterctl
+  shell: |
+     curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v{{ clusterctl_version }}/clusterctl-linux-amd64 -o /usr/local/bin/clusterctl 
+     chmod 755 /usr/local/bin/clusterctl
+     chown root:root /usr/local/bin/clusterctl
+  when: not check_file_status_clusterctl.stat.exists
+
+- name: Install kind
+  shell: |
+     curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ kind_version }}/kind-linux-amd64
+     chmod 755 /usr/local/bin/kind
+     chown root:root /usr/local/bin/kind
+  when: not check_file_status_kind.stat.exists
+
+- name: Create kind cluster
+  shell: |
+    if ! ( /usr/local/bin/kind get clusters|grep -q -P '^kind$' );then
+      /usr/local/bin/kind create cluster
+    fi
+    /usr/local/bin/kind get kubeconfig > /root/.kube/config
+
