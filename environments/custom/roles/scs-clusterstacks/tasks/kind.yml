@@ -13,4 +13,6 @@
 
 - name: Create kind cluster
   shell: |
-    /usr/local/bin/kind create cluster
+    if ! ( /usr/local/bin/kind get clusters|grep -q -P '^kind$' );then
+      /usr/local/bin/kind create cluster
+    fi
