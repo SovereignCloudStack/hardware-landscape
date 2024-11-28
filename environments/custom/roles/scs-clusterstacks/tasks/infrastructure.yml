@@ -3,16 +3,15 @@
 - name: Install kubectl
   shell: |
     snap install kubectl --classic
-  when: not check_file_status_kind.stat.exists
 
 - name: Install helm
   shell: |
     snap install helm --classic
 
-- name: Check if Kind is installed
+- name: Check if Clusterctl is installed
   stat:
-    path: /usr/local/bin/kind
-  register: check_file_status_kind
+    path: /usr/local/bin/clusterctl
+  register: check_file_status_clusterctl
 
 - name: Install clusterctl
   shell: |
@@ -20,6 +19,11 @@
      chmod 755 /usr/local/bin/clusterctl
      chown root:root /usr/local/bin/clusterctl
   when: not check_file_status_clusterctl.stat.exists
+
+- name: Check if Kind is installed
+  stat:
+    path: /usr/local/bin/kind
+  register: check_file_status_kind
 
 - name: Install kind
   shell: |
@@ -34,4 +38,3 @@
       /usr/local/bin/kind create cluster
     fi
     /usr/local/bin/kind get kubeconfig > /root/.kube/config
-
