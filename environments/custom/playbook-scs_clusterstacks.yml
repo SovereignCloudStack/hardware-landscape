@@ -3,5 +3,5 @@
   hosts: clusterstacks
   become: true
   roles:
-#    - osism.services.docker
+    - osism.services.docker
     - scs-clusterstacks
