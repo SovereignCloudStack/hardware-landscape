@@ -57,22 +57,14 @@
   changed_when: "'Performing upgrade' in result.stdout"
   when: capi_system_phase == "Active"
 
-#- name: Install Cluster Stack Operator
-#  kubernetes.core.helm:
-#    name: cso
-#    repo_url: "oci://registry.scs.community/cluster-stacks/cso"
-#    release_namespace: cso-system
-#    create_namespace: true
-#    set_values:
-#      - value: clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
-#        value_type: string
-#
-#- name: Install Cluster Stack Provider Openstack
-#  kubernetes.core.helm:
-#    name: cspo
-#    repo_url: "oci://registry.scs.community/cluster-stacks/cspo"
-#    release_namespace: cspo-system
-#    create_namespace: true
-#    set_values:
-#      - value: clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
-#        value_type: string
+- name: Install Cluster Stack Operator
+  ansible.builtin.shell: |
+    helm upgrade -i cso -n cso-system \ 
+    --create-namespace oci://registry.scs.community/cluster-stacks/cso \ 
+    --set clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
+
+- name: Install Cluster Stack Operator
+  ansible.builtin.shell: |
+    helm upgrade -i cspo -n cspo-system \ 
+    --create-namespace oci://registry.scs.community/cluster-stacks/cspo \ 
+    --set clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
