@@ -1,6 +1,7 @@
 ---
 - name: Deploy cluster stacks
-  hosts: manager
+  hosts: clusterstacks
   become: true
   roles:
+#    - osism.services.docker
     - scs-clusterstacks

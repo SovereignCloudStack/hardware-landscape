@@ -1,0 +1,4 @@
+---
+ansible_user: ubuntu
+docker_opts:
+  mtu: 1342

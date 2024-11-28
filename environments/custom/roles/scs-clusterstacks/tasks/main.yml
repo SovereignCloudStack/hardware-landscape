@@ -1,2 +1,5 @@
 ---
-
+- name: Bootstrap System
+  include_tasks: "{{ item }}"
+  loop:
+    - kind.yml
