@@ -27,11 +27,11 @@ Unlike a classic layer 2 network, this provides the following advantages:
 - Support for fast convergence of routing state across the network
 - Support for draining traffic from a node to be taken down
 - Support for filtering inbound and outbound advertisement
-
-[//]: <> TODO: Clarify/rework
-[//]: <> - Tenant traffic is encapsulated in Geneve or VXLAN in the packets transported using the layer3 underlay
-[//]: <>  (the configuration of the network switches can be kept very simple and there is no limitation to 4096 tenant networks like in layer2/VLAN)
-
+<!--
+TODO: Clarify/rework
+- Tenant traffic is encapsulated in Geneve or VXLAN in the packets transported using the layer3 underlay
+ (the configuration of the network switches can be kept very simple and there is no limitation to 4096 tenant networks like in layer2/VLAN)
+-->
 - BGP IPv6 unnumbered simplifies the ip-adressing scheme design requirements of layer3 networks significantly
 - Future: Support for establishing EVPN (tenant) connections using the Multiprotocol BGP Support (see RFC 4760)
 
