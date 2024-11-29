@@ -1,0 +1,13 @@
+--
+apiVersion: infrastructure.clusterstack.x-k8s.io/v1alpha1
+kind: OpenStackClusterStackReleaseTemplate
+metadata:
+  name: cspotemplate
+  namespace: cluster
+spec:
+  template:
+    spec:
+     identityRef:
+       kind: Secret
+       name: openstack
+

@@ -2,5 +2,5 @@
 - name: Bootstrap Clusterstack
   include_tasks: "{{ item }}"
   loop:
-    #- infrastructure.yml
+    - infrastructure.yml
     - clusterapi.yml

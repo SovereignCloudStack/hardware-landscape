@@ -1,12 +1,24 @@
 ---
 
+- name: Check if Helm is installed
+  stat:
+    path: /snap/bin/kubectl
+  register: check_file_status_kubectl
+
 - name: Install kubectl
   shell: |
     snap install kubectl --classic
+  register: check_file_status_kubectl
+
+- name: Check if Helm is installed
+  stat:
+    path: /snap/bin/helm
+  register: check_file_status_helm
 
 - name: Install helm
   shell: |
     snap install helm --classic
+  when: not check_file_status_helm.stat.exists
 
 - name: Check if Clusterctl is installed
   stat:
@@ -32,9 +44,24 @@
      chown root:root /usr/local/bin/kind
   when: not check_file_status_kind.stat.exists
 
+- name: Get kind installation status
+  ansible.builtin.shell: |
+    /usr/local/bin/kind get clusters 2>/dev/null
+    exit 0
+  args:
+    executable: /bin/bash
+  register: result
+  changed_when: false
+
+- name: Set kind installation fact
+  ansible.builtin.set_fact:
+    kind_cluster_state: "{{ result.stdout_lines[0] | default('') }}"
+
 - name: Create kind cluster
   shell: |
-    if ! ( /usr/local/bin/kind get clusters|grep -q -P '^kind$' );then
-      /usr/local/bin/kind create cluster
-    fi
+    /usr/local/bin/kind create cluster
     /usr/local/bin/kind get kubeconfig > /root/.kube/config
+  args:
+    executable: /bin/bash
+  when: kind_cluster_state == ""
+

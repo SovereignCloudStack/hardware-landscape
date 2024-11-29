@@ -63,7 +63,7 @@
     --create-namespace oci://registry.scs.community/cluster-stacks/cso \
     --set clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
 
-- name: Install Cluster Stack Operator
+- name: Install Cluster Stack Openstack Operator
   ansible.builtin.shell: |
     helm upgrade -i cspo -n cspo-system \
     --create-namespace oci://registry.scs.community/cluster-stacks/cspo \
