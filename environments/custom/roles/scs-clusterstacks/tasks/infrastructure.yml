@@ -40,11 +40,13 @@
 - name: Create kind cluster
   shell: |
       set -x
+      docker network create --driver=bridge  --opt=com.docker.network.driver.mtu=1342 kind
       curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ clusterstacks_kind_version }}/kind-linux-amd64
       chmod 755 /usr/local/bin/kind
       chown root:root /usr/local/bin/kind
       /usr/local/bin/kind create cluster
       /usr/local/bin/kind get kubeconfig > /root/.kube/config
+      chmod 600 /root/.kube/config
   args:
     executable: /bin/bash
   when: kind_cluster_state == ""

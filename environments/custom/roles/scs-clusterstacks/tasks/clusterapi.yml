@@ -13,21 +13,6 @@
     group: root
     mode: '0644'
 
-- name: Install Cloud Service Provider for Openstack
-  ansible.builtin.shell: |
-    awk 'BEGIN { print "cacert: |" } { print "  " $0 }' /etc/ssl/certs/ca-certificates-clusterstacks.crt > "{{ clusterstacks_templated_files_path }}/values.yaml"
-    helm upgrade -i openstack-secrets -n cluster \
-    --create-namespace https://github.com/SovereignCloudStack/openstack-csp-helper/releases/latest/download/openstack-csp-helper.tgz \
-    -f clouds.yaml --values values.yaml
-
-- name: Copy clouds.yaml file
-  ansible.builtin.template:
-    src: clouds.yaml.j2
-    dest: "{{ clusterstacks_templated_files_path }}/clouds.yaml.j2"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
-    mode: 0640
-
 - name: Copy cspo-template.yaml file
   ansible.builtin.template:
     src: cspo-template.yaml.j2
@@ -83,33 +68,50 @@
       --bootstrap kubeadm:v{{ clusterstacks_capi_version }} \
       --control-plane kubeadm:v{{ clusterstacks_capi_version }} \
       --infrastructure openstack:v{{ clusterstacks_capo_version }};
+    kubectl -n capi-system rollout status deployment
+    kubectl -n capo-system rollout status deployment
   args:
     executable: /bin/bash
   register: result
   changed_when: "'Your management cluster has been initialized successfully' in result.stdout"
   when: capi_system_phase == ""
 
-- name: Upgrade the CAPI management cluster
+- name: Copy clouds.yaml file
+  ansible.builtin.template:
+    src: clouds.yaml.j2
+    dest: "{{ clusterstacks_templated_files_path }}/clouds.yaml"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+
+- name: Install Cloud Service Provider for Openstack
   ansible.builtin.shell: |
-    set -o pipefail
+    awk 'BEGIN { print "cacert: |" } { print "  " $0 }' /etc/ssl/certs/ca-certificates-clusterstacks.crt > "{{ clusterstacks_templated_files_path }}/values.yaml"
+    helm upgrade -i openstack-secrets -n cluster \
+    --create-namespace https://github.com/SovereignCloudStack/openstack-csp-helper/releases/latest/download/openstack-csp-helper.tgz \
+    -f "{{ clusterstacks_templated_files_path }}/clouds.yaml" --values "{{ clusterstacks_templated_files_path }}/values.yaml"
 
-    export KUBECONFIG=/root/.kube/config
-    export EXP_CLUSTER_RESOURCE_SET=true
-    export EXP_RUNTIME_SDK=true
-    export CLUSTER_TOPOLOGY=true
-    export GOPROXY=off
-
-    clusterctl upgrade apply \
-      --core cluster-api:v{{ clusterstacks_capi_version }} \
-      --bootstrap kubeadm:v{{ clusterstacks_capi_version }} \
-      --control-plane kubeadm:v{{ clusterstacks_capi_version }} \
-      --infrastructure openstack:v{{ clusterstacks_capo_version }};
-  args:
-    executable: /bin/bash
-  register: result
-  changed_when: "'Performing upgrade' in result.stdout"
-  when: capi_system_phase == "Active"
-
+#- name: Upgrade the CAPI management cluster
+#  ansible.builtin.shell: |
+#    set -o pipefail
+#
+#    export KUBECONFIG=/root/.kube/config
+#    export EXP_CLUSTER_RESOURCE_SET=true
+#    export EXP_RUNTIME_SDK=true
+#    export CLUSTER_TOPOLOGY=true
+#    export GOPROXY=off
+#
+#    clusterctl upgrade apply \
+#      --core cluster-api:v{{ clusterstacks_capi_version }} \
+#      --bootstrap kubeadm:v{{ clusterstacks_capi_version }} \
+#      --control-plane kubeadm:v{{ clusterstacks_capi_version }} \
+#      --infrastructure openstack:v{{ clusterstacks_capo_version }};
+#  args:
+#    executable: /bin/bash
+#  register: result
+#  changed_when: "'Performing upgrade' in result.stdout"
+#  when: capi_system_phase == "Active"
+#
 - name: Install Cluster Stack Operator
   ansible.builtin.shell: |
     helm upgrade -i cso -n cso-system \
