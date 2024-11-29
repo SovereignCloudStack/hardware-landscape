@@ -11,6 +11,32 @@
   register: result
   changed_when: false
 
+
+- name: Copy cspo-template.yaml file
+  ansible.builtin.template:
+    src: cspo-template.yaml.j2
+    dest: "{ templated_files_path }}/cspo-template.yaml"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+
+
+- name: Copy clusterstack.yaml file
+  ansible.builtin.template:
+    src: clusterstack.yaml.j2
+    dest: "{ templated_files_path }}/clusterstack.yaml"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+
+- name: Copy cluster.yaml file
+  ansible.builtin.template:
+    src: cluster.yaml.j2
+    dest: "{ templated_files_path }}/cluster.yaml"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+
 - name: Set capi-system-phase fact
   ansible.builtin.set_fact:
     capi_system_phase: "{{ result.stdout_lines[0] | default('') }}"
@@ -18,7 +44,7 @@
 - name: Initialize the CAPI management cluster
   ansible.builtin.shell: |
     set -o pipefail
-
+    set -x
     export KUBECONFIG=/root/.kube/config
     export EXP_CLUSTER_RESOURCE_SET=true
     export EXP_RUNTIME_SDK=true
@@ -26,10 +52,10 @@
     export GOPROXY=off
 
     clusterctl init \
-      --core cluster-api:v{{ capi_version }} \
-      --bootstrap kubeadm:v{{ capi_version }} \
-      --control-plane kubeadm:v{{ capi_version }} \
-      --infrastructure openstack:v{{ capo_version }};
+      --core cluster-api:v{{ clusterstacks_capi_version }} \
+      --bootstrap kubeadm:v{{ clusterstacks_capi_version }} \
+      --control-plane kubeadm:v{{ clusterstacks_capi_version }} \
+      --infrastructure openstack:v{{ clusterstacks_capo_version }};
   args:
     executable: /bin/bash
   register: result
@@ -47,10 +73,10 @@
     export GOPROXY=off
 
     clusterctl upgrade apply \
-      --core cluster-api:v{{ capi_version }} \
-      --bootstrap kubeadm:v{{ capi_version }} \
-      --control-plane kubeadm:v{{ capi_version }} \
-      --infrastructure openstack:v{{ capo_version }};
+      --core cluster-api:v{{ clusterstacks_capi_version }} \
+      --bootstrap kubeadm:v{{ clusterstacks_capi_version }} \
+      --control-plane kubeadm:v{{ clusterstacks_capi_version }} \
+      --infrastructure openstack:v{{ clusterstacks_capo_version }};
   args:
     executable: /bin/bash
   register: result

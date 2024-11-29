@@ -27,7 +27,7 @@
 
 - name: Install clusterctl
   shell: |
-     curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v{{ clusterctl_version }}/clusterctl-linux-amd64 -o /usr/local/bin/clusterctl 
+     curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v{{ clusterstacks_clusterctl_version }}/clusterctl-linux-amd64 -o /usr/local/bin/clusterctl 
      chmod 755 /usr/local/bin/clusterctl
      chown root:root /usr/local/bin/clusterctl
   when: not check_file_status_clusterctl.stat.exists
@@ -39,7 +39,7 @@
 
 - name: Install kind
   shell: |
-     curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ kind_version }}/kind-linux-amd64
+     curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ clusterstacks_kind_version }}/kind-linux-amd64
      chmod 755 /usr/local/bin/kind
      chown root:root /usr/local/bin/kind
   when: not check_file_status_kind.stat.exists

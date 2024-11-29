@@ -4,8 +4,9 @@
 
 operator_user: "dragon"
 operator_group: "dragon"
-kind_version: 0.25.0
-capi_version: 1.8.5
-capo_version: 0.11.3
-clusterctl_version: 1.8.5
 
+clusterstacks_kind_version: 0.25.0
+clusterstacks_capi_version: 1.8.5
+clusterstacks_capo_version: 0.11.3
+clusterstacks_clusterctl_version: 1.8.5
+clusterstacks_templated_files_path: /root/clusterstacks
