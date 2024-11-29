@@ -1,48 +1,28 @@
 ---
-
-- name: Check if Helm is installed
-  stat:
-    path: /snap/bin/kubectl
-  register: check_file_status_kubectl
-
 - name: Install kubectl
   shell: |
     snap install kubectl --classic
-  register: check_file_status_kubectl
-
-- name: Check if Helm is installed
-  stat:
-    path: /snap/bin/helm
-  register: check_file_status_helm
+  creates: /snap/bin/kubectl
 
 - name: Install helm
   shell: |
     snap install helm --classic
-  when: not check_file_status_helm.stat.exists
-
-- name: Check if Clusterctl is installed
-  stat:
-    path: /usr/local/bin/clusterctl
-  register: check_file_status_clusterctl
+  creates: /snap/bin/helm
 
 - name: Install clusterctl
   shell: |
-     curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v{{ clusterstacks_clusterctl_version }}/clusterctl-linux-amd64 -o /usr/local/bin/clusterctl 
+     curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v{{ clusterstacks_clusterctl_version }}/clusterctl-linux-amd64 \
+        -o /usr/local/bin/clusterctl
      chmod 755 /usr/local/bin/clusterctl
      chown root:root /usr/local/bin/clusterctl
-  when: not check_file_status_clusterctl.stat.exists
-
-- name: Check if Kind is installed
-  stat:
-    path: /usr/local/bin/kind
-  register: check_file_status_kind
+  creates: /usr/local/bin/clusterctl
 
 - name: Install kind
   shell: |
      curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ clusterstacks_kind_version }}/kind-linux-amd64
      chmod 755 /usr/local/bin/kind
      chown root:root /usr/local/bin/kind
-  when: not check_file_status_kind.stat.exists
+  creates: /usr/local/bin/kind
 
 - name: Get kind installation status
   ansible.builtin.shell: |
@@ -59,9 +39,11 @@
 
 - name: Create kind cluster
   shell: |
+    set -x 
     /usr/local/bin/kind create cluster
     /usr/local/bin/kind get kubeconfig > /root/.kube/config
   args:
     executable: /bin/bash
   when: kind_cluster_state == ""
+
 
