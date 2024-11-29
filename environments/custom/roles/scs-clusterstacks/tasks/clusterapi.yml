@@ -8,7 +8,7 @@
 - name: Copy ca-certificates.crt to target system
   ansible.builtin.copy:
     src: /etc/ssl/certs/ca-certificates.crt
-    dest: /etc/ssl/certs/ca-certificates-clusterstacks.crt
+    dest: "{{ clusterstacks_templated_files_path }}/ca-certificate.crt"
     owner: root
     group: root
     mode: '0644'
@@ -86,34 +86,34 @@
 
 - name: Install Cloud Service Provider for Openstack
   ansible.builtin.shell: |
-    awk 'BEGIN { print "cacert: |" } { print "  " $0 }' /etc/ssl/certs/ca-certificates-clusterstacks.crt > "{{ clusterstacks_templated_files_path }}/values.yaml"
+    awk 'BEGIN { print "cacert: |" } { print "  " $0 }' "{{ clusterstacks_templated_files_path }}/ca-certificate.crt" > "{{ clusterstacks_templated_files_path }}/values.yaml"
     helm upgrade -i openstack-secrets -n cluster \
     --create-namespace https://github.com/SovereignCloudStack/openstack-csp-helper/releases/latest/download/openstack-csp-helper.tgz \
     -f "{{ clusterstacks_templated_files_path }}/clouds.yaml" --values "{{ clusterstacks_templated_files_path }}/values.yaml"
 
-#- name: Upgrade the CAPI management cluster
-#  ansible.builtin.shell: |
-#    set -o pipefail
-#
-#    export KUBECONFIG=/root/.kube/config
-#    export EXP_CLUSTER_RESOURCE_SET=true
-#    export EXP_RUNTIME_SDK=true
-#    export CLUSTER_TOPOLOGY=true
-#    export GOPROXY=off
-#
-#    clusterctl upgrade apply \
-#      --core cluster-api:v{{ clusterstacks_capi_version }} \
-#      --bootstrap kubeadm:v{{ clusterstacks_capi_version }} \
-#      --control-plane kubeadm:v{{ clusterstacks_capi_version }} \
-#      --infrastructure openstack:v{{ clusterstacks_capo_version }};
-#   kubectl -n capi-system rollout status deployment
-#   kubectl -n capo-system rollout status deployment
-#  args:
-#    executable: /bin/bash
-#  register: result
-#  changed_when: "'Performing upgrade' in result.stdout"
-#  when: capi_system_phase == "Active"
-#
+- name: Upgrade the CAPI management cluster
+  ansible.builtin.shell: |
+    set -o pipefail
+
+    export KUBECONFIG=/root/.kube/config
+    export EXP_CLUSTER_RESOURCE_SET=true
+    export EXP_RUNTIME_SDK=true
+    export CLUSTER_TOPOLOGY=true
+    export GOPROXY=off
+
+    clusterctl upgrade apply \
+      --core cluster-api:v{{ clusterstacks_capi_version }} \
+      --bootstrap kubeadm:v{{ clusterstacks_capi_version }} \
+      --control-plane kubeadm:v{{ clusterstacks_capi_version }} \
+      --infrastructure openstack:v{{ clusterstacks_capo_version }};
+   kubectl -n capi-system rollout status deployment
+   kubectl -n capo-system rollout status deployment
+  args:
+    executable: /bin/bash
+  register: result
+  changed_when: "'Performing upgrade' in result.stdout"
+  when: capi_system_phase == "Active"
+
 - name: Install Cluster Stack Operator
   ansible.builtin.shell: |
     helm upgrade -i cso -n cso-system \
