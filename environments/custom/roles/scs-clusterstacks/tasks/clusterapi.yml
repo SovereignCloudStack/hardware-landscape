@@ -1,4 +1,57 @@
 ---
+- name: "Ensure a directory {{ clusterstacks_templated_files_path }} is present"
+  ansible.builtin.file:
+    path: "{{ clusterstacks_templated_files_path }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy ca-certificates.crt to target system
+  ansible.builtin.copy:
+    src: /etc/ssl/certs/ca-certificates.crt
+    dest: /etc/ssl/certs/ca-certificates-clusterstacks.crt
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Install Cloud Service Provider for Openstack
+  ansible.builtin.shell: |
+    awk 'BEGIN { print "cacert: |" } { print "  " $0 }' /etc/ssl/certs/ca-certificates-clusterstacks.crt > "{{ clusterstacks_templated_files_path }}/values.yaml"
+    helm upgrade -i openstack-secrets -n cluster \
+    --create-namespace https://github.com/SovereignCloudStack/openstack-csp-helper/releases/latest/download/openstack-csp-helper.tgz \
+    -f clouds.yaml --values values.yaml
+
+- name: Copy clouds.yaml file
+  ansible.builtin.template:
+    src: clouds.yaml.j2
+    dest: "{{ clusterstacks_templated_files_path }}/clouds.yaml.j2"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+
+- name: Copy cspo-template.yaml file
+  ansible.builtin.template:
+    src: cspo-template.yaml.j2
+    dest: "{{ clusterstacks_templated_files_path }}/cspo-template.yaml"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+
+- name: Copy clusterstack.yaml file
+  ansible.builtin.template:
+    src: clusterstack.yaml.j2
+    dest: "{{ clusterstacks_templated_files_path }}/clusterstack.yaml"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+
+- name: Copy cluster.yaml file
+  ansible.builtin.template:
+    src: cluster.yaml.j2
+    dest: "{{ clusterstacks_templated_files_path }}/cluster.yaml"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+
 - name: Get capi-system namespace phase
   ansible.builtin.shell: |
     set -o pipefail
@@ -10,32 +63,6 @@
     executable: /bin/bash
   register: result
   changed_when: false
-
-
-- name: Copy cspo-template.yaml file
-  ansible.builtin.template:
-    src: cspo-template.yaml.j2
-    dest: "{ templated_files_path }}/cspo-template.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
-    mode: 0640
-
-
-- name: Copy clusterstack.yaml file
-  ansible.builtin.template:
-    src: clusterstack.yaml.j2
-    dest: "{ templated_files_path }}/clusterstack.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
-    mode: 0640
-
-- name: Copy cluster.yaml file
-  ansible.builtin.template:
-    src: cluster.yaml.j2
-    dest: "{ templated_files_path }}/cluster.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
-    mode: 0640
 
 - name: Set capi-system-phase fact
   ansible.builtin.set_fact:

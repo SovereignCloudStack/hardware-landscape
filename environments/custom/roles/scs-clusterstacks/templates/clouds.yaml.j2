@@ -1,0 +1,17 @@
+clouds:
+  openstack:
+    auth:
+      auth_url: https://api.zone1.landscape.scs.community:5000
+      username: k8s-clusterstacks-test-admin
+      project_name: management
+      project_domain_name: k8s-clusterstacks-test
+      user_domain_name: workload1
+    cacert: ca-certificates.crt
+    identity_api_version: 3
+    endpoint_type: internalURL
+
+    region_name: "RegionOne"
+    interface: "public"
+    identity_api_version: 3
+    auth_type: "v3applicationcredential"
+    cacert: ca-certificates.crt

@@ -1,29 +1,31 @@
 ---
+- name: Check if Kubectl is installed
+  stat:
+    path: /snap/bin/kubectl
+  register: check_file_status_kubectl
 - name: Install kubectl
   shell: |
     snap install kubectl --classic
-  creates: /snap/bin/kubectl
-
+  when: not check_file_status_kubectl.stat.exists
+- name: Check if Helm is installed
+  stat:
+    path: /snap/bin/helm
+  register: check_file_status_helm
 - name: Install helm
   shell: |
     snap install helm --classic
-  creates: /snap/bin/helm
-
+  when: not check_file_status_helm.stat.exists
+- name: Check if Clusterctl is installed
+  stat:
+    path: /usr/local/bin/clusterctl
+  register: check_file_status_clusterctl
 - name: Install clusterctl
   shell: |
      curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v{{ clusterstacks_clusterctl_version }}/clusterctl-linux-amd64 \
         -o /usr/local/bin/clusterctl
      chmod 755 /usr/local/bin/clusterctl
      chown root:root /usr/local/bin/clusterctl
-  creates: /usr/local/bin/clusterctl
-
-- name: Install kind
-  shell: |
-     curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ clusterstacks_kind_version }}/kind-linux-amd64
-     chmod 755 /usr/local/bin/kind
-     chown root:root /usr/local/bin/kind
-  creates: /usr/local/bin/kind
-
+  when: not check_file_status_clusterctl.stat.exists
 - name: Get kind installation status
   ansible.builtin.shell: |
     /usr/local/bin/kind get clusters 2>/dev/null
@@ -32,16 +34,17 @@
     executable: /bin/bash
   register: result
   changed_when: false
-
 - name: Set kind installation fact
   ansible.builtin.set_fact:
     kind_cluster_state: "{{ result.stdout_lines[0] | default('') }}"
-
 - name: Create kind cluster
   shell: |
-    set -x 
-    /usr/local/bin/kind create cluster
-    /usr/local/bin/kind get kubeconfig > /root/.kube/config
+      set -x
+      curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ clusterstacks_kind_version }}/kind-linux-amd64
+      chmod 755 /usr/local/bin/kind
+      chown root:root /usr/local/bin/kind
+      /usr/local/bin/kind create cluster
+      /usr/local/bin/kind get kubeconfig > /root/.kube/config
   args:
     executable: /bin/bash
   when: kind_cluster_state == ""
