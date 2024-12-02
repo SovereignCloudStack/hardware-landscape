@@ -8,7 +8,7 @@
 - name: Copy ca-certificates.crt to target system
   ansible.builtin.copy:
     src: /etc/ssl/certs/ca-certificates.crt
-    dest: "{{ clusterstacks_templated_files_path }}/ca-certificate.crt"
+    dest: "{{ clusterstacks_templated_files_path }}/ca-certificates.crt"
     owner: root
     group: root
     mode: '0644'
@@ -86,7 +86,7 @@
 
 - name: Install Cloud Service Provider for Openstack
   ansible.builtin.shell: |
-    awk 'BEGIN { print "cacert: |" } { print "  " $0 }' "{{ clusterstacks_templated_files_path }}/ca-certificate.crt" > "{{ clusterstacks_templated_files_path }}/values.yaml"
+    awk 'BEGIN { print "cacert: |" } { print "  " $0 }' "{{ clusterstacks_templated_files_path }}/ca-certificates.crt" > "{{ clusterstacks_templated_files_path }}/values.yaml"
     helm upgrade -i openstack-secrets -n cluster \
     --create-namespace https://github.com/SovereignCloudStack/openstack-csp-helper/releases/latest/download/openstack-csp-helper.tgz \
     -f "{{ clusterstacks_templated_files_path }}/clouds.yaml" --values "{{ clusterstacks_templated_files_path }}/values.yaml"

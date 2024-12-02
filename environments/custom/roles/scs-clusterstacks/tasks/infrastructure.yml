@@ -52,5 +52,3 @@
   args:
     executable: /bin/bash
   when: kind_cluster_state == ""
-
-
