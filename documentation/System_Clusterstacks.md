@@ -17,7 +17,11 @@
     --config ${WLM_CONFIG?WLM_CONFIG} \
     --create_domains ${WLM_DOMAIN?WLM_DOMAIN} --create_projects management --create_machines bootstrap1 \
     --ansible_inventory /opt/configuration/inventory/host_vars
-  ```sh
+  ```
+* Check system
+  ```bash
+  cat /opt/configuration/inventory/host_vars/k8s-clusterstacks-test-management-bootstrap1/*
+  ```
 * Create a project for the controller cluster
   ```
   openstack_workload_generator \
