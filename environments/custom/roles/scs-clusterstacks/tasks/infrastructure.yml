@@ -1,20 +1,23 @@
 ---
-- name: Check if Kubectl is installed
-  stat:
-    path: /snap/bin/kubectl
-  register: check_file_status_kubectl
-- name: Install kubectl
-  shell: |
-    snap install kubectl --classic
-  when: not check_file_status_kubectl.stat.exists
-- name: Check if Helm is installed
-  stat:
-    path: /snap/bin/helm
-  register: check_file_status_helm
-- name: Install helm
-  shell: |
-    snap install helm --classic
-  when: not check_file_status_helm.stat.exists
+- name: Update the apt cache
+  apt:
+    update_cache: yes
+- name: Install Ubuntu packages
+  apt:
+    name:
+      - vim
+      - curl
+      - git
+      - python3-openstackclient
+      - docker.io
+    state: present
+- name: Install Snap packages
+  community.general.snap:
+    name:
+      - k9s
+      - kubectl
+      - helm
+    classic: true
 - name: Check if Clusterctl is installed
   stat:
     path: /usr/local/bin/clusterctl
@@ -40,7 +43,6 @@
 - name: Create kind cluster
   shell: |
       set -x
-      docker network create --driver=bridge  --opt=com.docker.network.driver.mtu=1342 kind
       curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ clusterstacks_kind_version }}/kind-linux-amd64
       chmod 755 /usr/local/bin/kind
       chown root:root /usr/local/bin/kind
@@ -50,5 +52,3 @@
   args:
     executable: /bin/bash
   when: kind_cluster_state == ""
-
-

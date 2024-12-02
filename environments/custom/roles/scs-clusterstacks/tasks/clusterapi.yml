@@ -8,7 +8,7 @@
 - name: Copy ca-certificates.crt to target system
   ansible.builtin.copy:
     src: /etc/ssl/certs/ca-certificates.crt
-    dest: "{{ clusterstacks_templated_files_path }}/ca-certificate.crt"
+    dest: "{{ clusterstacks_templated_files_path }}/ca-certificates.crt"
     owner: root
     group: root
     mode: '0644'
@@ -17,24 +17,24 @@
   ansible.builtin.template:
     src: cspo-template.yaml.j2
     dest: "{{ clusterstacks_templated_files_path }}/cspo-template.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
+    owner: "{{ clusterstacks_operator_user }}"
+    group: "{{ clusterstacks_operator_group }}"
     mode: 0640
 
 - name: Copy clusterstack.yaml file
   ansible.builtin.template:
     src: clusterstack.yaml.j2
     dest: "{{ clusterstacks_templated_files_path }}/clusterstack.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
+    owner: "{{ clusterstacks_operator_user }}"
+    group: "{{ clusterstacks_operator_group }}"
     mode: 0640
 
 - name: Copy cluster.yaml file
   ansible.builtin.template:
     src: cluster.yaml.j2
     dest: "{{ clusterstacks_templated_files_path }}/cluster.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
+    owner: "{{ clusterstacks_operator_user }}"
+    group: "{{ clusterstacks_operator_group }}"
     mode: 0640
 
 - name: Get capi-system namespace phase
@@ -80,13 +80,13 @@
   ansible.builtin.template:
     src: clouds.yaml.j2
     dest: "{{ clusterstacks_templated_files_path }}/clouds.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
+    owner: "{{ clusterstacks_operator_user }}"
+    group: "{{ clusterstacks_operator_group }}"
     mode: 0640
 
 - name: Install Cloud Service Provider for Openstack
   ansible.builtin.shell: |
-    awk 'BEGIN { print "cacert: |" } { print "  " $0 }' "{{ clusterstacks_templated_files_path }}/ca-certificate.crt" > "{{ clusterstacks_templated_files_path }}/values.yaml"
+    awk 'BEGIN { print "cacert: |" } { print "  " $0 }' "{{ clusterstacks_templated_files_path }}/ca-certificates.crt" > "{{ clusterstacks_templated_files_path }}/values.yaml"
     helm upgrade -i openstack-secrets -n cluster \
     --create-namespace https://github.com/SovereignCloudStack/openstack-csp-helper/releases/latest/download/openstack-csp-helper.tgz \
     -f "{{ clusterstacks_templated_files_path }}/clouds.yaml" --values "{{ clusterstacks_templated_files_path }}/values.yaml"
@@ -134,6 +134,7 @@
 - name: Kubectl apply clusterstack.yaml
   ansible.builtin.shell: |
     export KUBECONFIG=/root/.kube/config
+    kubectl -n cso-system rollout status deployment
     kubectl apply -f "{{ clusterstacks_templated_files_path }}/clusterstack.yaml"
 
 - name: Kubectl apply cluster.yaml
