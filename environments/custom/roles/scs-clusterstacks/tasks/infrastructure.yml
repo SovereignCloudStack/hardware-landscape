@@ -2,7 +2,7 @@
 - name: Update the apt cache
   apt:
     update_cache: yes
-- name: Install specified Ubuntu packages
+- name: Install Ubuntu packages
   apt:
     name:
       - vim
@@ -11,22 +11,13 @@
       - python3-openstackclient
       - docker.io
     state: present
-- name: Check if Kubectl is installed
-  stat:
-    path: /snap/bin/kubectl
-  register: check_file_status_kubectl
-- name: Install kubectl
-  shell: |
-    snap install kubectl --classic
-  when: not check_file_status_kubectl.stat.exists
-- name: Check if Helm is installed
-  stat:
-    path: /snap/bin/helm
-  register: check_file_status_helm
-- name: Install helm
-  shell: |
-    snap install helm --classic
-  when: not check_file_status_helm.stat.exists
+- name: Install Snap packages
+  community.general.snap:
+    name:
+      - k9s
+      - kubectl
+      - helm
+    classic: true
 - name: Check if Clusterctl is installed
   stat:
     path: /usr/local/bin/clusterctl

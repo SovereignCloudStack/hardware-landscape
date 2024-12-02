@@ -17,24 +17,24 @@
   ansible.builtin.template:
     src: cspo-template.yaml.j2
     dest: "{{ clusterstacks_templated_files_path }}/cspo-template.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
+    owner: "{{ clusterstacks_operator_user }}"
+    group: "{{ clusterstacks_operator_group }}"
     mode: 0640
 
 - name: Copy clusterstack.yaml file
   ansible.builtin.template:
     src: clusterstack.yaml.j2
     dest: "{{ clusterstacks_templated_files_path }}/clusterstack.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
+    owner: "{{ clusterstacks_operator_user }}"
+    group: "{{ clusterstacks_operator_group }}"
     mode: 0640
 
 - name: Copy cluster.yaml file
   ansible.builtin.template:
     src: cluster.yaml.j2
     dest: "{{ clusterstacks_templated_files_path }}/cluster.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
+    owner: "{{ clusterstacks_operator_user }}"
+    group: "{{ clusterstacks_operator_group }}"
     mode: 0640
 
 - name: Get capi-system namespace phase
@@ -80,8 +80,8 @@
   ansible.builtin.template:
     src: clouds.yaml.j2
     dest: "{{ clusterstacks_templated_files_path }}/clouds.yaml"
-    owner: "{{ operator_user }}"
-    group: "{{ operator_group }}"
+    owner: "{{ clusterstacks_operator_user }}"
+    group: "{{ clusterstacks_operator_group }}"
     mode: 0640
 
 - name: Install Cloud Service Provider for Openstack
