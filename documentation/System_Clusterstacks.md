@@ -41,5 +41,5 @@
 
 ```sh
 openstack_workload_generator \
-    --config ${WLM_CONFIG?WLM_CONFIG}  --delete_domains ${WL_DOMAIN?WL_DOMAIN}
+    --config ${WLM_CONFIG?WLM_CONFIG}  --delete_domains ${WLM_DOMAIN?WLM_DOMAIN}
 ```
