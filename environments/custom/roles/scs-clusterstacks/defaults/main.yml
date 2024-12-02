@@ -2,8 +2,8 @@
 ##########################
 # operator
 
-operator_user: "dragon"
-operator_group: "dragon"
+operator_user: "root"
+operator_group: "root"
 
 clusterstacks_kind_version: 0.25.0
 clusterstacks_capi_version: 1.8.5
