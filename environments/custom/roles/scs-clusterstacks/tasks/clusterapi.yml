@@ -134,6 +134,7 @@
 - name: Kubectl apply clusterstack.yaml
   ansible.builtin.shell: |
     export KUBECONFIG=/root/.kube/config
+    kubectl -n cso-system rollout status deployment
     kubectl apply -f "{{ clusterstacks_templated_files_path }}/clusterstack.yaml"
 
 - name: Kubectl apply cluster.yaml

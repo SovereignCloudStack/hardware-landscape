@@ -1,4 +1,16 @@
 ---
+- name: Update the apt cache
+  apt:
+    update_cache: yes
+- name: Install specified Ubuntu packages
+  apt:
+    name:
+      - vim
+      - curl
+      - git
+      - python3-openstackclient
+      - docker.io
+    state: present
 - name: Check if Kubectl is installed
   stat:
     path: /snap/bin/kubectl
@@ -40,7 +52,6 @@
 - name: Create kind cluster
   shell: |
       set -x
-      docker network create --driver=bridge  --opt=com.docker.network.driver.mtu=1342 kind
       curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ clusterstacks_kind_version }}/kind-linux-amd64
       chmod 755 /usr/local/bin/kind
       chown root:root /usr/local/bin/kind
