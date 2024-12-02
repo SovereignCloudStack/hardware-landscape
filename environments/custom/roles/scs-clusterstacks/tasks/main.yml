@@ -1,14 +1,4 @@
 ---
-- name: Check if /usr/bin/docker exists
-  ansible.builtin.stat:
-    path: /usr/bin/docker
-  register: docker_file_stat
-
-- name: Include role only if /usr/bin/docker does not exist
-  ansible.builtin.include_role:
-    name: osism.services.docker
-  when: not docker_file_stat.stat.exists
-
 - name: Bootstrap Clusterstack
   include_tasks: "{{ item }}"
   loop:
