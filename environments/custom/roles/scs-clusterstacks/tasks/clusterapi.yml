@@ -119,12 +119,15 @@
     helm upgrade -i cso -n cso-system \
     --create-namespace oci://registry.scs.community/cluster-stacks/cso \
     --set clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
+    kubectl -n cso-system rollout status deployment
+    kubectl wait --for=jsonpath='{.subsets[*].addresses[*]}' endpoints/cso-webhook-service -n cso-system --timeout=60s
 
 - name: Install Cluster Stack Openstack Operator
   ansible.builtin.shell: |
     helm upgrade -i cspo -n cspo-system \
     --create-namespace oci://registry.scs.community/cluster-stacks/cspo \
     --set clusterStackVariables.ociRepository=registry.scs.community/csctl-oci/openstack
+    kubectl -n cspo-system rollout status deployment
 
 - name: Kubectl apply cspo-template.yaml
   ansible.builtin.shell: |
@@ -134,8 +137,9 @@
 - name: Kubectl apply clusterstack.yaml
   ansible.builtin.shell: |
     export KUBECONFIG=/root/.kube/config
-    kubectl -n cso-system rollout status deployment
     kubectl apply -f "{{ clusterstacks_templated_files_path }}/clusterstack.yaml"
+    sleep 1
+    kubectl wait --for=condition=Ready=true --timeout 600s -n cluster clusterstackrelease openstack-scs-1-31-v1
 
 - name: Kubectl apply cluster.yaml
   ansible.builtin.shell: |

@@ -56,10 +56,12 @@
   ansible.builtin.blockinfile:
     path: /root/.bashrc
     block: |
-      source <({{ item }} completion bash)
-    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR {{ item }} COMPLETION"
+      source <({{ compl_item }} completion bash)
+    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR {{ compl_item }} COMPLETION"
   loop:
     - kind
     - clusterctl
     - kubectl
     - helm
+  loop_control:
+    loop_var: compl_item
