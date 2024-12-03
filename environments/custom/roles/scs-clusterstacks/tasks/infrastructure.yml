@@ -24,10 +24,10 @@
   register: check_file_status_clusterctl
 - name: Install clusterctl
   shell: |
-     curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v{{ clusterstacks_clusterctl_version }}/clusterctl-linux-amd64 \
-        -o /usr/local/bin/clusterctl
-     chmod 755 /usr/local/bin/clusterctl
-     chown root:root /usr/local/bin/clusterctl
+    curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v{{ clusterstacks_clusterctl_version }}/clusterctl-linux-amd64 \
+       -o /usr/local/bin/clusterctl
+    chmod 755 /usr/local/bin/clusterctl
+    chown root:root /usr/local/bin/clusterctl
   when: not check_file_status_clusterctl.stat.exists
 - name: Get kind installation status
   ansible.builtin.shell: |
@@ -42,13 +42,24 @@
     kind_cluster_state: "{{ result.stdout_lines[0] | default('') }}"
 - name: Create kind cluster
   shell: |
-      set -x
-      curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ clusterstacks_kind_version }}/kind-linux-amd64
-      chmod 755 /usr/local/bin/kind
-      chown root:root /usr/local/bin/kind
-      /usr/local/bin/kind create cluster
-      /usr/local/bin/kind get kubeconfig > /root/.kube/config
-      chmod 600 /root/.kube/config
+    set -x
+    curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v{{ clusterstacks_kind_version }}/kind-linux-amd64
+    chmod 755 /usr/local/bin/kind
+    chown root:root /usr/local/bin/kind
+    /usr/local/bin/kind create cluster
+    /usr/local/bin/kind get kubeconfig > /root/.kube/config
+    chmod 600 /root/.kube/config
   args:
     executable: /bin/bash
   when: kind_cluster_state == ""
+- name: Load completions via bashrc
+  ansible.builtin.blockinfile:
+    path: /root/.bashrc
+    block: |
+      source <({{ item }} completion bash)
+    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR {{ item }} COMPLETION"
+  loop:
+    - kind
+    - clusterctl
+    - kubectl
+    - helm
