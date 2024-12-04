@@ -86,7 +86,7 @@ kube_vip_arp: false
 ############################
 # FRR
 
-frr_allow_service_restart: false
+frr_automatic_restart: true
 
 ##########################
 # docker
