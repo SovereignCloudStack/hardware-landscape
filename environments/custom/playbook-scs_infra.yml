@@ -1,4 +1,11 @@
 ---
+- name: Clone openstack workload manager
+  hosts: manager_infra
+  tasks:
+    - git:
+        repo: https://github.com/SovereignCloudStack/openstack-workload-generator.git
+        dest: /home/dragon/openstack-workload-generator
+        clone: yes
 - name: Assign roles to infrastructure hosts
   hosts: manager_infra
   become: true
@@ -36,7 +43,6 @@
           WantedBy=default.target
     - name: Run Systemd Reload for NFT rules
       shell: "systemctl daemon-reload"
-
 - name: Assign roles to manager hosts
   hosts: manager
   become: true

@@ -1,0 +1,7 @@
+---
+- name: Deploy cluster stacks
+  hosts: clusterstacks
+  gather_facts: true
+  become: true
+  roles:
+    - scs-clusterstacks

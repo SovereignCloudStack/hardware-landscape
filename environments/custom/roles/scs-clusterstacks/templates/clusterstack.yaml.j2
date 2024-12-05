@@ -1,0 +1,19 @@
+---
+apiVersion: clusterstack.x-k8s.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: openstack-scs-131
+  namespace: cluster
+spec:
+  provider: openstack
+  name: scs
+  kubernetesVersion: "1.31"
+  channel: stable
+  autoSubscribe: false
+  providerRef:
+    apiVersion: infrastructure.clusterstack.x-k8s.io/v1alpha1
+    kind: OpenStackClusterStackReleaseTemplate
+    name: cspotemplate
+  versions:
+    - v1
+

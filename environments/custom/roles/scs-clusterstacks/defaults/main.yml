@@ -1,0 +1,13 @@
+---
+##########################
+# operator
+
+clusterstacks_operator_user: "root"
+clusterstacks_operator_group: "root"
+
+clusterstacks_kind_version: 0.25.0
+clusterstacks_capi_version: 1.8.5
+clusterstacks_capo_version: 0.11.3
+clusterstacks_stern_version: 1.31.0
+clusterstacks_clusterctl_version: 1.8.5
+clusterstacks_templated_files_path: /root/clusterstacks

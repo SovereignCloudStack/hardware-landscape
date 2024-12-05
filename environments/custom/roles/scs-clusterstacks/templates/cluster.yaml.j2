@@ -1,0 +1,23 @@
+---
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: Cluster
+metadata:
+  name: cso-vp18
+  namespace: cluster
+  labels:
+    managed-secret: cloud-config
+spec:
+  topology:
+    variables:
+      - name: apiserver_loadbalancer
+        value: "octavia-ovn"
+    class: openstack-scs-1-31-v1
+    controlPlane:
+      replicas: 1
+    version: v1.31.2
+    workers:
+      machineDeployments:
+        - class: default-worker
+          name: md-0
+          replicas: 1
+
