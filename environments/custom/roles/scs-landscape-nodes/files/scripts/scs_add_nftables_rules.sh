@@ -40,9 +40,11 @@ if [ -n "$MGMTP2P_IPV4" ];then
 fi
 
 set -x
-nft "insert rule ip filter FORWARD position 0 $LOG iifname \"vxlan80\" oifname \"${GATEWAY_INTERFACE}\" accept comment SCS-MASQ"
-nft "insert rule ip filter FORWARD position 0 $LOG iifname \"${GATEWAY_INTERFACE}\" oifname \"vxlan80\" accept comment SCS-MASQ"
+nft "insert rule ip filter FORWARD position 0 iifname \"vxlan80\" accept comment SCS-MASQ"
+nft "insert rule ip filter FORWARD position 0 oifname \"vxlan80\" accept comment SCS-MASQ"
+nft "insert rule ip nat POSTROUTING position 0 $LOG ip saddr 10.80.0.0/20 ip daddr 10.10.21.0/24 snat to $ZONE1_IPV4 comment SCS-MASQ"
 nft "insert rule ip nat POSTROUTING position 0 $LOG ip saddr 10.80.0.0/20 oifname \"${GATEWAY_INTERFACE}\" masquerade comment SCS-MASQ"
+
 set +x
 for rule in $OLD_RULES_POSTROUTING; do
    echo "remove POSTROUTING rule with handle $rule"|logger -s -t scs_add_nftables_rules
