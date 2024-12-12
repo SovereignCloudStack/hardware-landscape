@@ -24,16 +24,9 @@ Unlike a classic layer 2 network, this provides the following advantages:
   is evenly distributed over competing paths (regardless of the amount of data these communication relationships exchange).
   (an approximate load distribution)
 - BGP/Anycast allows the IP addresses of services to be made concurrently available at several locations
-- Support for fast convergence of routing state across the network
-- Support for draining traffic from a node to be taken down
+- Support for fast convergence of link/routing state across the network
 - Support for filtering inbound and outbound advertisement
-<!--
-TODO: Clarify/rework
-- Tenant traffic is encapsulated in Geneve or VXLAN in the packets transported using the layer3 underlay
- (the configuration of the network switches can be kept very simple and there is no limitation to 4096 tenant networks like in layer2/VLAN)
--->
 - BGP IPv6 unnumbered simplifies the ip-adressing scheme design requirements of layer3 networks significantly
-- Future: Support for establishing EVPN (tenant) connections using the Multiprotocol BGP Support (see RFC 4760)
 
 As a consequence, this means that BGP routers with private ASN numbers are active on all systems involved
 (e.g. servers and switches) in the cloud setup and these exchange information with each other via the network topology.
@@ -41,8 +34,7 @@ As a consequence, this means that BGP routers with private ASN numbers are activ
 As a result, redundant paths of a server system, for example, are no longer managed via (multi-chassis) LACP,
 but the respective server or switch has topology information that allows it to route traffic efficiently or deal with availability problems.
 
-The detailes of this concept are heavily releated to the [great network documentation](https://docs.metal-stack.io/stable/overview/networking/) of
-(see also the [Github PR](https://github.com/metal-stack/docs/pull/209/files), or the [extended networking document](https://github.com/scoopex/metal-stack-docs/blob/master/docs/src/overview/networking.md) Metal-Stack.
+The detailes of this concept are heavily releated to the [great network documentation](https://docs.metal-stack.io/stable/overview/networking/) of metal-stack.
 Furthermore, the present design is strongly inspired by the work of Dinesh G. Dutt on BGP ([bgp-ebook](https://www.nvidia.com/en-us/networking/border-gateway-protocol/)) and the
 work ‘[Cloud Native Data Centre Networking](https://www.oreilly.com/library/view/cloud-native-data/9781492045595/)’ (O'Reilly)
 published in 2019, which provides various interesting basics.
