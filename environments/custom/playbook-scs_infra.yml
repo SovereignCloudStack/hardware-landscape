@@ -24,8 +24,9 @@
   hosts: manager_infra
   become: true
   tasks:
-    - ansible.builtin.copy:
-        dest: /etc/rc.local
+    - name: Create systemd startup rule for nftables
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/nftables-setup.service
         mode: 0755
         owner: root
         group: root
@@ -43,6 +44,8 @@
           WantedBy=default.target
     - name: Run Systemd Reload for NFT rules
       shell: "systemctl daemon-reload"
+    - name: Enable NFT rules
+      shell: "systemctl enable nftables-setup.service"
 - name: Assign roles to manager hosts
   hosts: manager
   become: true
