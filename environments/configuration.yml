@@ -222,6 +222,13 @@ user_list:
     groups:
       - docker
       - dialout
+  - name: "fzakfeld"
+    key: "github"
+    primary_group: dragon
+    uid: 45015
+    groups:
+      - docker
+      - dialout
 
 
 # yamllint disable rule:line-length

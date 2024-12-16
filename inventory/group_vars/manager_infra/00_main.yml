@@ -88,3 +88,7 @@ wireguard_users:
   - name: jschoone
     key: V83VIcgBKmEPqaugVnh0J3/dnpHhSxKkxRHvw89SABs=
     ip: 10.10.1.25
+  - name: fzakfeld
+    key: aLuOHfpBqZQ1HVB8TG64Hm2XGrCOEiLeAYpljaexuhY=
+    ip: 10.10.1.26
+
