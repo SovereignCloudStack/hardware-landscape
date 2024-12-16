@@ -39,7 +39,7 @@ provide L3 services with the same IP address, improving redundancy and
 failover. It also enables seamless VM live migration across geographically
 distributed environments, preserving the state of L2 and L3 connectivity.
 
-VXLAN or MLSP are used as data plane, to deliver the L2 frames over the L3
+VXLAN or MPLS are used as data plane, to deliver the L2 frames over the L3
 underlay. Each tenant’s traffic is encapsulated in VXLAN tunnels between
 endpoints (known as VTEPs—VXLAN Tunnel Endpoints), and BGP advertises the VXLAN
 VNI (Virtual Network Identifier) mappings along with MAC/IP addresses. As an
