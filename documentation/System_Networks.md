@@ -46,11 +46,12 @@ The containing ips are not statically assigned to a particular host.
 ### st01-mgmt-r01-u30
 
 * DHCP: No
+* MAC: 0c:c4:7a:fe:e6:6d
 * External Connection:
   * IP: 188.244.104.28
   * Ports:
-   * SSH: 22/TCP
-   * Wireguard: 51820/UDP
+   * SSH: 22/TCP (internal 22/TCP)
+   * Wireguard: 51820/UDP (internal 51820/UDP)
 * Interface: eno2 (Remote OSBA-DL-S7-L)
 * IP: 192.168.104.43
 * Subnet: 255.255.255.248 (/29)
@@ -67,13 +68,14 @@ sed -i "~s,nameserver.*$,nameserver 8.8.8.8," /etc/resolv.conf
 ### st01-mgmt-r01-u31
 
 * DHCP: yes
+* MAC: 0c:c4:7a:fe:e6:75
 * Interface: enp9s0
 * IP: 192.168.104.42
 * External Connection:
   * IP: 153.92.93.119
   * Ports:
-   * SSH: 41115/TCP
-   * Wireguard: 51820/UDP
+   * SSH: 41115/TCP (internal 22/TCP)
+   * Wireguard: 51820/UDP (internal 51820/UDP)
 * Interface: enp9s0 (Remote Temp-Downlink-S…)
 * Subnet: 255.255.255.248 (/29)
 * Gateway: 192.168.104.41
