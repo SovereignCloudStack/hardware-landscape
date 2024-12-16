@@ -178,7 +178,7 @@ router bgp 65001
  exit-address-family
 exit
 ```
-- Deploy kolla-ansible **without** OVN BGP agent on. This will create necessary to create ovs bridges.
+- Deploy kolla-ansible **without** an actiavted OVN BGP agent. This will create necessary to create ovs bridges.
 - For this we are going to use `underlay` exposing method, which requires `br-ex` interface to be up.
 ```bash
 sudo ip l set br-ex up
