@@ -1,7 +1,7 @@
 ---
 galaxy_info:
-  author: Marc schoechlin
-  description: Role for SCS Clusterstacks
+  author: Marc Schoechlin and Jan Schoone
+  description: Role for SCS Clusterstacks (draft implementation)
   company: OSBA e.V.
   license: Apache License 2.0
   min_ansible_version: 2.16.0

@@ -9,10 +9,12 @@
       - curl
       - git
       - python3-openstackclient
+        # TODO: Replace that later with the osism role
       - docker.io
     state: present
 - name: Install Snap packages
   community.general.snap:
+    # TODO: Replace that later with the osism roles
     name:
       - k9s
       - kubectl
