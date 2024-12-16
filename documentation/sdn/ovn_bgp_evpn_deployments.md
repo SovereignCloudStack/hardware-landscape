@@ -48,7 +48,7 @@ ram_size: 10000
 cpu_count: 12
 
 ```
-- Clone  [kola fork](https://github.com/SovereignCloudStack/kolla)
+- Clone  [kolla fork](https://github.com/SovereignCloudStack/kolla)
 ```
 git clone git@github.com:SovereignCloudStack/kolla.git
 ```
