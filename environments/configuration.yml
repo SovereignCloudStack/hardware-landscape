@@ -27,6 +27,7 @@ proxy_no_proxy_extra:
   - "landscape.scs.community"
 
 # Kubernetes ##############################################
+
 proxy_env:
   HTTP_PROXY: "http://{{ groups['manager'][0] }}:8888"
   HTTPS_PROXY: "http://{{ groups['manager'][0] }}:8888"
@@ -72,7 +73,7 @@ cluster_cidr: "10.52.0.0/16"
 cilium_mode: "native"
 
 k3s_interface: "dummy0"
-#kube_vip_iface: "dummy0"
+kube_vip_iface: "dummy0"
 cilium_iface: "dummy0"
 
 # Because the FRR instance on the node itself is responsible for propagate routes
@@ -82,11 +83,6 @@ kube_vip_bgp: true
 # ARP Broadcasts are not available in Layer3 Underlay Networks, therefore we disabled it
 # to make leader election functional.
 kube_vip_arp: false
-
-############################
-# FRR
-
-frr_automatic_restart: true
 
 ##########################
 # docker
