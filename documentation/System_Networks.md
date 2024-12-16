@@ -49,8 +49,8 @@ The containing ips are not statically assigned to a particular host.
 * External Connection:
   * IP: 188.244.104.28
   * Ports:
-   * SSH: 22
-   * Wireguard: 51820
+   * SSH: 22/TCP
+   * Wireguard: 51820/UDP
 * Interface: eno2 (Remote OSBA-DL-S7-L)
 * IP: 192.168.104.43
 * Subnet: 255.255.255.248 (/29)
@@ -72,8 +72,8 @@ sed -i "~s,nameserver.*$,nameserver 8.8.8.8," /etc/resolv.conf
 * External Connection:
   * IP: 153.92.93.119
   * Ports:
-   * SSH: 41115
-   * Wireguard: 51820
+   * SSH: 41115/TCP
+   * Wireguard: 51820/UDP
 * Interface: enp9s0 (Remote Temp-Downlink-S…)
 * Subnet: 255.255.255.248 (/29)
 * Gateway: 192.168.104.41
