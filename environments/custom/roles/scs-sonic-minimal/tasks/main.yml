@@ -1,0 +1,67 @@
+---
+# tasks file for sonic
+- name: Set password of admin
+  become: true
+  ansible.builtin.user:
+    name: "admin"
+    update_password: always
+    password: "{{ operator_password_root }}"
+
+- name: Create /etc/resolv.conf file
+  ansible.builtin.copy:
+    dest: /etc/resolv.conf
+    mode: 0644
+    owner: root
+    group: root
+    content: |
+      nameserver 10.10.23.254
+      nameserver 10.10.23.253
+      search mgmt.landscape.scs.community
+
+#- name: Generate a unique temporary file path
+#  ansible.builtin.shell: mktemp /tmp/authorized_keys_XXXXXX
+#  register: temp_file_result
+#  delegate_to: localhost
+#  run_once: true
+#- name: Set temp_file variable
+#  ansible.builtin.set_fact:
+#    temp_file: "{{ temp_file_result.stdout }}"
+#- name: Create a temporary file to collect keys
+#  ansible.builtin.file:
+#    path: "{{ temp_file }}"
+#    state: touch
+#    mode: '0644'
+#  delegate_to: localhost
+#  run_once: true
+#- name: Fetch public keys and append to the temp file
+#  ansible.builtin.uri:
+#    url: "https://github.com/{{ item }}.keys"
+#    return_content: yes
+#  register: key_fetch
+#  loop: "{{ operator_sonic_list }}"
+#  delegate_to: localhost
+#  run_once: true
+#- name: Append keys to the temp file
+#  ansible.builtin.lineinfile:
+#    path: "{{ temp_file }}"
+#    line: "{{ item.content }}"
+#    create: yes
+#    state: present
+#  with_items: "{{ key_fetch.results }}"
+#  when: item.content is defined
+#  delegate_to: localhost
+#  run_once: true
+#- name: Distribute the authorized_keys file to all hosts
+#  ansible.builtin.copy:
+#    src: "{{ temp_file }}"
+#    dest: /home/{{ ansible_user }}/.ssh/authorized_keys
+#    owner: "{{ ansible_user }}"
+#    group: "{{ ansible_user }}"
+#    mode: '0600'
+#- name: Clean up temporary file
+#  ansible.builtin.file:
+#    path: "{{ temp_file }}"
+#    state: absent
+#  delegate_to: localhost
+#  run_once: true
+#
