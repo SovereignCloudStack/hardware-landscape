@@ -1,6 +1,4 @@
 ---
-sonic_install: false
-
 # This option is intended for use in a LAB environment only, as it directs ONIE to install
 # a custom SONiC image built by the SCS community. For more details, refer to:
 # https://github.com/SovereignCloudStack/sonic-buildimage/pull/4

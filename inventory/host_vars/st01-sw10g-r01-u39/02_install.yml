@@ -1,1 +1,2 @@
-sonic_install: true
+---
+sonic_install: True
