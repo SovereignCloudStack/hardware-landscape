@@ -11,14 +11,18 @@
    ```
 2. **User**: Edit [environments/configuration.yml](../environments/configuration.yml)
   * Create branch
-  * Add new users in `user_list` section
-  * Actively remove users by adding them in the `user_delete
+  * Make modifications for node access:
+    * Add new users in `user_list` section
+    * Actively remove users by adding them in the `user_delete`
+  * Make modifications for switch access:
+    * Change the operator_sonic_list to add or remove users
   * Create pull request to `main` branch
 3. **Admin**: Rollout changes
    ```
    ssh scs-manager
    osism apply user
    osism apply operator
+   osism apply scs_sonic_minimal
    ```
 4. **User**: [Configure and use SSH Access](./System_Usage.md)
 5. Inform user
