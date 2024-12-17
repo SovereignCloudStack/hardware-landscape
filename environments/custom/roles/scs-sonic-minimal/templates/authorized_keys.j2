@@ -1,0 +1,7 @@
+# Operator, operator_public_key
+{{ operator_public_key }}
+
+{% for key in key_fetch.results %}
+# {{ key.item }} / {{ key.url }}
+{{ key.content }}
+{% endfor %}
