@@ -6,15 +6,13 @@ host {{ item }} {
   server-name "{{ item }}.{{ management_domain }}";
   option host-name "{{ item }}";
   fixed-address {{ hostvars[item]['mgmt_address']  }};
-  {% if item in ["st01-sw10g-r01-u38", "st01-sw10g-r01-u39", "st01-sw25g-r01-u40", "st01-sw100g-r01-u41", "st01-sw1g-r01-u42"] %}
-  # This option is intended for use in a LAB environment only, as it directs ONIE to install
-  # a custom SONiC image built by the SCS community. For more details, refer to:
-  # https://github.com/SovereignCloudStack/sonic-buildimage/pull/4
-  option default-url "http://10.10.23.254:28080/sonic-fix_edgecore.0-10b4356bf.bin";
-  # This option is intended for use in a LAB environment only, as it instructs ZTP to apply `ztp.json` bootfile
-  option bootfile-name "http://10.10.23.254:28080/ztp.json";
-  {% endif %}
-}
+{% if hostvars[item]['sonic_install'] is defined and hostvars[item]['sonic_install'] %}
+  option default-url "{{ hostvars[item]['sonic_image_url'] }}";
+{% if hostvars[item]['sonic_install'] is defined %}
+  option bootfile-name "{{ hostvars[item]['sonic_ztp'] }}";
+{% endif %}
+{% endif %}
+  }
 {% endif %}
 {% endfor %}
 

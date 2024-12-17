@@ -1,0 +1,5 @@
+# created by ansible
+{% for item in  resolvconf_nameserver %}
+nameserver {{ item }}
+{% endfor %}
+search {{ resolvconf_search  }}

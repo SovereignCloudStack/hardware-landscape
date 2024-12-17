@@ -1,0 +1,11 @@
+---
+
+##########################
+# resolvconf
+
+resolvconf_nameserver:
+  - 10.10.23.254
+  - 10.10.23.253
+
+resolvconf_search: mgmt.landscape.scs.community
+
