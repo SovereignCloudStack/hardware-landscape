@@ -1,0 +1,7 @@
+---
+- name: Assign roles to sonic all hosts
+  hosts: network_switches
+  become: yes
+  gather_facts: no
+  roles:
+    - scs-sonic-minimal
