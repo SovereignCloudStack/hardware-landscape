@@ -3,7 +3,7 @@
 ## Purpose of this repository
 
 This Git repository documents, configures and automates the management and setup of the Sovereign Cloud Stack hardware environment.
-This environment is build in the context of the VP18 project workpackage and in running at a colocation of [ScaleUp Technologies](https://scaleuptech.com).
+This environment was build in the context of the VP18 project workpackage and in now running at a colocation of [ScaleUp Technologies](https://scaleuptech.com). It was previously running at [JH Computers](https://jh-computers.de/).
 
 The main goals of this environment are:
 
