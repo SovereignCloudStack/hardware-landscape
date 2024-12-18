@@ -81,7 +81,9 @@ def check_firmware_servers(host_list: list[str]):
             bios_version = []
             for system in mgr_inst.systems:
                 bios_version.append(system.bios_version)
-            LOGGER.info(f"{host_name} - BMC Version {bmc_version} / BIOS Version {" ".join(bios_version)}")
+
+            bios_version_str = " ".join(bios_version)
+            LOGGER.info(f"{host_name} - BMC Version {bmc_version} / BIOS Version {bios_version_str}")
         except NotImplementedError:
             LOGGER.warning(f"Skipping system {host_name}, because redfish is not implemented")
 

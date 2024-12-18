@@ -106,6 +106,21 @@ operator_user: dragon
 operator_groups: [ "dragon", "adm", "sudo", "docker", "dialout" ]
 user_sudoers_type: "user"
 
+# The following users will get ssh login access to the sonic switches using the admin user
+# and the defined public keys of the listed github accounts
+operator_sonic_list:
+  - "scoopex"
+  - "garloff"
+  - "berendt"
+  - "fkr"
+  - "osfrickler"
+  - "zuse-z3"
+  - "matofeder"
+  - "MatusJenca2"
+  - "gtema"
+  - "jschoone"
+  - "fzakfeld"
+
 # Do not add users here, because they are deleted enirely
 # please add state=absent to the users to be deleted in user_list to
 # have proper numeric uid management and to not delete relevant files
@@ -219,6 +234,13 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45014
+    groups:
+      - docker
+      - dialout
+  - name: "fzakfeld"
+    key: "github"
+    primary_group: dragon
+    uid: 45015
     groups:
       - docker
       - dialout

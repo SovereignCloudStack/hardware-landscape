@@ -45,37 +45,31 @@ The containing ips are not statically assigned to a particular host.
 
 ### st01-mgmt-r01-u30
 
-* DHCP: No
-* External Connection:
-  * IP: 188.244.104.28
+* MAC: 0c:c4:7a:fe:e6:6d
+* Firewall IP (NAT):
+  * IP: 188.244.104.28 (old setup @JH computers)
   * Ports:
-   * SSH: 22
-   * Wireguard: 51820
-* Interface: eno2 (Remote OSBA-DL-S7-L)
-* IP: 192.168.104.43
-* Subnet: 255.255.255.248 (/29)
-* Gateway: 192.168.104.41
-* DNS: 192.168.104.41
-
-```
-ip addr add 192.168.104.43/29 dev eno2
-ip link set eno2 up
-ip route add default via 192.168.104.41 dev eno2
-sed -i "~s,nameserver.*$,nameserver 8.8.8.8," /etc/resolv.conf
-```
+   * SSH: 22/TCP (internal 22/TCP)
+   * Wireguard: 51820/UDP (internal 51820/UDP)
+* Internal interface (old setup @JH computers)
+  * Interface: eno2 (Remote OSBA-DL-S7-L)
+  * Internal IP: 192.168.104.43 
+  * Subnet: 255.255.255.248 (/29)
+  * Gateway: 192.168.104.41
+  * DNS: 192.168.104.41
 
 ### st01-mgmt-r01-u31
 
-* DHCP: yes
-* Interface: enp9s0
-* IP: 192.168.104.42
-* External Connection:
-  * IP: 153.92.93.119
+* MAC: 0c:c4:7a:fe:e6:75
+* Firewall IP (NAT):
+  * IP: 153.92.93.119 (old setup @JH computers)
   * Ports:
-   * SSH: 41115
-   * Wireguard: 51820
-* Interface: enp9s0 (Remote Temp-Downlink-S…)
-* Subnet: 255.255.255.248 (/29)
-* Gateway: 192.168.104.41
-* DNS: 192.168.104.41
+   * SSH: 41115/TCP (internal 22/TCP)
+   * Wireguard: 51820/UDP (internal 51820/UDP)
+* Internal interface (old setup @JH computers)
+  * Interface: eno2 (Remote Temp-Downlink-S…)
+  * Internal IP: 192.168.104.42
+  * Subnet: 255.255.255.248 (/29)
+  * Gateway: 192.168.104.41
+  * DNS: 192.168.104.41
 
