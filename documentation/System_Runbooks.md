@@ -58,7 +58,11 @@ ssh scs-manager
 osism apply scs_check_landscape
 ```
 
-# Shutdown the entire environment
+# Global Maintenance
+
+The following sections decribe the complete takedown and restart of the entire system.
+
+## Shutdown the entire environment
 
 This procedure describes the tasks to shutdown the scs hardware landscape completly.
 
@@ -137,7 +141,7 @@ This procedure describes the tasks to shutdown the scs hardware landscape comple
 
   sudo halt
   ```
-# Startup the entire environment
+## Startup the entire environment
 
 This procedure describes the tasks ro startup a completly stopped scs hardware landscape.
 
