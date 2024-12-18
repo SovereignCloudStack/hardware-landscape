@@ -167,14 +167,11 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
   NODES="$(./server_ctl -s all 2>/dev/null|grep -- "st01-ctl"|sort -r)"
   for node in $NODES; do
     echo "--> $node";
-    echo "+sudo systemctl enable docker.service"
     ssh $node "sudo systemctl enable docker.service";
-    ssh $node "sudo systemctl start docker.service";
-    echo "+sudo systemctl start ceph\*"
-    ssh $node "sudo systemctl start ceph\*";
-    echo "+sudo systemctl start kolla\*"
-    ssh $node "sudo systemctl start kolla\*";
-
+    ssh $node "sudo systemctl start --all docker.service";
+    ssh $node "sudo systemctl start --all osism\*";
+    ssh $node "sudo systemctl start --all ceph\*";
+    ssh $node "sudo systemctl start --all kolla\*";
     while ! (ssh $node sudo /usr/local/scripts/scs_check_services.sh) ; do
       echo -e "\nwaiting"; sleep 50;
     done
@@ -190,8 +187,11 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
   for node in $NODES; do echo "--> $node"; ssh $node "sudo systemctl enable docker.service"; done
   for node in $NODES; do
     echo "--> $node";
-    ssh $node "sudo systemctl start docker.service";
-    ssh $node "sudo sudo systemctl start ceph\*"; done
+    ssh $node "sudo systemctl enable docker.service";
+    ssh $node "sudo systemctl start --all docker.service";
+    ssh $node "sudo systemctl start --all osism\*";
+    ssh $node "sudo systemctl start --all kolla\*";
+    ssh $node "sudo systemctl start --all ceph\*"; done
     while ! (ssh $node sudo /usr/local/scripts/scs_check_services.sh) ; do
       echo -e "\nwaiting"; sleep 50;
     done
@@ -220,10 +220,13 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
   for node in $NODES; do
     echo "--> $node";
     ssh $node "sudo systemctl enable docker.service";
+    ssh $node "sudo systemctl start --all docker.service";
+    ssh $node "sudo systemctl start --all osism\*";
+    ssh $node "sudo systemctl start --all ceph\*";
+    ssh $node "sudo systemctl start --all kolla\*";
     while ! (ssh $node sudo /usr/local/scripts/scs_check_services.sh) ; do
       echo -e "\nwaiting"; sleep 50;
     done
-   ssh $node "sudo systemctl start docker.service";
   done
   ```
 
@@ -236,10 +239,13 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
   for node in $NODES; do
     echo "--> $node";
     ssh $node "sudo systemctl enable docker.service";
+    ssh $node "sudo systemctl start --all docker.service";
+    ssh $node "sudo systemctl start --all osism\*";
+    ssh $node "sudo systemctl start --all ceph\*";
+    ssh $node "sudo systemctl start --all kolla\*";
     while ! (ssh $node sudo /usr/local/scripts/scs_check_services.sh) ; do
       echo -e "\nwaiting"; sleep 50;
     done
-   ssh $node "sudo systemctl start docker.service";
   done
 
   ```
