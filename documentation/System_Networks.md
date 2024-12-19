@@ -48,7 +48,7 @@ The containing ips are not statically assigned to a particular host.
 
 * MAC: 0c:c4:7a:fe:e6:6d
 * Firewall IP (NAT):
-  * IP: 45.139.159.109 (BINAT -> 10.202.0.30)
+  * IP: 45.139.159.237 (BINAT -> 10.202.0.30)
 * Internal interface
   * Interface: eno2 (Remote OSBA-DL-S7-L)
   * Internal IP: 10.202.0.30
@@ -64,7 +64,7 @@ The containing ips are not statically assigned to a particular host.
 
 * MAC: 0c:c4:7a:fe:e6:75
 * Firewall IP (NAT):
-  * IP: 45.139.159.110 (BINAT -> 10.202.0.31)
+  * IP: 45.139.159.238 (BINAT -> 10.202.0.31)
 * Internal interface
   * Interface: eno2 (Remote Temp-Downlink-S…)
   * Internal IP: 10.202.0.31
