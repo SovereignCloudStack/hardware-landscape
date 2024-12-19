@@ -8,9 +8,6 @@
 #
 # https://github.com/osism/cfg-generics/tree/main/inventory
 
-# [ceph-mds:children]
-# ceph-control
-
 # Put the ovn infrastructure on compute nodes because
 # the st01-ctl-* hardware is to lame to support the cpu instruction
 # set (grep avx /proc/cpuinfo)  needed for ovn
