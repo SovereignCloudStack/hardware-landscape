@@ -98,23 +98,3 @@ st01-stor-r01-u07
 
 [ceph-rgw:children]
 ceph-control
-
-# NOTE: These empty groups are only necessary if netbox is used. After
-#       the initial import of the hosts these groups can be commented
-#       out. The groups above with the initial hosts can be commented.
-#
-# [generic]
-#
-# [manager]
-#
-# [monitoring]
-#
-# [control]
-#
-# [compute]
-#
-# [network]
-#
-# [ceph-control]
-#
-# [ceph-resource]
