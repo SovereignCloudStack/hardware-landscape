@@ -72,6 +72,20 @@ def tcp_test_connect(host: str, port: int, timeout: float = 5):
     finally:
         sock.close()
 
+def check_firmware_servers(host_list: list[str]):
+    host_data = parse_configuration_data()["servers"]
+    for host_name in host_list:
+        try:
+            (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
+            bmc_version = mgr_inst.firmware_version
+            bios_version = []
+            for system in mgr_inst.systems:
+                bios_version.append(system.bios_version)
+
+            bios_version_str = " ".join(bios_version)
+            LOGGER.info(f"{host_name} - BMC Version {bmc_version} / BIOS Version {bios_version_str}")
+        except NotImplementedError:
+            LOGGER.warning(f"Skipping system {host_name}, because redfish is not implemented")
 
 def check_power_servers(host_list: list[str]):
     host_data = parse_configuration_data()["servers"]

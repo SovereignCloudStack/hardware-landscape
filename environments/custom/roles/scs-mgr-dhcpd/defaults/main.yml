@@ -8,6 +8,11 @@ isc_dhcp_server_service_name: "isc-dhcp-server"
 isc_dhcp_server_subnet_definition: []
 isc_dhcp_mgmt_static_nodes_group: "dhcp_static_nodes"
 
+sonic_install: false
+sonic_image_url: "http://10.10.23.254:28080/sonic-fix_edgecore.0-10b4356bf.bin"
+sonic_ztp: "http://10.10.23.254:28080/ztp.json"
+
+
 #isc_dhcp_server_subnet_definition:
 #  - description: "Managment Network"
 #    config: |

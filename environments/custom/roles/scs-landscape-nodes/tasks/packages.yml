@@ -32,4 +32,5 @@
       - ncdu
       - nuttcp
       - pigz
+      - tshark
     state: present

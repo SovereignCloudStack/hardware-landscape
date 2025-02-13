@@ -7,8 +7,8 @@
   * Single-CPU 16-Core
   * two 1+ Gbps
   * two 25 Gbps SFP+
-    * NIC: enp66s0f0np0
-    * NIC: enp66s0f1np1
+    * NIC: enp66s0f0np0 / ASN: 65405
+    * NIC: enp66s0f1np1 / ASN: 65404
   * 128 GB ECC RAM
   * four 480 GB SSD/NVMe
   * twelve 12 TB HDD

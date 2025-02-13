@@ -1,7 +1,7 @@
 ---
 - name: Assign roles to manager host
-  hosts: manager_infra
+  hosts: manager
   become: true
   roles:
-    - osism.services.chrony
+    - scs-mgr-dhcpd
 
