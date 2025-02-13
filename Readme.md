@@ -3,12 +3,13 @@
 ## Purpose of this repository
 
 This Git repository documents, configures and automates the management and setup of the Sovereign Cloud Stack hardware environment.
-This environment is build in the context of the VP18 project workpackage and in running at a colocation of [JH Computers](https://jh-computers.de/).
+This environment was build in the context of the VP18 project workpackage and is now running at a colocation of [ScaleUp Technologies](https://scaleuptech.com).
+Previously it was colocated at [JH Computers](https://jh-computers.de/).
 
 The main goals of this environment are:
 
 * Runtime environment for the blueprint of the "SCS Turnkey Solution"
-  * Run, test and demontrate all components
+  * Run, test and demonstrate all components
   * Demonstration showroom for interested parties
     (A blueprint for potential SCS operators to get an idea of the OSISM setup)
   * Training and demonstration environment
@@ -17,7 +18,7 @@ The main goals of this environment are:
   * Reproduce and analyze production problems on a real system
   * Develop and test topics that can only be analyzed, tested or reproduced on a real system
   * Dogfooding / continuous operation with real workload
-  * Develop operational procdures
+  * Develop operational procedures
   * Develop and test certification tests
 * Provide a network testing lab for:
   * Switch/network automation
@@ -86,7 +87,7 @@ The main goals of this environment are:
 
 :::info
 
-This is list is incomplete.
+This list is incomplete.
 
 :::
 
