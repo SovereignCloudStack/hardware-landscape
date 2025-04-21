@@ -50,6 +50,7 @@
   hosts: manager
   become: true
   roles:
+    - scs-serial-terminals
     - scs-mgr-dhcpd
 
 
