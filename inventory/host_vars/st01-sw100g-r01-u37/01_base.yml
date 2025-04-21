@@ -12,4 +12,3 @@ mgmt_mac: 90:2d:77:58:26:50
 mgmt_address: 10.10.23.109
 serial_device: AMBOb113318
 bgp_asn: 65501
-

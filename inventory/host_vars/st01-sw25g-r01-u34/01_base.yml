@@ -12,4 +12,3 @@ mgmt_mac: d0:77:ce:4b:b4:7a
 mgmt_address: 10.10.23.107
 serial_device: EFBGb113318
 bgp_asn: 65504
-

@@ -17,7 +17,7 @@
 
 | Name                | Serial Number   | OS-Flavor  | Delivery date | Management IPs/VXLANs | MGMT MAC          | ASN   | Serial      | Comments                       |
 |---------------------|-----------------|------------|---------------|-----------------------|-------------------|-------|-------------|--------------------------------|
-| st01-sw25g-r01-u40  | 732656X2317026  | Community  | 2023-10-12    | 10.10.23.106          | d0:77:ce:4b:b1:7a | NONE  | DIABb113318 |  sw06, lab, leaf               |
-| st01-sw25g-r01-u34  | 732656X2317029  | Community  | 2023-10-12    | 10.10.23.107          | d0:77:ce:4b:b4:7a | 65504 | CGBSb113318 |  sw07, production, leaf        |
-| st01-sw25g-r01-u35  | 732656X2324021  | Community  | 2023-10-12    | 10.10.23.108          | d0:77:ce:c1:63:80 | 65505 | BSAHb113318 |  sw08, production, leaf        |
+| st01-sw25g-r01-u40  | 732656X2317026  | Community  | 2023-10-12    | 10.10.23.106          | d0:77:ce:4b:b1:7a | NONE  | EHCLb113318 |  sw06, lab, leaf               |
+| st01-sw25g-r01-u34  | 732656X2317029  | Community  | 2023-10-12    | 10.10.23.107          | d0:77:ce:4b:b4:7a | 65504 | EFBGb113318 |  sw07, production, leaf        |
+| st01-sw25g-r01-u35  | 732656X2324021  | Community  | 2023-10-12    | 10.10.23.108          | d0:77:ce:c1:63:80 | 65505 | EGBGb113318 |  sw08, production, leaf        |
 
