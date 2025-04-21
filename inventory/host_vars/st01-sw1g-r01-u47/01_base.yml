@@ -10,4 +10,4 @@ ansible_host: 10.10.22.102
 device_model: 4630-54TE-O-AC-B
 mgmt_mac: d0:77:ce:2b:44:c4
 mgmt_address: 10.10.22.102
-serial_device: EFBGb113318
+serial_device: CZABb113318

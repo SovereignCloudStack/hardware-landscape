@@ -10,4 +10,4 @@ ansible_host: 10.10.23.104
 device_model: 5835-54X-O-AC-B
 mgmt_mac: d0:77:ce:70:ee:06
 mgmt_address: 10.10.23.104
-serial_device: DDABb113318
+serial_device: st01-sw10g-r01-u39
