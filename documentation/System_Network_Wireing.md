@@ -256,7 +256,7 @@ show interfaces status PortChannel04
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
-| st01-sw25g-r01-u40   | eth0          |                     |               |              |                  |            |                                  |
+| st01-sw25g-r01-u40   | eth0          | st01-sw1g-r01-u47   | Ethernet47    | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw25g-r01-u40   | Ethernet72    | st01-sw100g-r01-u41 | Ethernet104   |              |                  |            |                                  |
 | st01-sw25g-r01-u40   | Ethernet76    | st01-sw100g-r01-u41 | Ethernet108   |              |                  |            |                                  |
 
