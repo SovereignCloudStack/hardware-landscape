@@ -417,30 +417,39 @@
       "POLL_INTERVAL": "10000"
     },
     "BUFFER_POOL_WATERMARK": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PFCWD": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PG_DROP": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PG_WATERMARK": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PORT": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PORT_BUFFER_DROP": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "QUEUE": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "QUEUE_WATERMARK": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "RIF": {
+      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     }
   },
@@ -990,7 +999,7 @@
   },
   "PORT": {
     "Ethernet0": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE1",
       "index": "1",
       "lanes": "1",
@@ -998,7 +1007,7 @@
       "speed": "10000"
     },
     "Ethernet1": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE2",
       "index": "2",
       "lanes": "2",
@@ -1006,7 +1015,7 @@
       "speed": "10000"
     },
     "Ethernet10": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE11",
       "index": "11",
       "lanes": "11",
@@ -1014,7 +1023,7 @@
       "speed": "10000"
     },
     "Ethernet11": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE12",
       "index": "12",
       "lanes": "12",
@@ -1022,7 +1031,7 @@
       "speed": "10000"
     },
     "Ethernet12": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE13",
       "index": "13",
       "lanes": "13",
@@ -1030,7 +1039,7 @@
       "speed": "10000"
     },
     "Ethernet13": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE14",
       "index": "14",
       "lanes": "14",
@@ -1038,7 +1047,7 @@
       "speed": "10000"
     },
     "Ethernet14": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE15",
       "index": "15",
       "lanes": "15",
@@ -1046,7 +1055,7 @@
       "speed": "10000"
     },
     "Ethernet15": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE16",
       "index": "16",
       "lanes": "16",
@@ -1054,7 +1063,7 @@
       "speed": "10000"
     },
     "Ethernet16": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE17",
       "index": "17",
       "lanes": "17",
@@ -1062,7 +1071,7 @@
       "speed": "10000"
     },
     "Ethernet17": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE18",
       "index": "18",
       "lanes": "18",
@@ -1070,7 +1079,7 @@
       "speed": "10000"
     },
     "Ethernet18": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE19",
       "index": "19",
       "lanes": "19",
@@ -1078,7 +1087,7 @@
       "speed": "10000"
     },
     "Ethernet19": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE20",
       "index": "20",
       "lanes": "20",
@@ -1086,7 +1095,7 @@
       "speed": "10000"
     },
     "Ethernet2": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE3",
       "index": "3",
       "lanes": "3",
@@ -1094,7 +1103,7 @@
       "speed": "10000"
     },
     "Ethernet20": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE21",
       "index": "21",
       "lanes": "21",
@@ -1102,7 +1111,7 @@
       "speed": "10000"
     },
     "Ethernet21": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE22",
       "index": "22",
       "lanes": "22",
@@ -1110,7 +1119,7 @@
       "speed": "10000"
     },
     "Ethernet22": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE23",
       "index": "23",
       "lanes": "23",
@@ -1118,7 +1127,7 @@
       "speed": "10000"
     },
     "Ethernet23": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE24",
       "index": "24",
       "lanes": "24",
@@ -1126,7 +1135,7 @@
       "speed": "10000"
     },
     "Ethernet24": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE25",
       "index": "25",
       "lanes": "53",
@@ -1134,7 +1143,7 @@
       "speed": "10000"
     },
     "Ethernet25": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE26",
       "index": "26",
       "lanes": "54",
@@ -1142,7 +1151,7 @@
       "speed": "10000"
     },
     "Ethernet26": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE27",
       "index": "27",
       "lanes": "55",
@@ -1150,7 +1159,7 @@
       "speed": "10000"
     },
     "Ethernet27": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE28",
       "index": "28",
       "lanes": "56",
@@ -1158,7 +1167,7 @@
       "speed": "10000"
     },
     "Ethernet28": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE29",
       "index": "29",
       "lanes": "57",
@@ -1166,7 +1175,7 @@
       "speed": "10000"
     },
     "Ethernet29": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE30",
       "index": "30",
       "lanes": "58",
@@ -1174,7 +1183,7 @@
       "speed": "10000"
     },
     "Ethernet3": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE4",
       "index": "4",
       "lanes": "4",
@@ -1182,7 +1191,7 @@
       "speed": "10000"
     },
     "Ethernet30": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE31",
       "index": "31",
       "lanes": "59",
@@ -1190,7 +1199,7 @@
       "speed": "10000"
     },
     "Ethernet31": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE32",
       "index": "32",
       "lanes": "60",
@@ -1198,7 +1207,7 @@
       "speed": "10000"
     },
     "Ethernet32": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE33",
       "index": "33",
       "lanes": "61",
@@ -1206,7 +1215,7 @@
       "speed": "10000"
     },
     "Ethernet33": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE34",
       "index": "34",
       "lanes": "62",
@@ -1214,7 +1223,7 @@
       "speed": "10000"
     },
     "Ethernet34": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE35",
       "index": "35",
       "lanes": "63",
@@ -1222,7 +1231,7 @@
       "speed": "10000"
     },
     "Ethernet35": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE36",
       "index": "36",
       "lanes": "64",
@@ -1230,7 +1239,7 @@
       "speed": "10000"
     },
     "Ethernet36": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE37",
       "index": "37",
       "lanes": "65",
@@ -1238,7 +1247,7 @@
       "speed": "10000"
     },
     "Ethernet37": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE38",
       "index": "38",
       "lanes": "66",
@@ -1246,7 +1255,7 @@
       "speed": "10000"
     },
     "Ethernet38": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE39",
       "index": "39",
       "lanes": "67",
@@ -1254,7 +1263,7 @@
       "speed": "10000"
     },
     "Ethernet39": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE40",
       "index": "40",
       "lanes": "68",
@@ -1262,7 +1271,7 @@
       "speed": "10000"
     },
     "Ethernet4": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE5",
       "index": "5",
       "lanes": "5",
@@ -1270,7 +1279,7 @@
       "speed": "10000"
     },
     "Ethernet40": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE41",
       "index": "41",
       "lanes": "69",
@@ -1278,7 +1287,7 @@
       "speed": "10000"
     },
     "Ethernet41": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE42",
       "index": "42",
       "lanes": "70",
@@ -1286,7 +1295,7 @@
       "speed": "10000"
     },
     "Ethernet42": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE43",
       "index": "43",
       "lanes": "71",
@@ -1294,7 +1303,7 @@
       "speed": "10000"
     },
     "Ethernet43": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE44",
       "index": "44",
       "lanes": "72",
@@ -1302,7 +1311,7 @@
       "speed": "10000"
     },
     "Ethernet44": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE45",
       "index": "45",
       "lanes": "73",
@@ -1310,7 +1319,7 @@
       "speed": "10000"
     },
     "Ethernet45": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE46",
       "index": "46",
       "lanes": "74",
@@ -1318,7 +1327,7 @@
       "speed": "10000"
     },
     "Ethernet46": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE47",
       "index": "47",
       "lanes": "75",
@@ -1326,7 +1335,7 @@
       "speed": "10000"
     },
     "Ethernet47": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE48",
       "index": "48",
       "lanes": "76",
@@ -1334,7 +1343,7 @@
       "speed": "10000"
     },
     "Ethernet48": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE49",
       "index": "49",
       "lanes": "37,38,39,40",
@@ -1342,7 +1351,7 @@
       "speed": "100000"
     },
     "Ethernet5": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE6",
       "index": "6",
       "lanes": "6",
@@ -1350,7 +1359,7 @@
       "speed": "10000"
     },
     "Ethernet52": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE50",
       "index": "50",
       "lanes": "29,30,31,32",
@@ -1358,7 +1367,7 @@
       "speed": "100000"
     },
     "Ethernet56": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "hundredGigE51",
       "index": "51",
       "lanes": "33,34,35,36",
@@ -1366,7 +1375,7 @@
       "speed": "100000"
     },
     "Ethernet6": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE7",
       "index": "7",
       "lanes": "7",
@@ -1398,7 +1407,7 @@
       "speed": "100000"
     },
     "Ethernet7": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE8",
       "index": "8",
       "lanes": "8",
@@ -1406,7 +1415,7 @@
       "speed": "10000"
     },
     "Ethernet8": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE9",
       "index": "9",
       "lanes": "9",
@@ -1414,7 +1423,7 @@
       "speed": "10000"
     },
     "Ethernet9": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "tenGigE10",
       "index": "10",
       "lanes": "10",
