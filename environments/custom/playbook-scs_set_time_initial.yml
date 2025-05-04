@@ -8,7 +8,7 @@
       shell: |
         #!/bin/bash
         HOST=www.google.com
-        DATESTRING=$(curl -sI "https://$HOST/" | grep -i "^date: ")
+        DATESTRING=$(curl -k -sI "https://$HOST/" | grep -i "^date: ")
 
         if [[ $? -ne 0 ]]; then
                 echo "Can't connect to $HOST"
