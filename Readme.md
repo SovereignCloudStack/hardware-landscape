@@ -79,7 +79,8 @@ The main goals of this environment are:
         * [GNS testbed deployment](documentation/sonic/testbed/GNS3_bgp_basic.md)
         * [GNS testbed deployment with unified configuration](documentation/sonic/testbed/GNS3_bgp_unified.md)
       * ["route-map set src option" issue](documentation/sonic/FRR_issue_01.md)
-
+  * Colocation Site
+      * [Colocation Info and Contact](documentation/colocation/ScaleUp-Colo.md)
 
 ## Environment Links
 
