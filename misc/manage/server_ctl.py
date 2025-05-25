@@ -103,11 +103,11 @@ if args.restore_cfg:
     restore_config(get_unique_servers(args.node, False, args.filter), args.restore_cfg)
 
 if args.show:
-    print()
+    print(file=sys.stderr)
     print("The following hosts are configured:", file=sys.stderr)
     hosts = get_unique_servers(args.node, args.verbose, args.filter)
     for host in hosts:
-        if isinstance(host,str):
+        if isinstance(host, str):
             print(host)
         else:
             pprint(host, indent=2)

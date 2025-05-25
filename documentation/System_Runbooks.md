@@ -156,7 +156,7 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
   * scs-manager2
 * Check switches
   ```
-  ./switch_ctl -s all 2>/dev/null|grep st01-sw| while read host; do echo "** $host";echo ssh ${host}-bmc "uptime"; done
+  for host in $(./switch_ctl -s all 2>/dev/null|xargs); do echo "** $host"; ssh -t "${host}-bmc" "uptime"; done
   ```
 * Startup Controllers (Ceph and Openstack)
   ```
@@ -165,6 +165,11 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
   ./server_ctl -o $NODES
   ./server_ctl --power_check $NODES
   for node in $NODES; do echo "--> $node"; ssh $node "sudo uptime"; done
+  ```
+* Check and set time
+  ```
+  osism apply scs_set_time_initial -l 'all:!manager'
+  osism apply scs_check_preinstall
   ```
 * Startup Ceph and Openstack Services
   ```
@@ -175,13 +180,27 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
     ssh $node "sudo systemctl start --all docker.service";
     ssh $node "sudo systemctl start --all osism\*";
     ssh $node "sudo systemctl start --all ceph\*";
-    ssh $node "sudo systemctl start --all kolla\*";
     while ! (ssh $node sudo /usr/local/scripts/scs_check_services.sh) ; do
       echo -e "\nwaiting"; sleep 50;
     done
   done
   ```
-
+* Startup Mariadb, see [recovery procedure](https://osism.tech/de/docs/guides/operations-guide/infrastructure#recovery)
+  ```
+  NODES="$(./server_ctl -s all 2>/dev/null|grep -- "st01-ctl"|sort -r)"
+  osism apply mariadb_recovery
+  ./landscape_ctl -o -s database_password
+  mysql -h api-internal.zone1.landscape.scs.community -u root -p
+  ```
+* Startup remaining kolla services
+  ```
+  NODES="$(./server_ctl -s all 2>/dev/null|grep -- "st01-ctl"|sort -r)"
+  for node in $NODES; do
+    echo "--> $node";
+    ssh $node "sudo systemctl start --all kolla\* ";
+    ssh $node /usr/local/scripts/scs_check_services.sh
+  done
+  ```
 * Startup Ceph OSDs
   ```
   NODES="$(./server_ctl -s all 2>/dev/null|grep -- "st01-stor")"
@@ -195,7 +214,7 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
     ssh $node "sudo systemctl start --all docker.service";
     ssh $node "sudo systemctl start --all osism\*";
     ssh $node "sudo systemctl start --all kolla\*";
-    ssh $node "sudo systemctl start --all ceph\*"; done
+    ssh $node "sudo systemctl start --all ceph\*";
     while ! (ssh $node sudo /usr/local/scripts/scs_check_services.sh) ; do
       echo -e "\nwaiting"; sleep 50;
     done
@@ -228,6 +247,7 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
     ssh $node "sudo systemctl start --all osism\*";
     ssh $node "sudo systemctl start --all ceph\*";
     ssh $node "sudo systemctl start --all kolla\*";
+    ssh $node "sudo systemctl  start octavia-interface.service"
     while ! (ssh $node sudo /usr/local/scripts/scs_check_services.sh) ; do
       echo -e "\nwaiting"; sleep 50;
     done
@@ -254,3 +274,4 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
 
   ```
 * Check the system, execute the [validation steps](./System_Deployment.md#step-5-validate-the-installation)
+* Create [test workload](./System_Deployment.md#step-5-validate-the-installation)
