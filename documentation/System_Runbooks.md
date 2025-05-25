@@ -156,7 +156,7 @@ This procedure describes the tasks ro startup a completly stopped scs hardware l
   * scs-manager2
 * Check switches
   ```
-  for host in $(./switch_ctl -s all 2>/dev/null|xargs); do echo "** $host"; ssh -t "${host}-bmc" "uptime"; done
+  ./switch_ctl -s all 2>/dev/null|grep st01-sw| while read host; do echo "** $host";echo ssh ${host}-bmc "uptime"; done
   ```
 * Startup Controllers (Ceph and Openstack)
   ```
