@@ -53,6 +53,8 @@ def get_ansible_secrets() -> dict[str,Any]:
             glob.glob(rf"{get_basedir()}/inventory/**/*.yml",recursive=True) +
             glob.glob(rf"{get_basedir()}/environments/**/*.yml",recursive=True)
         ):
+        if "/venv/" in file_name:
+            continue
         file_name = os.path.realpath(file_name)
         file_secrets = decrypt_vault_yaml_file(file_name)
 
