@@ -42,7 +42,7 @@ logtstamp string "[ %t: %Y-%m-%d %c:%s ]\012"
 logtstamp on
 zombie kr
 
-{% for item in groups[serial_terminals_group | default("network")] | default([]) | sort %}
+{% for item in groups[serial_terminals_group | default("network_switches")] | default([]) | sort %}
 {% if hostvars[item]['serial_device'] is defined %}
 # Host: {{ item }} // {{ hostvars[item]['ansible_host'] }}
 screen -t {{ item }}-{{ hostvars[item]['serial_device']  }} {{ serial_terminal_device_prefix }}{{ hostvars[item]['serial_device']  }}{{ serial_terminal_device_suffix  }} {{ serial_terminal_boud_rate }}

@@ -51,7 +51,7 @@ def integrated_configuration(config_db: dict) -> bool:
 
     return False
 
-def execute_switch_commands(data: dict[str, str], cmd: str, timeout=15) -> str | None:
+def execute_switch_commands(data: dict[str, str], cmd: str, timeout=300) -> str | None:
     ssh_connect = f"ssh {data['bmc_username']}@{data['bmc_ip_v4']}"
     command = f"{ssh_connect} \"{cmd}\""
     LOGGER.info("EXEC: >>>%s<<<", command)

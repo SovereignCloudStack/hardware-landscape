@@ -925,7 +925,7 @@
       "speed": "1000"
     },
     "Ethernet37": {
-      "admin_status": "up",
+      "admin_status": "down",
       "alias": "Eth38(Port38)",
       "autoneg": "on",
       "index": "38",

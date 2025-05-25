@@ -1,12 +1,11 @@
 
 Host scs-manager2
-   Hostname 153.92.93.119
-   Port 41115
+   Hostname 45.139.159.238
 
 Host scs-manager scs-manager1
-   Hostname 188.244.101.28
+   Hostname 45.139.159.237
 
 Host scs-manager-screen
-   Hostname 188.244.101.28
+   Hostname 45.139.159.237
    RemoteCommand screen -x ssh-persistent-remote || screen -S ssh-persistent-remote
    RequestTTY yes
