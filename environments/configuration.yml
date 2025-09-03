@@ -113,11 +113,7 @@ operator_sonic_list:
   - "garloff"
   - "berendt"
   - "fkr"
-  - "osfrickler"
-  - "zuse-z3"
   - "matofeder"
-  - "MatusJenca2"
-  - "gtema"
   - "jschoone"
   - "fzakfeld"
   - "rrmichel"
@@ -185,6 +181,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45007
+    state: absent
     groups:
       - docker
       - dialout
@@ -192,6 +189,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45008
+    state: absent
     groups:
       - docker
       - dialout
@@ -199,6 +197,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45009
+    state: absent
     groups:
       - docker
       - dialout
@@ -213,6 +212,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45011
+    state: absent
     groups:
       - docker
       - dialout
@@ -220,6 +220,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45012
+    state: absent
     groups:
       - docker
       - dialout
