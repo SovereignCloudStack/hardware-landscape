@@ -120,6 +120,7 @@ operator_sonic_list:
   - "gtema"
   - "jschoone"
   - "fzakfeld"
+  - "rrmichel"
 
 # Do not add users here, because they are deleted enirely
 # please add state=absent to the users to be deleted in user_list to
@@ -241,6 +242,13 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45015
+    groups:
+      - docker
+      - dialout
+  - name: "rrmichel"
+    key: "github"
+    primary_group: dragon
+    uid: 45016
     groups:
       - docker
       - dialout
