@@ -78,6 +78,7 @@ wireguard_users:
   - name: gtema
     key: PoXN8ZMMQdJM+BQ/XI/uu/nODCiE9FzZ1mRIEIFbKXs=
     ip: 10.10.1.22
+    state: absent
   - name: bitkeks
     key: i5zuiuEhpRQiXTEgeDjfWCPnKCxx9SpaxpLKjZsgok8=
     ip: 10.10.1.23
