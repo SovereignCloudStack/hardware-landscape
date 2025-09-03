@@ -120,13 +120,13 @@
     }
   },
   "BGP_NEIGHBOR": {
-    "default|PortChannel1": {
+    "default|PortChannel01": {
       "asn": "65041",
       "name": "to_u40"
     }
   },
   "BGP_NEIGHBOR_AF": {
-    "default|PortChannel1|ipv4_unicast": {
+    "default|PortChannel01|ipv4_unicast": {
       "admin_status": "true",
       "route_map_in": [
         "ALLOW"
@@ -135,7 +135,7 @@
         "ALLOW"
       ]
     },
-    "default|PortChannel1|ipv6_unicast": {
+    "default|PortChannel01|ipv6_unicast": {
       "admin_status": "true",
       "route_map_in": [
         "ALLOW"
@@ -209,7 +209,7 @@
       "buffer_model": "traditional",
       "default_bgp_status": "up",
       "default_pfcwd_status": "disable",
-      "docker_router_config_mode": "unified",
+      "docker_routing_config_mode": "unified",
       "frr_mgmt_framework_config": "true",
       "hostname": "st01-sw25g-r01-u40",
       "hwsku": "Accton-AS7326-56X",
@@ -247,7 +247,7 @@
       "has_per_asic_scope": "False",
       "high_mem_alert": "disabled",
       "set_owner": "local",
-      "state": "enabled",
+      "state": "disabled",
       "support_syslog_rate_limit": "True"
     },
     "eventd": {
@@ -384,103 +384,200 @@
   "FLEX_COUNTER_TABLE": {
     "ACL": {
       "FLEX_COUNTER_DELAY_STATUS": "false",
-      "FLEX_COUNTER_STATUS": "disable",
+      "FLEX_COUNTER_STATUS": "enable",
       "POLL_INTERVAL": "10000"
     },
     "BUFFER_POOL_WATERMARK": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PFCWD": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PG_DROP": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PG_WATERMARK": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PORT": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "PORT_BUFFER_DROP": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "QUEUE": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "QUEUE_WATERMARK": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     },
     "RIF": {
-      "FLEX_COUNTER_DELAY_STATUS": "false",
       "FLEX_COUNTER_STATUS": "enable"
     }
   },
   "INTERFACE": {
-    "Ethernet0": {},
-    "Ethernet1": {},
-    "Ethernet10": {},
-    "Ethernet11": {},
-    "Ethernet12": {},
-    "Ethernet13": {},
-    "Ethernet14": {},
-    "Ethernet15": {},
-    "Ethernet16": {},
-    "Ethernet17": {},
-    "Ethernet18": {},
-    "Ethernet19": {},
-    "Ethernet2": {},
-    "Ethernet20": {},
-    "Ethernet21": {},
-    "Ethernet22": {},
-    "Ethernet23": {},
-    "Ethernet24": {},
-    "Ethernet25": {},
-    "Ethernet26": {},
-    "Ethernet27": {},
-    "Ethernet28": {},
-    "Ethernet29": {},
-    "Ethernet3": {},
-    "Ethernet30": {},
-    "Ethernet31": {},
-    "Ethernet32": {},
-    "Ethernet33": {},
-    "Ethernet34": {},
-    "Ethernet35": {},
-    "Ethernet36": {},
-    "Ethernet37": {},
-    "Ethernet38": {},
-    "Ethernet39": {},
-    "Ethernet4": {},
-    "Ethernet40": {},
-    "Ethernet41": {},
-    "Ethernet42": {},
-    "Ethernet43": {},
-    "Ethernet44": {},
-    "Ethernet45": {},
-    "Ethernet46": {},
-    "Ethernet47": {},
-    "Ethernet48": {},
-    "Ethernet5": {},
-    "Ethernet52": {},
-    "Ethernet56": {},
-    "Ethernet6": {},
-    "Ethernet60": {},
-    "Ethernet64": {},
-    "Ethernet68": {},
-    "Ethernet7": {},
-    "Ethernet72": {},
-    "Ethernet76": {},
-    "Ethernet8": {},
-    "Ethernet9": {}
+    "Ethernet0": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet1": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet10": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet11": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet12": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet13": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet14": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet15": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet16": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet17": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet18": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet19": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet2": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet20": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet21": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet22": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet23": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet24": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet25": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet26": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet27": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet28": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet29": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet3": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet30": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet31": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet32": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet33": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet34": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet35": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet36": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet37": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet38": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet39": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet4": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet40": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet41": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet42": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet43": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet44": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet45": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet46": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet47": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet48": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet5": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet52": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet56": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet6": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet60": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet64": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet68": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet7": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet8": {
+      "ipv6_use_link_local_only": "enable"
+    },
+    "Ethernet9": {
+      "ipv6_use_link_local_only": "enable"
+    }
   },
   "KDUMP": {
     "config": {
@@ -833,7 +930,6 @@
   },
   "LOOPBACK_INTERFACE": {
     "Loopback0": {},
-    "Loopback0|10.1.0.1/32": {},
     "Loopback0|10.10.21.40/32": {}
   },
   "MGMT_INTERFACE": {
@@ -1320,7 +1416,7 @@
     }
   },
   "PORTCHANNEL": {
-    "PortChannel1": {
+    "PortChannel01": {
       "admin_status": "up",
       "fallback": "true",
       "fast_rate": "false",
@@ -1330,13 +1426,13 @@
     }
   },
   "PORTCHANNEL_INTERFACE": {
-    "PortChannel1": {
+    "PortChannel01": {
       "ipv6_use_link_local_only": "enable"
     }
   },
   "PORTCHANNEL_MEMBER": {
-    "PortChannel1|Ethernet72": {},
-    "PortChannel1|Ethernet76": {}
+    "PortChannel01|Ethernet72": {},
+    "PortChannel01|Ethernet76": {}
   },
   "ROUTE_MAP": {
     "ALLOW|1": {
