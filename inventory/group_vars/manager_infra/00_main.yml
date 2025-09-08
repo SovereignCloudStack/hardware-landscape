@@ -95,4 +95,7 @@ wireguard_users:
   - name: rrmichel
     key: lrVPtcbvY4OqF4WJAdap+i1rcgNgC/t1poBpzyn7kic=
     ip: 10.10.1.27
+  - name: garloff
+    key: q79Q3VSbyqdmTlzPqmn/TD3RPxSOKI0f7eWZa1+cj1E=
+    ip: 10.10.1.28
 
