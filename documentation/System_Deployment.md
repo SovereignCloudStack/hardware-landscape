@@ -210,9 +210,12 @@ For the steps described in the osd configurtion there are the following exceptio
   ```
   /opt/configuration/misc/run_validations.sh
   ```
-* Use the small scenario of the next step
+* Run openstack validation commands
+  ```
+  /opt/configuration/misc/check_openstack.sh
+  ```
 
-## Step 6: Create Test Workload
+### Step 6: Create Test Workload
 
 Test the deployed platform by creating some domains, projects and virtual machines.
 
@@ -220,8 +223,10 @@ You can use the [tiny scenario](https://github.com/SovereignCloudStack/openstack
 
 ```
 cd /home/dragon
-gut clone https://github.com/SovereignCloudStack/openstack-workload-generator.git
+git clone https://github.com/SovereignCloudStack/openstack-workload-generator.git
 cd openstack-workload-generator
+git checkout main
+git pull
 cp /opt/configuration/environments/openstack/{secure.yml,clouds.yml} .
 ./openstack_workload_generator \
     --create_domains smoketest{1..2} \
@@ -229,6 +234,16 @@ cp /opt/configuration/environments/openstack/{secure.yml,clouds.yml} .
     --create_machines smoketest-testvm{1..2}
 
 ```
-## Step 7: Run Stresstest Workload
+
+
+### Step 7: Run Stresstest Workload
 
 Use the [huge stresstest scenario](https://github.com/SovereignCloudStack/openstack-workload-generator?tab=readme-ov-file#example-usage-a-huge-stresstest-scenario).
+
+### Step 8: Destroy Test workload
+
+```
+cd /home/dragon/openstack-workload-generator
+./openstack_workload_generator \
+    --delete_domains smoketest{1..2} \
+```
