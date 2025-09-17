@@ -75,16 +75,8 @@ wireguard_users:
   - name: matofeder
     key: EkL7bli2t4EJSDYo4Edyhg8enHI1zOR+A54Ghco1OlY=
     ip: 10.10.1.21
-  - name: gtema
-    key: PoXN8ZMMQdJM+BQ/XI/uu/nODCiE9FzZ1mRIEIFbKXs=
-    ip: 10.10.1.22
-    state: absent
-  - name: bitkeks
-    key: i5zuiuEhpRQiXTEgeDjfWCPnKCxx9SpaxpLKjZsgok8=
-    ip: 10.10.1.23
-    state: absent
   - name: fkr
-    key: 0CcpoKi2d+fYeeIQutKWZ4nHc4fKyULjQBwMzAidiT4=
+    key: WQAlQL4ut0ZASqj6rn4nadRjvueukFaAgjXkG+9DAU0=
     ip: 10.10.1.24
   - name: jschoone
     key: V83VIcgBKmEPqaugVnh0J3/dnpHhSxKkxRHvw89SABs=
