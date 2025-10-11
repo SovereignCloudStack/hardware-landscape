@@ -1,16 +1,17 @@
 ---
-- name: Assign roles to manager hosts
-  hosts: manager
-  become: true
-  roles:
-    - scs-mgr-dhcpd
-
+- name: Clone openstack workload manager
+  hosts: manager_infra
+  tasks:
+    - git:
+        repo: https://github.com/SovereignCloudStack/openstack-workload-generator.git
+        dest: /home/dragon/openstack-workload-generator
+        clone: yes
 - name: Assign roles to infrastructure hosts
   hosts: manager_infra
   become: true
   roles:
-    - osism.services.wireguard
     - scs-landscape-nodes
+    - osism.services.wireguard
     - osism.commons.motd
     - osism.services.squid
     - osism.services.chrony
@@ -18,3 +19,38 @@
     - scs-mgr-httpd
     - scs-mgr-samba
     - scs-mgr-tinyproxy
+
+- name: Configure network rules on system boot
+  hosts: manager_infra
+  become: true
+  tasks:
+    - name: Create systemd startup rule for nftables
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/nftables-setup.service
+        mode: 0755
+        owner: root
+        group: root
+        content: |
+          [Unit]
+          Description=Add nftables rules on system boot
+          After=network.target
+
+          [Service]
+          Type=simple
+          ExecStart=/usr/local/scripts/scs_add_nftables_rules.sh
+          User=root
+
+          [Install]
+          WantedBy=default.target
+    - name: Run Systemd Reload for NFT rules
+      shell: "systemctl daemon-reload"
+    - name: Enable NFT rules
+      shell: "systemctl enable nftables-setup.service"
+- name: Assign roles to manager hosts
+  hosts: manager
+  become: true
+  roles:
+    - scs-serial-terminals
+    - scs-mgr-dhcpd
+
+

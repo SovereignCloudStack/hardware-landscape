@@ -1,2 +1,13 @@
 ---
-# handlers file for scs-landscape
+- name: Reload ssh service
+  become: true
+  ansible.builtin.service:
+    name: ssh
+    state: reloaded
+- name: Restart rsyslog service
+  become: true
+  ansible.builtin.service:
+    name: rsyslog
+    state: restarted
+
+

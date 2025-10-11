@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     image: "{{ httpd_image }}"
     ports:
-      - "18080:80"
+      - "28080:80"
     volumes:
       - "{{ httpd_configuration_directory }}/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro"
       - "{{ httpd_media_directory }}/:/srv/:ro" 

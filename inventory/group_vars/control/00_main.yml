@@ -32,3 +32,20 @@ logical_volumes:
     size: '100G'
     resizefs: true
     force: true
+  - lv: 'mariadb'
+    vg: 'system'
+    size: '20G'
+    resizefs: true
+    # It seems that XFS still has better O_DIRECT support than EXT4
+    filesystem: 'xfs'
+    force: true
+    mountpoint: '/var/lib/mariadb'
+  - lv: 'rabbitmq'
+    vg: 'system'
+    size: '10G'
+    resizefs: true
+    force: true
+    mountpoint: '/var/lib/rabbitmq'
+
+rabbitmq_datadir_volume: '/var/lib/rabbitmq'
+mariadb_datadir_volume: '/var/lib/mariadb'

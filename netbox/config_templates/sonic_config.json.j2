@@ -1,0 +1,245 @@
+{
+  {%- if loopback_interfaces %}
+  "LOOPBACK_INTERFACE": {
+  {%- for interface in loopback_interfaces %}
+    "{{ interface.name }}": {},
+    "{{ interface.name }}|{{ interface.ip_address }}": {}{%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },{%- endif %}
+
+  {%- if ntp_servers %}
+  "NTP_SERVER": {
+  {%- for server in ntp_servers %}
+    "{{ server }}": {}{%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },{%- endif %}
+
+  {%- if syslog_servers %}
+  "SYSLOG_SERVER": {
+  {%- for syslog_server in syslog_servers %}
+    "{{ syslog_server }}": {}{%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },{%- endif %}
+
+  {%- set vlans = [] %}
+  {%- set vlan_members = {} %}
+  {%- for interface in device.interfaces.all() %}
+    {%- for vlan in interface.tagged_vlans.all() %}
+      {%- set key = vlan.name + '|' + interface.name %}
+      {%- set _ = vlans.append(vlan) %}
+      {%- set _ = vlan_members.update({key: {'tagging_mode': 'tagged'}}) %}
+    {%- endfor %}
+    {%- if interface.untagged_vlan %}
+      {%- set key = interface.untagged_vlan.name + '|' + interface.name %}
+      {%- set _ = vlans.append(interface.untagged_vlan) %}
+      {%- set _ = vlan_members.update({key: {'tagging_mode': 'untagged'}}) %}
+    {%- endif %}
+  {%- endfor %}
+  {%- set filtered_vlan_virt_interfaces = [] %}
+  {%- for interface in device.interfaces.all() %}
+    {%- if interface.is_virtual and 'vlan' in interface.name | lower %}
+      {%- set _ = filtered_vlan_virt_interfaces.append(interface) %}
+    {%- endif %}
+  {%- endfor %}
+  {%- if vlans %}
+  "VLAN": {
+  {%- for vlan in vlans | unique(attribute='vid') | sort(attribute='vid') %}
+    "{{ vlan.name }}": {
+      "vlanid": "{{ vlan.vid }}"
+    }{% if not loop.last %},{% endif %}
+  {%- endfor %}
+  },
+  "VLAN_INTERFACE": {
+  {%- for interface in filtered_vlan_virt_interfaces | sort(attribute='name') %}
+    "{{ interface.name }}": {}{%- if interface.ip_addresses.first() %},
+    "{{ interface.name }}|{{ interface.ip_addresses.first().address }}": {}
+    {%- endif %}
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },
+  "VLAN_MEMBER": {
+  {%- for key, value in vlan_members.items() | sort(attribute='0') %}
+    "{{ key }}": {
+      "tagging_mode": "{{ value.tagging_mode }}"
+    }
+    {%- if not loop.last %},{% endif %}
+  {%- endfor %}
+  },{%- endif %}
+
+  {%- set filtered_port_channel_interfaces = [] %}
+  {%- for interface in device.interfaces.all() %}
+    {%- if interface.is_lag and 'portchannel' in interface.name | lower %}
+      {%- set _ = filtered_port_channel_interfaces.append(interface) %}
+    {%- endif %}
+  {%- endfor %}
+  {%- if port_channels_params and filtered_port_channel_interfaces %}
+  "PORTCHANNEL": {
+  {%- for lag_interface in filtered_port_channel_interfaces | sort(attribute='name') %}
+    "{{ lag_interface.name }}": {
+      "admin_status": "{% if lag_interface.enabled %}up{% else %}down{% endif %}",
+      "fast_rate": "{{ port_channels_params[lag_interface.name].fast_rate }}",
+      "lacp_key": "{{ port_channels_params[lag_interface.name].lacp_key }}",
+      "min_links": "{{ port_channels_params[lag_interface.name].min_links }}",
+      "fallback": "{{ port_channels_params[lag_interface.name].fallback }}",
+      "mtu": "{{ lag_interface.mtu if lag_interface.mtu else 9100 }}"
+    }
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },
+  "PORTCHANNEL_INTERFACE": {
+  {%- for lag_interface in filtered_port_channel_interfaces | sort(attribute='name') %}
+    "{{ lag_interface.name }}": {
+      "ipv6_use_link_local_only": "enable"
+    }
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  },
+  "PORTCHANNEL_MEMBER": {
+  {%- for lag_interface in filtered_port_channel_interfaces | sort(attribute='name') %}
+    {%- for interface in lag_interface.member_interfaces.all() | sort(attribute='name') %}
+    "{{ lag_interface.name }}|{{ interface.name }}": {}
+    {%- if not loop.last %},{%- endif %}
+    {%- endfor %}
+  {%- endfor %}
+  },{%- endif %}
+
+  {%- set filtered_interfaces = [] %}
+  {%- set lag_member_interfaces = [] %}
+
+  {#- Collect all members of LAG interfaces #}
+  {%- for lag_interface in filtered_port_channel_interfaces | sort(attribute='name') %}
+    {%- for interface in lag_interface.member_interfaces.all() | sort(attribute='name') %}
+        {%- set _ = lag_member_interfaces.append(interface.name) %}
+    {%- endfor %}
+  {%- endfor %}
+
+  {#- Filter out interfaces that are not management, not virtual, and not members of LAG #}
+  {%- for interface in device.interfaces.all() %}
+    {%- if interface.enabled and interface.mgmt_only != true and not interface.ip_addresses.first() and not interface.is_virtual and interface.name not in lag_member_interfaces %}
+      {%- set _ = filtered_interfaces.append(interface) %}
+    {%- endif %}
+  {%- endfor %}
+  {%- if filtered_interfaces %}
+  "INTERFACE": {
+    {%- for interface in filtered_interfaces | sort(attribute='name') %}
+    "{{ interface.name }}": {
+      "ipv6_use_link_local_only": "enable"
+    }
+    {%- if not loop.last %},{%- endif %}
+    {%- endfor %}
+  },{%- endif %}
+
+  {%- if static_routes %}
+  "STATIC_ROUTE": {
+  {%- for static_route in static_routes %}
+    "{{ static_route['route'] }}": {
+      "blackhole": "{{ static_route['blackhole'] }}",
+      "distance": "{{ static_route['distance'] }}",
+      "ifname": "{{ static_route['ifname'] }}",
+      "nexthop": "{{ static_route['nexthop'] }}",
+      "nexthop-vrf": "{{ static_route['nexthop-vrf'] }}"
+    }{% if not loop.last %},{% endif %}
+  {%- endfor %}
+  },{%- endif %}
+
+  {%- if bgp %}
+  "BGP_GLOBALS": {
+    "default": {
+      "local_asn": "{{ bgp.local_asn }}",
+      "log_nbr_state_changes": "true",
+      "router_id": "{{ bgp.router_id }}"
+    }
+  },
+  "BGP_PEER_GROUP": {
+    {%- for peer_group in bgp.peer_groups %}
+    "default|{{ peer_group.name }}": {
+      "peer_group_name": "{{ peer_group.name }}",
+      "admin_status": "true",
+      "asn": "{{ peer_group.asn }}"{% if peer_group.peer_type %},
+      "peer_type": "{{ peer_group.peer_type }}"{% endif %}
+    }{% if not loop.last %},{% endif %}
+    {%- endfor %}
+  },
+  "BGP_NEIGHBOR": {
+    {%- for neighbor in bgp.neighbors %}
+    "default|{{ neighbor.port }}": {
+      {%- if neighbor.peer_group_name %}
+      "peer_group_name": "{{ neighbor.peer_group_name }}"{%- endif %}
+      {%- if neighbor.asn %}
+      "asn": "{{ neighbor.asn }}"{% if neighbor.description %},{% endif %}{%- endif %}
+      {%- if neighbor.description %}
+      "name": "{{ neighbor.description }}"{%- endif %}
+    }{% if not loop.last %},{% endif %}
+    {%- endfor %}
+  },
+  "BGP_NEIGHBOR_AF": {
+    {%- for neighbor in bgp.neighbors if not neighbor.peer_group_name %}
+    "default|{{ neighbor.port }}|ipv4_unicast": {
+      "admin_status": "true",
+      "route_map_in": [
+        "ALLOW"
+      ],
+      "route_map_out": [
+        "ALLOW"
+      ]
+    },
+    "default|{{ neighbor.port }}|ipv6_unicast": {
+      "admin_status": "true",
+      "route_map_in": [
+        "ALLOW"
+      ],
+      "route_map_out": [
+        "ALLOW"
+      ]
+    }{% if not loop.last or (loop.last and bgp.peer_groups) %},{% endif %}
+    {%- endfor %}
+    {%- for peer_group in bgp.peer_groups %}
+    "default|{{ peer_group.name }}|ipv4_unicast": {
+      "admin_status": "true",
+      "route_map_in": [
+        "ALLOW"
+      ],
+      "route_map_out": [
+        "ALLOW"
+      ]
+    },
+    "default|{{ peer_group.name }}|ipv6_unicast": {
+      "admin_status": "true",
+      "route_map_in": [
+        "ALLOW"
+      ],
+      "route_map_out": [
+        "ALLOW"
+      ]
+    }{% if not loop.last %},{% endif %}
+    {%- endfor %}
+  },
+  "ROUTE_MAP": {
+    "ALLOW|1": {
+      "route_operation": "permit"
+    }
+  },
+  "ROUTE_REDISTRIBUTE": {
+    "default|connected|bgp|ipv4": {}
+  },{%- endif %}
+  "DEVICE_METADATA": {
+    "localhost": {
+      "docker_routing_config_mode": "unified",
+      "frr_mgmt_framework_config": "true",
+      "hostname": "{{ device.name }}",
+      "mac": "{{ mac_addr }}",
+      "type": "{{ device.role.name }}",
+      "hwsku": "{{ hwsku }}",
+      "platform": "{{ platform }}",
+      "timezone": "UTC"
+    }
+  },
+  "MGMT_INTERFACE": {
+  {%- for interface in device.interfaces.all() if interface.mgmt_only == true and interface.ip_addresses.first() %}
+    "{{ interface.name }}|{{ interface.ip_addresses.first().address }}": {
+      "gwaddr": "{{ mgmt_gwaddr }}"
+    }
+    {%- if not loop.last %},{%- endif %}
+  {%- endfor %}
+  }
+}

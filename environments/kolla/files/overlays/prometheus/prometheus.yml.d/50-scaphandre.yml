@@ -1,0 +1,17 @@
+---
+scrape_configs:
+  - job_name: scaphandre
+    static_configs:
+      - targets:
+{% for host in groups['scaphandre'] %}
+        - "{{ host }}:9155"
+{% endfor %}
+    relabel_configs:
+      # remove port from instance name
+      - source_labels:
+          - __address__
+        regex: '(.*):.*'
+        replacement: $1
+        target_label: instance
+    scrape_interval: 1m
+

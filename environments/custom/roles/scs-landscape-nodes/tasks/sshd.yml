@@ -1,0 +1,21 @@
+---
+- name: Hardening Settings for SSHD
+  ansible.builtin.copy:
+    dest: /etc/ssh/sshd_config.d/99-scs-hardening.conf
+    content: |
+      PermitRootLogin no
+
+      PasswordAuthentication no
+      PermitEmptyPasswords no
+
+      ChallengeResponseAuthentication no
+      KerberosAuthentication no
+      GSSAPIAuthentication no
+
+      AllowGroups {{ operator_group }}
+  notify: Reload ssh service
+- name: Ensure that SSH passwordless login from cloud-init is removed
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/50-cloud-init.conf
+    state: absent
+  notify: Reload ssh service

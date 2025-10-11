@@ -39,7 +39,7 @@
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw1g-r01-u47    | eth0          | st01-mgmt-r01-u30   | eno1          | RJ45/1GBE    | OOB-MGMT-P2P     |            |                                  |
-| st01-sw1g-r01-u47    | Ethernet0     | st01-gw-r01-u46     | enp1s0        | RJ45/1GBE    | UPSTREAM1        |            |                                  |
+| st01-sw1g-r01-u47    | Ethernet0     |                     |               | RJ45/1GBE    | UPSTREAM1        |            | upstream rental system, obsolete |
 | st01-sw1g-r01-u47    | Ethernet1     | st01-sw1g-r01-u32   | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet3     | st01-sw1g-r01-u32   | Ethernet0     | RJ45/1GBE    | SPINE-UPSTREAM2  |            |                                  |
 | st01-sw1g-r01-u47    | Ethernet4     | st01-sw1g-r01-u33   | eth0          | RJ45/1GBE    | OOB-MGMT         |            |                                  |
@@ -256,7 +256,7 @@ show interfaces status PortChannel04
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
-| st01-sw25g-r01-u40   | eth0          |                     |               |              |                  |            |                                  |
+| st01-sw25g-r01-u40   | eth0          | st01-sw1g-r01-u47   | Ethernet47    | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw25g-r01-u40   | Ethernet72    | st01-sw100g-r01-u41 | Ethernet104   |              |                  |            |                                  |
 | st01-sw25g-r01-u40   | Ethernet76    | st01-sw100g-r01-u41 | Ethernet108   |              |                  |            |                                  |
 
@@ -265,8 +265,8 @@ show interfaces status PortChannel04
 |----------------------|---------------|---------------------|---------------|--------------|------------------|------------|----------------------------------|
 | st01-sw10g-r01-u39   | eth0          | st01-sw1g-r01-u47   | Ethernet6     | RJ45/1GBE    | OOB-MGMT         |            |                                  |
 | st01-sw10g-r01-u39   | Ethernet60    | st01-sw100g-r01-u41 | Ethernet116   | QSFP28/100G  | LAB              | PC4        |                                  |
-| st01-sw10g-r01-u39   | Ethernet64    | st01-sw10g-r01-u39  | Ethernet64    | QSFP28/100G  | LAB              | PC4        |                                  |
-| st01-sw10g-r01-u39   | Ethernet68    | st01-sw10g-r01-u39  | Ethernet68    | QSFP28/100G  | LAB              | PC4        |                                  |
+| st01-sw10g-r01-u39   | Ethernet64    | st01-sw10g-r01-u38  | Ethernet64    | QSFP28/100G  | LAB              | PC4        |                                  |
+| st01-sw10g-r01-u39   | Ethernet68    | st01-sw10g-r01-u38  | Ethernet68    | QSFP28/100G  | LAB              | PC4        |                                  |
 
 
 | Source               | SPort         | Destination         | DPort         | Linktype     | Connection Group | IdentGroup | Description                      |

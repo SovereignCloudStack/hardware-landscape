@@ -1,0 +1,31 @@
+
+
+$PreserveFQDN on
+
+# provides UDP syslog reception
+module(load="imudp")
+input(type="imudp" port="514")
+
+# provides TCP syslog reception
+module(load="imtcp")
+input(type="imtcp" port="514")
+
+
+template(name="HardwareSwitchLogTemplate" type="string"
+         string="/var/log/switches-%$YEAR%-%$MONTH%-%$DAY%.log")
+
+if $hostname startswith "st01-sw" then {
+	action(type="omfile" dynaFile="HardwareSwitchLogTemplate" fileOwner="root" fileGroup="dragon" fileCreateMode="0640")
+   action(type="omfwd" target="{{ internal_address }}" port="5140" protocol="udp" action.resumeRetryCount="100" queue.type="linkedList" queue.size="1000")
+	stop
+}
+
+template(name="HardwareServerLogTemplate" type="string"
+         string="/var/log/servers-%$YEAR%-%$MONTH%-%$DAY%.log")
+
+if $hostname startswith "st01-ctl" or $hostname startswith "st01-stor" or $hostname startswith "st01-comp" then {
+	action(type="omfile" dynaFile="HardwareServerLogTemplate" fileOwner="root" fileGroup="dragon" fileCreateMode="0640")
+   action(type="omfwd" target="{{ internal_address }}" port="5140" protocol="udp" action.resumeRetryCount="100" queue.type="linkedList" queue.size="1000")
+	stop
+}
+

@@ -1,0 +1,5 @@
+
+network_dispatcher_scripts:
+  - src: /opt/configuration/environments/custom/roles/scs-landscape-nodes/templates/scs_configure_vxlan.sh.j2
+    dest: routable.d/scs_configure_vxlan.sh
+

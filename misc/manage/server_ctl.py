@@ -5,7 +5,7 @@ import sys
 from pprint import pprint
 
 from lib.server_operating_system import install_server, control_servers, open_servers, check_power_servers, \
-    PowerActionTypes
+    PowerActionTypes, check_firmware_servers
 from lib.helpers import template_ansible_config, AnsibleInvertoryStrategy, create_configs, \
     ansible_inventory_strategy_type
 from lib.server_hardware import template_bmc_config, backup_config, restore_config, CfgTypes, \
@@ -35,6 +35,9 @@ exclusive_group.add_argument('--power_action', choices=[e.name for e in PowerAct
 
 exclusive_group.add_argument('--power_check', action="store_true",
                              help='Check power status')
+
+exclusive_group.add_argument('--firmware_check', action="store_true",
+                             help='Check firmware status')
 
 exclusive_group.add_argument('--show', '-s', action="store_true",
                              help="Show hosts")
@@ -90,6 +93,9 @@ if args.power_action:
 if args.power_check:
     check_power_servers(get_unique_servers(args.node, False, args.filter))
 
+if args.firmware_check:
+    check_firmware_servers(get_unique_servers(args.node, False, args.filter))
+
 if args.backup_cfg:
     backup_config(get_unique_servers(args.node, False, args.filter), args.backup_cfg)
 
@@ -97,11 +103,14 @@ if args.restore_cfg:
     restore_config(get_unique_servers(args.node, False, args.filter), args.restore_cfg)
 
 if args.show:
-    print()
+    print(file=sys.stderr)
     print("The following hosts are configured:", file=sys.stderr)
     hosts = get_unique_servers(args.node, args.verbose, args.filter)
     for host in hosts:
-        pprint(host, indent=2)
+        if isinstance(host, str):
+            print(host)
+        else:
+            pprint(host, indent=2)
 
 if args.open:
     open_servers(get_unique_servers(args.node, False, args.filter))

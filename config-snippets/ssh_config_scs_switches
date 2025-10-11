@@ -1,48 +1,48 @@
-Host scs-st01-sw100g-r01-u36-bmc
+Host scs-st01-sw100g-r01-u36-bmc st01-sw100g-r01-u36-bmc
    Hostname 10.10.23.110
    User admin
 
-Host scs-st01-sw100g-r01-u37-bmc
+Host scs-st01-sw100g-r01-u37-bmc st01-sw100g-r01-u37-bmc
    Hostname 10.10.23.109
    User admin
 
-Host scs-st01-sw100g-r01-u41-bmc
+Host scs-st01-sw100g-r01-u41-bmc st01-sw100g-r01-u41-bmc
    Hostname 10.10.23.111
    User admin
 
-Host scs-st01-sw10g-r01-u38-bmc
+Host scs-st01-sw10g-r01-u38-bmc st01-sw10g-r01-u38-bmc
    Hostname 10.10.23.105
    User admin
 
-Host scs-st01-sw10g-r01-u39-bmc
+Host scs-st01-sw10g-r01-u39-bmc st01-sw10g-r01-u39-bmc
    Hostname 10.10.23.104
    User admin
 
-Host scs-st01-sw1g-r01-u32-bmc
+Host scs-st01-sw1g-r01-u32-bmc st01-sw1g-r01-u32-bmc
    Hostname 10.10.23.101
    User admin
 
-Host scs-st01-sw1g-r01-u33-bmc
+Host scs-st01-sw1g-r01-u33-bmc st01-sw1g-r01-u33-bmc
    Hostname 10.10.23.100
    User admin
 
-Host scs-st01-sw1g-r01-u42-bmc
+Host scs-st01-sw1g-r01-u42-bmc st01-sw1g-r01-u42-bmc
    Hostname 10.10.23.103
    User admin
 
-Host scs-st01-sw1g-r01-u47-bmc
+Host scs-st01-sw1g-r01-u47-bmc st01-sw1g-r01-u47-bmc
    Hostname 10.10.22.102
    User admin
 
-Host scs-st01-sw25g-r01-u34-bmc
+Host scs-st01-sw25g-r01-u34-bmc st01-sw25g-r01-u34-bmc
    Hostname 10.10.23.107
    User admin
 
-Host scs-st01-sw25g-r01-u35-bmc
+Host scs-st01-sw25g-r01-u35-bmc st01-sw25g-r01-u35-bmc
    Hostname 10.10.23.108
    User admin
 
-Host scs-st01-sw25g-r01-u40-bmc
+Host scs-st01-sw25g-r01-u40-bmc st01-sw25g-r01-u40-bmc
    Hostname 10.10.23.106
    User admin
 

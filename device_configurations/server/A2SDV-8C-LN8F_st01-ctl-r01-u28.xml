@@ -247,10 +247,10 @@
         <!--Local/NTP-->
         <!--To use NTP as time update mode, DNS configuration in LAN table-->
         <!--should be configured-->
-        <NTPPrimaryServer>192.53.103.103</NTPPrimaryServer>
+        <NTPPrimaryServer>10.10.23.253</NTPPrimaryServer>
         <!--string value; length limit = 127 characters-->
         <!--Configuration will be set only when time update mode is NTP-->
-        <NTPSecondaryServer>192.53.103.104</NTPSecondaryServer>
+        <NTPSecondaryServer>10.10.23.254</NTPSecondaryServer>
         <!--string value; length limit = 127 characters-->
         <!--Configuration will be set only when time update mode is NTP-->
         <TimeZone>+0000</TimeZone>
@@ -595,7 +595,7 @@
         <SyslogEnable>Enable</SyslogEnable>
         <!--Enable/Disable-->
         <!--Enable or disable BMC syslog-->
-        <SyslogServerIP>10.10.23.1</SyslogServerIP>
+        <SyslogServerIP>10.10.23.254</SyslogServerIP>
         <!--Syslog server address-->
         <SyslogPortNumber>514</SyslogPortNumber>
         <!--[1-65535]-->
@@ -657,11 +657,11 @@
             <!--X.X.X.X-->
             <!--Each field is an integer in [0-255].-->
             <?Note Will be skipped in multiple system usage without --individually option.?>
-            <DefaultGateWayAddr>10.10.23.1</DefaultGateWayAddr>
+            <DefaultGateWayAddr>10.10.23.254</DefaultGateWayAddr>
             <!--X.X.X.X-->
             <!--Each field is an integer in [0-255].-->
             <?Note Will be skipped in multiple system usage without --individually option.?>
-            <DNSAddr>8.8.8.8</DNSAddr>
+            <DNSAddr>10.10.23.254</DNSAddr>
             <!--X.X.X.X-->
             <!--Each field is an integer in [0-255].-->
             <!--Will be skipped if empty.-->
@@ -672,7 +672,7 @@
           <Information>
             <!--Information for dynamic IPv6 properties-->
             <TotalDynamicIPv6Group>0</TotalDynamicIPv6Group>
-            <DUID>0E 00 00 01 00 01 2C 66 FA 98 3C EC EF 5B B5 BF</DUID>
+            <DUID>0E 00 00 01 00 01 2E B2 5D B1 3C EC EF 5B B5 BF</DUID>
           </Information>
           <Configuration>
             <!--Configuration for dynamic IPv6 properties-->

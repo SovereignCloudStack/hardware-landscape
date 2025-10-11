@@ -13,7 +13,7 @@ from sushy import auth
 from sushy.resources.manager.manager import Manager
 import urllib3
 
-from .global_helpers import get_install_media_url, get_basedir
+from .global_helpers import get_install_media_url
 
 from .helpers import parse_configuration_data
 
@@ -49,7 +49,7 @@ def control_server(url: str, http_auth: HTTPBasicAuth, mode: str):
     try:
         data = result.json()
         LOGGER.info(f"Result >>>{data}<<<")
-    except:
+    except Exception:
         pass
 
 
@@ -67,24 +67,42 @@ def tcp_test_connect(host: str, port: int, timeout: float = 5):
     try:
         sock.connect((host, port))
         return True
-    except socket.error as e:
+    except socket.error:
         return False
     finally:
         sock.close()
 
+def check_firmware_servers(host_list: list[str]):
+    host_data = parse_configuration_data()["servers"]
+    for host_name in host_list:
+        try:
+            (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
+            bmc_version = mgr_inst.firmware_version
+            bios_version = []
+            for system in mgr_inst.systems:
+                bios_version.append(system.bios_version)
+
+            bios_version_str = " ".join(bios_version)
+            LOGGER.info(f"{host_name} - BMC Version {bmc_version} / BIOS Version {bios_version_str}")
+        except NotImplementedError:
+            LOGGER.warning(f"Skipping system {host_name}, because redfish is not implemented")
 
 def check_power_servers(host_list: list[str]):
     host_data = parse_configuration_data()["servers"]
     for host_name in host_list:
-        (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
-        if check_power_off(redfish_url, http_auth):
-            LOGGER.warning(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered OFF")
-        else:
-            if tcp_test_connect(host_data[host_name]['node_ip_v4'], 22, 0.5):
-                reachable = "online (tcp 22/ssh)"
+        try:
+            (mgr_inst, http_auth, redfish_url) = _setup_bmc_connection(host_data[host_name])
+            if check_power_off(redfish_url, http_auth):
+                LOGGER.warning(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered OFF")
             else:
-                reachable = "not reachable on tcp port 22/ssh"
-            LOGGER.info(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered ON, {reachable}")
+                if tcp_test_connect(host_data[host_name]['node_ip_v4'], 22, 0.5):
+                    reachable = "online (tcp 22/ssh)"
+                else:
+                    reachable = "not reachable on tcp port 22/ssh"
+                LOGGER.info(f"Server {host_name} / {host_data[host_name]['node_ip_v4']} is powered ON, {reachable}")
+        except NotImplementedError:
+            LOGGER.warning(f"Skipping system {host_name}, because redfish is not implemented")
+
 
 
 def wait_power_off(url: str, http_auth: HTTPBasicAuth):
@@ -117,7 +135,7 @@ def _setup_bmc_connection(host_details: dict[str, str]):
 
     if host_details["device_model"].startswith("ARS"):
         # https://github.com/openbmc/docs/blob/master/REDFISH-cheatsheet.md
-        raise RuntimeError("redfish not implemented")
+        raise NotImplementedError("redfish not implemented")
 
     redfish_url = "https://%s/redfish/v1" % host_details["bmc_ip_v4"]
 

@@ -64,10 +64,13 @@ if args.configs:
     create_configs(get_unique_switches(args.node, False, args.filter), "switches")
 
 if args.show:
-    print()
+    print(file=sys.stderr)
     print("The following switches are configured:", file=sys.stderr)
     hosts = get_unique_switches(args.node, args.verbose, args.filter)
     for host in hosts:
-        pprint(host, indent=2)
+        if isinstance(host, str):
+            print(host)
+        else:
+            pprint(host, indent=2)
 
 sys.exit(0)

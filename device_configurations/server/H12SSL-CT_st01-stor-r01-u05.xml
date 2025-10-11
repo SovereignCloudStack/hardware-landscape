@@ -287,16 +287,16 @@
       <!--Configurations for BMC to tick date and time-->
       <Information>
         <!--Information for date and time-->
-        <DateTime>2024/6/13 16:52</DateTime>
+        <DateTime>2024/1/1 11:11</DateTime>
         <!--YYYY/MM/DD HH:MM-->
       </Information>
       <Configuration>
         <!--Configuration for DateTime-->
         <NTPEnable>Enable</NTPEnable>
         <!--Enable/Disable-->
-        <PrimaryNTPServer>192.53.103.103</PrimaryNTPServer>
+        <PrimaryNTPServer>10.10.23.253</PrimaryNTPServer>
         <!--string value; length limit = 127 characters-->
-        <SecondaryNTPServer>192.53.103.104</SecondaryNTPServer>
+        <SecondaryNTPServer>10.10.23.254</SecondaryNTPServer>
         <!--string value; length limit = 127 characters-->
         <TimeZone>(UTC+00:00) Coordinated Universal Time</TimeZone>
         <!--Please check available TimeZone format in ExternalData/timezone -->
@@ -483,7 +483,7 @@
           <!--Will be skipped if this device is mounted by iKVM.-->
           <!--The device is mounted by iKVM if the field "Image" is kvm_usb/kvm_cd/kvm_floppy.-->
           <Information>
-            <MediaType>CD/DVD</MediaType>
+            <MediaType></MediaType>
             <!--CD/DVD/Floppy/USBStick-->
             <!--Will empty if the device is unmounted.-->
           </Information>
@@ -517,7 +517,7 @@
             <!--Enable/Disable-->
             <!--Accepts self-signed certificate for SSL if the fields "VerifyCert" and "AcceptSelfSigned" are both Enable.-->
             <!--Only for HTTPS protocol.-->
-            <Inserted>Enable</Inserted>
+            <Inserted>Disable</Inserted>
             <!--Enable/Disable-->
             <!--Mounts the image file if the field "Inserted" is Enable.-->
             <!--Unmounts the image file if the field "Inserted" is Disable.-->
@@ -823,7 +823,7 @@
         <SyslogEnable>Enable</SyslogEnable>
         <!--Enable/Disable-->
         <!--Enable or disable BMC syslog-->
-        <SyslogServerIP>10.10.23.1</SyslogServerIP>
+        <SyslogServerIP>10.10.23.254</SyslogServerIP>
         <!--Syslog server address-->
         <SyslogPortNumber>514</SyslogPortNumber>
         <!--[1-65535]-->
@@ -942,14 +942,14 @@
             <!--X.X.X.X-->
             <!--Each field is an integer in [0-255].-->
             <?Note Will be skipped in multiple system usage without --individually option.?>
-            <Gateway>10.10.23.1</Gateway>
+            <Gateway>10.10.23.254</Gateway>
             <!--X.X.X.X-->
             <!--Each field is an integer in [0-255].-->
             <?Note Will be skipped in multiple system usage without --individually option.?>
             <IPv4UseDNSServers>Disable</IPv4UseDNSServers>
             <!--Enable/Disable-->
             <!--Determines whether to use DHCPv4-supplied DNS servers.-->
-            <IPv4StaticNameServer1></IPv4StaticNameServer1>
+            <IPv4StaticNameServer1>10.10.23.254</IPv4StaticNameServer1>
             <!--X.X.X.X-->
             <!--Each field is an integer in [0-255].-->
             <!--IPv4StaticNameServer1 is readonly if IPv4UseDNSServers is Enable.-->
@@ -968,7 +968,7 @@
             <IPv6LinkLocalAddress>fe80::3eec:efff:fe9e:d09b</IPv6LinkLocalAddress>
             <IPv6LinkLocalAddressPrefixLength>64</IPv6LinkLocalAddressPrefixLength>
             <!--Address is valid only for this link network segment.-->
-            <IPv6NameServer1>fd00::cece:1eff:fe65:f9ac</IPv6NameServer1>
+            <IPv6NameServer1></IPv6NameServer1>
             <!--This represents DNS name servers that are currently in use on this interface.-->
             <IPv6NameServer2></IPv6NameServer2>
             <!--This represents DNS name servers that are currently in use on this interface.-->

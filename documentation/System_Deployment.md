@@ -17,6 +17,11 @@
   ```
   ./server_ctl --restore_cfg bmc all
   ```
+* Step 4: Backup and check new config
+  ```
+  ./server_ctl --backup_cfg all
+  git diff
+  ```
 
 ## Deployment of the nodes
 
@@ -28,13 +33,15 @@
    * Align configuration
      (replace external with internal ip address in `ansible_host`)
      ```
-     vim -d environments/manager/host_vars/st01-mgmt-r01-u30.yml ./inventory/host_vars/st01-mgmt-r01-u30.yml
+     vim -d environments/manager/host_vars/st01-mgmt-r01-u30.yml ./inventory/host_vars/st01-mgmt-r01-u30/01_base.yml
      ```
    * Run Ansible on manager
      ```
      ssh st01-mgmt-r01-u30
      sudo -u dragon -i
-     osism apply configuration
+     osism sync configuration
+     osism sync inventory
+     osism apply facts
      ```
 3. Install Manager Infrastructure from manager
    ```
@@ -69,8 +76,6 @@ Please just add issues to this project with hints or directly [contact me](https
   cd /opt/configuration/misc/node-images
   make all
   ```
-* Configure  "local shell on your local system
-  * Add the passwords file for BMC password data (TODO, add this later to ansible secrets) : ``secrets/server.passwords``
 
 ### Step 3: Provision / Install the node images
 
@@ -116,35 +121,50 @@ Please just add issues to this project with hints or directly [contact me](https
   ```
 * Install the installation infrastructure
   ```
-  osism apply scs_infra -l 'all:!manager'
+  osism apply scs_infra
   ```
-* Execute the [bootstrap procedure](https://osism.tech/de/docs/guides/deploy-guide/bootstrap)
+* Execute the [bootstrap procedure](https://osism.tech/de/docs/guides/deploy-guide/bootstrap) with a configured
+  layer 3 underlay before restarting the servers
+  ```
+  osism apply frr
+  ```
 * Run Basic customizations
   ```
   osism apply scs_all_nodes -l 'all:!manager'
   ```
-* Check if the ntp time setup is correct
+* Check if the ntp time and the network setup is correct
+  (checks pre installation conditions like proper time sync and network connectivity)
   ```
-  osism apply scs_check_ntp
+  osism apply scs_check_preinstall
+  osism validate ceph-connectivity
+  ```
+* Reboot all hosts
+  ```
+  osism apply reboot -l 'all:manager' -e ireallymeanit=yes -e reboot_wait=true
+  osism apply reboot -l 'all:!manager' -e ireallymeanit=yes -e reboot_wait=true
   ```
 
-## Deploy the infratructure servcies
+## Deploy the infrastructure services
 
-Deployment order
+### Step 1:
 
-1. [Infrastructure](https://osism.tech/de/docs/guides/deploy-guide/services/infrastructure.md)
-2. [Network](https://osism.tech/de/docs/guides/deploy-guide/services/network.md)
-3. [Logging & Monitoring](https://osism.tech/de/docs/guides/deploy-guide/services/logging-monitoring.md)
-4. [Ceph](https://osism.tech/de/docs/guides/deploy-guide/services/ceph.mdx)
-5. [OpenStack](https://osism.tech/de/docs/guides/deploy-guide/services/openstack.md)
+[Infrastructure](https://osism.tech/de/docs/guides/deploy-guide/services/infrastructure)
+[Logging & Monitoring](https://osism.tech/de/docs/guides/deploy-guide/services/logging-monitoring)
 
 ### Step 2: Network
 
 The OVN database is deployed to the first 3 compute nodes because the ATOM CPUs do not not support the suitable AVX instructions.
 
+[Network](https://osism.tech/de/docs/guides/deploy-guide/services/network)
+
+
 ### Step 3: Logging & Monitoring
 
-TODO
+1. Follow the [Logging & Monitoring deployment](https://osism.tech/docs/guides/deploy-guide/services/logging-monitoring)
+2. Deploy Scaphandre
+   ```
+   osism apply scaphandre
+   ```
 
 ### Step 4: Ceph
 
@@ -163,4 +183,67 @@ For the steps described in the osd configurtion there are the following exceptio
    git commit -m "osd-generation" -a -s
    git push
    ```
+2. [Ceph](https://osism.tech/de/docs/guides/deploy-guide/services/ceph)
 
+
+### Step 5: Openstack
+
+1. Install all steps from [OpenStack](https://osism.tech/de/docs/guides/deploy-guide/services/openstack)
+   except `osism apply octavia`
+2. Execute the environment setup
+   (There is currently a bug: #61)
+   ```
+   osism apply scs_landscape_setup
+   ```
+3. Execute Octavia Installation
+   ```
+   osism apply octavia
+   ```
+
+### Step 5: Validate the Installation
+
+* Run the Postinstallation validation
+  ```
+  osism apply scs_check_postinstall
+  ```
+* Run the OSISM validations
+  ```
+  /opt/configuration/misc/run_validations.sh
+  ```
+* Run openstack validation commands
+  ```
+  /opt/configuration/misc/check_openstack.sh
+  ```
+
+### Step 6: Create Test Workload
+
+Test the deployed platform by creating some domains, projects and virtual machines.
+
+You can use the [tiny scenario](https://github.com/SovereignCloudStack/openstack-workload-generator?tab=readme-ov-file#example-usage-a-tiny-scenario).
+
+```
+cd /home/dragon
+git clone https://github.com/SovereignCloudStack/openstack-workload-generator.git
+cd openstack-workload-generator
+git checkout main
+git pull
+cp /opt/configuration/environments/openstack/{secure.yml,clouds.yml} .
+./openstack_workload_generator \
+    --create_domains smoketest{1..2} \
+    --create_projects smoketest-project{1..2} \
+    --create_machines smoketest-testvm{1..2}
+
+```
+
+
+### Step 7: Run Stresstest Workload
+
+Use the [huge stresstest scenario](https://github.com/SovereignCloudStack/openstack-workload-generator?tab=readme-ov-file#example-usage-a-huge-stresstest-scenario).
+
+### Step 8: Destroy Test workload
+
+```
+cd /home/dragon/openstack-workload-generator
+./openstack_workload_generator \
+    --delete_domains smoketest{1..2} \
+```

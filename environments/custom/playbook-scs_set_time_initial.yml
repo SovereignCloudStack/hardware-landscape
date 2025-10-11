@@ -8,7 +8,7 @@
       shell: |
         #!/bin/bash
         HOST=www.google.com
-        DATESTRING=$(curl -sI "https://$HOST/" | grep -i "^date: ")
+        DATESTRING=$(curl -k -sI "https://$HOST/" | grep -i "^date: ")
 
         if [[ $? -ne 0 ]]; then
                 echo "Can't connect to $HOST"
@@ -20,6 +20,9 @@
         date -s "${DATESTRING}" > /dev/null
         echo "Set hardware clock"
         hwclock --systohc
+        systemctl stop chrony.service
+        sleep 2
+        systemctl start chrony.service
 
         if [[ $? -ne 0 ]];then
            echo "Time setting failed - maybe you are not root?"

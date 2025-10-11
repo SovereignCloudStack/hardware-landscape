@@ -5,7 +5,9 @@ cd "$rundir" || exit 1
 
 source include.sh
 
+if [ "$1" = "deps" ];then
+   exit 0
+fi
 cd "$rundir" || exit 1
 source venv/bin/activate
-python3 ./landscape_ctl.py $@
-
+exec python3 ./landscape_ctl.py "$@"

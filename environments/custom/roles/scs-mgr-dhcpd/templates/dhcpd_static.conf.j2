@@ -6,7 +6,13 @@ host {{ item }} {
   server-name "{{ item }}.{{ management_domain }}";
   option host-name "{{ item }}";
   fixed-address {{ hostvars[item]['mgmt_address']  }};
-}
+{% if hostvars[item]['sonic_install'] is defined and hostvars[item]['sonic_install'] %}
+  option default-url "{{ hostvars[item]['sonic_image_url'] }}";
+{% if hostvars[item]['sonic_install'] is defined %}
+  option bootfile-name "{{ hostvars[item]['sonic_ztp'] }}";
+{% endif %}
+{% endif %}
+  }
 {% endif %}
 {% endfor %}
 

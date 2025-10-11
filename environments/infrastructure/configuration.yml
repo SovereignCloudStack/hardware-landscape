@@ -3,9 +3,16 @@
 # netbox
 
 netbox_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}"
-netbox_tag: 'v4.0.8'
+netbox_tag: 'v4.1.4'
 netbox_userid: 'unit:root'
 netbox_plugins_defaults:
   - netbox_initializers
+netbox_plugins_extra:
+  - netbox_config_diff
+  - netbox_topology_views
+netbox_plugins_config:
+  netbox_config_diff:
+    USERNAME: "{{ netbox_config_diff_username }}"
+    PASSWORD: "{{ netbox_config_diff_password }}"
 netbox_extra:
   SCRIPTS_ROOT: '/opt/netbox/netbox/scripts'

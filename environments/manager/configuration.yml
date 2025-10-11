@@ -9,8 +9,7 @@ docker_registry_service: index.docker.io
 ##########################
 # versions
 
-manager_version: 7.0.5
-
+manager_version: 8.0.2
 
 ##########################
 # ara
@@ -51,6 +50,8 @@ osism_api_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface
 ##########################
 # configuration
 
+enable_osism_kubernetes: no
+
 configuration_directory: /opt/configuration
 configuration_git_private_key_file: ~/.ssh/id_rsa.configuration
 configuration_type: git
@@ -64,7 +65,8 @@ configuration_git_protocol: ssh
 configuration_git_repository: SovereignCloudStack/hardware-landscape
 configuration_git_username: git
 
-configuration_git_version: marcs_second_vacation
+configuration_git_version: install_clusterstacks_clusterapi
+
 # BEGIN: TLS
 manager_environment_extra:
   REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
