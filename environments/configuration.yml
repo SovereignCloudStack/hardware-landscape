@@ -113,13 +113,10 @@ operator_sonic_list:
   - "garloff"
   - "berendt"
   - "fkr"
-  - "osfrickler"
-  - "zuse-z3"
   - "matofeder"
-  - "MatusJenca2"
-  - "gtema"
   - "jschoone"
   - "fzakfeld"
+  - "rrmichel"
 
 # Do not add users here, because they are deleted enirely
 # please add state=absent to the users to be deleted in user_list to
@@ -184,6 +181,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45007
+    state: absent
     groups:
       - docker
       - dialout
@@ -191,6 +189,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45008
+    state: absent
     groups:
       - docker
       - dialout
@@ -198,6 +197,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45009
+    state: absent
     groups:
       - docker
       - dialout
@@ -212,6 +212,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45011
+    state: absent
     groups:
       - docker
       - dialout
@@ -219,6 +220,7 @@ user_list:
     key: "github"
     primary_group: dragon
     uid: 45012
+    state: absent
     groups:
       - docker
       - dialout
@@ -244,7 +246,20 @@ user_list:
     groups:
       - docker
       - dialout
-
+  - name: "rrmichel"
+    key: "github"
+    primary_group: dragon
+    uid: 45016
+    groups:
+      - docker
+      - dialout
+  - name: "depressiverobot"
+    key: "github"
+    primary_group: dragon
+    uid: 45017
+    groups:
+      - docker
+      - dialout
 
 # yamllint disable rule:line-length
 operator_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC2wE2xiuO+i3qmDvu8kCCKX7U7H1diOICbWmR2UrKIxqWgcfWMQsT3WclotJKuVJuKIWyFD6ZNwwLuvC3RxVSqhCiWjqxg3jzJBj7/C1O3IYyLGTUl/x7Cky530lf/aj4wrwt3Ketk/4QNwgget2nCvOy0S2NDCJ3rL6oIUjdJekvRrFf9IbWeX8fqYYCoh1cYJWto1XYPnhMDAB/lqtjN1ssurLSKoJg/bUT7q/KkIvvA/BOR2NMqS0aGx+bKhdkeB22V/t75Ct8ymoCYk9+MTC9i/QX20Fi7835/W7Gl18J8NiO9ebaWyYbsxZ5klWXQa5EiLLBDZ82OR88G+0FjXp1Z3VG6FcpdYpW7sxrT21HEvWOnQACZCdlzwyBJ31id/LjDRhJU6BmZm0Sa9EOJNL8XVOUUzuoa0XL1mIVTsmLpUwqLSfw6Ditb+q4afFi0iYMe3JKOt+JmftvBgeQCjNUsCzk+Ny2j6dZKv2aeF5LOQZGRM3HzG39Gkir3q1zdWmCl4lc3QQBfr5ZcdAp+wQMFSgJAudKffO9kdDVNoyjgih7rD3E+JjJdhY9//WQEEBm2vfEqm7qqEQUAELd0JBCivJmOhUVH0rGbTrnkTBtLR4Au40W5aYaNQJ7+U3hTRrvpycSC1pUU3Wq3OXJd2FRDgKQJljQcpBw4V9j8GQ==
