@@ -11,11 +11,11 @@ We start with the functional stack at the bottom, where a deployment on server h
 ## Overview table
 | Layer | Component | Subcomponent | Purpose | Status | Requirements | Documentation |
 |--|--|--|--|--|--|--|
-| Infra | OSISM | Manager, Netbox, ... | Lifecycle Manage deployment | Prod | HW | https://docs.scs.community/docs/iaas/guides/configuration-guide/ |
-| Ops | OSISM | Prometheus, Netdata, AlertMgr, ... | Monitor Infra layer | Prod | HW | https://docs.scs.community/docs/iaas/guides/concept-guide/#components-in-a-cluster |
-| SDS | OSISM | ceph | Storage (Block, Object) | Prod | HW | https://docs.scs.community/docs/iaas/guides/concept-guide/components/ceph |
-| SDN | OSISM | OVN | Networking | Prod | HW | https://docs.scs.community/docs/iaas/guides/concept-guide/components/sonic#-lifecycle-management-of-open-virtual-network-ovn-in-osism |
-| IaaS | OSISM | OpenStack | Virtualization | Prod | HW | https://docs.scs.community/docs/iaas/guides/concept-guide/components/openstack |
+| Infra | OSISM | Manager, Netbox, ... | Lifecycle Manage deployment | Prod | HW | https://osism.tech/docs/guides/configuration-guide/ |
+| Ops | OSISM | Prometheus, Netdata, AlertMgr, ... | Monitor Infra layer | Prod | HW | https://osism.tech/docs/guides/concept-guide/ |
+| SDS | OSISM | ceph | Storage (Block, Object) | Prod | HW | https://osism.tech/docs/concepts/components/ceph |
+| SDN | OSISM | OVN | Networking | Prod | HW | https://osism.tech/docs/concepts/cluster-network |
+| IaaS | OSISM | OpenStack | Virtualization | Prod | HW | https://osism.tech/docs/concepts/components/openstack |
 | KaaS | ClusterStacks | CAPI, CAPO, ClusterStacks, CSO, CSPO  | K8s cluster management | Stable | IaaS | https://docs.scs.community/docs/container/components/cluster-stacks/components/cluster-stacks/overview |
 | PaaS | Registry | harbor | Container registry | Prod | KaaS | https://docs.scs.community/docs/category/container-registry |
 | API | Central API | Central API | API for IAM, IaaS, KaaS | Tech Preview | KaaS | https://scs.community/tech/2024/08/13/central-api-tech-preview-release/ |
