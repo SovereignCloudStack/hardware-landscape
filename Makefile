@@ -1,5 +1,6 @@
 venv = . venv/bin/activate
 export PATH := ${PATH}:${PWD}/venv/bin
+basedir = ${PWD}
 
 VAULTPASS_FILE ?= ${PWD}/secrets/vaultpass
 
@@ -28,6 +29,23 @@ venv/bin/activate: Makefile requirements.txt
 	@[ -e venv/bin/python ] || python3 -m venv venv --prompt osism-$(shell basename ${PWD})
 	@${venv} && pip3 install -r requirements.txt
 	touch venv/bin/activate
+
+#################################################
+### EXPERIMENTAL, yamlfix is still very broken
+
+.PHONY: lint-check
+lint-check: deps
+	$(MAKE) lint-fix DO_CHECK="--check"
+
+# Just for testing, currently yamllint seems to be broken
+.PHONY: lint-fix
+lint-fix: deps
+	${venv} && find . -type f \( -not -path "misc/node-images/node-image/*" -and -not -path "*/.venv/*" -and -not -path "*/venv/*" -regex ".*\.ya?ml" \) \
+		-print \
+		-exec yamlfix --verbose ${DO_CHECK} --config-file ${basedir}/.yamlfix.toml {} \;
+
+### EXPERIMENTAL
+#################################################
 
 .PHONY: deps
 sync: deps
@@ -110,3 +128,4 @@ endif
 .PHONY: ansible_vault_encrypt_string
 ansible_vault_encrypt_string: deps check_vault_pass
 		@${venv} && ansible-vault encrypt_string --vault-password-file ${VAULTPASS_FILE}
+
