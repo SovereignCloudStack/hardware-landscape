@@ -35,7 +35,7 @@ create_cert(){
    set -xe
    openssl genpkey -algorithm RSA -out secrets/${key}.key -pkeyopt rsa_keygen_bits:4096
    openssl req -new -key secrets/${key}.key -out secrets/${key}.csr \
-      -subj "${subject}/CN=${domain}" 
+      -subj "${subject}/CN=${domain}"
    sed "~s,your_common_name,$domain," ${server_cnf} > ${server_cnf}.new
 
    openssl x509 -req -in secrets/${key}.csr -CA secrets/ca.crt -CAkey secrets/ca.key -CAcreateserial \
