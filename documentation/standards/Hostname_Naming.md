@@ -64,10 +64,10 @@ The elements of the nameing scheme:
 
   * `st01-mgmt-r13-3031`
     A managment node in Stödelen Rack 13 deployed at rack unit 30,31
-  * `st01-sw-r13-u30`
-    A switch in Stödelen Rack 13 on deployed at rack unit 31
+  * `st01-sw1g-r13-u30`
+    A 1 GBE switch in Stödelen Rack 13 on deployed at rack unit 10 
   * `st01-stor-r13-u10`
     A storage node in Stödelen Rack 13 deployed at rack unit 10,11,12,13
   * `st01-comp-r13-u10-s4`
-    A the 4th and last compute node in Stödelen Rack 13 deployed at rack unit 10,11,12,13
+    The 4th and last compute node in Stödelen Rack 13 deployed at rack unit 10,11,12,13
     (deployed on bottom right)

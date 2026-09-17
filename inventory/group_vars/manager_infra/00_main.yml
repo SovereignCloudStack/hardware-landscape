@@ -90,4 +90,6 @@ wireguard_users:
   - name: garloff
     key: q79Q3VSbyqdmTlzPqmn/TD3RPxSOKI0f7eWZa1+cj1E=
     ip: 10.10.1.28
-
+  - name: depressiveRobot
+    key: Oypryw0rlo6u41oVEzmG5FkW4XypN4cNcxT+xeClZGE=
+    ip: 10.10.1.29

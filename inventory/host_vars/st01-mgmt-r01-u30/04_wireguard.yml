@@ -1,4 +1,4 @@
 
 
-wireguard_server_public_address: 188.244.101.28
+wireguard_server_public_address: 45.139.159.237
 wireguard_endpoint: "{{ wireguard_server_public_address }}:{{ wireguard_listen_port }}"
