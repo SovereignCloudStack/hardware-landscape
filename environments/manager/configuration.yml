@@ -66,7 +66,7 @@ configuration_git_protocol: ssh
 configuration_git_repository: SovereignCloudStack/hardware-landscape
 configuration_git_username: git
 
-configuration_git_version: install_clusterstacks_clusterapi
+configuration_git_version: update-10.2.0
 
 # BEGIN: TLS
 manager_environment_extra:
