@@ -64,6 +64,9 @@ octavia_network_type: tenant
 # designate
 designate_ns_record: openstack.zone1.landscape.scs.community
 
+# barbican
+enable_barbican: "yes"
+
 ##########################################################
 # ceph rgw integration
 
