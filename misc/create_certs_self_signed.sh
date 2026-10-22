@@ -66,7 +66,7 @@ create_ca(){
    cat > $server_cnf << 'EOF'
 [ v3_req ]
 basicConstraints = critical, CA:FALSE
-keyUsage = critical, digitalSignature, keyEncipherment, keyAgreement, keyCertSign
+keyUsage = critical, digitalSignature, keyEncipherment, keyAgreement
 extendedKeyUsage = critical, serverAuth
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid:always
