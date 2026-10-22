@@ -57,14 +57,19 @@ create_ca(){
    openssl req -x509 -new \
       -key secrets/ca.key -sha256 -days 3650 \
       -out secrets/ca.crt -passin pass:${password} \
+      -addext "basicConstraints=critical,CA:TRUE" \
+      -addext "keyUsage=critical,keyCertSign,cRLSign" \
+      -addext "subjectKeyIdentifier=hash" \
       -subj "/C=DE/ST=Berlin/L=Berlin/O=OSBA e.V./OU=Fake CA"
 
    server_cnf="$(mktemp /tmp/server_cert-XXXXX.cnf)"
    cat > $server_cnf << 'EOF'
 [ v3_req ]
-basicConstraints = CA:FALSE
-keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-extendedKeyUsage = serverAuth
+basicConstraints = critical, CA:FALSE
+keyUsage = critical, digitalSignature, keyEncipherment, keyAgreement
+extendedKeyUsage = critical, serverAuth
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always
 subjectAltName = @alt_names
 
 [ alt_names ]
