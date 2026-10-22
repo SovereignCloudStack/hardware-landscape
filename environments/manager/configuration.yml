@@ -72,7 +72,3 @@ configuration_git_version: update-10.2.0
 manager_environment_extra:
   REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
 # END: TLS
-# BEGIN: TLS
-manager_environment_extra:
-  REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
-# END: TLS

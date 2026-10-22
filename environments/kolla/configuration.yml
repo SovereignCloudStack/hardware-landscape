@@ -139,7 +139,3 @@ opensearch_heap_size: "2g"
 kolla_copy_ca_into_containers: "yes"
 openstack_cacert: /etc/ssl/certs/ca-certificates.crt
 # END: TLS
-# BEGIN: TLS
-kolla_copy_ca_into_containers: "yes"
-openstack_cacert: /etc/ssl/certs/ca-certificates.crt
-# END: TLS
