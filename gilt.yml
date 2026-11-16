@@ -1,6 +1,6 @@
 ---
-- git: https://github.com/osism/cfg-generics.git
-  version: v0.20241006.0
+- git: https://github.com/osism/generics.git
+  version: v0.20260808.0
   files:
     - src: gilt.yml
       dst: ./gilt.yml

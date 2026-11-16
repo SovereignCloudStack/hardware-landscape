@@ -53,9 +53,11 @@ mk_server_cnf() {
    server_cnf="$(mktemp /tmp/server_cert-XXXXX.cnf)"
    cat > $server_cnf << 'EOF'
 [ v3_req ]
-basicConstraints = CA:FALSE
-keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-extendedKeyUsage = serverAuth
+basicConstraints = critical, CA:FALSE
+keyUsage = critical, digitalSignature, keyEncipherment, keyAgreement, keyCertSign
+extendedKeyUsage = critical, serverAuth
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always
 subjectAltName = @alt_names
 
 [ alt_names ]

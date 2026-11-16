@@ -3,13 +3,14 @@
 # docker registries
 
 docker_registry: index.docker.io
-docker_registry_ansible: quay.io
 docker_registry_service: index.docker.io
+docker_registry_ansible: registry.osism.tech
+docker_registry_netbox: registry.osism.tech
 
 ##########################
 # versions
 
-manager_version: 8.0.2
+manager_version: 10.2.0
 
 ##########################
 # ara
@@ -65,7 +66,7 @@ configuration_git_protocol: ssh
 configuration_git_repository: SovereignCloudStack/hardware-landscape
 configuration_git_username: git
 
-configuration_git_version: install_clusterstacks_clusterapi
+configuration_git_version: update-10.2.0
 
 # BEGIN: TLS
 manager_environment_extra:
